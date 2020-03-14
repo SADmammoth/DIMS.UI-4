@@ -1,59 +1,52 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import shortid from 'shortid';
 import Client from '../helpers/Client';
+import MemberCard from '../components/cards/MemberCard';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { members: [] };
+    this.state = { members: [], open: -1 };
   }
 
   async componentDidMount() {
-    this.setState({ members: await Client.getMembers() });
+    this.setState({
+      members: (await Client.getMembers()).map((el) => {
+        el.collapsed = true;
+        return el;
+      }),
+    });
   }
 
+  onOpen = (id) => {
+    const members = [...this.state.members];
+    if (this.state.open + 1) {
+      members[this.state.open].collapsed = true;
+    }
+    members[id].collapsed = false;
+    this.setState({ members: members, open: id });
+  };
+
   renderMembers() {
-    console.log(this.state.members);
     if (this.state.members.length < 1) {
       return null;
     }
     return (
       <ul className='grid no-type-list'>
-        {this.state.members.map((el) => (
-          <li className='gridItem' key={shortid.generate()}>
-            {this.renderMember(el)}
+        {this.state.members.map((el, i) => (
+          <li key={el.fullName} className='gridItem'>
+            {this.renderMember(i, el)}
           </li>
         ))}
       </ul>
     );
   }
 
-  renderMember({ fullName, direction, education, startDate, age }) {
+  renderMember(index, data) {
+    // { fullName, direction, education, startDate, age }
     return (
       <>
-        <div>
-          <b>Name: </b>
-          <span>{fullName}</span>
-        </div>
-        <div>
-          <b>Direction: </b>
-          <span>{direction}</span>
-        </div>
-        <div>
-          <b>Education: </b>
-          <span>{education}</span>
-        </div>
-        <div>
-          <b>Start date: </b>
-          <span>{startDate.toString()}</span>
-        </div>
-        <div>
-          <b>Age: </b>
-          <span>{age}</span>
-        </div>
+        <MemberCard id={index} onOpen={this.onOpen} {...data} />
       </>
     );
   }
