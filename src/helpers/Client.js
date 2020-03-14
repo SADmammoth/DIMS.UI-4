@@ -1,15 +1,34 @@
 import faker from 'faker';
+import firebase from 'firebase';
 
-export default class Client {
-  static getMembers() {
-    let members = new Array(faker.random.number({ min: 1, max: 10 })).fill(null);
-    members = members.map(() => ({
-      fullName: faker.name.findName(),
-      direction: faker.helpers.randomize(['Java', 'Frontend', '.Net', 'Saleforce']),
-      education: faker.company.companyName(),
-      startDate: faker.date.recent(),
-      age: faker.random.number({ min: 18, max: 45 }),
-    }));
-    return new Promise((resolve) => resolve(members));
+class Client {
+  static db = null;
+
+  static async getMembers() {
+    let members = await Client.db.collection('members').get();
+    let membersObject = {};
+    members.docs.forEach(
+      (el) => (
+        (membersObject[el.id] = el.data()),
+        (membersObject[el.id].startDate = new Date(membersObject[el.id].startDate.seconds * 1000))
+      ),
+    );
+    return new Promise((resolve) => resolve(membersObject));
   }
 }
+
+const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
+const config = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: `${projectId}.firebaseapp.com`,
+  databaseURL: `https://${projectId}.firebaseio.com`,
+  projectId: projectId,
+  storageBucket: `${projectId}.appspot.com`,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+};
+
+firebase.initializeApp(config);
+Client.db = firebase.firestore();
+
+export default Client;

@@ -6,47 +6,50 @@ import MemberCard from '../components/cards/MemberCard';
 class MembersManagerPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { members: [], open: -1 };
+    this.state = { members: {}, open: null };
   }
 
   async componentDidMount() {
+    let membersData = await Client.getMembers();
+    Object.keys(membersData).forEach((key) => (membersData[key].collapsed = true));
     this.setState({
-      members: (await Client.getMembers()).map((el) => {
-        el.collapsed = true;
-        return el;
-      }),
+      members: membersData,
     });
   }
 
   onOpen = (id) => {
-    const members = [...this.state.members];
-    if (this.state.open + 1) {
-      members[this.state.open].collapsed = true;
+    const members = { ...this.state.members };
+    const { open } = this.state;
+    if (open) {
+      console.log(open);
+      members[open].collapsed = true;
     }
     members[id].collapsed = false;
-    this.setState({ members: members, open: id });
+    this.setState({ members, open: id });
   };
 
   renderMembers() {
-    if (this.state.members.length < 1) {
+    const { members } = this.state;
+    if (members.length < 1) {
       return null;
     }
     return (
       <ul className='grid no-type-list'>
-        {this.state.members.map((el, i) => (
-          <li key={el.fullName} className='gridItem'>
-            {this.renderMember(i, el)}
+        {Object.entries(members).map((el) => (
+          <li key={el[0]} className='gridItem'>
+            {this.renderMember(el[0], el[1])}
           </li>
         ))}
       </ul>
     );
   }
 
-  renderMember(index, data) {
-    // { fullName, direction, education, startDate, age }
+  renderMember(id, data) {
+    // { id, fullName, direction, education, startDate, age }
+
     return (
       <>
-        <MemberCard id={index} onOpen={this.onOpen} {...data} />
+        <MemberCard id={id} onOpen={this.onOpen} {...data} />
       </>
     );
   }

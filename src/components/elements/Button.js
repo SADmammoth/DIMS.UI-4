@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 function Button(props) {
   return (
     <button
+      className='button'
       type={props.type}
       onClick={
         props.onClick ||

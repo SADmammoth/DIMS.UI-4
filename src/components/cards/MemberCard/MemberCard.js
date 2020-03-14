@@ -25,7 +25,7 @@ class MemberCard extends React.Component {
         <CollapsedMemberCard {...this.props} />
       </article>
     ) : (
-      <article onClick={this.onClick}>
+      <article className='member-card_open' onClick={this.onClick}>
         <CollapsedMemberCard {...this.props} />
         <Button content='Progress' link={`/members/${id}/progress`} />
         <Button content='Tasks' link={`/members/${id}/tasks`} />
@@ -41,7 +41,6 @@ MemberCard.defaultProps = {
 };
 
 MemberCard.propTypes = {
-  id: PropTypes.number.isRequired,
   collapsed: PropTypes.bool,
   onOpen: PropTypes.func.isRequired,
   ...CollapsedMemberCard.propTypes,
