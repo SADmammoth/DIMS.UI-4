@@ -5,15 +5,15 @@ import DirectionBadge from '../../elements/DirectionBadge';
 import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
-  const { fullName, age, direction, startDate } = props;
+  const { fullName, age, direction, startDate, onClick } = props;
   const names = fullName.match(/^([^\s]*)\s([^\s]*)/);
 
   return (
     <div className='member-card__header'>
-      <p className='member-card__header__title'>
+      <button type='button' className='member-card__header__title' onClick={onClick}>
         <b>{names[1]}</b>
         {` ${names[2]}, ${age}`}
-      </p>
+      </button>
       <DateBadge date={startDate} type='startDate' />
       <DirectionBadge direction={direction} />
     </div>
@@ -25,6 +25,7 @@ CollapsedMemberCard.propTypes = {
   age: PropTypes.number.isRequired,
   direction: PropTypes.string.isRequired,
   startDate: PropTypes.instanceOf(Date).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default CollapsedMemberCard;

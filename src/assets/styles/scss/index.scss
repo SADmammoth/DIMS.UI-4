@@ -110,7 +110,7 @@ html {
     font-size: 1.1rem;
   }
   &_ghost {
-    background-color: transparent;
+    background: none;
     color: $common-text;
     font-size: 1.1rem;
     text-decoration: underline;
@@ -135,4 +135,12 @@ html {
 
 .common-text-color {
   color: $common-text;
+}
+
+.modal {
+  position: absolute;
+  display: none;
+  &.show {
+    display: unset;
+  }
 }

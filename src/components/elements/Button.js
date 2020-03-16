@@ -14,7 +14,7 @@ function Button(props) {
         }
       }
     >
-      {props.content}
+      {props.content || props.children}
     </button>
   );
 }
@@ -24,11 +24,11 @@ Button.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   history: PropTypes.any,
   classMod: PropTypes.string,
+  children: PropTypes.array,
 };
 
 Button.defaultProps = {
   type: 'button',
-  content: 'Button',
 };
 
 export default withRouter(Button);
