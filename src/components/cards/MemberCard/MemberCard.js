@@ -27,10 +27,29 @@ class MemberCard extends React.Component {
     ) : (
       <article className='member-card_open' onClick={this.onClick}>
         <CollapsedMemberCard {...this.props} />
-        <Button content='Progress' link={`/members/${id}/progress`} />
-        <Button content='Tasks' link={`/members/${id}/tasks`} />
-        <Button content='Edit' />
-        <Button content='Delete' />
+        <div className='member-card__body'>
+          <Button
+            content={
+              <>
+                <i className='icon-progress' /> <span>Progress</span>
+              </>
+            }
+            classMod='primary'
+            link={`/members/${id}/progress`}
+          />
+          <Button
+            content={
+              <>
+                <i className='icon-tasks' /> <span>Progress</span>
+              </>
+            }
+            classMod='primary'
+            link={`/members/${id}/tasks`}
+          />
+          <Button content='Delete' classMod='error' />
+          <Button content='Edit' classMod='success' />
+          <Button content='More info' classMod='ghost' />
+        </div>
       </article>
     );
   }

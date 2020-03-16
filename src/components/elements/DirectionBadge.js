@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function DirectionBadge(props) {
   const { direction } = props;
-  return <div>{direction}</div>;
+  return <div className='direction-badge'>{direction}</div>;
 }
 
 DirectionBadge.propTypes = {

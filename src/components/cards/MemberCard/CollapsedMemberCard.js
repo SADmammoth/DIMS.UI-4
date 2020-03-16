@@ -10,12 +10,12 @@ function CollapsedMemberCard(props) {
 
   return (
     <div className='member-card__header'>
-      <p>
+      <p className='member-card__header__title'>
         <b>{names[1]}</b>
         {` ${names[2]}, ${age}`}
       </p>
+      <DateBadge date={startDate} type='startDate' />
       <DirectionBadge direction={direction} />
-      <DateBadge date={startDate} />
     </div>
   );
 }

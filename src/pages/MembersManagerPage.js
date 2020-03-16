@@ -34,9 +34,9 @@ class MembersManagerPage extends React.Component {
       return null;
     }
     return (
-      <ul className='grid no-type-list'>
+      <ul className='grid list_no-type'>
         {Object.entries(members).map((el) => (
-          <li key={el[0]} className='gridItem'>
+          <li key={el[0]} className='grid__item'>
             {this.renderMember(el[0], el[1])}
           </li>
         ))}
