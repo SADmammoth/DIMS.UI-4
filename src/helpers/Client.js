@@ -10,7 +10,8 @@ class Client {
     members.docs.forEach(
       (el) => (
         (membersObject[el.id] = el.data()),
-        (membersObject[el.id].startDate = new Date(membersObject[el.id].startDate.seconds * 1000))
+        (membersObject[el.id].startDate = new Date(membersObject[el.id].startDate.seconds * 1000)),
+        (membersObject[el.id].birthDate = new Date(membersObject[el.id].birthDate.seconds * 1000))
       ),
     );
     return new Promise((resolve) => resolve(membersObject));
@@ -34,7 +35,8 @@ export default Client;
 
 // let members = new Array(10).fill(null);
 //     members = members.map(() => ({
-//       fullName: faker.name.findName(),
+//       firstName: faker.name.firstName(),
+//       lastName: faker.name.lastName(),
 //       email: faker.internet.email(),
 //       sex: faker.helpers.randomize(['Male', 'Female']),
 //       direction: faker.helpers.randomize(['Java', 'Frontend', '.Net', 'Saleforce']),
@@ -44,7 +46,8 @@ export default Client;
 //       address: `${faker.address.city()}, ${faker.address.streetAddress()} ${faker.address.secondaryAddress()}`,
 //       mobilePhone: `+375 ${faker.phone.phoneNumberFormat(1)}`,
 //       skype: `live:${faker.internet.userName()}`,
-//       age: faker.random.number({ min: 18, max: 45 }),
+//       birthDate: faker.date.past(40, new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000)),
+//       mathScore: faker.random.number({ min: 50, max: 100 }),
 //     }));
 //     Promise.all(members.forEach((el) => Client.db.collection('members').add(el)));
 //   }

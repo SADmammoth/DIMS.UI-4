@@ -40,10 +40,12 @@
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
-
 .icon-flag:before {
   content: '\e800';
 } /* '' */
+.icon-back:before {
+  content: '\e801';
+} /* '' */
 .icon-progress:before {
   content: '\e802';
 } /* '' */
@@ -68,3 +70,6 @@
 .icon-skype:before {
   content: '\e809';
 } /* '' */
+.icon-address:before {
+  content: '\e80a';
+} /* '' */

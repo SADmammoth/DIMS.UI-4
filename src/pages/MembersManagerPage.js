@@ -17,14 +17,14 @@ class MembersManagerPage extends React.Component {
     });
   }
 
-  onOpen = (id) => {
+  open = (id) => {
     const members = { ...this.state.members };
     const { open } = this.state;
     if (open) {
-      console.log(open);
       members[open].collapsed = true;
     }
     members[id].collapsed = false;
+
     this.setState({ members, open: id });
   };
 
@@ -49,7 +49,7 @@ class MembersManagerPage extends React.Component {
 
     return (
       <>
-        <MemberCard id={id} onOpen={this.onOpen} {...data} />
+        <MemberCard id={id} open={this.open} {...data} />
       </>
     );
   }

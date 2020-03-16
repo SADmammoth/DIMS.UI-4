@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function DateBadge(props) {
   const { date, type } = props;
-  let iconClass = '';
+  let iconClass;
   switch (type) {
     case 'startDate':
       iconClass = 'icon-flag';
@@ -21,11 +21,11 @@ function DateBadge(props) {
       iconClass = 'icon-taskdate error-color';
       break;
     default:
-      throw Error('Unexpected type');
+      iconClass = null;
   }
   return (
     <p className='date-badge'>
-      <i className={iconClass} />
+      {iconClass && <i className={iconClass} />}
       {date.toLocaleDateString()}
     </p>
   );
@@ -33,7 +33,7 @@ function DateBadge(props) {
 
 DateBadge.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
-  type: PropTypes.oneOf(['startDate', 'endDate', 'trackStart', 'trackSuccess', 'trackFail']).isRequired,
+  type: PropTypes.oneOf(['startDate', 'endDate', 'trackStart', 'trackSuccess', 'trackFail']),
 };
 
 export default DateBadge;

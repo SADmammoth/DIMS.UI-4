@@ -24,7 +24,7 @@ Button.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   history: PropTypes.any,
   classMod: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.objectOf(PropTypes.object)]),
 };
 
 Button.defaultProps = {

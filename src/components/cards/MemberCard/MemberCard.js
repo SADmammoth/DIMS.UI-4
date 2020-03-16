@@ -5,17 +5,10 @@ import CollapsedMemberCard from './CollapsedMemberCard';
 import MemberInfoModal from '../../modals/MemberInfoModal';
 
 class MemberCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { collapsed: this.props.collapsed };
-  }
-
   onClick = () => {
-    if (this.state.collapsed) {
-      this.props.onOpen(this.props.id);
+    if (this.props.collapsed) {
+      this.props.open(this.props.id);
     }
-
-    this.setState({ collapsed: !this.state.collapsed });
   };
 
   render() {
@@ -23,7 +16,7 @@ class MemberCard extends React.Component {
 
     return (
       <>
-        {this.state.collapsed ? (
+        {this.props.collapsed ? (
           <article className='member-card'>
             <CollapsedMemberCard {...this.props} onClick={this.onClick} />
           </article>
@@ -37,7 +30,7 @@ class MemberCard extends React.Component {
               </Button>
               <Button classMod='primary' link={`/members/${id}/tasks`}>
                 <i className='icon-tasks' />
-                <span>Progress</span>
+                <span>Tasks</span>
               </Button>
               <Button content='Delete' classMod='error' />
               <Button content='Edit' classMod='success' />
@@ -51,13 +44,8 @@ class MemberCard extends React.Component {
   }
 }
 
-MemberCard.defaultProps = {
-  collapsed: true,
-};
-
 MemberCard.propTypes = {
-  collapsed: PropTypes.bool,
-  onOpen: PropTypes.func.isRequired,
+  open: PropTypes.func.isRequired,
   ...CollapsedMemberCard.propTypes,
 };
 

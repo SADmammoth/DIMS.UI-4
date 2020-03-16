@@ -24,3 +24,6 @@ Modal.propTypes = {
 };
 
 export default Modal;
+export function ModalBackface() {
+  return <div className='modal-shadow' onClick={(e) => e.stopPropagation()} />;
+}
