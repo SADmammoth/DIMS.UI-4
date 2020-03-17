@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
-import CollapableItemsList from '../components/lists/CollapableItemsList';
+import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 
 class MembersTasksPage extends React.Component {
   constructor(props) {
@@ -12,8 +12,15 @@ class MembersTasksPage extends React.Component {
   }
 
   async componentDidMount() {
+    this.getName();
     const taskData = await Client.getUserTasks(this.id);
     this.setState({ tasks: taskData });
+  }
+
+  async getName() {
+    this.name = (await Client.getMember(this.id)).firstName;
+    console.log(await Client.getMember(this.id));
+    console.log(this.name);
   }
 
   renderTask(id, data) {
@@ -27,9 +34,13 @@ class MembersTasksPage extends React.Component {
   render() {
     return (
       <>
-        <p>{`Member ${this.id} tasks`}</p>
+        <h1>{`${this.name}'s tasks`}</h1>
         <div>
-          <CollapableItemsList>{this.renderTasks()}</CollapableItemsList>
+          {Object.keys(this.state.tasks).length ? (
+            <CollapsableItemsList>{this.renderTasks()}</CollapsableItemsList>
+          ) : (
+            'No tasks'
+          )}
         </div>
       </>
     );

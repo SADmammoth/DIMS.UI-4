@@ -18,7 +18,10 @@ class Client {
   }
 
   static async getUserTasks(userID) {
-    const members = await Client.db.collection('tasks').get();
+    const members = await Client.db
+      .collection('tasks')
+      .where('userID', '==', userID)
+      .get();
     const membersObject = {};
     members.docs.forEach(
       (el) => (
@@ -28,6 +31,14 @@ class Client {
       ),
     );
     return new Promise((resolve) => resolve(membersObject));
+  }
+
+  static async getMember(userId) {
+    let member = await Client.db
+      .collection('members')
+      .doc(userId)
+      .get();
+    return new Promise((resolve) => resolve(member.data()));
   }
 }
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;

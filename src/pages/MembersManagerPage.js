@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
-import CollapableItemsList from '../components/lists/CollapableItemsList';
+import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class MembersManagerPage extends React.Component {
   render() {
     return (
       <>
-        <CollapableItemsList>{this.renderMembers()}</CollapableItemsList>
+        <CollapsableItemsList>{this.renderMembers()}</CollapsableItemsList>
       </>
     );
   }

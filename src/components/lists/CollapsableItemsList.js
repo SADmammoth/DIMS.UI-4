@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 
-export default class CollapableItemsList extends Component {
+export default class CollapsableItemsList extends Component {
   constructor(props) {
     super(props);
     this.state = { items: {}, open: null };
   }
 
   async componentDidUpdate() {
-    console.log(Object.keys(this.state.items).length, this.props.children.length);
+    if (Object.keys(this.state.items).length !== this.props.children.length) {
+      let itemsData = {};
+      React.Children.forEach(this.props.children, (child) => (itemsData[child.props.id] = { collapsed: true }));
+      console.log(itemsData);
+      this.setState({
+        items: itemsData,
+      });
+    }
+  }
+
+  async componentDidMount() {
     if (Object.keys(this.state.items).length !== this.props.children.length) {
       let itemsData = {};
       React.Children.forEach(this.props.children, (child) => (itemsData[child.props.id] = { collapsed: true }));
