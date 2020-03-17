@@ -87,7 +87,7 @@ class MemberInfoModal extends Modal {
               </div>
             </div>
           </div>
-          <div class='button-block'>
+          <div className='button-block'>
             <Button classMod='primary' link={`/members/${id}/progress`}>
               <i className='icon-progress' />
               <span>Progress</span>

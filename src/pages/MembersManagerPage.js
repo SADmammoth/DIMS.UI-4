@@ -2,60 +2,41 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
+import CollapableItemsList from '../components/lists/CollapableItemsList';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { members: {}, open: null };
+    this.state = { members: {} };
   }
 
   async componentDidMount() {
     let membersData = await Client.getMembers();
-    Object.keys(membersData).forEach((key) => (membersData[key].collapsed = true));
     this.setState({
       members: membersData,
     });
   }
-
-  open = (id) => {
-    const members = { ...this.state.members };
-    const { open } = this.state;
-    if (open) {
-      members[open].collapsed = true;
-    }
-    members[id].collapsed = false;
-
-    this.setState({ members, open: id });
-  };
 
   renderMembers() {
     const { members } = this.state;
     if (members.length < 1) {
       return null;
     }
-    return (
-      <ul className='grid list_no-type'>
-        {Object.entries(members).map((el) => (
-          <li key={el[0]} className='grid__item'>
-            {this.renderMember(el[0], el[1])}
-          </li>
-        ))}
-      </ul>
-    );
+    return Object.entries(members).map((el) => this.renderMember(el[0], el[1]));
   }
 
   renderMember(id, data) {
     // { id, fullName, direction, education, startDate, age }
 
-    return (
-      <>
-        <MemberCard id={id} open={this.open} {...data} />
-      </>
-    );
+    return <MemberCard id={id} {...data} />;
   }
 
   render() {
-    return <>{this.renderMembers()}</>;
+    return (
+      <>
+        <CollapableItemsList>{this.renderMembers()}</CollapableItemsList>
+      </>
+    );
   }
 }
 
