@@ -7,12 +7,19 @@ import Button from '../../elements/Button';
 function MemberTaskCard(props) {
   const { taskName, taskDescription, state, taskStart, taskDeadline } = props;
   return props.collapsed ? (
-    <article className={`task-card_${state}`} onClick={() => props.open(props.id)}>
+    <article
+      className={`task-card task-card_${state.toLowerCase()} ${props.collapsed ? '' : 'open'}`}
+      onClick={() => props.open(props.id)}
+    >
       <CollapsedMemberTaskCard taskName={taskName} />
     </article>
   ) : (
-    <article className={`task-card_${state}`} onClick={() => props.close(props.id)}>
+    <article
+      className={`task-card task-card_${state.toLowerCase()} ${props.collapsed ? '' : 'open'}`}
+      onClick={() => props.close(props.id)}
+    >
       <CollapsedMemberTaskCard taskName={taskName} />
+      <div className='state'>{state}</div>
       <div className='task-card__body'>
         <div className='task-card__dates'>
           <DateBadge type='startDate' date={taskStart} />

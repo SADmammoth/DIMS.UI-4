@@ -4,8 +4,8 @@ $dark-bg: #447ace;
 $light-bg: white;
 $common-text: #0046af;
 $light-text: white;
-$success: #72bf7e;
-$error: #ff9191;
+$success: #70fc85;
+$error: #ff6f6f;
 
 @import '../../fonts/DIMSUIcons/index.css';
 @mixin clearfix {
@@ -336,4 +336,80 @@ hr {
 .list-key {
   font-weight: bold;
   padding-right: 15px;
+}
+
+@mixin task-card_border($color) {
+  :before {
+    content: '';
+    width: 99%;
+    height: 90%;
+    display: block;
+    border: 5px solid $color;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+  }
+}
+
+.task-card {
+  &_active > &__header {
+    position: relative;
+    @include task-card_border(white);
+  }
+  &_fail > &__header {
+    position: relative;
+    @include task-card_border($error);
+  }
+  &_success > &__header {
+    position: relative;
+    @include task-card_border($success);
+  }
+  &__header {
+    background: $primary-bg;
+    padding: 10px 35px;
+  }
+  &__title {
+    font-size: 1.2rem;
+  }
+  margin-bottom: 5px;
+  &.open > & {
+    &__header {
+      background: $highlight-bg;
+    }
+  }
+
+  .state {
+    background: $highlight-bg;
+    padding-left: 30px;
+    padding-bottom: 5px;
+  }
+  &_active .state {
+    color: white;
+    font-weight: bold;
+  }
+  &_fail .state {
+    color: $error;
+    font-weight: bold;
+  }
+  &_success .state {
+    color: $success;
+    font-weight: bold;
+  }
+
+  &__body {
+    border: 5px solid $highlight-bg;
+    padding: 20px;
+  }
+
+  .button-block {
+    .button:not(.button_primary) {
+      float: right;
+      margin-left: 10px;
+    }
+  }
+  .date-badge {
+    margin-right: 20px;
+  }
 }
