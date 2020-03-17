@@ -35,6 +35,19 @@ html {
 
   &_open > &__header {
     background-color: $highlight-bg;
+
+    position: relative;
+    &:before {
+      content: '\e801';
+      font-family: 'DIMSUIcons';
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      transform: rotate(90deg);
+      position: absolute;
+      color: $dark-bg;
+      left: 5px;
+    }
   }
 
   &__body {
@@ -51,6 +64,18 @@ html {
   }
 
   &__header {
+    position: relative;
+    &:before {
+      content: '\e801';
+      font-family: 'DIMSUIcons';
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      transform: rotate(-90deg);
+      position: absolute;
+      color: $dark-bg;
+      left: 5px;
+    }
     background-color: $primary-bg;
     padding: 15px 35px;
     height: 35px;
