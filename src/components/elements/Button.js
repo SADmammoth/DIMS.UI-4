@@ -19,16 +19,16 @@ function Button(props) {
   );
 }
 
+Button.defaultProps = {
+  type: 'button',
+};
+
 Button.propTypes = {
   type: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  history: PropTypes.any,
+  history: PropTypes.any.isRequired,
   classMod: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.objectOf(PropTypes.object)]),
-};
-
-Button.defaultProps = {
-  type: 'button',
 };
 
 export default withRouter(Button);

@@ -31,6 +31,10 @@ function DateBadge(props) {
   );
 }
 
+DateBadge.defaultProps = {
+  type: 'startDate',
+};
+
 DateBadge.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
   type: PropTypes.oneOf(['startDate', 'endDate', 'trackStart', 'trackSuccess', 'trackFail']),

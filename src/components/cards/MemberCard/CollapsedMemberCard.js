@@ -21,10 +21,12 @@ function CollapsedMemberCard(props) {
 }
 
 CollapsedMemberCard.propTypes = {
-  fullName: PropTypes.string.isRequired,
-  age: PropTypes.number.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  birthDate: PropTypes.instanceOf(Date).isRequired,
   direction: PropTypes.string.isRequired,
   startDate: PropTypes.instanceOf(Date).isRequired,
+
   onClick: PropTypes.func.isRequired,
 };
 

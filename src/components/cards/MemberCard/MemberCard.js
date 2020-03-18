@@ -5,17 +5,37 @@ import CollapsedMemberCard from './CollapsedMemberCard';
 import MemberInfoModal from '../../modals/MemberInfoModal';
 
 const MemberCard = (props) => {
-  const { id } = props;
+  const {
+    id,
+    collapsed,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+  } = props;
+
   let showModal;
   return (
     <>
-      {props.collapsed ? (
-        <article className='member-card'>
-          <CollapsedMemberCard {...props} onClick={() => props.open(id)} />
-        </article>
-      ) : (
-        <article className='member-card_open'>
-          <CollapsedMemberCard {...props} onClick={() => props.close(id)} />
+      <article className={`member-card${!collapsed ? '_open' : ''}`}>
+        <CollapsedMemberCard
+          firstName={firstName}
+          lastName={lastName}
+          birthDate={birthDate}
+          direction={direction}
+          startDate={startDate}
+          onClick={() => (collapsed ? props.open(id) : props.close(id))}
+        />
+        {collapsed || (
           <div className='member-card__body'>
             <Button classMod='primary' link={`/members/${id}/progress`}>
               <i className='icon-progress' />
@@ -29,16 +49,36 @@ const MemberCard = (props) => {
             <Button content='Edit' classMod='success' />
             <Button content='More info' classMod='ghost' onClick={() => showModal()} />
           </div>
-        </article>
-      )}
-      <MemberInfoModal {...props} bindButton={(cb) => (showModal = cb)} />
+        )}
+      </article>
+      <MemberInfoModal
+        firstName={firstName}
+        lastName={lastName}
+        birthDate={birthDate}
+        direction={direction}
+        startDate={startDate}
+        email={email}
+        mobilePhone={mobilePhone}
+        skype={skype}
+        address={address}
+        sex={sex}
+        education={education}
+        universityAverageScore={universityAverageScore}
+        mathScore={mathScore}
+        bindButton={(cb) => {
+          showModal = cb;
+        }}
+      />
     </>
   );
 };
 
+const { bindButton, ...MemberCardProps } = MemberInfoModal.propTypes;
+
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
-  ...CollapsedMemberCard.propTypes,
+  close: PropTypes.func.isRequired,
+  ...MemberCardProps,
 };
 
 export default MemberCard;

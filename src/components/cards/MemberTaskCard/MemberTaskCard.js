@@ -5,14 +5,11 @@ import DateBadge from '../../elements/DateBadge';
 import Button from '../../elements/Button';
 
 function MemberTaskCard(props) {
-  const { taskName, taskDescription, state, taskStart, taskDeadline } = props;
+  const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id } = props;
   return (
-    <article
-      className={`task-card task-card_${state.toLowerCase()} ${props.collapsed ? '' : 'open'}`}
-      onClick={() => props.open(props.id)}
-    >
-      <CollapsedMemberTaskCard taskName={taskName} />
-      {props.collapsed || (
+    <article className={`task-card task-card_${state.toLowerCase()} ${collapsed ? '' : 'open'}`}>
+      <CollapsedMemberTaskCard taskName={taskName} onClick={() => (collapsed ? props.open(id) : props.close(id))} />
+      {collapsed || (
         <>
           <div className='state'>{state}</div>
           <div className='task-card__body'>
@@ -37,6 +34,11 @@ function MemberTaskCard(props) {
 }
 
 MemberTaskCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+  open: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,

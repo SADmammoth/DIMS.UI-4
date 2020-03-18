@@ -1,17 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
 import Button from '../../elements/Button';
-import DateBadge from '../../elements/DateBadge';
 
-export default function MemberProgressCard(props) {
-  const { taskName, trackNote, trackDate } = props;
+function MemberProgressCard(props) {
+  const { taskName, trackNote, trackDate, collapsed, id } = props;
   return (
-    <article
-      className={`task-progress task-card ${props.collapsed ? '' : 'open'}`}
-      onClick={() => props.open(props.id)}
-    >
-      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} />
-      {props.collapsed || (
+    <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
+      <CollapsedMemberProgressCard
+        taskName={taskName}
+        trackDate={trackDate}
+        onClick={() => (collapsed ? props.open(id) : props.close(id))}
+      />
+      {collapsed || (
         <>
           <div className='task-card__body'>
             <p className='task-card__description'>{trackNote}</p>
@@ -29,3 +30,16 @@ export default function MemberProgressCard(props) {
     </article>
   );
 }
+
+MemberProgressCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  open: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+
+  taskName: PropTypes.string.isRequired,
+  trackNote: PropTypes.string.isRequired,
+  trackDate: PropTypes.instanceOf(Date).isRequired,
+};
+
+export default MemberProgressCard;
