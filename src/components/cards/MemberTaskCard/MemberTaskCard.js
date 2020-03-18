@@ -6,35 +6,32 @@ import Button from '../../elements/Button';
 
 function MemberTaskCard(props) {
   const { taskName, taskDescription, state, taskStart, taskDeadline } = props;
-  return props.collapsed ? (
+  return (
     <article
       className={`task-card task-card_${state.toLowerCase()} ${props.collapsed ? '' : 'open'}`}
       onClick={() => props.open(props.id)}
     >
       <CollapsedMemberTaskCard taskName={taskName} />
-    </article>
-  ) : (
-    <article
-      className={`task-card task-card_${state.toLowerCase()} ${props.collapsed ? '' : 'open'}`}
-      onClick={() => props.close(props.id)}
-    >
-      <CollapsedMemberTaskCard taskName={taskName} />
-      <div className='state'>{state}</div>
-      <div className='task-card__body'>
-        <div className='task-card__dates'>
-          <DateBadge type='startDate' date={taskStart} />
-          <DateBadge type='endDate' date={taskDeadline} />
-        </div>
-        <p className='task-card__description'>{taskDescription}</p>
-        <div className='button-block'>
-          <Button classMod='primary'>
-            <i className='icon-track' />
-            <span>Track</span>
-          </Button>
-          <Button classMod='error' content='Delete' />
-          <Button classMod='success' content='Edit' />
-        </div>
-      </div>
+      {props.collapsed || (
+        <>
+          <div className='state'>{state}</div>
+          <div className='task-card__body'>
+            <div className='task-card__dates'>
+              <DateBadge type='startDate' date={taskStart} />
+              <DateBadge type='endDate' date={taskDeadline} />
+            </div>
+            <p className='task-card__description'>{taskDescription}</p>
+            <div className='button-block'>
+              <Button classMod='primary'>
+                <i className='icon-track' />
+                <span>Track</span>
+              </Button>
+              <Button classMod='error' content='Delete' />
+              <Button classMod='success' content='Edit' />
+            </div>
+          </div>
+        </>
+      )}
     </article>
   );
 }

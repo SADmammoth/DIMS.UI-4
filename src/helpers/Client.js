@@ -40,6 +40,21 @@ class Client {
       .get();
     return new Promise((resolve) => resolve(member.data()));
   }
+
+  static async getUserProgress(userID) {
+    const members = await Client.db
+      .collection('progress')
+      .where('userID', '==', userID)
+      .get();
+    const membersObject = {};
+    members.docs.forEach(
+      (el) => (
+        (membersObject[el.id] = el.data()),
+        (membersObject[el.id].trackDate = new Date(membersObject[el.id].trackDate.seconds * 1000))
+      ),
+    );
+    return new Promise((resolve) => resolve(membersObject));
+  }
 }
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
 const config = {
@@ -90,4 +105,18 @@ export default Client;
 //       state: faker.helpers.randomize(['Active', 'Fail', 'Success']),
 //     }));
 //     Promise.all(members.forEach((el) => Client.db.collection('tasks').add(el)));
-//   }
+
+// let members = new Array(5).fill(null);
+// const generateTaskName = () => {
+//   let taskName = `${faker.hacker.verb()} ${faker.hacker.adjective()} ${faker.hacker.noun()}`;
+//   return taskName.charAt(0).toUpperCase() + taskName.slice(1);
+// };
+// let startDate;
+// members = members.map(async () => ({
+//   userID: userID,
+//   userName: (await Client.getMember(userID)).firstName,
+//   taskName: generateTaskName(),
+//   trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
+//   trackDate: ((startDate = faker.date.recent()), startDate),
+// }));
+// Promise.all(members.forEach(async (el) => Client.db.collection('progress').add(await el)));
