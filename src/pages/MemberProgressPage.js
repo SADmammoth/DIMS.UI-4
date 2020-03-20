@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberProgressCard from '../components/cards/MemberProgressCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
+import Container from '../components/elements/Container';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
@@ -34,10 +35,10 @@ class MemberProgressPage extends React.Component {
     const anytask = Object.values(tasks)[0] || {};
 
     return (
-      <>
+      <Container>
         <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
         <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
-      </>
+      </Container>
     );
   }
 }

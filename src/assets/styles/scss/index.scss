@@ -26,6 +26,8 @@ html {
 
 .list_no-type {
   list-style-type: none;
+  margin: inherit;
+  padding: inherit;
 }
 
 .member-card {
@@ -431,4 +433,10 @@ hr {
   .task-card__header {
     @include clearfix();
   }
+}
+
+.container {
+  max-width: 90vw;
+  width: 1000px;
+  margin: 0 auto;
 }

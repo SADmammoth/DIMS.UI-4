@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
+import Container from '../components/elements/Container';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -46,10 +47,10 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks, name } = this.state;
     return (
-      <>
+      <Container>
         <h1>{`${name}'s tasks`}</h1>
         <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderTasks()} /> : 'No tasks'}</div>
-      </>
+      </Container>
     );
   }
 }

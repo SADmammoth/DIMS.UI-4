@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
+import Container from '../components/elements/Container';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -68,9 +69,9 @@ class MembersManagerPage extends React.Component {
 
   render() {
     return (
-      <>
+      <Container>
         <CollapsableItemsList items={this.renderMembers()} />
-      </>
+      </Container>
     );
   }
 }
