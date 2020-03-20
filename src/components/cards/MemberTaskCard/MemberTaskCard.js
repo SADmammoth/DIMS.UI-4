@@ -11,7 +11,9 @@ function MemberTaskCard(props) {
       <CollapsedMemberTaskCard taskName={taskName} onClick={() => (collapsed ? props.open(id) : props.close(id))} />
       {collapsed || (
         <>
-          <div className='state'>{state}</div>
+          <div className='state'>
+            <span>{state}</span>
+          </div>
           <div className='task-card__body'>
             <div className='task-card__dates'>
               <DateBadge type='startDate' date={taskStart} />
@@ -23,8 +25,8 @@ function MemberTaskCard(props) {
                 <i className='icon-track' />
                 <span>Track</span>
               </Button>
-              <Button classMod='error' content='Delete' />
-              <Button classMod='success' content='Edit' />
+              <Button classMod='secondary' content='Delete' />
+              <Button classMod='secondary' content='Edit' />
             </div>
           </div>
         </>

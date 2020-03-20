@@ -141,6 +141,12 @@ html {
     font-size: 1.1rem;
     text-decoration: underline;
   }
+  &_secondary {
+    background: $primary-bg;
+    color: $common-text;
+    font-size: 1.1rem;
+    width: 100px;
+  }
 }
 // &:before {
 //   content: '\e800'; //icon-flag
@@ -382,20 +388,17 @@ hr {
 
   .state {
     background: $highlight-bg;
-    padding-left: 30px;
+    padding-top: 5px;
     padding-bottom: 5px;
-  }
-  &_active .state {
-    color: white;
-    font-weight: bold;
-  }
-  &_fail .state {
-    color: $error;
-    font-weight: bold;
-  }
-  &_success .state {
-    color: $success;
-    font-weight: bold;
+    font-size: 1.1rem;
+    span {
+      padding: 5px;
+      padding-left: 50px;
+      width: 60px;
+      display: inline-block;
+      text-align: center;
+      background: $primary-bg;
+    }
   }
 
   &__body {

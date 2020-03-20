@@ -45,8 +45,8 @@ const MemberCard = (props) => {
               <i className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <Button content='Delete' classMod='error' />
-            <Button content='Edit' classMod='success' />
+            <Button content='Delete' classMod='secondary' />
+            <Button content='Edit' classMod='secondary' />
             <Button content='More info' classMod='ghost' onClick={() => showModal()} />
           </div>
         )}

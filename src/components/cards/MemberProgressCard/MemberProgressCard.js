@@ -21,8 +21,8 @@ function MemberProgressCard(props) {
                 <i className='icon-track' />
                 <span>Track</span>
               </Button>
-              <Button classMod='error' content='Delete' />
-              <Button classMod='success' content='Edit' />
+              <Button classMod='secondary' content='Delete' />
+              <Button classMod='secondary' content='Edit' />
             </div>
           </div>
         </>
