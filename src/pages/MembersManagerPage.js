@@ -69,7 +69,7 @@ class MembersManagerPage extends React.Component {
   render() {
     return (
       <>
-        <CollapsableItemsList>{this.renderMembers()}</CollapsableItemsList>
+        <CollapsableItemsList items={this.renderMembers()} />
       </>
     );
   }

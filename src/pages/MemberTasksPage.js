@@ -48,9 +48,7 @@ class MemberTasksPage extends React.Component {
     return (
       <>
         <h1>{`${name}'s tasks`}</h1>
-        <div>
-          {Object.keys(tasks).length ? <CollapsableItemsList>{this.renderTasks()}</CollapsableItemsList> : 'No tasks'}
-        </div>
+        <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderTasks()} /> : 'No tasks'}</div>
       </>
     );
   }

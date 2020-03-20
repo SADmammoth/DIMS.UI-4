@@ -36,13 +36,7 @@ class MemberProgressPage extends React.Component {
     return (
       <>
         <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
-        <div>
-          {Object.keys(tasks).length ? (
-            <CollapsableItemsList>{this.renderProgress()}</CollapsableItemsList>
-          ) : (
-            'No tasks'
-          )}
-        </div>
+        <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
       </>
     );
   }
@@ -51,5 +45,3 @@ class MemberProgressPage extends React.Component {
 export default withRouter(MemberProgressPage);
 
 /* TODO icons */
-/* TODO colors */
-/*  status */

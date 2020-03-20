@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default class CollapsableItemsList extends Component {
+class CollapsableItemsList extends Component {
   constructor(props) {
     super(props);
     this.state = { items: {}, open: null };
   }
 
-  async componentDidUpdate() {
-    if (Object.keys(this.state.items).length !== this.props.children.length) {
-      let itemsData = {};
-      React.Children.forEach(this.props.children, (child) => (itemsData[child.props.id] = { collapsed: true }));
-      console.log(itemsData);
+  async componentDidMount() {
+    const { items } = this.props;
+    const { items: stateItems } = this.state;
+
+    if (Object.keys(stateItems).length !== items.length) {
+      const itemsData = {};
+      items.forEach((child) => {
+        itemsData[child.props.id] = { collapsed: true };
+      });
+
       this.setState({
         items: itemsData,
       });
     }
   }
 
-  async componentDidMount() {
-    if (Object.keys(this.state.items).length !== this.props.children.length) {
-      let itemsData = {};
-      React.Children.forEach(this.props.children, (child) => (itemsData[child.props.id] = { collapsed: true }));
-      console.log(itemsData);
+  async componentDidUpdate() {
+    const { items } = this.props;
+    const { items: stateItems } = this.state;
+
+    if (Object.keys(stateItems).length !== items.length) {
+      const itemsData = {};
+      items.forEach((child) => {
+        itemsData[child.props.id] = { collapsed: true };
+      });
+
       this.setState({
         items: itemsData,
       });
@@ -29,8 +40,7 @@ export default class CollapsableItemsList extends Component {
   }
 
   open = (id) => {
-    const items = { ...this.state.items };
-    const { open } = this.state;
+    const { open, items } = this.state;
     if (open) {
       items[open].collapsed = true;
     }
@@ -46,18 +56,21 @@ export default class CollapsableItemsList extends Component {
     }
     items[id].collapsed = true;
 
-    this.setState({ items, open: id }); /* TODO Rewrite with callback */
+    this.setState({ items, open: id });
   };
 
   render() {
+    const { items } = this.props;
+    const { items: stateItems } = this.state;
+
     return (
       <ul className='list_no-type'>
-        {React.Children.map(this.props.children, (child) => (
-          <li key={child.props.id}>
-            {React.cloneElement(child, {
+        {items.map((item) => (
+          <li key={item.props.id}>
+            {React.cloneElement(item, {
               open: this.open,
               close: this.close,
-              collapsed: this.state.items[child.props.id] && this.state.items[child.props.id].collapsed,
+              collapsed: stateItems[item.props.id] && stateItems[item.props.id].collapsed,
             })}
           </li>
         ))}
@@ -65,3 +78,9 @@ export default class CollapsableItemsList extends Component {
     );
   }
 }
+
+CollapsableItemsList.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.element).isRequired,
+};
+
+export default CollapsableItemsList;

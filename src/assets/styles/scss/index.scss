@@ -35,8 +35,8 @@ html {
 
   &_open > &__header {
     background-color: $highlight-bg;
-
     position: relative;
+
     &:before {
       content: '\e801';
       font-family: 'DIMSUIcons';
@@ -55,11 +55,10 @@ html {
 
     .button {
       margin: 0 5px;
-      &_success,
-      &_error,
-      &_ghost {
-        float: right;
-      }
+    }
+
+    .button:not(.button_primary) {
+      float: right;
     }
   }
 
