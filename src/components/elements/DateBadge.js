@@ -38,7 +38,7 @@ function DateBadge(props) {
 }
 
 DateBadge.defaultProps = {
-  type: 'startDate',
+  type: '',
 };
 
 DateBadge.propTypes = {

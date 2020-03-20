@@ -22,7 +22,10 @@ class MemberInfoModal extends Modal {
       education,
       universityAverageScore,
       mathScore,
+      bindButton,
     } = this.props;
+
+    bindButton(this.handleShow);
 
     return (
       <>
@@ -96,8 +99,8 @@ class MemberInfoModal extends Modal {
               <i className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <Button content='Delete' classMod='error' />
-            <Button content='Edit' classMod='success' />
+            <Button content='Delete' classMod='secondary' />
+            <Button content='Edit' classMod='secondary' />
           </div>
         </article>
         <ModalBackface />

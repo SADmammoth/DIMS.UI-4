@@ -24,6 +24,7 @@ const MemberCard = (props) => {
   } = props;
 
   let showModal;
+
   return (
     <>
       <article className={`member-card${!collapsed ? '_open' : ''}`}>
@@ -52,6 +53,7 @@ const MemberCard = (props) => {
         )}
       </article>
       <MemberInfoModal
+        id={id}
         firstName={firstName}
         lastName={lastName}
         birthDate={birthDate}
