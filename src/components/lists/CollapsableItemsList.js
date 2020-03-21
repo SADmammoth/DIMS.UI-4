@@ -21,6 +21,8 @@ class CollapsableItemsList extends Component {
         items: itemsData,
       });
     }
+
+    document.body.addEventListener('keydown', this.navigationKeys);
   }
 
   async componentDidUpdate() {
@@ -57,6 +59,35 @@ class CollapsableItemsList extends Component {
     items[id].collapsed = true;
 
     this.setState({ items, open: id });
+  };
+
+  navigationKeys = (event) => {
+    const isUp = event.key === 'ArrowUp';
+    const isDown = event.key === 'ArrowDown';
+    if (isUp || isDown) {
+      const { open, items } = this.state;
+      if (isUp && !open) {
+        return;
+      }
+      const itemsKeys = Object.keys(items);
+      if (isDown && !open) {
+        this.open(itemsKeys[0]);
+        return;
+      }
+
+      const index = itemsKeys.indexOf(open);
+      if (isDown) {
+        if (index !== itemsKeys.length - 1) {
+          this.open(itemsKeys[index + 1]);
+        }
+      }
+
+      if (isUp) {
+        if (index !== 0) {
+          this.open(itemsKeys[index - 1]);
+        }
+      }
+    }
   };
 
   render() {
