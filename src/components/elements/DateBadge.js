@@ -1,37 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ReactComponent as FlagIcon } from '../../assets/icons/flag.svg';
+import { ReactComponent as TaskDateIcon } from '../../assets/icons/TaskDate.svg';
 
 function DateBadge(props) {
   const { date, type } = props;
-  let iconClass;
-  let tooltip;
+  let Icon;
   switch (type) {
     case 'startDate':
-      iconClass = 'icon-flag';
-      tooltip = 'Start date';
+      Icon = <FlagIcon title='Start date' className='icon-flag common-text-color' />;
       break;
     case 'endDate':
-      iconClass = 'icon-flag error-color';
-      tooltip = 'Deadline';
+      Icon = <FlagIcon title='End date' className='icon-flag error-color' />;
       break;
     case 'trackStart':
-      iconClass = 'icon-taskdate';
-      tooltip = 'Track start date';
+      Icon = <TaskDateIcon title='Track start date' className='icon-taskdate common-text-color' />;
       break;
     case 'trackSuccess':
-      iconClass = 'icon-taskdate success-color';
-      tooltip = 'Task success date';
+      Icon = <TaskDateIcon title='Track success date' className='icon-taskdate success-color' />;
       break;
     case 'trackFail':
-      iconClass = 'icon-taskdate error-color';
-      tooltip = 'Task fail date';
+      Icon = <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />;
       break;
     default:
-      iconClass = null;
+      Icon = null;
   }
   return (
     <p className='date-badge'>
-      {iconClass && <i className={iconClass} title={tooltip} />}
+      {Icon}
       {date.toLocaleDateString()}
     </p>
   );

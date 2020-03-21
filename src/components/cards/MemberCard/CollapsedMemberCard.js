@@ -10,10 +10,10 @@ function CollapsedMemberCard(props) {
 
   return (
     <div className='member-card__header'>
-      <button type='button' className='button_invisible member-card__header__title' onClick={onClick}>
+      <p role='menu' className='interactive member-card__header__title' onClick={onClick}>
         <b>{firstName}</b>
         {` ${lastName}, ${age}`}
-      </button>
+      </p>
       <DateBadge date={startDate} type='startDate' />
       <DirectionBadge direction={direction} />
     </div>

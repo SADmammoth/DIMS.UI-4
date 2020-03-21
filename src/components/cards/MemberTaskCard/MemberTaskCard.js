@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../elements/DateBadge';
 import Button from '../../elements/Button';
+import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 
 function MemberTaskCard(props) {
   const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id } = props;
@@ -22,7 +23,7 @@ function MemberTaskCard(props) {
             <p className='task-card__description'>{taskDescription}</p>
             <div className='button-block'>
               <Button classMod='primary'>
-                <i className='icon-track' />
+                <TrackIcon className='icon-track' />
                 <span>Track</span>
               </Button>
               <Button classMod='secondary' content='Delete' />

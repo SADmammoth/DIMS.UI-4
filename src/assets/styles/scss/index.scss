@@ -4,10 +4,10 @@ $dark-bg: #447ace;
 $light-bg: white;
 $common-text: #0046af;
 $light-text: white;
-$success: #70fc85;
+$success: #39ff57;
 $error: #ff6f6f;
 
-@import '../../fonts/DIMSUIcons/index.css';
+// @import '../../fonts/DIMSUIcons/index.css';
 @mixin clearfix {
   &:after {
     content: '.';
@@ -38,18 +38,6 @@ html {
   &_open > &__header {
     background-color: $highlight-bg;
     position: relative;
-
-    &:before {
-      content: '\e801';
-      font-family: 'DIMSUIcons';
-      display: inline-block;
-      padding: 5px 10px;
-      font-size: 1.1rem;
-      transform: rotate(90deg);
-      position: absolute;
-      color: $dark-bg;
-      left: 5px;
-    }
   }
 
   &__body {
@@ -66,42 +54,32 @@ html {
 
   &__header {
     position: relative;
-    &:before {
-      content: '\e801';
-      font-family: 'DIMSUIcons';
-      display: inline-block;
-      padding: 5px 10px;
-      font-size: 1.1rem;
-      transform: rotate(-90deg);
-      position: absolute;
-      color: $dark-bg;
-      left: 5px;
-    }
     background-color: $primary-bg;
     padding: 15px 35px;
     height: 35px;
+    margin-bottom: 2px;
+
     &__title {
       font-size: 1.5rem;
       margin: 0;
       float: left;
+      padding-bottom: 2px;
+      border-bottom: 1px solid $dark-bg;
     }
+
     .date-badge {
       float: right;
       margin-left: 40px;
+      padding: 5px 0;
+      font-size: 1.3rem;
+      position: relative;
+      margin-top: -5px;
     }
     .direction-badge {
       float: right;
     }
   }
   @include clearfix;
-}
-
-.date-badge {
-  margin: 0;
-  display: inline;
-  padding: 5px 0;
-  font-size: 1.1rem;
-  position: relative;
 }
 
 .direction-badge {
@@ -118,6 +96,8 @@ html {
   border: none;
   outline: none;
   padding: 10px;
+  cursor: pointer;
+
   &_primary {
     background-color: $highlight-bg;
     width: 150px;
@@ -160,14 +140,17 @@ html {
 
 .error-color {
   color: $error;
+  fill: $error;
 }
 
 .success-color {
   color: $success;
+  fill: $success;
 }
 
 .common-text-color {
   color: $common-text;
+  fill: $common-text;
 }
 
 .modal {
@@ -351,7 +334,7 @@ hr {
     width: 99%;
     height: 90%;
     display: block;
-    border: 5px solid $color;
+    border: 2px solid $color;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -376,9 +359,13 @@ hr {
   &__header {
     background: $primary-bg;
     padding: 10px 35px;
+
+    @include clearfix;
   }
   &__title {
     font-size: 1.2rem;
+    border-bottom: 1px solid $dark-bg;
+    float: left;
   }
   margin-bottom: 5px;
   &.open > & {
@@ -407,6 +394,10 @@ hr {
     padding: 20px;
   }
 
+  &__description {
+    margin-bottom: 35px;
+  }
+
   .button-block {
     .button:not(.button_primary) {
       float: right;
@@ -415,6 +406,13 @@ hr {
   }
   .date-badge {
     margin-right: 20px;
+    float: left;
+    margin-bottom: 0;
+    font-size: 1.1rem;
+  }
+
+  &__dates {
+    @include clearfix;
   }
 
   .button_invisible {
@@ -425,10 +423,13 @@ hr {
 .task-progress {
   .task-card__title {
     float: left;
+    padding: 3px;
+    border-bottom: 1px solid $dark-bg;
   }
   .date-badge {
     float: right;
     margin-top: 15px;
+    font-size: 1.3rem;
   }
   .task-card__header {
     @include clearfix();
@@ -439,4 +440,38 @@ hr {
   max-width: 90vw;
   width: 1000px;
   margin: 0 auto;
+}
+
+.icon-flag {
+  width: 18px;
+  height: 18px;
+  margin-bottom: -3px;
+}
+
+.icon-taskdate {
+  width: 23px;
+  height: 23px;
+  margin-bottom: -3px;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.icon-track {
+  width: 18px;
+  height: 18px;
+  margin-bottom: -1px;
+}
+
+.icon-progress {
+  width: 15px;
+  height: 15px;
+  margin-bottom: -1px;
+}
+
+.icon-tasks {
+  width: 20px;
+  height: 20px;
+  margin-bottom: -3px;
 }

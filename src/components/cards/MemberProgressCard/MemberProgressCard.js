@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
 import Button from '../../elements/Button';
+import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id } = props;
@@ -18,7 +19,7 @@ function MemberProgressCard(props) {
             <p className='task-card__description'>{trackNote}</p>
             <div className='button-block'>
               <Button classMod='primary'>
-                <i className='icon-track' />
+                <TrackIcon className='icon-track' />
                 <span>Track</span>
               </Button>
               <Button classMod='secondary' content='Delete' />

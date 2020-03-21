@@ -6,9 +6,9 @@ function CollapsedMemberProgressCard(props) {
   const { taskName, trackDate, onClick } = props;
   return (
     <div className='task-card__header'>
-      <button type='button' className='button_invisible task-card__title' onClick={onClick}>
+      <p role='menu' className='interactive task-card__title' onClick={onClick}>
         {taskName}
-      </button>
+      </p>
       <DateBadge type='trackStart' date={trackDate} />
     </div>
   );

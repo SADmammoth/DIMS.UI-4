@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Button from '../../elements/Button';
 import CollapsedMemberCard from './CollapsedMemberCard';
 import MemberInfoModal from '../../modals/MemberInfoModal';
+import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
+import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 
 const MemberCard = (props) => {
   const {
@@ -39,11 +41,11 @@ const MemberCard = (props) => {
         {collapsed || (
           <div className='member-card__body'>
             <Button classMod='primary' link={`/members/${id}/progress`}>
-              <i className='icon-progress' />
+              <ProgressIcon className='icon-progress' />
               <span>Progress</span>
             </Button>
             <Button classMod='primary' link={`/members/${id}/tasks`}>
-              <i className='icon-tasks' />
+              <TasksIcon className='icon-tasks' />
               <span>Tasks</span>
             </Button>
             <Button content='Delete' classMod='secondary' />

@@ -5,9 +5,9 @@ function CollapsedMemberTaskCard(props) {
   const { taskName, onClick } = props;
   return (
     <div className='task-card__header'>
-      <button type='button' className='button_invisible task-card__title' onClick={onClick}>
+      <p role='menu' className='interactive task-card__title' onClick={onClick}>
         {taskName}
-      </button>
+      </p>
     </div>
   );
 }
