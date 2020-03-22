@@ -1,0 +1,442 @@
+$primary-bg: #c6ddff;
+$highlight-bg: #91bdff;
+$dark-bg: #447ace;
+$light-bg: white;
+$common-text: #0046af;
+$light-text: white;
+$success: #70fc85;
+$error: #ff6f6f;
+
+@import '../../fonts/DIMSUIcons/index.css';
+@mixin clearfix {
+  &:after {
+    content: '.';
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
+html {
+  font-family: 'Segoe UI', sans-serif;
+  color: $common-text;
+  font-size: 16px;
+}
+
+.list_no-type {
+  list-style-type: none;
+  margin: inherit;
+  padding: inherit;
+}
+
+.member-card {
+  &_open {
+    border: 3px solid $highlight-bg;
+  }
+
+  &_open > &__header {
+    background-color: $highlight-bg;
+    position: relative;
+
+    &:before {
+      content: '\e801';
+      font-family: 'DIMSUIcons';
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      transform: rotate(90deg);
+      position: absolute;
+      color: $dark-bg;
+      left: 5px;
+    }
+  }
+
+  &__body {
+    padding: 10px 30px;
+
+    .button {
+      margin: 0 5px;
+    }
+
+    .button:not(.button_primary) {
+      float: right;
+    }
+  }
+
+  &__header {
+    position: relative;
+    &:before {
+      content: '\e801';
+      font-family: 'DIMSUIcons';
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 1.1rem;
+      transform: rotate(-90deg);
+      position: absolute;
+      color: $dark-bg;
+      left: 5px;
+    }
+    background-color: $primary-bg;
+    padding: 15px 35px;
+    height: 35px;
+    &__title {
+      font-size: 1.5rem;
+      margin: 0;
+      float: left;
+    }
+    .date-badge {
+      float: right;
+      margin-left: 40px;
+    }
+    .direction-badge {
+      float: right;
+    }
+  }
+  @include clearfix;
+}
+
+.date-badge {
+  margin: 0;
+  display: inline;
+  padding: 5px 0;
+  font-size: 1.1rem;
+  position: relative;
+}
+
+.direction-badge {
+  background-color: $dark-bg;
+  font-size: 1.2rem;
+  width: 100px;
+  color: $light-text;
+  text-align: center;
+  padding: 5px;
+  border-radius: 20px;
+}
+
+.button {
+  border: none;
+  outline: none;
+  padding: 10px;
+  &_primary {
+    background-color: $highlight-bg;
+    width: 150px;
+    color: $light-text;
+    font-size: 1.1rem;
+  }
+  &_success {
+    background-color: $success;
+    width: 80px;
+    color: $light-text;
+    font-size: 1.1rem;
+  }
+  &_error {
+    background-color: $error;
+    width: 80px;
+    color: $light-text;
+    font-size: 1.1rem;
+  }
+  &_ghost {
+    background: none;
+    color: $common-text;
+    font-size: 1.1rem;
+    text-decoration: underline;
+  }
+  &_secondary {
+    background: $primary-bg;
+    color: $common-text;
+    font-size: 1.1rem;
+    width: 100px;
+  }
+}
+// &:before {
+//   content: '\e800'; //icon-flag
+//   font-family: 'DIMSUIcons';
+//   display: inline-block;
+//   position: absolute;
+//   left: -18px;
+//   top: 10px;
+// }
+
+.error-color {
+  color: $error;
+}
+
+.success-color {
+  color: $success;
+}
+
+.common-text-color {
+  color: $common-text;
+}
+
+.modal {
+  position: fixed;
+  display: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 100;
+  &.show {
+    display: block;
+
+    z-index: 101;
+    & + .modal-shadow {
+      background: transparentize(black, 0.2);
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+  }
+  background: $light-bg;
+}
+
+.member-info {
+  width: 80vw;
+  height: 90vh;
+
+  &__header {
+    background-color: $primary-bg;
+    position: relative;
+
+    .button {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      width: 50px;
+      background-color: $highlight-bg;
+      color: $common-text;
+      font-size: 1.5rem;
+      padding-left: 0;
+    }
+
+    .date-badge {
+      float: right;
+      margin-left: 50px;
+      transform: scale(1.2);
+    }
+
+    .direction-badge {
+      float: right;
+      transform: scale(1.2);
+    }
+
+    padding: 25px 0;
+    padding-right: 70px;
+    @include clearfix;
+  }
+
+  &__title {
+    float: left;
+    font-size: 2rem;
+    margin: 0;
+    margin-left: 80px;
+  }
+
+  &__contacts {
+    font-size: 1.4rem;
+    margin: 3% 70px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background: $primary-bg;
+    padding: 20px 20px;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    & > * {
+      width: 50%;
+      &:first-child {
+        justify-self: flex-start;
+        text-align: left;
+      }
+      &:last-child {
+        justify-self: flex-end;
+        text-align: right;
+      }
+    }
+
+    .icon-envelope {
+      font-size: 1.3rem;
+    }
+  }
+
+  .address {
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .flex-column {
+    float: left;
+    width: 35%;
+    box-sizing: border-box;
+    &:first-child {
+      margin-right: 5%;
+    }
+    font-size: 1.4rem;
+  }
+  &__additional-info {
+    margin: 0 auto;
+    width: calc(100% - 140px);
+    box-sizing: border-box;
+    padding: 2% 5%;
+    margin-top: 3%;
+    background: $primary-bg;
+    .date-badge {
+      font-size: 1.4rem;
+    }
+
+    @include clearfix;
+  }
+
+  .button-block {
+    position: absolute;
+    bottom: 50px;
+    right: 70px;
+    width: calc(100% - 140px);
+    .button:not(.button_primary) {
+      margin-left: 20px;
+      float: right;
+    }
+
+    .button_primary {
+      float: left;
+      margin-right: 20px;
+    }
+  }
+}
+
+.button_invisible {
+  background: transparent;
+  border: none;
+  color: inherit;
+  outline: none;
+}
+
+[class*='icon-'] {
+  padding-right: 10px;
+}
+
+hr {
+  width: calc(100% - 140px);
+  height: 5px;
+  background: $primary-bg;
+  border: none;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  & > div {
+    margin-bottom: 20px;
+  }
+}
+
+.list-key {
+  font-weight: bold;
+  padding-right: 15px;
+}
+
+@mixin task-card_border($color) {
+  :before {
+    content: '';
+    width: 99%;
+    height: 90%;
+    display: block;
+    border: 5px solid $color;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+  }
+}
+
+.task-card {
+  &_active > &__header {
+    position: relative;
+    @include task-card_border(white);
+  }
+  &_fail > &__header {
+    position: relative;
+    @include task-card_border($error);
+  }
+  &_success > &__header {
+    position: relative;
+    @include task-card_border($success);
+  }
+  &__header {
+    background: $primary-bg;
+    padding: 10px 35px;
+  }
+  &__title {
+    font-size: 1.2rem;
+  }
+  margin-bottom: 5px;
+  &.open > & {
+    &__header {
+      background: $highlight-bg;
+    }
+  }
+
+  .state {
+    background: $highlight-bg;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 1.1rem;
+    span {
+      padding: 5px;
+      padding-left: 50px;
+      width: 60px;
+      display: inline-block;
+      text-align: center;
+      background: $primary-bg;
+    }
+  }
+
+  &__body {
+    border: 5px solid $highlight-bg;
+    padding: 20px;
+  }
+
+  .button-block {
+    .button:not(.button_primary) {
+      float: right;
+      margin-left: 10px;
+    }
+  }
+  .date-badge {
+    margin-right: 20px;
+  }
+
+  .button_invisible {
+    padding: 20px;
+  }
+}
+
+.task-progress {
+  .task-card__title {
+    float: left;
+  }
+  .date-badge {
+    float: right;
+    margin-top: 15px;
+  }
+  .task-card__header {
+    @include clearfix();
+  }
+}
+
+.container {
+  max-width: 90vw;
+  width: 1000px;
+  margin: 0 auto;
+}
