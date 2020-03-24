@@ -1,7 +1,21 @@
 import firebase from 'firebase';
 
+//* Firebase configuration
+const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
+const config = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: `${projectId}.firebaseapsp.com`,
+  databaseURL: `https://${projectId}.firebaseio.com`,
+  projectId,
+  storageBucket: `${projectId}.appspot.com`,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+};
+
+firebase.initializeApp(config);
+
 class Client {
-  static db = null;
+  static db = firebase.firestore();
 
   static async getMembers() {
     const members = await Client.db.collection('members').get();
@@ -12,8 +26,7 @@ class Client {
       membersObject[doc.id].startDate = new Date(membersObject[doc.id].startDate.seconds * 1000);
       membersObject[doc.id].birthDate = new Date(membersObject[doc.id].birthDate.seconds * 1000);
     });
-
-    return new Promise((resolve) => resolve(membersObject));
+    return membersObject;
   }
 
   static async getUserTasks(userID) {
@@ -29,7 +42,7 @@ class Client {
       membersObject[doc.id].taskDeadline = new Date(membersObject[doc.id].taskDeadline.seconds * 1000);
     });
 
-    return new Promise((resolve) => resolve(membersObject));
+    return membersObject;
   }
 
   static async getMember(userId) {
@@ -38,7 +51,7 @@ class Client {
       .doc(userId)
       .get();
 
-    return new Promise((resolve) => resolve(member.data()));
+    return member.data();
   }
 
   static async getUserProgress(userID) {
@@ -53,23 +66,8 @@ class Client {
       membersObject[doc.id].trackDate = new Date(membersObject[doc.id].trackDate.seconds * 1000);
     });
 
-    return new Promise((resolve) => resolve(membersObject));
+    return membersObject;
   }
 }
-
-//* Firebase configuration
-const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
-const config = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: `${projectId}.firebaseapsp.com`,
-  databaseURL: `https://${projectId}.firebaseio.com`,
-  projectId,
-  storageBucket: `${projectId}.appspot.com`,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-};
-
-firebase.initializeApp(config);
-Client.db = firebase.firestore();
 
 export default Client;

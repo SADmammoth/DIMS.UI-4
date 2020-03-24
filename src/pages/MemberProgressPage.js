@@ -44,5 +44,3 @@ class MemberProgressPage extends React.Component {
 }
 
 export default withRouter(MemberProgressPage);
-
-/* TODO icons */

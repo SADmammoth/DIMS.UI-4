@@ -6,14 +6,18 @@ import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id } = props;
+  function onClick() {
+    if (collapsed) {
+      props.open(id);
+    } else {
+      props.close(id);
+    }
+  }
+
   return (
     <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberProgressCard
-        taskName={taskName}
-        trackDate={trackDate}
-        onClick={() => (collapsed ? props.open(id) : props.close(id))}
-      />
-      {collapsed || (
+      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} onClick={onClick} />
+      {!collapsed && (
         <>
           <div className='task-card__body'>
             <p className='task-card__description'>{trackNote}</p>

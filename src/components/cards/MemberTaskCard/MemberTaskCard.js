@@ -7,9 +7,17 @@ import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 
 function MemberTaskCard(props) {
   const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id } = props;
+  function onClick() {
+    if (collapsed) {
+      props.open(id);
+    } else {
+      props.close(id);
+    }
+  }
+
   return (
     <article className={`task-card task-card_${state.toLowerCase()} ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberTaskCard taskName={taskName} onClick={() => (collapsed ? props.open(id) : props.close(id))} />
+      <CollapsedMemberTaskCard taskName={taskName} onClick={onClick} />
       {collapsed || (
         <>
           <div className='state'>

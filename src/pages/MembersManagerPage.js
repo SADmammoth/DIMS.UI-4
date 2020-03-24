@@ -20,10 +20,12 @@ class MembersManagerPage extends React.Component {
 
   renderMembers() {
     const { members } = this.state;
-    if (members.length < 1) {
-      return null;
+    if (!Object.keys(members).length) {
+      return [];
     }
+
     return Object.entries(members).map((member) => {
+      //TODO
       const id = member[0];
       const data = member[1];
       return MembersManagerPage.renderMember(id, data);

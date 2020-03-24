@@ -25,7 +25,15 @@ const MemberCard = (props) => {
     mathScore,
   } = props;
 
-  let showModal;
+  function onClick() {
+    if (collapsed) {
+      props.open(id);
+    } else {
+      props.close(id);
+    }
+  }
+
+  const modal = React.createRef();
 
   return (
     <>
@@ -36,7 +44,7 @@ const MemberCard = (props) => {
           birthDate={birthDate}
           direction={direction}
           startDate={startDate}
-          onClick={() => (collapsed ? props.open(id) : props.close(id))}
+          onClick={onClick}
         />
         {collapsed || (
           <div className='member-card__body'>
@@ -50,11 +58,18 @@ const MemberCard = (props) => {
             </Button>
             <Button content='Delete' classMod='secondary' />
             <Button content='Edit' classMod='secondary' />
-            <Button content='More info' classMod='ghost' onClick={() => showModal()} />
+            <Button
+              content='More info'
+              classMod='ghost'
+              onClick={() => {
+                modal.current.handleShow();
+              }}
+            />
           </div>
         )}
       </article>
       <MemberInfoModal
+        ref={modal}
         id={id}
         firstName={firstName}
         lastName={lastName}
@@ -69,20 +84,15 @@ const MemberCard = (props) => {
         education={education}
         universityAverageScore={universityAverageScore}
         mathScore={mathScore}
-        bindButton={(cb) => {
-          showModal = cb;
-        }}
       />
     </>
   );
 };
 
-const { bindButton, ...MemberCardProps } = MemberInfoModal.propTypes;
-
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  ...MemberCardProps,
+  ...MemberInfoModal.propTypes,
 };
 
 export default MemberCard;

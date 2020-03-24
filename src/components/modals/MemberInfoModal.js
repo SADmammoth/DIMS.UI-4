@@ -22,10 +22,7 @@ class MemberInfoModal extends Modal {
       education,
       universityAverageScore,
       mathScore,
-      bindButton,
     } = this.props;
-
-    bindButton(this.handleShow);
 
     return (
       <>
@@ -124,7 +121,6 @@ MemberInfoModal.propTypes = {
   education: PropTypes.string.isRequired,
   universityAverageScore: PropTypes.number.isRequired,
   mathScore: PropTypes.number.isRequired,
-  bindButton: PropTypes.func.isRequired,
 };
 
 export default MemberInfoModal;

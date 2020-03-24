@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 function Button(props) {
+  function onClick(event) {
+    if (props.onClick) {
+      props.onClick(event);
+    } else {
+      props.history.push(props.link);
+    }
+  }
   return (
-    <button
-      className={`button button${`_${props.classMod}` || ''}`}
-      type={props.type}
-      onClick={
-        props.onClick ||
-        function() {
-          props.history.push(props.link);
-        }
-      }
-    >
+    <button className={`button button${`_${props.classMod}` || ''}`} type={props.type} onClick={onClick}>
       {props.content || props.children}
     </button>
   );

@@ -5,29 +5,17 @@ import { ReactComponent as TaskDateIcon } from '../../assets/icons/TaskDate.svg'
 
 function DateBadge(props) {
   const { date, type } = props;
-  let Icon;
-  switch (type) {
-    case 'startDate':
-      Icon = <FlagIcon title='Start date' className='icon-flag common-text-color' />;
-      break;
-    case 'endDate':
-      Icon = <FlagIcon title='End date' className='icon-flag error-color' />;
-      break;
-    case 'trackStart':
-      Icon = <TaskDateIcon title='Track start date' className='icon-taskdate common-text-color' />;
-      break;
-    case 'trackSuccess':
-      Icon = <TaskDateIcon title='Track success date' className='icon-taskdate success-color' />;
-      break;
-    case 'trackFail':
-      Icon = <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />;
-      break;
-    default:
-      Icon = null;
-  }
+  const dateTypes = {
+    startDate: <FlagIcon title='Start date' className='icon-flag common-text-color' />,
+    endDate: <FlagIcon title='End date' className='icon-flag error-color' />,
+    trackStart: <TaskDateIcon title='Track start date' className='icon-taskdate common-text-color' />,
+    trackSuccess: <TaskDateIcon title='Track success date' className='icon-taskdate success-color' />,
+    trackFails: <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />,
+  };
+
   return (
     <p className='date-badge'>
-      {Icon}
+      {dateTypes[type]}
       {date.toLocaleDateString()}
     </p>
   );
