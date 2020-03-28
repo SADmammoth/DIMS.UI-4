@@ -114,11 +114,21 @@ export default class Validator {
   };
 
   static text(input) {
-    return /^[a-zA-Z]+/.test(input);
+    return /^[a-zA-Z]+$/.test(input);
   }
 
   static numeric(input) {
-    return /^[0-9]+/.test(input);
+    return /^(?=[^,.]*[,.]?[^,.]*)([0-9,.]+)$/.test(input);
+  }
+
+  static float(number, from, to) {
+    const num = parseFloat(number);
+    return num <= to && num >= from;
+  }
+
+  static number(number, from, to) {
+    const num = parseInt(number, 10);
+    return num <= to && num >= from;
   }
 
   static alphanumeric(input) {

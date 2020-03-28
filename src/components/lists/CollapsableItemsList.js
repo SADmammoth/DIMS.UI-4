@@ -58,7 +58,7 @@ class CollapsableItemsList extends Component {
     }
     items[id].collapsed = true;
 
-    this.setState({ items, open: id });
+    this.setState({ items, open: null });
   };
 
   navigationKeys = (event) => {

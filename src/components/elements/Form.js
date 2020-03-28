@@ -17,6 +17,7 @@ class Form extends React.Component {
     label = false,
     attributes = [],
     value = undefined,
+    valueOptions = [],
   ) {
     return (
       <Input
@@ -30,6 +31,7 @@ class Form extends React.Component {
         validator={validator}
         byCharValidator={byCharValidator}
         attributes={attributes}
+        valueOptions={valueOptions}
         label={label}
         value={value}
       />
@@ -69,24 +71,24 @@ class Form extends React.Component {
   updateValue = (event) => {
     const { values } = this.state;
 
-    console.log(values[event.target.id]);
-    values[event.target.id].value = event.target.value;
+    console.log(values[event.target.getAttribute('name')]);
+    values[event.target.getAttribute('name')].value = event.target.value;
     this.createValues();
     this.createInputs();
     this.setState({ values });
   };
 
   createValue(id, type, name) {
-    this.setState((state) => ({ ...state, values: { ...state.values, [id]: { type, name } } }));
+    this.setState((state) => ({ ...state, values: { ...state.values, [name]: { type, id } } }));
   }
 
   createValues() {
     const values = {};
     this.props.inputs.forEach((input) => {
-      values[input.name + faker.random.alphaNumeric(8)] = {
+      values[input.name] = {
         type: input.type,
-        name: input.name,
-        value: input.attributes ? input.attributes.value : undefined,
+        id: input.name + faker.random.alphaNumeric(8),
+        value: input.value,
       };
     });
     this.setState({ values });
@@ -101,20 +103,21 @@ class Form extends React.Component {
 
     const inputsData = {};
     inputs.forEach((input, i) => {
-      const { type, name, description, required, label, attributes, byCharValidator, validator } = input;
+      const { type, name, description, required, label, attributes, byCharValidator, validator, valueOptions } = input;
       inputsData[name] = Form.createInput(
-        Object.keys(values)[i],
+        Object.values(values)[i].id,
         type,
         name,
         description,
         this.updateValue,
-        () => {},
+        this.updateValue,
         validator,
         byCharValidator,
         required,
         label,
         attributes,
-        values[Object.keys(values)[i]].value,
+        Object.values(values)[i].value,
+        valueOptions,
       );
     });
     onInputsUpdate(inputsData);
@@ -123,8 +126,8 @@ class Form extends React.Component {
 
   formatValues() {
     const values = {};
-    Object.values(this.state.values).forEach((valueItem) => {
-      values[valueItem.name] = valueItem.value;
+    Object.entries(this.state.values).forEach(({ name, valueItem }) => {
+      values[name] = valueItem.value;
     });
     return values;
   }
@@ -152,7 +155,7 @@ class Form extends React.Component {
             }
           }}
         >
-          {this.props.children && Object.values(this.state.inputs)}
+          {this.props.children && this.props.children.length ? this.props.children : Object.values(this.state.inputs)}
           {React.cloneElement(submitButton, {
             type: 'submit',
           })}

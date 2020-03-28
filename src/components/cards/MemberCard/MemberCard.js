@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../elements/Button';
 import CollapsedMemberCard from './CollapsedMemberCard';
-import MemberInfoModal from '../../modals/MemberInfoModal';
+import MemberInfo from '../../elements/MemberInfo';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
+
+import Modal from '../../elements/Modal';
 
 const MemberCard = (props) => {
   const {
@@ -35,6 +37,8 @@ const MemberCard = (props) => {
 
   const modal = React.createRef();
 
+  let [edit, setEdit] = useState(false);
+
   return (
     <>
       <article className={`member-card${!collapsed ? '_open' : ''}`}>
@@ -57,7 +61,14 @@ const MemberCard = (props) => {
               <span>Tasks</span>
             </Button>
             <Button content='Delete' classMod='secondary' />
-            <Button content='Edit' classMod='secondary' />
+            <Button
+              content='Edit'
+              classMod='secondary'
+              onClick={() => {
+                modal.current.handleShow();
+                setEdit(true);
+              }}
+            />
             <Button
               content='More info'
               classMod='ghost'
@@ -68,23 +79,30 @@ const MemberCard = (props) => {
           </div>
         )}
       </article>
-      <MemberInfoModal
-        ref={modal}
-        id={id}
-        firstName={firstName}
-        lastName={lastName}
-        birthDate={birthDate}
-        direction={direction}
-        startDate={startDate}
-        email={email}
-        mobilePhone={mobilePhone}
-        skype={skype}
-        address={address}
-        sex={sex}
-        education={education}
-        universityAverageScore={universityAverageScore}
-        mathScore={mathScore}
-      />
+      <Modal ref={modal} className='member-info'>
+        <MemberInfo
+          edit={edit}
+          setEdit={setEdit}
+          id={id}
+          firstName={firstName}
+          lastName={lastName}
+          birthDate={birthDate}
+          direction={direction}
+          startDate={startDate}
+          email={email}
+          mobilePhone={mobilePhone}
+          skype={skype}
+          address={address}
+          sex={sex}
+          education={education}
+          universityAverageScore={universityAverageScore}
+          mathScore={mathScore}
+          handleClose={() => {
+            setEdit(false);
+            modal.current.handleClose();
+          }}
+        />
+      </Modal>
     </>
   );
 };
@@ -92,7 +110,7 @@ const MemberCard = (props) => {
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  ...MemberInfoModal.propTypes,
+  ...MemberInfo.propTypes,
 };
 
 export default MemberCard;

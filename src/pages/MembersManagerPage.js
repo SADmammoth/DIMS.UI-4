@@ -24,10 +24,8 @@ class MembersManagerPage extends React.Component {
       return [];
     }
 
-    return Object.entries(members).map((member) => {
+    return Object.entries(members).map(({ 0: id, 1: data }) => {
       //TODO
-      const id = member[0];
-      const data = member[1];
       return MembersManagerPage.renderMember(id, data);
     });
   }

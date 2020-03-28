@@ -1,36 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import DirectionBadge from '../elements/DirectionBadge';
-import DateBadge from '../elements/DateBadge';
-import Button from '../elements/Button';
-import Modal, { ModalBackface } from './Modal';
+import DirectionBadge from '../DirectionBadge';
+import DateBadge from '../DateBadge';
+import Button from '../Button';
+import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
+import EditMember from './EditMember';
+import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
+import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
+import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
+import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
 
-class MemberInfoModal extends Modal {
-  render() {
-    const {
-      id,
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-    } = this.props;
+const MemberInfo = (props) => {
+  const {
+    id,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+    edit,
+    setEdit,
+    handleClose,
+  } = props;
 
-    return (
-      <>
-        <article className={`modal ${this.state.show ? 'show' : ''} member-info`}>
+  return (
+    <>
+      {edit ? (
+        <EditMember {...props} />
+      ) : (
+        <>
           <div className='member-info__header'>
-            <Button onClick={this.handleClose}>
-              <i className='icon-back' />
-            </Button>
+            {handleClose && (
+              <Button onClick={handleClose}>
+                <BackIcon className='icon-back common-text-color' />
+              </Button>
+            )}
             <p className='member-info__title'>
               <b>{firstName}</b>
               {` ${lastName}`}
@@ -41,21 +53,21 @@ class MemberInfoModal extends Modal {
           <div className='member-info__body'>
             <div className='member-info__contacts'>
               <a href={`mailto:${email}`}>
-                <i className='icon-envelope' />
+                <EnvelopeIcon className='icon-envelope' />
                 <span>{email}</span>
               </a>
               <a href={`skype:${skype}`}>
-                <i className='icon-skype' />
+                <SkypeIcon className='icon-skype' />
                 {skype}
               </a>
               <a href={`tel:${mobilePhone.replace(/[\s()+]/, '')}`}>
-                <i className='icon-mobile' />
+                <MobileIcon className='icon-mobile' />
                 <span>{mobilePhone}</span>
               </a>
             </div>
             <div>
               <p className='address'>
-                <i className='icon-address' />
+                <AddressIcon className='icon-address' />
                 {address}
               </p>
               <hr />
@@ -97,16 +109,19 @@ class MemberInfoModal extends Modal {
               <span>Tasks</span>
             </Button>
             <Button content='Delete' classMod='secondary' />
-            <Button content='Edit' classMod='secondary' />
+            <Button content='Edit' classMod='secondary' onClick={() => setEdit(true)} />
           </div>
-        </article>
-        <ModalBackface />
-      </>
-    );
-  }
-}
+        </>
+      )}
+    </>
+  );
+};
 
-MemberInfoModal.propTypes = {
+MemberInfo.defaultTypes = {
+  edit: false,
+};
+
+MemberInfo.propTypes = {
   id: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
@@ -121,6 +136,9 @@ MemberInfoModal.propTypes = {
   education: PropTypes.string.isRequired,
   universityAverageScore: PropTypes.number.isRequired,
   mathScore: PropTypes.number.isRequired,
+
+  handleClose: PropTypes.func,
+  edit: PropTypes.bool,
 };
 
-export default MemberInfoModal;
+export default MemberInfo;
