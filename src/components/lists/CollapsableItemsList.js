@@ -8,7 +8,7 @@ class CollapsableItemsList extends Component {
   }
 
   async componentDidMount() {
-    const { items } = this.props;
+    const { items, open } = this.props;
     const { items: stateItems } = this.state;
 
     if (Object.keys(stateItems).length !== items.length) {
@@ -17,9 +17,17 @@ class CollapsableItemsList extends Component {
         itemsData[child.props.id] = { collapsed: true };
       });
 
-      this.setState({
-        items: itemsData,
-      });
+      this.setState(
+        {
+          items: itemsData,
+        },
+        () => {
+          if (open) {
+            setTimeout(() => document.getElementById(open).scrollIntoView(), 0);
+            this.open(open);
+          }
+        },
+      );
     }
 
     document.body.addEventListener('keydown', this.navigationKeys);
@@ -43,6 +51,7 @@ class CollapsableItemsList extends Component {
 
   open = (id) => {
     const { open, items } = this.state;
+
     if (open) {
       items[open].collapsed = true;
     }
@@ -111,6 +120,7 @@ class CollapsableItemsList extends Component {
 }
 
 CollapsableItemsList.propTypes = {
+  open: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 

@@ -16,9 +16,8 @@ function App() {
           <Route exact path='/members'>
             <MembersManagerPage />
           </Route>
-          <Route path='/members/:id/tasks'>
-            <MemberTasksPage />
-          </Route>
+          <Route path='/members/:id/tasks/:open?' render={() => <MemberTasksPage taskSet='user' />} />
+          <Route path='/tasks' render={() => <MemberTasksPage taskSet='all' />} />
           <Route path='/members/:id/progress'>
             <MemberProgressPage />
           </Route>

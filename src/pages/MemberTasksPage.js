@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
@@ -12,8 +12,13 @@ class MemberTasksPage extends React.Component {
   }
 
   async componentDidMount() {
-    this.getName();
-    const taskData = await Client.getUserTasks(this.state.id);
+    let taskData;
+    if (this.props.taskSet === 'user') {
+      this.getName();
+      taskData = await Client.getUserTasks(this.state.id);
+    } else if (this.props.taskSet === 'all') {
+      taskData = await Client.getTasks(this.state.id);
+    }
     this.setState({ tasks: taskData });
   }
 
@@ -21,8 +26,17 @@ class MemberTasksPage extends React.Component {
     this.setState({ name: (await Client.getMember(this.state.id)).firstName });
   }
 
-  static renderTask(id, data) {
-    const { taskName, taskDescription, state, taskStart, taskDeadline } = data;
+  static renderTask(id, data, taskSet) {
+    const { taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
+    let feature;
+    switch (taskSet) {
+      case 'all':
+        feature = 'assign';
+        break;
+      case 'user':
+        feature = 'track';
+        break;
+    }
     return (
       <MemberTaskCard
         id={id}
@@ -31,6 +45,8 @@ class MemberTasksPage extends React.Component {
         state={state}
         taskStart={taskStart}
         taskDeadline={taskDeadline}
+        feature={feature}
+        assignedTo={assignedTo}
       />
     );
   }
@@ -40,16 +56,24 @@ class MemberTasksPage extends React.Component {
     return Object.entries(tasks).map((task) => {
       const id = task[0];
       const data = task[1];
-      return MemberTasksPage.renderTask(id, data);
+      return MemberTasksPage.renderTask(id, data, this.props.taskSet);
     });
   }
 
   render() {
     const { tasks, name } = this.state;
+    const { taskSet } = this.props;
+    console.log(tasks);
     return (
       <Container>
-        <h1>{`${name}'s tasks`}</h1>
-        <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderTasks()} /> : 'No tasks'}</div>
+        {taskSet !== 'all' && <h1>{`${name}'s tasks`}</h1>}
+        <div>
+          {Object.keys(tasks).length ? (
+            <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+          ) : (
+            'No tasks'
+          )}
+        </div>
       </Container>
     );
   }
