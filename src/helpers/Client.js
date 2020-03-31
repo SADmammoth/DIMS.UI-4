@@ -34,7 +34,7 @@ class Client {
       .collection('memberTasks')
       .where('userID', '==', userID)
       .get();
-
+    console.log(tasks.docs.map((el) => el.data()));
     const tasksObject = {};
     let taskData = {};
     await Promise.all(
@@ -46,10 +46,11 @@ class Client {
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
+        tasksObject[doc.id].id = doc.data().taskID;
       }),
     );
-
-    return await tasksObject;
+    console.log(tasksObject);
+    return tasksObject;
   }
 
   static async getMember(userId) {
@@ -89,11 +90,12 @@ class Client {
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
         users = await Client.getAssignedTo(doc.id);
         tasksObject[doc.id].assignedTo = await Promise.all(
-          users.map(async (userID) => {
+          users.map(async ({ memberTaskID, userID }) => {
             user = await Client.getMember(userID);
-            return { firstName: user.firstName, lastName: user.lastName };
+            return { userID, memberTaskID, firstName: user.firstName, lastName: user.lastName };
           }),
         );
+        tasksObject[doc.id].id = doc.id;
       }),
     );
     return tasksObject;
@@ -104,7 +106,10 @@ class Client {
       .collection('memberTasks')
       .where('taskID', '==', taskID)
       .get();
-    return memberTasks.docs.map((doc) => doc.data().userID);
+    console.log(memberTasks.docs.map((doc) => doc.data()));
+    return memberTasks.docs.map((doc) => {
+      return { userID: doc.data().userID, memberTaskID: doc.id };
+    });
   }
 }
 

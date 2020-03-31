@@ -23,7 +23,11 @@ class CollapsableItemsList extends Component {
         },
         () => {
           if (open) {
-            setTimeout(() => document.getElementById(open).scrollIntoView(), 0);
+            setTimeout(() => {
+              if (document.getElementById(open)) {
+                document.getElementById(open).scrollIntoView();
+              }
+            }, 0);
             this.open(open);
           }
         },
@@ -34,7 +38,7 @@ class CollapsableItemsList extends Component {
   }
 
   async componentDidUpdate() {
-    const { items } = this.props;
+    const { items, open } = this.props;
     const { items: stateItems } = this.state;
 
     if (Object.keys(stateItems).length !== items.length) {
@@ -43,9 +47,19 @@ class CollapsableItemsList extends Component {
         itemsData[child.props.id] = { collapsed: true };
       });
 
-      this.setState({
-        items: itemsData,
-      });
+      this.setState(
+        {
+          items: itemsData,
+        },
+        () => {
+          if (open) {
+            if (document.getElementById(open)) {
+              document.getElementById(open).scrollIntoView();
+            }
+            this.open(open);
+          }
+        },
+      );
     }
   }
 

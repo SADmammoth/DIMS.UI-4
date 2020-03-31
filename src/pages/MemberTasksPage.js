@@ -8,22 +8,40 @@ import Container from '../components/elements/Container';
 class MemberTasksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: {}, id: this.props.match.params.id, name: 'Name' };
+    this.state = { tasks: {}, taskSet: null, name: 'Name' };
   }
 
   async componentDidMount() {
-    let taskData;
-    if (this.props.taskSet === 'user') {
-      this.getName();
-      taskData = await Client.getUserTasks(this.state.id);
-    } else if (this.props.taskSet === 'all') {
-      taskData = await Client.getTasks(this.state.id);
-    }
-    this.setState({ tasks: taskData });
+    this.update();
   }
 
-  async getName() {
-    this.setState({ name: (await Client.getMember(this.state.id)).firstName });
+  async componentDidUpdate() {
+    if (this.state.taskSet !== this.props.taskSet) {
+      this.update();
+    }
+  }
+
+  static async getName(userId) {
+    return Client.getMember(userId);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.taskSet !== props.taskSet) {
+      return { ...state, tasks: {}, name: 'Name' };
+    }
+  }
+
+  async update() {
+    let taskData;
+    let { name } = this.state;
+    const userId = this.props.match.params.id;
+    if (this.props.taskSet === 'user') {
+      name = (await MemberTasksPage.getName(userId)).firstName;
+      taskData = await Client.getUserTasks(userId);
+    } else if (this.props.taskSet === 'all') {
+      taskData = await Client.getTasks();
+    }
+    this.setState({ tasks: taskData, name, taskSet: this.props.taskSet });
   }
 
   static renderTask(id, data, taskSet) {
@@ -53,9 +71,7 @@ class MemberTasksPage extends React.Component {
 
   renderTasks() {
     const { tasks } = this.state;
-    return Object.entries(tasks).map((task) => {
-      const id = task[0];
-      const data = task[1];
+    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
       return MemberTasksPage.renderTask(id, data, this.props.taskSet);
     });
   }
@@ -63,7 +79,6 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks, name } = this.state;
     const { taskSet } = this.props;
-    console.log(tasks);
     return (
       <Container>
         {taskSet !== 'all' && <h1>{`${name}'s tasks`}</h1>}

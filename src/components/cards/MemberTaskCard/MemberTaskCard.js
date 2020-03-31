@@ -4,6 +4,7 @@ import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../elements/DateBadge';
 import Button from '../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
+import { Link } from 'react-router-dom';
 
 function MemberTaskCard(props) {
   const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id, feature, assignedTo } = props;
@@ -14,6 +15,7 @@ function MemberTaskCard(props) {
       props.close(id);
     }
   }
+  console.log(assignedTo);
 
   return (
     <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
@@ -37,10 +39,10 @@ function MemberTaskCard(props) {
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
                     <li>
-                      <p>
+                      <Link to={`/members/${user.userID}/tasks/${user.memberTaskID}`}>
                         <b>{user.firstName}</b>
                         {` ${user.lastName}`}
-                      </p>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -79,7 +81,9 @@ MemberTaskCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   feature: PropTypes.oneOf(['track', 'assign']).isRequired,
-  assignedTo: PropTypes.arrayOf(PropTypes.shape({ firstName: PropTypes.string, lastName: PropTypes.string })),
+  assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+  ),
 
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
