@@ -4,6 +4,7 @@ import MembersManagerPage from './pages/MembersManagerPage';
 import MemberTasksPage from './pages/MemberTasksPage';
 import MemberProgressPage from './pages/MemberProgressPage';
 import Error404Page from './pages/Error404Page';
+import MemberTracksPage from './pages/MemberTracksPage';
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           <Route path='/tasks' render={() => <MemberTasksPage taskSet='all' />} />
           <Route path='/members/:id/progress'>
             <MemberProgressPage />
+          </Route>
+          <Route path='/members/:id/tracks'>
+            <MemberTracksPage />
           </Route>
           <Route path='*'>
             <Error404Page />

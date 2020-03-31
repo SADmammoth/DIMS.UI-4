@@ -391,9 +391,24 @@ hr {
     }
   }
 
+  &__header {
+    .date-badge {
+      float: right;
+      margin-top: 15px;
+      font-size: 1.3rem;
+    }
+  }
+
   &__body {
     border: 5px solid $highlight-bg;
     padding: 20px;
+    @include clearfix();
+    .date-badge {
+      margin-right: 20px;
+      float: left;
+      margin-bottom: 0;
+      font-size: 1.1rem;
+    }
   }
 
   &__description {
@@ -406,13 +421,6 @@ hr {
       margin-left: 10px;
     }
   }
-  .date-badge {
-    margin-right: 20px;
-    float: left;
-    margin-bottom: 0;
-    font-size: 1.1rem;
-  }
-
   &__dates {
     @include clearfix;
   }
@@ -427,11 +435,6 @@ hr {
     float: left;
     padding: 3px;
     border-bottom: 1px solid $dark-bg;
-  }
-  .date-badge {
-    float: right;
-    margin-top: 15px;
-    font-size: 1.3rem;
   }
   .task-card__header {
     @include clearfix();

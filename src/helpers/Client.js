@@ -111,6 +111,24 @@ class Client {
       return { userID: doc.data().userID, memberTaskID: doc.id };
     });
   }
+
+  static async getTracks(userID) {
+    const memberTasks = await Client.getUserTasks(userID);
+    const tracks = await Client.db
+      .collection('tracks')
+      .where('memberTaskID', 'in', Object.keys(memberTasks))
+      .get();
+
+    const tracksObject = {};
+    await Promise.all(
+      tracks.docs.map(async (doc) => {
+        tracksObject[doc.id] = doc.data();
+        tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
+        tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
+      }),
+    );
+    return tracksObject;
+  }
 }
 
 export default Client;

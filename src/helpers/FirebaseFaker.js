@@ -78,4 +78,19 @@ export default class FirebaseFaker {
     }));
     tasks.forEach(async (el) => Client.db.collection('tasks').add(await el));
   }
+
+  static async generateTracks(userID) {
+    const memberTasks = await Client.getUserTasks(userID);
+    const tracks = [];
+    Object.entries(memberTasks).forEach(({ 0: id, 1: data }) => {
+      if (faker.random.boolean && data.state === 'Active') {
+        tracks.push({
+          memberTaskID: id,
+          trackDate: faker.date.future(0, data.startDate),
+          trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
+        });
+      }
+    });
+    tracks.forEach(async (el) => Client.db.collection('tracks').add(await el));
+  }
 }
