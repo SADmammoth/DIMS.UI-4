@@ -1,9 +1,11 @@
 import React from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import Container from '../components/elements/Container';
+import Header from '../components/elements/Header';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -79,17 +81,23 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks, name } = this.state;
     const { taskSet } = this.props;
+    const title = `${name}'s tasks`;
     return (
-      <Container>
-        {taskSet !== 'all' && <h1>{`${name}'s tasks`}</h1>}
-        <div>
-          {Object.keys(tasks).length ? (
-            <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
-          ) : (
-            'No tasks'
-          )}
-        </div>
-      </Container>
+      <>
+        <Helmet>
+          <title>{title}</title>
+        </Helmet>
+        <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
+        <Container>
+          <div>
+            {Object.keys(tasks).length ? (
+              <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+            ) : (
+              'No tasks'
+            )}
+          </div>
+        </Container>
+      </>
     );
   }
 }

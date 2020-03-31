@@ -1,9 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
 import TaskTrackCard from '../components/cards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import Container from '../components/elements/Container';
+import Header from '../components/elements/Header';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
@@ -44,11 +46,19 @@ class MemberTracksPage extends React.Component {
 
   render() {
     return (
-      <Container>
-        <div>
-          {Object.keys(this.state.tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
-        </div>
-      </Container>
+      <>
+        <Helmet>
+          <title>Task tracks</title>
+        </Helmet>
+        <Header>
+          <h1>Your Task tracks</h1>
+        </Header>
+        <Container>
+          <div>
+            {Object.keys(this.state.tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
+          </div>
+        </Container>
+      </>
     );
   }
 }

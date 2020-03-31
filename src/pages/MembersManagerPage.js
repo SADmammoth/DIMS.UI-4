@@ -1,9 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import Container from '../components/elements/Container';
+import Header from '../components/elements/Header';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -69,9 +71,17 @@ class MembersManagerPage extends React.Component {
 
   render() {
     return (
-      <Container>
-        <CollapsableItemsList items={this.renderMembers()} />
-      </Container>
+      <>
+        <Helmet>
+          <title>Members</title>
+        </Helmet>
+        <Header>
+          <h1>Members</h1>
+        </Header>
+        <Container>
+          <CollapsableItemsList items={this.renderMembers()} />
+        </Container>
+      </>
     );
   }
 }

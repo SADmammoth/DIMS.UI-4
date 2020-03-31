@@ -2,6 +2,7 @@ $primary-bg: #c6ddff;
 $highlight-bg: #91bdff;
 $dark-bg: #447ace;
 $light-bg: white;
+$header-bg: #c6ddff96;
 $common-text: #0046af;
 $light-text: white;
 $success: #39ff57;
@@ -441,10 +442,16 @@ hr {
   }
 }
 
-.container {
+.container:not(.fullwidth) {
   max-width: 90vw;
   width: 1000px;
   margin: 0 auto;
+}
+
+.container.fullwidth {
+  max-width: 90vw;
+  width: calc(1000px + (100vw - 1000px) / 2);
+  float: right;
 }
 
 .icon-flag {
@@ -633,4 +640,51 @@ hr {
 }
 a:visited {
   color: inherit;
+}
+
+.fixed-top {
+  position: fixed;
+  top: 0;
+}
+
+header {
+  height: 80px;
+  background: $header-bg;
+  z-index: 1000;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid $light-bg;
+  & + * {
+    position: relative;
+    top: 100px;
+  }
+  .content {
+    margin-left: 40px;
+    background: $primary-bg;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 80px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.site-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 5px;
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
