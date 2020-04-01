@@ -18,13 +18,15 @@ class Form extends React.Component {
     attributes = [],
     value = undefined,
     valueOptions = [],
+    minSymbols = 0,
+    maxSymbols = Infinity,
   ) {
     return (
       <Input
         id={id}
         type={type}
         name={name}
-        placeholder={description}
+        description={description}
         required={required ? 'required' : null}
         onChange={onChange}
         onInput={onInput}
@@ -34,6 +36,8 @@ class Form extends React.Component {
         valueOptions={valueOptions}
         label={label}
         value={value}
+        minSymbols={minSymbols}
+        maxSymbols={maxSymbols}
       />
     );
   }
@@ -70,10 +74,10 @@ class Form extends React.Component {
 
   updateValue = (event) => {
     const { values } = this.state;
+    const name = event.target.getAttribute('name');
 
-    console.log(values[event.target.getAttribute('name')]);
-    values[event.target.getAttribute('name')].value = event.target.value;
-    this.createValues();
+    values[name].value = event.target.value;
+
     this.createInputs();
     this.setState({ values });
   };
@@ -103,14 +107,27 @@ class Form extends React.Component {
 
     const inputsData = {};
     inputs.forEach((input, i) => {
-      const { type, name, description, required, label, attributes, byCharValidator, validator, valueOptions } = input;
+      const {
+        type,
+        name,
+        description,
+        required,
+        label,
+        attributes,
+        byCharValidator,
+        validator,
+        valueOptions,
+        minSymbols,
+        maxSymbols,
+      } = input;
+
       inputsData[name] = Form.createInput(
         Object.values(values)[i].id,
         type,
         name,
         description,
-        this.updateValue,
-        this.updateValue,
+        (event, multiple) => this.updateValue(event, multiple),
+        (event, multiple) => this.updateValue(event, multiple),
         validator,
         byCharValidator,
         required,
@@ -118,6 +135,8 @@ class Form extends React.Component {
         attributes,
         Object.values(values)[i].value,
         valueOptions,
+        minSymbols,
+        maxSymbols,
       );
     });
     onInputsUpdate(inputsData);
@@ -155,7 +174,7 @@ class Form extends React.Component {
             }
           }}
         >
-          {this.props.children && this.props.children.length ? this.props.children : Object.values(this.state.inputs)}
+          {this.props.children || Object.values(this.state.inputs)}
           {React.cloneElement(submitButton, {
             type: 'submit',
           })}

@@ -16,11 +16,7 @@ class Modal extends React.Component {
 
   componentDidMount() {
     const { show } = this.props;
-    if (this.state.show !== show) {
-      this.setState({
-        show,
-      });
-    }
+    return this.setState({ show });
   }
 
   handleClose = () => {
@@ -37,7 +33,15 @@ class Modal extends React.Component {
         <article className={`modal ${this.state.show ? 'show' : ''} ${this.props.className || ''}`}>
           {this.props.children}
         </article>
-        {this.props.backface && <div className='modal-shadow' role='article' onClick={(e) => e.stopPropagation()} />}
+        {this.props.backface && (
+          <div
+            className='modal-shadow'
+            role='article'
+            onClick={(e) => {
+              this.handleClose();
+            }}
+          />
+        )}
       </>
     );
   }

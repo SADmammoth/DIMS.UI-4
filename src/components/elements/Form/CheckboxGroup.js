@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function CheckboxGroup(props) {
-  function renderCheckbox(value, { valueOptions, value: commonValue, id, type, onInput, ...attributes }) {
+  function renderCheckbox(value, { valueOptions, value: commonValue, id, type, onInput, onChange, ...attributes }) {
+    let values = typeof commonValue === 'object' ? commonValue : commonValue.split(',');
+
     return (
       <div className='form-group'>
         <input
@@ -10,9 +12,17 @@ function CheckboxGroup(props) {
           type={type}
           className={`form-${type}`}
           value={value}
-          onClick={onInput}
+          onClick={(event) => {
+            if (event.target.checked) {
+              values.push(event.target.value);
+            } else {
+              values = values.filter((value) => value !== event.target.value);
+            }
+            event.target.value = values;
+            onInput(event);
+          }}
           {...attributes}
-          checked={props.value === value || props.value.includes(value)}
+          checked={values === value || values.includes(value)}
         />
         <label htmlFor={id + value}>{value}</label>
       </div>
@@ -24,7 +34,7 @@ function CheckboxGroup(props) {
   }
 
   return (
-    <div id={props.id} className={`${props.type}-group`}>
+    <div id={props.id + props.type} className={`${props.type}-group`}>
       {renderCheckboxes()}
     </div>
   );

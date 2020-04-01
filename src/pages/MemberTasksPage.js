@@ -10,7 +10,7 @@ import Header from '../components/elements/Header';
 class MemberTasksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: {}, taskSet: null, name: 'Name' };
+    this.state = { tasks: {}, taskSet: null, name: 'Name', members: [] };
   }
 
   async componentDidMount() {
@@ -37,17 +37,21 @@ class MemberTasksPage extends React.Component {
     let taskData;
     let { name } = this.state;
     const userId = this.props.match.params.id;
+    let members;
     if (this.props.taskSet === 'user') {
       name = (await MemberTasksPage.getName(userId)).firstName;
       taskData = await Client.getUserTasks(userId);
     } else if (this.props.taskSet === 'all') {
       taskData = await Client.getTasks();
+      members = Object.values(await Client.getMembers()).map((member) => {
+        return { firstName: member.firstName, lastName: member.lastName };
+      });
     }
-    this.setState({ tasks: taskData, name, taskSet: this.props.taskSet });
+    this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
   }
 
-  static renderTask(id, data, taskSet) {
-    const { taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
+  static renderTask(id, data, taskSet, members) {
+    const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     let feature;
     switch (taskSet) {
       case 'all':
@@ -60,6 +64,7 @@ class MemberTasksPage extends React.Component {
     return (
       <MemberTaskCard
         id={id}
+        taskID={taskID}
         taskName={taskName}
         taskDescription={taskDescription}
         state={state}
@@ -67,14 +72,15 @@ class MemberTasksPage extends React.Component {
         taskDeadline={taskDeadline}
         feature={feature}
         assignedTo={assignedTo}
+        members={members}
       />
     );
   }
 
   renderTasks() {
-    const { tasks } = this.state;
+    const { tasks, members } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberTasksPage.renderTask(id, data, this.props.taskSet);
+      return MemberTasksPage.renderTask(id, data, this.props.taskSet, members);
     });
   }
 

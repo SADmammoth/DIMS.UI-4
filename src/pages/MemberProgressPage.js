@@ -25,9 +25,7 @@ class MemberProgressPage extends React.Component {
 
   renderProgress() {
     const { tasks } = this.state;
-    return Object.entries(tasks).map((task) => {
-      const id = task[0];
-      const data = task[1];
+    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
       return MemberProgressPage.renderProgressCard(id, data);
     });
   }

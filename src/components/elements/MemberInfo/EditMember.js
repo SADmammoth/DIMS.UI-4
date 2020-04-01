@@ -118,7 +118,7 @@ export default function EditMember(props) {
         </p>
         <div className='date-badge'>
           <FlagIcon className='icon-flag common-text-color' />
-          {inputs.startDate}
+          {inputs.startDate}//TODO Add input mask
         </div>
         <div className='direction-badge'>{inputs.direction}</div>
       </div>

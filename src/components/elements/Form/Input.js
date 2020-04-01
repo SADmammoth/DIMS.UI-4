@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Validator from '../../helpers/Validator';
 import CheckboxGroup from './CheckboxGroup';
 import SelectInput from './SelectInput';
+import TextArea from './TextArea';
 
 function Input(props) {
   const {
@@ -19,6 +19,8 @@ function Input(props) {
     byCharValidator,
     validator,
     valueOptions,
+    minSymbols,
+    maxSymbols,
   } = props;
 
   function renderLabel(input) {
@@ -27,46 +29,68 @@ function Input(props) {
         <label className='form-label' htmlFor={id}>
           {label}
         </label>
+        {input}
       </div>
     ) : (
       input
     );
   }
 
-  return type === 'checkbox' || type === 'radio' ? (
-    <CheckboxGroup
-      id={id}
-      type={type}
-      name={name}
-      description={description}
-      onChange={onChange}
-      onInput={onInput}
-      required={required}
-      label={label}
-      attributes={attributes}
-      value={value}
-      byCharValidator={byCharValidator}
-      validator={validator}
-      valueOptions={valueOptions}
-    />
-  ) : type === 'select' ? (
-    <SelectInput
-      id={id}
-      type={type}
-      name={name}
-      description={description}
-      onChange={onChange}
-      onInput={onInput}
-      required={required}
-      label={label}
-      attributes={attributes}
-      value={value}
-      byCharValidator={byCharValidator}
-      validator={validator}
-      valueOptions={valueOptions}
-    />
-  ) : (
-    renderLabel(
+  function renderInput() {
+    if (type === 'checkbox' || type === 'radio') {
+      return renderLabel(
+        <CheckboxGroup
+          id={id}
+          type={type}
+          name={name}
+          description={description}
+          onChange={onChange}
+          onInput={onInput}
+          required={required}
+          label={label}
+          attributes={attributes}
+          value={value}
+          byCharValidator={byCharValidator}
+          validator={validator}
+          valueOptions={valueOptions}
+        />,
+      );
+    }
+    if (type === 'select') {
+      return renderLabel(
+        <SelectInput
+          id={id}
+          type={type}
+          name={name}
+          description={description}
+          onChange={onChange}
+          onInput={onInput}
+          required={required}
+          attributes={attributes}
+          value={value}
+          byCharValidator={byCharValidator}
+          validator={validator}
+          valueOptions={valueOptions}
+        />,
+      );
+    }
+    if (type === 'textarea') {
+      return renderLabel(
+        <TextArea
+          id={id}
+          name={name}
+          description={description}
+          onChange={onChange}
+          onInput={onInput}
+          required={required}
+          attributes={attributes}
+          value={value}
+          minSymbols={minSymbols}
+          maxSymbols={maxSymbols}
+        />,
+      );
+    }
+    return renderLabel(
       <input
         id={id}
         type={type}
@@ -93,8 +117,10 @@ function Input(props) {
         {...attributes}
         value={value}
       />,
-    )
-  );
+    );
+  }
+
+  return renderInput();
 }
 
 Input.defaultProps = {
@@ -120,6 +146,8 @@ Input.propTypes = {
   attributes: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.any,
   valueOptions: PropTypes.arrayOf(PropTypes.string),
+  minSymbols: PropTypes.number,
+  maxSymbols: PropTypes.number,
 
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,

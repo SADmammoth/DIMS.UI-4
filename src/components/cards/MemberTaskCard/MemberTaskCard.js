@@ -4,10 +4,22 @@ import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../elements/DateBadge';
 import Button from '../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import TaskEditButton from '../../elements/TaskEditButton';
 
 function MemberTaskCard(props) {
-  const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id, feature, assignedTo } = props;
+  const {
+    taskName,
+    taskDescription,
+    state,
+    taskStart,
+    taskDeadline,
+    collapsed,
+    id,
+    feature,
+    assignedTo,
+    taskID,
+  } = props;
   function onClick() {
     if (collapsed) {
       props.open(id);
@@ -15,7 +27,7 @@ function MemberTaskCard(props) {
       props.close(id);
     }
   }
-  console.log(assignedTo);
+  console.log(props.match.params);
 
   return (
     <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
@@ -62,7 +74,8 @@ function MemberTaskCard(props) {
                 </Button>
               )}
               <Button classMod='secondary' content='Delete' />
-              <Button classMod='secondary' content='Edit' />
+
+              <TaskEditButton {...props} show={props.match && props.match.params.open === id} />
             </div>
           </div>
         </>
@@ -92,4 +105,4 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default MemberTaskCard;
+export default withRouter(MemberTaskCard);

@@ -37,7 +37,7 @@ const MemberCard = (props) => {
 
   const modal = React.createRef();
 
-  let [edit, setEdit] = useState(false);
+  let [edit, setEdit] = useState(false); //TODO
 
   return (
     <>
