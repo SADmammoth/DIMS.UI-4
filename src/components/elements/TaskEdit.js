@@ -16,7 +16,7 @@ export default function TaskEdit(props) {
             name: 'taskDescription',
             label: 'Task description',
             minSymbols: 50,
-            maxSymbols: 800,
+            maxSymbols: 600,
             value: taskDescription,
           },
           {

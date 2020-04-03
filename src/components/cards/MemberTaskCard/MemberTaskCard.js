@@ -6,6 +6,7 @@ import Button from '../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 import { Link, withRouter } from 'react-router-dom';
 import TaskEditButton from '../../elements/TaskEditButton';
+import TrackButton from '../../elements/TrackButton';
 
 function MemberTaskCard(props) {
   const {
@@ -61,12 +62,7 @@ function MemberTaskCard(props) {
               </>
             )}
             <div className='button-block'>
-              {feature === 'track' && (
-                <Button classMod='primary'>
-                  <TrackIcon className='icon-track' />
-                  <span>Track</span>
-                </Button>
-              )}
+              {feature === 'track' && <TrackButton taskName={taskName} />}
               {feature === 'assign' && (
                 <Button classMod='primary'>
                   <TrackIcon className='icon-tasks' />

@@ -747,6 +747,7 @@ body {
         height: 100%;
         width: 100%;
         resize: none;
+        font-size: 1.1rem;
         box-sizing: border-box;
       }
     }
@@ -810,4 +811,31 @@ body {
   color: $common-text;
   outline: none;
   display: inline-block;
+}
+
+.track-create {
+  width: 50vw;
+  height: 58vh;
+  .task-edit__description {
+    height: 29vh;
+  }
+  .task-edit__header {
+    @include clearfix();
+  }
+  .task-edit__title {
+    float: left;
+  }
+  .direction-badge {
+    float: right;
+    margin-right: 5%;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+  .button[type='submit'] {
+    float: right;
+    margin-right: 6.5%;
+    margin-top: 10px;
+  }
 }
