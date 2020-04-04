@@ -1,8 +1,8 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import Button from './Button';
+import PropTypes from 'prop-types';
+import Button from '../Button';
 import TaskEdit from './TaskEdit';
-import Modal from './Modal';
+import Modal from '../Modal';
 
 function TaskEditButton(props) {
   const modal = React.createRef();
@@ -10,11 +10,12 @@ function TaskEditButton(props) {
     <>
       <Button
         classMod='secondary'
-        content='Edit'
         onClick={() => {
           props.history.push(`/tasks/edit/${props.taskID}`);
         }}
-      />
+      >
+        {props.children || props.buttonContent}
+      </Button>
       <Modal ref={modal} show={props.show} className='task-edit'>
         <TaskEdit {...props} />
       </Modal>
@@ -23,6 +24,7 @@ function TaskEditButton(props) {
 }
 
 TaskEditButton.propTypes = {
+  buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   ...TaskEdit.propTypes,
 };
 

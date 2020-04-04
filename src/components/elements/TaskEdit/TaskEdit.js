@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from './Form';
-import Button from './Button';
-import Validator from '../../helpers/Validator';
+import Form from '../Form';
+import Button from '../Button';
+import Validator from '../../../helpers/Validator';
 
 export default function TaskEdit(props) {
   const { taskName, taskDescription, taskStart, taskDeadline, assignedTo, members } = props;

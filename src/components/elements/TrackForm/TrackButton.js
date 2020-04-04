@@ -1,32 +1,31 @@
 import React from 'react';
-import Button from './Button';
-import TaskEdit from './TaskEdit';
-import Modal from './Modal';
-import CreateTrack from './CreateTrack';
-import { ReactComponent as TrackIcon } from '../../assets/icons/Track.svg';
+import PropTypes from 'prop-types';
+import Button from '../Button';
+import Modal from '../Modal';
+import TrackForm from './TrackForm';
 
 function TaskEditButton(props) {
   const modal = React.createRef();
   return (
     <>
       <Button
-        classMod='primary'
+        classMod='secondary'
         onClick={() => {
           modal.current.handleShow();
         }}
       >
-        <TrackIcon className='icon-track' />
-        <span>Track</span>
+        {props.children || props.buttonContent}
       </Button>
       <Modal ref={modal} className='track-create'>
-        <CreateTrack {...props} />
+        <TrackForm {...props} />
       </Modal>
     </>
   );
 }
 
 TaskEditButton.propTypes = {
-  ...TaskEdit.propTypes,
+  buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  ...TrackForm.propTypes,
 };
 
 export default TaskEditButton;

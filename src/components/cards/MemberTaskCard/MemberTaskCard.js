@@ -1,26 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
+
 import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../elements/DateBadge';
 import Button from '../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
-import { Link, withRouter } from 'react-router-dom';
-import TaskEditButton from '../../elements/TaskEditButton';
-import TrackButton from '../../elements/TrackButton';
+import { TaskEditButton } from '../../elements/TaskEdit';
+import { TrackButton } from '../../elements/TrackForm';
 
 function MemberTaskCard(props) {
-  const {
-    taskName,
-    taskDescription,
-    state,
-    taskStart,
-    taskDeadline,
-    collapsed,
-    id,
-    feature,
-    assignedTo,
-    taskID,
-  } = props;
+  const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id, feature, assignedTo } = props;
+
   function onClick() {
     if (collapsed) {
       props.open(id);
@@ -28,7 +19,6 @@ function MemberTaskCard(props) {
       props.close(id);
     }
   }
-  console.log(props.match.params);
 
   return (
     <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
@@ -62,7 +52,12 @@ function MemberTaskCard(props) {
               </>
             )}
             <div className='button-block'>
-              {feature === 'track' && <TrackButton taskName={taskName} />}
+              {feature === 'track' && (
+                <TrackButton taskName={taskName}>
+                  <TrackIcon className='icon-track' />
+                  <span>Track</span>
+                </TrackButton>
+              )}
               {feature === 'assign' && (
                 <Button classMod='primary'>
                   <TrackIcon className='icon-tasks' />
@@ -71,7 +66,7 @@ function MemberTaskCard(props) {
               )}
               <Button classMod='secondary' content='Delete' />
 
-              <TaskEditButton {...props} show={props.match && props.match.params.open === id} />
+              <TaskEditButton {...props} show={props.match && props.match.params.open === id} buttonContent='Edit' />
             </div>
           </div>
         </>
@@ -80,7 +75,7 @@ function MemberTaskCard(props) {
   );
 }
 
-MemberTaskCard.defaultTypes = {
+MemberTaskCard.defaultProps = {
   assignedTo: [],
 };
 

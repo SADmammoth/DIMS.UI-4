@@ -815,9 +815,13 @@ body {
 
 .track-create {
   width: 50vw;
-  height: 58vh;
+  height: 65vh;
   .task-edit__description {
     height: 29vh;
+  }
+
+  .task-edit__dates {
+    margin-bottom: 10px;
   }
   .task-edit__header {
     @include clearfix();

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from './Form';
-import Button from './Button';
-import DirectionBadge from './DirectionBadge';
-import Validator from '../../helpers/Validator';
+import Form from '../Form';
+import Button from '../Button';
+import DirectionBadge from '../DirectionBadge';
+import Validator from '../../../helpers/Validator';
 
-function CreateTrack(props) {
+function TrackForm(props) {
   const { taskName, trackDate, trackNote } = props;
   const [inputs, setInputs] = useState({});
   return (
@@ -36,6 +36,7 @@ function CreateTrack(props) {
           <DirectionBadge direction='Track' />
         </div>
         <div className='task-edit__body'>
+          <div className='task-edit__dates'>{inputs.trackDate}</div>
           <div className='task-edit__description' style={{ width: '100%' }}>
             {inputs.trackNote}
           </div>
@@ -45,9 +46,15 @@ function CreateTrack(props) {
   );
 }
 
-CreateTrack.propTypes = {
-  taskName: PropTypes.string.isRequired,
-  trackNote: PropTypes.string.isRequired,
+TrackForm.defaultProps = {
+  trackDate: new Date(),
+  trackNote: '',
 };
 
-export default CreateTrack;
+TrackForm.propTypes = {
+  taskName: PropTypes.string.isRequired,
+  trackDate: PropTypes.instanceOf(Date),
+  trackNote: PropTypes.string,
+};
+
+export default TrackForm;
