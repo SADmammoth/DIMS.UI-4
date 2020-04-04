@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import DirectionBadge from '../DirectionBadge';
 import DateBadge from '../DateBadge';
@@ -139,6 +139,7 @@ MemberInfo.propTypes = {
 
   handleClose: PropTypes.func,
   edit: PropTypes.bool,
+  setEdit: PropTypes.string.isRequired,
 };
 
 export default MemberInfo;

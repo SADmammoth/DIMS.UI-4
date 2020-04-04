@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
-import Button from '../../elements/Button';
-import { ReactComponent as TrackIcon } from '../../../assets/icons/Track.svg';
 
 function MemberProgressCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id } = props;
+  const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
   function onClick() {
     if (collapsed) {
-      props.open(id);
+      open(id);
     } else {
-      props.close(id);
+      close(id);
     }
   }
 
@@ -21,14 +20,6 @@ function MemberProgressCard(props) {
         <>
           <div className='task-card__body'>
             <p className='task-card__description'>{trackNote}</p>
-            <div className='button-block'>
-              <Button classMod='primary'>
-                <TrackIcon className='icon-track' />
-                <span>Track</span>
-              </Button>
-              <Button classMod='secondary' content='Delete' />
-              <Button classMod='secondary' content='Edit' />
-            </div>
           </div>
         </>
       )}

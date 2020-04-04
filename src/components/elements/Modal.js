@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from './Button';
 
 class Modal extends React.Component {
   static Header = (props) => <div className={`modal__header ${props.className || ''}`}>{props.children}</div>;
@@ -34,6 +33,7 @@ class Modal extends React.Component {
         <article className={`modal ${this.state.show ? 'show' : ''} ${this.props.className || ''}`}>
           {this.props.children}
         </article>
+
         {this.props.backface && (
           <div
             className='modal-shadow'

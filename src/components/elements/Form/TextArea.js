@@ -5,7 +5,6 @@ function TextArea(props) {
   const { id, name, description, onInput, onChange, required, attributes, value, minSymbols, maxSymbols } = props;
 
   function checkCount(input, min, max) {
-    console.log(input.length >= min);
     return input.length <= max && input.length >= min;
   }
 
@@ -18,14 +17,14 @@ function TextArea(props) {
         if (checkCount(event.target.value, 0, maxSymbols)) {
           onInput(event);
         } else {
-          alert('Bad input');
+          alert('Bad input'); //TODO temp
         }
       }}
       onBlur={(event) => {
         if (checkCount(event.target.value, minSymbols, maxSymbols)) {
           onChange(event);
         } else {
-          alert('Bad input');
+          alert('Bad input'); //TODO temp
         }
       }}
       required={required}

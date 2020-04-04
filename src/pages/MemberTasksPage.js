@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
@@ -38,6 +39,7 @@ class MemberTasksPage extends React.Component {
     let { name } = this.state;
     const userId = this.props.match.params.id;
     let members;
+
     if (this.props.taskSet === 'user') {
       name = (await MemberTasksPage.getName(userId)).firstName;
       taskData = await Client.getUserTasks(userId);
@@ -47,12 +49,14 @@ class MemberTasksPage extends React.Component {
         return { firstName: member.firstName, lastName: member.lastName };
       });
     }
+
     this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
   }
 
   static renderTask(id, data, taskSet, members) {
     const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     let feature;
+
     switch (taskSet) {
       case 'all':
         feature = 'assign';
@@ -60,7 +64,10 @@ class MemberTasksPage extends React.Component {
       case 'user':
         feature = 'track';
         break;
+      default:
+        throw Error('Bad task set');
     }
+
     return (
       <MemberTaskCard
         id={id}
@@ -107,5 +114,9 @@ class MemberTasksPage extends React.Component {
     );
   }
 }
+
+MemberTasksPage.propTypes = {
+  taskSet: PropTypes.string.isRequired,
+};
 
 export default withRouter(MemberTasksPage);

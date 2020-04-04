@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+
 import CollapsedTaskTrackCard from './CollapsedTaskTrackCard';
 import Button from '../../elements/Button';
 import { TrackButton } from '../../elements/TrackForm';
 
 function MemberTaskCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, memberTaskID } = props;
+
   function onClick() {
     if (collapsed) {
       props.open(id);

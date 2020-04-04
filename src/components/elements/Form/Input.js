@@ -110,7 +110,7 @@ function Input(props) {
             return;
           }
           if (!validator(e.target.value)) {
-            alert('Bad input');
+            alert('Bad input'); //TODO temp
           }
           onChange(e);
         }}

@@ -1,4 +1,6 @@
 export default class Validator {
+  // TODO Refactor
+
   static emailMessage = 'Email is not valid';
 
   static email = (email) => {
@@ -159,9 +161,8 @@ export default class Validator {
       `(^${masks
         .map((mask) => {
           let check = [...mask.slice(input.length - 1)].findIndex((el) => /[^MdymshHa]/.test(el)) + input.length - 1;
-          console.log(check, input.length, mask.length);
-          // console.log(mask.slice(0, check < 0 ? input.length - 1 : check + input.length - 1));
           let maskU = RegexpUnescape(mask);
+
           return (check > input.length
             ? `(.{${input.length - 1}})[0-9]`
             : check === input.length - 1

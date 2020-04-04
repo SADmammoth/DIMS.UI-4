@@ -10,13 +10,25 @@ import { TaskEditButton } from '../../elements/TaskEdit';
 import { TrackButton } from '../../elements/TrackForm';
 
 function MemberTaskCard(props) {
-  const { taskName, taskDescription, state, taskStart, taskDeadline, collapsed, id, feature, assignedTo } = props;
+  const {
+    taskName,
+    taskDescription,
+    state,
+    taskStart,
+    taskDeadline,
+    collapsed,
+    id,
+    feature,
+    assignedTo,
+    open,
+    close,
+  } = props;
 
   function onClick() {
     if (collapsed) {
-      props.open(id);
+      open(id);
     } else {
-      props.close(id);
+      close(id);
     }
   }
 
@@ -30,12 +42,15 @@ function MemberTaskCard(props) {
               <span>{state}</span>
             </div>
           )}
+
           <div className='task-card__body'>
             <div className='task-card__dates'>
               <DateBadge type='startDate' date={taskStart} />
               <DateBadge type='endDate' date={taskDeadline} />
             </div>
+
             <p className='task-card__description'>{taskDescription}</p>
+
             {feature === 'assign' && (
               <>
                 <h3>Assigned to:</h3>
@@ -51,6 +66,7 @@ function MemberTaskCard(props) {
                 </ul>
               </>
             )}
+
             <div className='button-block'>
               {feature === 'track' && (
                 <TrackButton taskName={taskName} buttonClassMod='primary'>
@@ -58,12 +74,14 @@ function MemberTaskCard(props) {
                   <span>Track</span>
                 </TrackButton>
               )}
+
               {feature === 'assign' && (
                 <Button classMod='primary'>
                   <TrackIcon className='icon-tasks' />
                   <span>Assign</span>
                 </Button>
               )}
+
               <Button classMod='secondary' content='Delete' />
 
               <TaskEditButton
