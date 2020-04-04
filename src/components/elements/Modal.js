@@ -20,6 +20,7 @@ class Modal extends React.Component {
   }
 
   handleClose = () => {
+    this.props.onClose();
     this.setState({ show: false });
   };
 
@@ -38,7 +39,11 @@ class Modal extends React.Component {
             className='modal-shadow'
             role='article'
             onClick={(e) => {
+              e.preventDefault();
               this.handleClose();
+            }}
+            onScroll={(e) => {
+              e.preventDefault();
             }}
           />
         )}
@@ -50,12 +55,14 @@ class Modal extends React.Component {
 Modal.defaultProps = {
   show: false,
   backface: true,
+  onClose: () => {},
 };
 
 Modal.propTypes = {
   show: PropTypes.bool,
   className: PropTypes.string,
   backface: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default Modal;

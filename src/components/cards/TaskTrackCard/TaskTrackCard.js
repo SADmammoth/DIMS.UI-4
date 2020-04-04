@@ -24,7 +24,13 @@ function MemberTaskCard(props) {
             <p className='task-card__description'>{trackNote}</p>
             <div className='button-block'>
               <Button classMod='secondary' content='Delete' />
-              <TrackButton taskName={taskName} trackDate={trackDate} trackNote={trackNote} buttonContent='Edit' />
+              <TrackButton
+                buttonClassMod='secondary'
+                taskName={taskName}
+                trackDate={trackDate}
+                trackNote={trackNote}
+                buttonContent='Edit'
+              />
               <Button
                 classMod='ghost'
                 link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}

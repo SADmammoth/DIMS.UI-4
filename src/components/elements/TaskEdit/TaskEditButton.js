@@ -9,14 +9,21 @@ function TaskEditButton(props) {
   return (
     <>
       <Button
-        classMod='secondary'
+        classMod={props.buttonClassMod}
         onClick={() => {
           props.history.push(`/tasks/edit/${props.taskID}`);
         }}
       >
         {props.children || props.buttonContent}
       </Button>
-      <Modal ref={modal} show={props.show} className='task-edit'>
+      <Modal
+        ref={modal}
+        show={props.show}
+        className='task-edit'
+        onClose={() => {
+          props.history.goBack();
+        }}
+      >
         <TaskEdit {...props} />
       </Modal>
     </>
@@ -25,6 +32,7 @@ function TaskEditButton(props) {
 
 TaskEditButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  buttonClassMod: PropTypes.string.isRequired,
   ...TaskEdit.propTypes,
 };
 

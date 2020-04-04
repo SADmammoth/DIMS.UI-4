@@ -4,28 +4,29 @@ import Button from '../Button';
 import Modal from '../Modal';
 import TrackForm from './TrackForm';
 
-function TaskEditButton(props) {
+function TrackButton(props) {
   const modal = React.createRef();
   return (
     <>
+      <Modal ref={modal} className='track-create'>
+        <TrackForm {...props} />
+      </Modal>
       <Button
-        classMod='secondary'
+        classMod={props.buttonClassMod}
         onClick={() => {
           modal.current.handleShow();
         }}
       >
         {props.children || props.buttonContent}
       </Button>
-      <Modal ref={modal} className='track-create'>
-        <TrackForm {...props} />
-      </Modal>
     </>
   );
 }
 
-TaskEditButton.propTypes = {
+TrackButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  buttonClassMod: PropTypes.string.isRequired,
   ...TrackForm.propTypes,
 };
 
-export default TaskEditButton;
+export default TrackButton;

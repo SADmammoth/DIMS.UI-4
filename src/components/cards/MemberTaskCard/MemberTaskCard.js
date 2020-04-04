@@ -53,7 +53,7 @@ function MemberTaskCard(props) {
             )}
             <div className='button-block'>
               {feature === 'track' && (
-                <TrackButton taskName={taskName}>
+                <TrackButton taskName={taskName} buttonClassMod='primary'>
                   <TrackIcon className='icon-track' />
                   <span>Track</span>
                 </TrackButton>
@@ -66,7 +66,12 @@ function MemberTaskCard(props) {
               )}
               <Button classMod='secondary' content='Delete' />
 
-              <TaskEditButton {...props} show={props.match && props.match.params.open === id} buttonContent='Edit' />
+              <TaskEditButton
+                buttonClassMod='secondary'
+                {...props}
+                show={props.match && props.match.params.open === id}
+                buttonContent='Edit'
+              />
             </div>
           </div>
         </>
