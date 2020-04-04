@@ -11,7 +11,8 @@ function TaskEditButton(props) {
       <Button
         classMod={props.buttonClassMod}
         onClick={() => {
-          props.history.push(`/tasks/edit/${props.taskID}`);
+          props.history.push(`/tasks/${props.taskID}/edit`);
+          modal.current.handleShow();
         }}
       >
         {props.children || props.buttonContent}

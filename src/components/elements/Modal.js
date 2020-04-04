@@ -42,9 +42,6 @@ class Modal extends React.Component {
               e.preventDefault();
               this.handleClose();
             }}
-            onScroll={(e) => {
-              e.preventDefault();
-            }}
           />
         )}
       </>

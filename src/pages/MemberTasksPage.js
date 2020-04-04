@@ -53,7 +53,7 @@ class MemberTasksPage extends React.Component {
     this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
   }
 
-  static renderTask(id, data, taskSet, members) {
+  static renderTask(id, data, taskSet, members, edit) {
     const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     let feature;
 
@@ -71,6 +71,7 @@ class MemberTasksPage extends React.Component {
     return (
       <MemberTaskCard
         id={id}
+        edit={edit}
         taskID={taskID}
         taskName={taskName}
         taskDescription={taskDescription}
@@ -87,7 +88,7 @@ class MemberTasksPage extends React.Component {
   renderTasks() {
     const { tasks, members } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberTasksPage.renderTask(id, data, this.props.taskSet, members);
+      return MemberTasksPage.renderTask(id, data, this.props.taskSet, members, this.props.edit);
     });
   }
 
@@ -115,8 +116,13 @@ class MemberTasksPage extends React.Component {
   }
 }
 
+MemberTasksPage.defaultTypes = {
+  edit: false,
+};
+
 MemberTasksPage.propTypes = {
   taskSet: PropTypes.string.isRequired,
+  edit: PropTypes.bool,
 };
 
 export default withRouter(MemberTasksPage);

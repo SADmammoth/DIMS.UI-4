@@ -22,6 +22,7 @@ function MemberTaskCard(props) {
     assignedTo,
     open,
     close,
+    edit,
   } = props;
 
   function onClick() {
@@ -84,12 +85,7 @@ function MemberTaskCard(props) {
 
               <Button classMod='secondary' content='Delete' />
 
-              <TaskEditButton
-                buttonClassMod='secondary'
-                {...props}
-                show={props.match && props.match.params.open === id}
-                buttonContent='Edit'
-              />
+              <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
             </div>
           </div>
         </>
@@ -104,6 +100,7 @@ MemberTaskCard.defaultProps = {
 
 MemberTaskCard.propTypes = {
   id: PropTypes.string.isRequired,
+  edit: PropTypes.bool.isRequired,
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
