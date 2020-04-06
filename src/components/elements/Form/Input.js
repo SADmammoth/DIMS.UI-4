@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
+import InputMask from './InputMask';
 
 function Input(props) {
   const {
@@ -21,6 +22,8 @@ function Input(props) {
     valueOptions,
     minSymbols,
     maxSymbols,
+    mask,
+    maskType,
   } = props;
 
   function renderLabel(input) {
@@ -36,6 +39,13 @@ function Input(props) {
     );
   }
 
+  function renderMask(input) {
+    if (mask && mask !== '') {
+      return InputMask(input, mask, !byCharValidator, maskType);
+    }
+    return input;
+  }
+
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
       return renderLabel(
@@ -44,8 +54,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={onChange}
-          onInput={onInput}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          onInput={(e) => onInput(e.target.name, e.target.value)}
           required={required}
           label={label}
           attributes={attributes}
@@ -63,8 +73,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={onChange}
-          onInput={onInput}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          onInput={(e) => onInput(e.target.name, e.target.value)}
           required={required}
           attributes={attributes}
           value={value}
@@ -80,8 +90,8 @@ function Input(props) {
           id={id}
           name={name}
           description={description}
-          onChange={onChange}
-          onInput={onInput}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          onInput={(e) => onInput(e.target.name, e.target.value)}
           required={required}
           attributes={attributes}
           value={value}
@@ -154,6 +164,8 @@ Input.propTypes = {
   valueOptions: PropTypes.arrayOf(PropTypes.string),
   minSymbols: PropTypes.number,
   maxSymbols: PropTypes.number,
+  mask: PropTypes.string,
+  maskType: PropTypes.string,
 
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
