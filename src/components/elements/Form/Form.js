@@ -35,11 +35,10 @@ class Form extends React.Component {
     return this.state.input[name];
   }
 
-  updateValue = (event) => {
+  updateValue = (name, value) => {
     const { values } = this.state;
-    const { name } = event.target;
-
-    values[name].value = event.target.value;
+    console.log(name, value);
+    values[name].value = value;
 
     this.setState({ values });
     this.createInputs();
@@ -72,6 +71,8 @@ class Form extends React.Component {
     description,
     onInput,
     onChange,
+    mask,
+    maskType,
     validator,
     byCharValidator,
     required,
@@ -99,12 +100,15 @@ class Form extends React.Component {
         value={value}
         minSymbols={minSymbols}
         maxSymbols={maxSymbols}
+        mask={mask}
+        maskType={maskType}
       />
     );
   }
 
   createInputs() {
     const { values } = this.state;
+    console.log(values['mobilePhone'] && values['mobilePhone'].value);
     const { inputs, onInputsUpdate } = this.props;
     if (!Object.keys(values).length) {
       return;
@@ -124,6 +128,8 @@ class Form extends React.Component {
         valueOptions,
         minSymbols,
         maxSymbols,
+        mask,
+        maskType,
       } = input;
 
       inputsData[name] = Form.createInput(
@@ -133,6 +139,8 @@ class Form extends React.Component {
         description,
         this.updateValue, // onInput
         this.updateValue, // onChange
+        mask,
+        maskType,
         validator,
         byCharValidator,
         required,

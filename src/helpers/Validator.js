@@ -1,5 +1,5 @@
 export default class Validator {
-  // TODO Refactor
+  //* Input validators
 
   static emailMessage = 'Email is not valid';
 
@@ -20,6 +20,8 @@ export default class Validator {
     return AddNotContains('^[a-zA-Z_0-9]{6,64}$', notContainsUnescaped).test(userName);
   };
 
+  //
+
   static passwordMessage =
     'Password must contain at least: <ul><li>8 chars;</li><li>one uppercase and one lowercase letter;</li><li>any special character.</li></ul> Must use only alphanumeric and special characters.';
 
@@ -37,9 +39,54 @@ export default class Validator {
     ).test(userName);
   };
 
+  //
+
+  /* *
+   * Mask template:
+   * 9 - number [0,9]
+   * a - letter [a,z]
+   * A -letter [A,Z]
+   * h - hex number [0,f]
+   * % - any not alphanumeric character
+   * # - any symbol
+   *
+   * Other symbols are considered as static
+   * To escape special mask characters use '\': 'a\, 'h\', '9\', '#\', '?\','\\'
+   */
+  static maskValidator = (input, mask) => {
+    if (Validator.lastMask[mask]) {
+      if (Object.keys(Validator.lastMask).length >= 10) {
+        Validator.lastMask = {};
+      }
+      let regexp;
+      regexp = mask.replace(/9(?!\\(?!\\))/g, '[0-9]');
+      regexp = regexp.replace(/a(?!\\(?!\\))/g, '[a-z]');
+      regexp = regexp.replace(/A(?!\\(?!\\))/g, '[A-Z]');
+      regexp = regexp.replace(/h(?!\\(?!\\))/g, '[0-9a-fA-F]');
+      regexp = regexp.replace(/%(?!\\(?!\\))/g, '[^0-9a-zA-Z]');
+      regexp = regexp.replace(/#(?!\\(?!\\))/g, '.');
+      regexp = regexp.replace(/([9aAh%#])\\(?!\\)/g, '$1');
+      Validator.lastMask[mask] = `^${regexp}$`;
+    }
+
+    return new RegExp(RegexpUnescape(Validator.lastMask[mask])).test(input);
+  };
+
+  static lastMask = {};
+
+  /* *
+   * Phone mask template:
+   *
+   * #  - number [0,9]
+   * #* - 1 or more numbers [0,9]
+   * +  - '+' sign
+   * () - brackets
+   */
+
   static phoneMessage = 'Phone is not valid';
 
-  static phone = (phone, masks) => {
+  static phone = (phone, masks = ['#* ###-##-##']) => {
+    Validator.phoneLastMasks = masks;
     return RegExp(
       `(^${masks
         .map((mask) =>
@@ -51,6 +98,8 @@ export default class Validator {
     ).test(phone);
   };
 
+  static phoneLastMasks = [];
+
   static mobilePhoneMessage = 'Mobile phone is not valid';
 
   static mobilePhone = (
@@ -60,9 +109,34 @@ export default class Validator {
     Validator.phone(phone, masks);
   };
 
+  //
+
   static dateTimeMessage = 'Invalid date format';
 
+  /* *
+   * Mask template:
+   *
+   * M    - month number
+   * MM   - month number with trailing 0
+   * MMM  - month in word (short)
+   * MMMM - month in word
+   * d    - day number
+   * dd   - day number with trailing 0
+   * yy   - year number (short)
+   * yyyy - year number
+   * m    - minutes
+   * mm   - minutes with trailing 0
+   * s    - seconds
+   * ss   - seconds with trailing 0
+   * h    - hours (12h-format)
+   * hh   - hours with trailing 0 (12h-format)
+   * H    - hours (24h-format)
+   * HH   - hours with trailing 0 (24h-format)
+   * a    - AM / PM mark
+   */
+
   static dateTime = (date, masks = ['MM-dd-yyyy hh:mm:ss']) => {
+    Validator.dateTimeLastMasks = masks.replace(/[MmdyHhMmsa]/g, '#');
     const months = [
       'January',
       'February',
@@ -106,6 +180,8 @@ export default class Validator {
     return Regexp.test(date);
   };
 
+  static dateTimeLastMasks = [];
+
   static dateTimeJS = (date) => {
     try {
       Date(date);
@@ -114,14 +190,6 @@ export default class Validator {
     }
     return true;
   };
-
-  static text(input) {
-    return /^[a-zA-Z]+$/.test(input);
-  }
-
-  static numeric(input) {
-    return /^(?=[^,.]*[,.]?[^,.]*)([0-9,.]+)$/.test(input);
-  }
 
   static float(number, from, to) {
     const num = parseFloat(number);
@@ -133,12 +201,71 @@ export default class Validator {
     return num <= to && num >= from;
   }
 
+  //
+
+  //* By char validators
+
+  static text(input) {
+    return /^[a-zA-Z]+$/.test(input);
+  }
+
+  static numericByChar(input) {
+    return /^(?=[^,.]*[,.]?[^,.]*)([0-9,.]+)$/.test(input);
+  }
+
   static alphanumeric(input) {
     if (/[0-9_]/.test(input[0])) {
       return false;
     }
     return /^[0-9a-zA-Z_]+$/.test(input);
   }
+
+  /* *
+   * Mask template:
+   * 9 - number [0,9]
+   * a - letter [a,z]
+   * A -letter [A,Z]
+   * h - hex number [0,f]
+   * % - any not alphanumeric character
+   * # - any symbol
+   *
+   * Other symbols are considered as static
+   * To escape special mask characters use '\': 'a\, 'h\', '9\', '#\','\\'
+   */
+  static maskByChar = (input, mask) => {
+    const maskArray = mask.split(/(a\\(?!\\))|(h\\(?!\\))|(#\\(?!\\))|(9\\(?!\\))|(\\\\)|()/).filter((el) => el);
+    const currMaskEl = maskArray[input.length - 1];
+    if (!currMaskEl) {
+      return false;
+    }
+
+    let regexp;
+    switch (currMaskEl) {
+      case '9':
+        regexp = '[0-9]';
+        break;
+      case 'a':
+        regexp = '[a-z]';
+        break;
+      case 'A':
+        regexp = '[A-Z]';
+        break;
+      case 'h':
+        regexp = '[0-9a-fA-F]';
+        break;
+      case '%':
+        regexp = '[^0-9a-zA-Z]';
+        break;
+      case '#':
+        regexp = '.';
+        break;
+      default:
+        regexp = currMaskEl.match(/([9aAh%#\\])\\/);
+        regexp = regexp ? regexp[0] : currMaskEl;
+    }
+
+    return new RegExp(RegexpUnescape(regexp)).test(input[input.length - 1]);
+  };
 
   static dateByChar(input, masks = ['MM-dd-yyyy hh:mm:ss']) {
     const months = [
@@ -217,6 +344,7 @@ export default class Validator {
   };
 }
 
+// Helpers
 function AddNotContains(regexp, notContains) {
   return RegExp(
     `${
