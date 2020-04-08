@@ -1,0 +1,25 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+header {
+  height: 80px;
+  background: $header-bg;
+  z-index: 99;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid $light-bg;
+  & + * {
+    position: relative;
+    top: 100px;
+  }
+  .content {
+    margin-left: 40px;
+    background: $primary-bg;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 80px;
+  }
+}

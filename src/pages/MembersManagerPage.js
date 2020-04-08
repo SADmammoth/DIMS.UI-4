@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import Container from '../components/elements/Container';
+import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 
 class MembersManagerPage extends React.Component {
@@ -77,9 +77,9 @@ class MembersManagerPage extends React.Component {
         <Header>
           <h1>Members</h1>
         </Header>
-        <Container>
+        <ContainerComponent>
           <CollapsableItemsList items={this.renderMembers()} />
-        </Container>
+        </ContainerComponent>
       </>
     );
   }

@@ -2,9 +2,9 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
-import MemberProgressCard from '../components/cards/MemberProgressCard';
+import MemberProgressCard from '../components/cards/TaskCards/MemberProgressCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import Container from '../components/elements/Container';
+import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 
 class MemberProgressPage extends React.Component {
@@ -40,9 +40,9 @@ class MemberProgressPage extends React.Component {
         <Header>
           <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
         </Header>
-        <Container>
+        <ContainerComponent>
           <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
-        </Container>
+        </ContainerComponent>
       </>
     );
   }

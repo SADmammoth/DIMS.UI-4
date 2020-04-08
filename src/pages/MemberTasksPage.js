@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import Client from '../helpers/Client';
-import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
+import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import Container from '../components/elements/Container';
+import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 
 class MemberTasksPage extends React.Component {
@@ -102,7 +102,7 @@ class MemberTasksPage extends React.Component {
           <title>{title}</title>
         </Helmet>
         <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
-        <Container>
+        <ContainerComponent>
           <div>
             {Object.keys(tasks).length ? (
               <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
@@ -110,7 +110,7 @@ class MemberTasksPage extends React.Component {
               'No tasks'
             )}
           </div>
-        </Container>
+        </ContainerComponent>
       </>
     );
   }

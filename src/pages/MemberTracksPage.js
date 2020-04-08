@@ -2,9 +2,9 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Client from '../helpers/Client';
-import TaskTrackCard from '../components/cards/TaskTrackCard';
+import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import Container from '../components/elements/Container';
+import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 
 class MemberTracksPage extends React.Component {
@@ -53,11 +53,11 @@ class MemberTracksPage extends React.Component {
         <Header>
           <h1>Your Task tracks</h1>
         </Header>
-        <Container>
+        <ContainerComponent>
           <div>
             {Object.keys(this.state.tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
           </div>
-        </Container>
+        </ContainerComponent>
       </>
     );
   }
