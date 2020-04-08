@@ -16,45 +16,7 @@ class TaskEdit extends React.PureComponent {
     return (
       <>
         <Form
-<<<<<<< HEAD:src/components/elements/TaskForms/TaskEdit/TaskEdit.js
           inputs={taskEditInputsAttributes(this.props)}
-=======
-          inputs={[
-            {
-              type: 'textarea',
-              name: 'taskDescription',
-              label: 'Task description',
-              minSymbols: 50,
-              maxSymbols: 600,
-              value: taskDescription,
-            },
-            {
-              type: 'text',
-              name: 'taskStart',
-              label: 'Task start',
-              value: `${taskStart.getMonth()}-${taskStart.getDate()}-${taskStart.getFullYear()}`,
-              mask: '99-99-999',
-              maskType: 'invisible',
-              byCharValidator: Validator.dateByChar,
-            },
-            {
-              type: 'text',
-              name: 'taskDeadline',
-              label: 'Task deadline',
-              value: `${taskDeadline.getMonth()}-${taskDeadline.getDate()}-${taskDeadline.getFullYear()}`,
-              mask: '99-99-999',
-              maskType: 'invisible',
-              byCharValidator: Validator.dateByChar,
-            },
-            {
-              type: 'checkbox',
-              name: 'members',
-              label: 'Assigned to members',
-              value: assignedTo.map((member) => `${member.firstName} ${member.lastName}`),
-              valueOptions: members.map((member) => `${member.firstName} ${member.lastName}`),
-            },
-          ]}
->>>>>>> e59d15b... feat: input mask:src/components/elements/TaskEdit/TaskEdit.js
           onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
           submitButton={<Button content='Confirm' classMod='secondary' />}
         >

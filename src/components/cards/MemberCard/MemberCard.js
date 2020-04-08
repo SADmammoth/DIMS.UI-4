@@ -89,11 +89,7 @@ class MemberCard extends React.PureComponent {
         <Modal ref={this.modal} className='member-info'>
           <MemberInfo
             edit={this.state.edit}
-<<<<<<< HEAD
             setEdit={this.editModal}
-=======
-            setEdit={(bool) => this.setState({ edit: !!bool })}
->>>>>>> e59d15b... feat: input mask
             id={id}
             firstName={firstName}
             lastName={lastName}
@@ -108,14 +104,7 @@ class MemberCard extends React.PureComponent {
             education={education}
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
-<<<<<<< HEAD
             handleClose={this.handleClose}
-=======
-            handleClose={() => {
-              this.setState({ edit: false });
-              modal.current.handleClose();
-            }}
->>>>>>> e59d15b... feat: input mask
           />
         </Modal>
       </>

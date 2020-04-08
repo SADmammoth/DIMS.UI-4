@@ -76,7 +76,6 @@ class Form extends React.Component {
     maskType,
     validator,
     byCharValidator,
-<<<<<<< HEAD
     required,
     label,
     attributes,
@@ -84,15 +83,6 @@ class Form extends React.Component {
     valueOptions,
     minSymbols,
     maxSymbols,
-=======
-    required = false,
-    label = false,
-    attributes = [],
-    value = undefined,
-    valueOptions = [],
-    minSymbols = 0,
-    maxSymbols = Infinity, //TODO
->>>>>>> d1c2498... feat: input mask
   ) {
     return (
       <Input
