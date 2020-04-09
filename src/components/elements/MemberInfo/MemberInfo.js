@@ -31,6 +31,8 @@ const MemberInfo = (props) => {
     handleClose,
   } = props;
 
+  const openEditModal = () => setEdit(true);
+
   return (
     <>
       {edit ? (
@@ -109,7 +111,7 @@ const MemberInfo = (props) => {
               <span>Tasks</span>
             </Button>
             <Button content='Delete' classMod='secondary' />
-            <Button content='Edit' classMod='secondary' onClick={() => setEdit(true)} />
+            <Button content='Edit' classMod='secondary' onClick={openEditModal} />
           </div>
         </>
       )}

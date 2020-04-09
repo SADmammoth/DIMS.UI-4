@@ -13,9 +13,9 @@ class Form extends React.Component {
     };
   }
 
-  componentDidMount() {
-    if (!this.checkNames()) {
-      throw Error('Inputs names repeat');
+  async componentDidMount() {
+    if (!checkNames(Object.values(this.props.inputs))) {
+      throw Error('Inputs names repeat'); // TODO
     }
 
     this.createValues();
@@ -37,18 +37,13 @@ class Form extends React.Component {
 
   updateValue = (event) => {
     const { values } = this.state;
-    const name = event.target.getAttribute('name');
+    const { name } = event.target;
 
     values[name].value = event.target.value;
 
-    this.createInputs();
     this.setState({ values });
+    this.createInputs();
   };
-
-  checkNames() {
-    const inputs = Object.values(this.props.inputs);
-    return !inputs.every((input, index) => inputs.slice(index + 1).find((anotherInput) => input.name === anotherInput));
-  }
 
   //* Create values
   createValue(id, type, name) {
@@ -64,6 +59,7 @@ class Form extends React.Component {
         value: input.value,
       };
     });
+
     this.setState({ values });
   }
   // * -end- Create values
@@ -77,14 +73,14 @@ class Form extends React.Component {
     onInput,
     onChange,
     validator,
-    byCharValidator = () => {},
-    required = false,
-    label = false,
-    attributes = [],
-    value = undefined,
-    valueOptions = [],
-    minSymbols = 0,
-    maxSymbols = Infinity,
+    byCharValidator,
+    required,
+    label,
+    attributes,
+    value,
+    valueOptions,
+    minSymbols,
+    maxSymbols,
   ) {
     return (
       <Input
@@ -110,7 +106,7 @@ class Form extends React.Component {
   createInputs() {
     const { values } = this.state;
     const { inputs, onInputsUpdate } = this.props;
-    if (Object.keys(values).length === 0) {
+    if (!Object.keys(values).length) {
       return;
     }
 
@@ -164,8 +160,17 @@ class Form extends React.Component {
     return values;
   }
 
+  onSubmit = (event) => {
+    if (onSubmit) {
+      event.preventDefault();
+      if (event.target.checkValidity()) {
+        onSubmit(this.formatValues());
+      }
+    }
+  };
+
   render() {
-    const { method, action, className, style, onSubmit, submitButton } = this.props;
+    const { method, action, className, style, submitButton, children } = this.props;
     return (
       <>
         <form
@@ -173,23 +178,18 @@ class Form extends React.Component {
           action={action}
           className={`form ${className}` || ''}
           style={{ ...style }}
-          onSubmit={(event) => {
-            if (onSubmit) {
-              event.preventDefault();
-              if (event.target.checkValidity()) {
-                onSubmit(this.formatValues());
-              }
-            }
-          }}
+          onSubmit={this.onSubmit}
         >
-          {this.props.children || Object.values(this.state.inputs)}
-          {React.cloneElement(submitButton, {
-            type: 'submit',
-          })}
+          {children || Object.values(this.state.inputs)}
+          {React.cloneElement(submitButton, { type: 'submit' })}
         </form>
       </>
     );
   }
+}
+
+function checkNames(inputs) {
+  return !inputs.every((input, index) => inputs.slice(index + 1).find((anotherInput) => input.name === anotherInput));
 }
 
 Form.defaultProps = {
@@ -216,6 +216,7 @@ Form.propTypes = {
   ).isRequired,
   onSubmit: PropTypes.func,
   submitButton: PropTypes.element,
+  children: PropTypes.arrayOf(PropTypes.element),
 
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,

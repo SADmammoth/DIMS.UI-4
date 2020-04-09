@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function SelectInput(props) {
+function Select(props) {
   function renderOption(value) {
     return <option value={value}>{value}</option>;
   }
@@ -13,8 +13,8 @@ function SelectInput(props) {
   );
 }
 
-SelectInput.propTypes = {
+Select.propTypes = {
   valueOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default SelectInput;
+export default Select;

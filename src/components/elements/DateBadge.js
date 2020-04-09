@@ -5,21 +5,29 @@ import { ReactComponent as TaskDateIcon } from '../../assets/icons/TaskDate.svg'
 
 function DateBadge(props) {
   const { date, type } = props;
-  const dateTypes = {
+  const DateTypes = {
     startDate: <FlagIcon title='Start date' className='icon-flag common-text-color' />,
     endDate: <FlagIcon title='End date' className='icon-flag error-color' />,
     trackStart: <TaskDateIcon title='Track start date' className='icon-taskdate common-text-color' />,
     trackSuccess: <TaskDateIcon title='Track success date' className='icon-taskdate success-color' />,
-    trackFails: <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />,
+    trackFail: <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />,
   };
 
   return (
     <p className='date-badge'>
-      {dateTypes[type]}
+      {DateTypes[type]}
       {date.toLocaleDateString()}
     </p>
   );
 }
+
+DateBadge.DateTypes = Object.freeze({
+  startDate: 'startDate',
+  endDate: 'endDate',
+  trackStart: 'trackStart',
+  trackSuccess: 'trackSuccess',
+  trackFail: 'trackFail',
+});
 
 DateBadge.defaultProps = {
   type: '',
@@ -27,7 +35,7 @@ DateBadge.defaultProps = {
 
 DateBadge.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
-  type: PropTypes.oneOf(['startDate', 'endDate', 'trackStart', 'trackSuccess', 'trackFail']),
+  type: PropTypes.oneOf(Object.values(DateBadge.DateTypes)),
 };
 
 export default DateBadge;

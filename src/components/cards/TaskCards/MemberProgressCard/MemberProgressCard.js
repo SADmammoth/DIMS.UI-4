@@ -6,11 +6,7 @@ import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
   function onClick() {
-    if (collapsed) {
-      open(id);
-    } else {
-      close(id);
-    }
+    collapsed ? open(id) : close(id);
   }
 
   return (

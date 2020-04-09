@@ -4,6 +4,7 @@ import Form from '../../Form';
 import Button from '../../Button';
 import DirectionBadge from '../../DirectionBadge';
 import Validator from '../../../../helpers/Validator';
+import trackFormInputsAttributes from './trackFormInputsAttributes';
 
 class TrackForm extends React.Component {
   constructor(props) {
@@ -17,23 +18,7 @@ class TrackForm extends React.Component {
     return (
       <>
         <Form
-          inputs={[
-            {
-              type: 'textarea',
-              name: 'trackNote',
-              label: 'Track note',
-              minSymbols: 50,
-              maxSymbols: 600,
-              value: trackNote,
-            },
-            {
-              type: 'text',
-              name: 'trackDate',
-              label: 'Track date',
-              value: `${trackDate.getMonth()}-${trackDate.getDate()}-${trackDate.getFullYear()}`,
-              byCharValidator: Validator.dateByChar,
-            },
-          ]}
+          inputs={trackFormInputsAttributes(this.props)}
           onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
           submitButton={<Button content='Confirm' classMod='secondary' />}
         >

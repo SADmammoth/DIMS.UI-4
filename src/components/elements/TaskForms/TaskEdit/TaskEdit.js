@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
 import Validator from '../../../../helpers/Validator';
+import taskEditInputsAttributes from './taskEditInputsAttributes';
 
 class TaskEdit extends React.Component {
   constructor(props) {
@@ -11,42 +12,12 @@ class TaskEdit extends React.Component {
   }
 
   render() {
-    const { taskName, taskDescription, taskStart, taskDeadline, assignedTo, members } = this.props;
+    const { taskName } = this.props;
     const { inputs } = this.state;
     return (
       <>
         <Form
-          inputs={[
-            {
-              type: 'textarea',
-              name: 'taskDescription',
-              label: 'Task description',
-              minSymbols: 50,
-              maxSymbols: 600,
-              value: taskDescription,
-            },
-            {
-              type: 'text',
-              name: 'taskStart',
-              label: 'Task start',
-              value: `${taskStart.getMonth()}-${taskStart.getDate()}-${taskStart.getFullYear()}`,
-              byCharValidator: Validator.dateByChar,
-            },
-            {
-              type: 'text',
-              name: 'taskDeadline',
-              label: 'Task deadline',
-              value: `${taskDeadline.getMonth()}-${taskDeadline.getDate()}-${taskDeadline.getFullYear()}`,
-              byCharValidator: Validator.dateByChar,
-            },
-            {
-              type: 'checkbox',
-              name: 'members',
-              label: 'Assigned to members',
-              value: assignedTo.map((member) => `${member.firstName} ${member.lastName}`),
-              valueOptions: members.map((member) => `${member.firstName} ${member.lastName}`),
-            },
-          ]}
+          inputs={taskEditInputsAttributes(this.props)}
           onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
           submitButton={<Button content='Confirm' classMod='secondary' />}
         >

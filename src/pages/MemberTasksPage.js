@@ -116,7 +116,7 @@ class MemberTasksPage extends React.Component {
   }
 }
 
-MemberTasksPage.defaultTypes = {
+MemberTasksPage.defaultProps = {
   edit: false,
 };
 

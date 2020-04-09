@@ -10,6 +10,7 @@ import { ReactComponent as SkypeIcon } from '../../../../assets/icons/skype.svg'
 import { ReactComponent as MobileIcon } from '../../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../../assets/icons/Address.svg';
 import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelope.svg';
+import editMemberInputsAttributes from './editMemberInputsAttributes';
 
 class EditMember extends React.Component {
   constructor(props) {
@@ -18,125 +19,14 @@ class EditMember extends React.Component {
   }
 
   render() {
-    const {
-      id,
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-      handleClose,
-    } = this.props;
+    const { handleClose } = this.props;
 
     const { inputs } = this.state;
 
     return (
       <Form
         className='edit-member'
-        inputs={[
-          {
-            type: 'text',
-            name: 'firstName',
-            description: 'First Name',
-            value: firstName,
-            byCharValidator: Validator.text,
-          },
-          {
-            type: 'text',
-            name: 'lastName',
-            description: 'Last Name',
-            value: lastName,
-            byCharValidator: Validator.text,
-          },
-          {
-            type: 'text',
-            name: 'email',
-            description: 'Email',
-            value: email,
-            validator: Validator.email,
-          },
-          {
-            type: 'text',
-            name: 'skype',
-            description: 'Skype',
-            value: skype,
-            byCharValidator: Validator.username,
-          },
-          {
-            type: 'text',
-            name: 'mobilePhone',
-            description: 'Mobile phone',
-            value: mobilePhone,
-            byCharValidator: Validator.mobilePhoneByChar,
-            validator: Validator.mobilePhone,
-          },
-          {
-            type: 'text',
-            name: 'address',
-            description: 'Address',
-            value: address,
-            byCharValidator: Validator.alphanumeric,
-          },
-          {
-            type: 'radio',
-            name: 'sex',
-            description: 'Sex',
-            value: sex,
-            valueOptions: ['Male', 'Female'],
-          },
-          {
-            type: 'text',
-            name: 'startDate',
-            description: 'Start date',
-            value: `${startDate.getMonth()}-${startDate.getDate()}-${startDate.getFullYear()}`,
-            byCharValidator: Validator.dateByChar,
-          },
-          {
-            type: 'text',
-            name: 'birthDate',
-            description: 'Birth date',
-            value: `${birthDate.getMonth()}-${birthDate.getDate()}-${birthDate.getFullYear()}`,
-            byCharValidator: Validator.dateByChar,
-          },
-          {
-            type: 'select',
-            name: 'direction',
-            description: 'Direction',
-            value: direction,
-            valueOptions: ['Java', 'Salesforce', '.Net', 'Frontent'], //TODO Replace with request
-          },
-          {
-            type: 'text',
-            name: 'education',
-            description: 'Education',
-            value: education,
-            byCharValidator: Validator.alphanumeric,
-          },
-          {
-            type: 'text',
-            name: 'universityAverageScore',
-            description: 'University average score',
-            value: universityAverageScore,
-            byCharValidator: Validator.numeric,
-            validator: (input) => Validator.float(input, 5, 10),
-          },
-          {
-            type: 'text',
-            name: 'mathScore',
-            description: 'CT math score',
-            value: mathScore,
-            byCharValidator: Validator.numeric,
-            validator: (input) => Validator.number(input, 20, 100),
-          },
-        ]}
+        inputs={editMemberInputsAttributes(this.props)}
         onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
         submitButton={<Button content='Confirm' classMod='secondary' />}
       >
@@ -147,9 +37,7 @@ class EditMember extends React.Component {
           </p>
           <div className='date-badge'>
             <FlagIcon className='icon-flag common-text-color' />
-            {
-              inputs.startDate // TODO Add input mask
-            }
+            {inputs.startDate}
           </div>
           <div className='direction-badge'>{inputs.direction}</div>
         </div>

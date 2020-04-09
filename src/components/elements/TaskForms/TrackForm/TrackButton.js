@@ -6,18 +6,20 @@ import TrackForm from './TrackForm';
 
 function TrackButton(props) {
   const modal = React.createRef();
+
+  const showModal = () => {
+    modal.current.handleShow();
+  };
+
+  const { buttonContent, buttonClassMod, children, ...trackFromProps } = props;
+
   return (
     <>
       <Modal ref={modal} className='track-create'>
-        <TrackForm {...props} />
+        <TrackForm {...trackFromProps} />
       </Modal>
-      <Button
-        classMod={props.buttonClassMod}
-        onClick={() => {
-          modal.current.handleShow();
-        }}
-      >
-        {props.children || props.buttonContent}
+      <Button classMod={buttonClassMod} onClick={showModal}>
+        {children || buttonContent}
       </Button>
     </>
   );

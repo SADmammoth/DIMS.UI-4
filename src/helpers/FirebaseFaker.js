@@ -91,6 +91,6 @@ export default class FirebaseFaker {
         });
       }
     });
-    tracks.forEach(async (el) => Client.db.collection('tracks').add(await el));
+    tracks.forEach(async (el) => Client.db.collection('track').add(await el));
   }
 }

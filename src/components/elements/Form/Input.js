@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CheckboxGroup from './CheckboxGroup';
-import SelectInput from './SelectInput';
+import Select from './Select';
 import TextArea from './TextArea';
 
 function Input(props) {
@@ -58,7 +58,7 @@ function Input(props) {
     }
     if (type === 'select') {
       return renderLabel(
-        <SelectInput
+        <Select
           id={id}
           type={type}
           name={name}
@@ -90,6 +90,23 @@ function Input(props) {
         />,
       );
     }
+
+    const onKeyPress = (e) => {
+      if (!byCharValidator(e.target.value + e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    const onBlur = (e) => {
+      if (!e.target.value) {
+        return;
+      }
+      if (!validator(e.target.value)) {
+        alert('Bad input'); //TODO temp
+      }
+      onChange(e);
+    };
+
     return renderLabel(
       <input
         id={id}
@@ -98,22 +115,9 @@ function Input(props) {
         className='form-control'
         placeholder={description}
         required={required ? 'required' : null}
-        onKeyPress={(e) => {
-          console.log(e.target.value + e.key, byCharValidator(e.target.value + e.key));
-          if (!byCharValidator(e.target.value + e.key)) {
-            e.preventDefault();
-          }
-        }}
+        onKeyPress={onKeyPress}
         onInput={onInput}
-        onBlur={(e) => {
-          if (e.target.value === '') {
-            return;
-          }
-          if (!validator(e.target.value)) {
-            alert('Bad input'); //TODO temp
-          }
-          onChange(e);
-        }}
+        onBlur={onBlur}
         {...attributes}
         value={value}
       />,
@@ -124,7 +128,7 @@ function Input(props) {
 }
 
 Input.defaultProps = {
-  description: '',
+  onInput: () => {},
   onChange: () => {},
   required: false,
   label: false,
@@ -132,13 +136,15 @@ Input.defaultProps = {
   value: '',
   byCharValidator: () => true,
   validator: () => true,
+  minSymbols: 0,
+  maxSymbols: 1000,
 };
 
 Input.propTypes = {
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string,
+  description: PropTypes.string.isRequired,
   onInput: PropTypes.func,
   onChange: PropTypes.func,
   required: PropTypes.bool,

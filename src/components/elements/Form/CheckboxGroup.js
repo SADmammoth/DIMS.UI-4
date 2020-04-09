@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function CheckboxGroup(props) {
-  //! Renders both checkbox and radio buttons groups
-
   function renderCheckbox(value, { value: commonValue, id, type, name, onInput, attributes }) {
     //* 'value' variable is 'value' property of current checkbox
     /*
@@ -12,6 +10,17 @@ function CheckboxGroup(props) {
 
     let values = typeof commonValue === 'string' ? commonValue.split(',') : commonValue;
 
+    const onClick = (event) => {
+      if (type === 'checkbox') {
+        if (event.target.checked) {
+          values.push(event.target.value);
+        } else {
+          values = values.filter((value) => value !== event.target.value);
+        }
+        event.target.value = values;
+      }
+      onInput(event);
+    };
     return (
       <div className='form-group'>
         <input
@@ -20,17 +29,7 @@ function CheckboxGroup(props) {
           type={type}
           className={`form-${type}`}
           value={value}
-          onClick={(event) => {
-            if (type === 'checkbox') {
-              if (event.target.checked) {
-                values.push(event.target.value);
-              } else {
-                values = values.filter((value) => value !== event.target.value);
-              }
-              event.target.value = values;
-            }
-            onInput(event);
-          }}
+          onClick={onClick}
           {...attributes}
           checked={values === value || values.includes(value)}
         />

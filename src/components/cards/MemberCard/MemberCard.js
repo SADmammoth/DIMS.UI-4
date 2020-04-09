@@ -9,11 +9,29 @@ import Modal from '../../elements/Modal';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 
-class MemberCard extends React.Component {
+class MemberCard extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { edit: false };
+
+    this.modal = React.createRef();
   }
+
+  closeEditModal = () => {
+    this.setState({ edit: false });
+    this.modal.current.handleClose();
+  };
+
+  showEditModal = () => {
+    this.modal.current.handleShow();
+    this.setState({ edit: true });
+  };
+
+  showModal = () => {
+    this.modal.current.handleShow();
+  };
+
+  editModal = (bool) => this.setState({ edit: !!bool });
 
   render() {
     const {
@@ -32,20 +50,13 @@ class MemberCard extends React.Component {
       education,
       universityAverageScore,
       mathScore,
-
       open,
       close,
     } = this.props;
 
     function onClick() {
-      if (collapsed) {
-        open(id);
-      } else {
-        close(id);
-      }
+      collapsed ? open(id) : close(id);
     }
-
-    const modal = React.createRef();
 
     return (
       <>
@@ -69,28 +80,15 @@ class MemberCard extends React.Component {
                 <span>Tasks</span>
               </Button>
               <Button content='Delete' classMod='secondary' />
-              <Button
-                content='Edit'
-                classMod='secondary'
-                onClick={() => {
-                  modal.current.handleShow();
-                  this.setState({ edit: true });
-                }}
-              />
-              <Button
-                content='More info'
-                classMod='ghost'
-                onClick={() => {
-                  modal.current.handleShow();
-                }}
-              />
+              <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+              <Button content='More info' classMod='ghost' onClick={this.showModal} />
             </div>
           )}
         </article>
-        <Modal ref={modal} className='member-info'>
+        <Modal ref={this.modal} className='member-info'>
           <MemberInfo
             edit={this.state.edit}
-            setEdit={(bool) => this.setState(!!bool)}
+            setEdit={this.editModal}
             id={id}
             firstName={firstName}
             lastName={lastName}
@@ -105,10 +103,7 @@ class MemberCard extends React.Component {
             education={education}
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
-            handleClose={() => {
-              this.setState(false);
-              modal.current.handleClose();
-            }}
+            handleClose={this.handleClose}
           />
         </Modal>
       </>

@@ -5,6 +5,7 @@ import DirectionBadge from '../../elements/DirectionBadge';
 import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
+  // TODO
   const { firstName, lastName, birthDate, direction, startDate, onClick } = props;
   const age = new Date().getFullYear() - birthDate.getFullYear();
 

@@ -7,23 +7,23 @@ export default class Validator {
     return /^[a-zA-Z][a-zA-Z0-9_.-]*@(?:(?!.*(?:-{2,}))[\w-]{2,255})\.(?:[a-zа-я]{2,10})$/.test(email);
   };
 
-  static usernameMessage = 'Username must contain from 6 to 64 alphanumeric characters and underscore';
+  static userNameMessage = 'userName must contain from 6 to 64 alphanumeric characters and underscore';
 
-  static username = (username, notContains) => {
+  static userName = (userName, notContains) => {
     const notContainsUnescaped = RegexpUnescapeArray(notContains);
 
-    Validator.usernameMessage = `${Validator.usernameMessage.replace(
+    Validator.userNameMessage = `${Validator.userNameMessage.replace(
       / and not contain: .*/,
       '',
     )} and not contain: "${notContainsUnescaped.join('","')}"`;
 
-    return AddNotContains('^[a-zA-Z_0-9]{6,64}$', notContainsUnescaped).test(username);
+    return AddNotContains('^[a-zA-Z_0-9]{6,64}$', notContainsUnescaped).test(userName);
   };
 
   static passwordMessage =
     'Password must contain at least: <ul><li>8 chars;</li><li>one uppercase and one lowercase letter;</li><li>any special character.</li></ul> Must use only alphanumeric and special characters.';
 
-  static password = (username, notContains = []) => {
+  static password = (userName, notContains = []) => {
     const notContainsUnecaped = RegexpUnescapeArray(notContains);
 
     Validator.passwordMessage = `${Validator.passwordMessage.replace(
@@ -34,7 +34,7 @@ export default class Validator {
     return AddNotContains(
       '(^(?:(?=[a-zA-Z0-9~`!@#$%^&*()+=_{}[\\]\\|:;”’?\\/<>,.-]{8,})(?=.*[`!@#$%^&*()+=_{}[\\]\\|:;”’?\\/<>,.-].*)(?=.*[a-z].*)(?=.*_.*)(?=.*[0-9].*)(?=.*[A-Z].*))(.*)$)',
       notContainsUnecaped,
-    ).test(username);
+    ).test(userName);
   };
 
   static phoneMessage = 'Phone is not valid';

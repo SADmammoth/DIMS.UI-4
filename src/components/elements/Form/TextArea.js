@@ -8,25 +8,29 @@ function TextArea(props) {
     return input.length <= max && input.length >= min;
   }
 
+  const inputHandler = (event) => {
+    if (checkCount(event.target.value, 0, maxSymbols)) {
+      onInput(event);
+    } else {
+      alert('Bad input'); //TODO temp
+    }
+  };
+
+  const onBlur = (event) => {
+    if (checkCount(event.target.value, minSymbols, maxSymbols)) {
+      onChange(event);
+    } else {
+      alert('Bad input'); //TODO temp
+    }
+  };
+
   return (
     <textarea
       id={id}
       className='form-textarea'
       name={name}
-      onInput={(event) => {
-        if (checkCount(event.target.value, 0, maxSymbols)) {
-          onInput(event);
-        } else {
-          alert('Bad input'); //TODO temp
-        }
-      }}
-      onBlur={(event) => {
-        if (checkCount(event.target.value, minSymbols, maxSymbols)) {
-          onChange(event);
-        } else {
-          alert('Bad input'); //TODO temp
-        }
-      }}
+      onInput={inputHandler}
+      onBlur={onBlur}
       required={required}
       {...attributes}
       value={value}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../../elements/DateBadge';
@@ -26,11 +26,7 @@ function MemberTaskCard(props) {
   } = props;
 
   function onClick() {
-    if (collapsed) {
-      open(id);
-    } else {
-      close(id);
-    }
+    collapsed ? open(id) : close(id);
   }
 
   return (
@@ -116,4 +112,4 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default withRouter(MemberTaskCard);
+export default MemberTaskCard;

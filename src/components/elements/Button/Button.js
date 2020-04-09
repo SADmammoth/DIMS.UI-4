@@ -4,12 +4,9 @@ import { withRouter } from 'react-router-dom';
 
 function Button(props) {
   function onClick(event) {
-    if (props.onClick) {
-      props.onClick(event);
-    } else {
-      props.history.push(props.link);
-    }
+    props.onClick ? props.onClick(event) : props.history.push(props.link);
   }
+  // TODO
   return (
     <button className={`button button${`_${props.classMod}` || ''}`} type={props.type} onClick={onClick}>
       {props.content || props.children}

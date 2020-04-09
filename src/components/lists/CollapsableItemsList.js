@@ -7,65 +7,38 @@ class CollapsableItemsList extends Component {
     this.state = { items: {}, open: null };
   }
 
-  async componentDidMount() {
-    const { items, open } = this.props;
-    const { items: stateItems } = this.state;
-
+  static getDerivedStateFromProps(props, state) {
+    const { items, open } = props;
+    const { items: stateItems } = state;
     if (Object.keys(stateItems).length !== items.length) {
       const itemsData = {};
       items.forEach((child) => {
         itemsData[child.props.id] = { collapsed: true };
       });
-
-      this.setState(
-        {
-          items: itemsData,
-        },
-        () => {
-          if (open) {
-            setTimeout(() => {
-              if (document.getElementById(open)) {
-                document.getElementById(open).scrollIntoView();
-              }
-            }, 0);
-            this.open(open);
-          }
-        },
-      );
+      return { ...state, items: itemsData };
     }
+  }
 
+  async componentDidMount() {
+    const { open } = this.props;
+    this.openOnLoad(open);
     document.body.addEventListener('keydown', this.navigationKeys);
   }
 
-  async componentDidUpdate() {
-    const { items, open } = this.props;
-    const { items: stateItems } = this.state;
-
-    if (Object.keys(stateItems).length !== items.length) {
-      const itemsData = {};
-      items.forEach((child) => {
-        itemsData[child.props.id] = { collapsed: true };
-      });
-
-      this.setState(
-        {
-          items: itemsData,
-        },
-        () => {
-          if (open) {
-            if (document.getElementById(open)) {
-              document.getElementById(open).scrollIntoView();
-            }
-            this.open(open);
-          }
-        },
-      );
+  openOnLoad = (id) => {
+    if (id) {
+      setTimeout(() => {
+        if (document.getElementById(id)) {
+          document.getElementById(id).scrollIntoView();
+        }
+      }, 0);
+      this.open(id);
     }
-  }
+  };
 
   open = (id) => {
     const { open, items } = this.state;
-
+    console.log(items);
     if (open) {
       items[open].collapsed = true;
     }
@@ -86,7 +59,7 @@ class CollapsableItemsList extends Component {
 
   navigationKeys = (event) => {
     const isUp = event.key === 'ArrowUp';
-    const isDown = event.key === 'ArrowDown';
+    const isDown = event.key === 'ArrowDown'; // TODO
     if (isUp || isDown) {
       const { open, items } = this.state;
       if (isUp && !open) {

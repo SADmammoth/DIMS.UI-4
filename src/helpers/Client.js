@@ -115,7 +115,7 @@ class Client {
   static async getTracks(userID) {
     const memberTasks = await Client.getUserTasks(userID);
     const tracks = await Client.db
-      .collection('tracks')
+      .collection('track')
       .where('memberTaskID', 'in', Object.keys(memberTasks))
       .get();
 

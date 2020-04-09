@@ -2,12 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Modal extends React.Component {
-  static Header = (props) => <div className={`modal__header ${props.className || ''}`}>{props.children}</div>;
-
-  static Body = (props) => <div className={`modal__body ${props.className || ''}`}>{props.children}</div>;
-
-  static Title = (props) => <p className={`modal__title ${props.className || ''}`}>{props.children}</p>;
-
   constructor(props) {
     super(props);
     this.state = { show: false };
@@ -27,6 +21,11 @@ class Modal extends React.Component {
     this.setState({ show: true });
   };
 
+  modalBackfaceClick = (e) => {
+    e.preventDefault();
+    this.handleClose();
+  };
+
   render() {
     return (
       <>
@@ -34,16 +33,7 @@ class Modal extends React.Component {
           {this.props.children}
         </article>
 
-        {this.props.backface && (
-          <div
-            className='modal-shadow'
-            role='article'
-            onClick={(e) => {
-              e.preventDefault();
-              this.handleClose();
-            }}
-          />
-        )}
+        {this.props.backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
       </>
     );
   }
