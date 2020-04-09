@@ -163,18 +163,16 @@ class Form extends React.Component {
   // * Format values to pass to onSubmit
   formatValues() {
     const values = {};
-    Object.entries(this.state.values).forEach(({ name, valueItem }) => {
+    Object.entries(this.state.values).forEach(([name, valueItem]) => {
       values[name] = valueItem.value;
     });
     return values;
   }
 
   onSubmit = (event) => {
-    if (onSubmit) {
+    if (this.props.onSubmit) {
       event.preventDefault();
-      if (event.target.checkValidity()) {
-        onSubmit(this.formatValues());
-      }
+      this.props.onSubmit(this.formatValues());
     }
   };
 

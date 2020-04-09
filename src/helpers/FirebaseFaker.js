@@ -1,4 +1,5 @@
 import faker from 'faker';
+import md5 from 'md5';
 import Client from './Client';
 
 export default class FirebaseFaker {
@@ -93,4 +94,34 @@ export default class FirebaseFaker {
     });
     tracks.forEach(async (el) => Client.db.collection('track').add(await el));
   }
+
+  static async createUser(login, password, role, userID) {
+    await Client.db
+      .collection('users')
+      .add({ login, password: md5(password), role, userID, token: faker.random.alphaNumeric(15) });
+  }
+
+  static async generateUsers() {
+    const users = await Client.getMembers();
+    const json = [];
+    await Promise.all(
+      Object.entries(users).map(async ([id, doc]) => {
+        const login = (doc.firstName + doc.lastName).toLowerCase();
+        const password = faker.internet.password();
+        await FirebaseFaker.createUser(login, password, 'member', id);
+        json.push({ login, password });
+      }),
+    );
+    saveAsFile(JSON.stringify(json), 'membersPasswords');
+  }
+}
+
+function saveAsFile(content, filename) {
+  const blob = new Blob([content], { type: 'text/text' });
+  const anchor = document.createElement('a');
+
+  anchor.download = filename + '.txt';
+  anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+  anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
+  anchor.click();
 }

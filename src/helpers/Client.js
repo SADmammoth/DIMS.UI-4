@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import md5 from 'md5';
 
 //* Firebase configuration
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
@@ -128,6 +129,29 @@ class Client {
       }),
     );
     return tracksObject;
+  }
+
+  static async signIn(login, password) {
+    const user = await Client.db
+      .collection('users')
+      .where('login', '==', login)
+      .get();
+    if (user) {
+      console.log(md5(password), user.docs[0].data().password, user.docs[0].data().password === md5(password));
+      if (user.docs[0].data().password === md5(password)) {
+        return { status: 'success', found: true, token: user.docs[0].data().token };
+      }
+      return { status: 'fail', found: true };
+    }
+    return { status: 'fail', found: false };
+  }
+
+  static async checkToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return !!user.docs.length;
   }
 }
 
