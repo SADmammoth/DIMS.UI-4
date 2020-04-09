@@ -2,52 +2,41 @@ import Client from './Client';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import AuthenticationManager from './AuthenticationManager';
+import LoginModal from '../components/elements/LoginModal/LoginModal';
+import UserContext from './UserContext';
 
 class AuthorizationManager extends Component {
   constructor(props) {
     super(props);
-    this.state = { authorized: null };
+    this.state = { authorizedUser: { role: 'guest', userID: 'guest' }, roles: ['guest', 'member', 'admin', 'mentor'] };
   }
 
-  async componentDidMount() {
-    await this.logIn();
-  }
-
-  logIn = async (login, password) => {
-    this.setState({ authorized: (await this.authorize(login, password)).status === 'success' });
-  };
-
-  authorize = async (login, password) => {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken || !(await Client.checkToken(authToken))) {
-      if (!login || !password) {
-        return { status: 'fail' };
-      }
-      const { status, found, token } = await Client.signIn(login, password);
-      if (status === 'fail' && found) {
-        return { status, message: 'Incorrect password' };
-      }
-      if (status === 'fail' && !found) {
-        return { status, message: 'Incorrect username' };
-      }
-
-      localStorage.setItem('authToken', token);
+  authorize = (role, userID) => {
+    if (!role || !userID) {
+      this.setState({ authorizedUser: JSON.parse(localStorage.getItem('userInfo')) });
     }
-    return { status: 'success', message: 'Login succesful' };
+    if (this.state.roles.includes(role)) {
+      localStorage.setItem('userInfo', JSON.stringify({ role, userID }));
+      this.setState({ authorizedUser: { role, userID } });
+    }
   };
 
   render() {
-    const { logInModalClass: LogInModal, children } = this.props;
+    const { children } = this.props;
     return (
       <>
-        {this.state.authorized !== null && (this.state.authorized ? children : <LogInModal logIn={this.logIn} show />)}
+        <UserContext.Provider value={this.state.authorizedUser}>
+          <AuthenticationManager logInModalClass={LoginModal} authorize={this.authorize}>
+            {children}
+          </AuthenticationManager>
+        </UserContext.Provider>
       </>
     );
   }
 }
 
 AuthorizationManager.propTypes = {
-  logInModalClass: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 

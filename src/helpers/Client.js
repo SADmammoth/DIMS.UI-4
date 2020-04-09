@@ -139,7 +139,13 @@ class Client {
     if (user) {
       console.log(md5(password), user.docs[0].data().password, user.docs[0].data().password === md5(password));
       if (user.docs[0].data().password === md5(password)) {
-        return { status: 'success', found: true, token: user.docs[0].data().token };
+        return {
+          status: 'success',
+          found: true,
+          token: user.docs[0].data().token,
+          role: user.docs[0].data().role,
+          userID: user.docs[0].data().userID,
+        };
       }
       return { status: 'fail', found: true };
     }
