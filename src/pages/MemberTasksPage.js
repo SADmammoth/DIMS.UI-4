@@ -54,36 +54,38 @@ class MemberTasksPage extends React.Component {
     this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
   }
 
-  static renderTask(id, data, taskSet, members, edit) {
-    const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
-    let feature;
-
-    switch (taskSet) {
-      case 'all':
-        feature = 'assign';
-        break;
-      case 'user':
-        feature = 'track';
-        break;
-      default:
-        throw Error('Bad task set');
-    }
-
+  static wrappedMemberTask = ({ collapsed, id, taskSet, members, edit, open, close, ...data }) => {
+    const { taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
-      <MemberTaskCard
-        id={id}
-        edit={edit}
-        taskID={taskID}
-        taskName={taskName}
-        taskDescription={taskDescription}
-        state={state}
-        taskStart={taskStart}
-        taskDeadline={taskDeadline}
-        feature={feature}
-        assignedTo={assignedTo}
-        members={members}
-      />
+      <UserContext.Consumer>
+        {({ role }) => {
+          return (
+            <MemberTaskCard
+              id={id}
+              edit={edit}
+              taskID={taskID}
+              taskName={taskName}
+              taskDescription={taskDescription}
+              state={state}
+              taskStart={taskStart}
+              taskDeadline={taskDeadline}
+              taskSet={taskSet}
+              role={role}
+              open={open}
+              close={close}
+              collapsed={collapsed}
+              assignedTo={assignedTo}
+              members={members}
+            />
+          );
+        }}
+      </UserContext.Consumer>
     );
+  };
+
+  static renderTask(id, data, taskSet, members, edit) {
+    const WrappedMemberTask = MemberTasksPage.wrappedMemberTask;
+    return <WrappedMemberTask id={id} taskSet={taskSet} members={members} edit={edit} {...data} />;
   }
 
   renderTasks() {

@@ -15,6 +15,17 @@ function Routes(props) {
       <Route path='/404'>
         <Error404Page />
       </Route>
+      <Route
+        exact
+        path='/members/:id/tasks/:open?'
+        render={(props) => {
+          return role === 'member' && props.match.params.id !== userID ? (
+            <Redirect to='/404' />
+          ) : (
+            <MemberTasksPage taskSet='user' />
+          );
+        }}
+      />
       {(role === 'admin' || role === 'mentor') && (
         <>
           <Route exact path='/'>
@@ -34,17 +45,6 @@ function Routes(props) {
           </Route>
         </>
       )}
-      <Route
-        exact
-        path='/members/:id/tasks/:open?'
-        render={(props) => {
-          return role === 'member' && props.match.params.id !== userID ? (
-            <Redirect to='/404' />
-          ) : (
-            <MemberTasksPage taskSet='user' />
-          );
-        }}
-      />
       {role === 'member' && (
         <>
           <Route exact path='/'>

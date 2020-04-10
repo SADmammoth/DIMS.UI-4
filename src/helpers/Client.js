@@ -47,7 +47,6 @@ class Client {
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
-        tasksObject[doc.id].id = doc.data().taskID;
       }),
     );
     console.log(tasksObject);
