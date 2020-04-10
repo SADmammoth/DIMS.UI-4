@@ -9,6 +9,7 @@ import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg'
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import { AssignButton } from '../../../elements/AssignForm';
 
 function MemberTaskCard(props) {
   const {
@@ -21,6 +22,7 @@ function MemberTaskCard(props) {
     id,
     feature,
     assignedTo,
+    members,
     open,
     close,
     edit,
@@ -74,10 +76,10 @@ function MemberTaskCard(props) {
               )}
 
               {feature === 'assign' && (
-                <Button classMod='primary'>
+                <AssignButton buttonClassMod='primary' assignedTo={assignedTo} members={members}>
                   <TrackIcon className='icon-tasks' />
                   <span>Assign</span>
-                </Button>
+                </AssignButton>
               )}
 
               <Button classMod='secondary' content='Delete' />
@@ -93,6 +95,7 @@ function MemberTaskCard(props) {
 
 MemberTaskCard.defaultProps = {
   assignedTo: [],
+  members: [],
 };
 
 MemberTaskCard.propTypes = {
@@ -103,6 +106,9 @@ MemberTaskCard.propTypes = {
   close: PropTypes.func.isRequired,
   feature: PropTypes.oneOf(['track', 'assign']).isRequired,
   assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+  ),
+  members: PropTypes.arrayOf(
     PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
   ),
 

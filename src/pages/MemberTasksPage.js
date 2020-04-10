@@ -7,6 +7,7 @@ import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import UserContext from '../helpers/UserContext';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
