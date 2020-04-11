@@ -5,6 +5,8 @@ import DateBadge from '../DateBadge';
 import Button from '../Button';
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
 import MemberEdit from './MemberEdit';
+import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
+import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
 import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
@@ -31,6 +33,7 @@ const MemberInfo = (props) => {
     edit,
     setEdit,
     handleClose,
+    role,
   } = props;
 
   const openEditModal = () => setEdit(true);
@@ -105,15 +108,19 @@ const MemberInfo = (props) => {
           </div>
           <ButtonGroup>
             <Button classMod='primary' link={`/members/${id}/progress`}>
-              <i className='icon-progress' />
+              <ProgressIcon className='icon-progress' />
               <span>Progress</span>
             </Button>
             <Button classMod='primary' link={`/members/${id}/tasks`}>
-              <i className='icon-tasks' />
+              <TasksIcon className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <Button content='Delete' classMod='secondary' />
-            <Button content='Edit' classMod='secondary' onClick={openEditModal} />
+            {role === 'admin' && (
+              <>
+                <Button content='Delete' classMod='secondary' />
+                <Button content='Edit' classMod='secondary' onClick={openEditModal} />
+              </>
+            )}
           </ButtonGroup>
         </>
       )}
@@ -140,6 +147,7 @@ MemberInfo.propTypes = {
   education: PropTypes.string.isRequired,
   universityAverageScore: PropTypes.number.isRequired,
   mathScore: PropTypes.number.isRequired,
+  role: PropTypes.string.isRequired,
 
   handleClose: PropTypes.func,
   edit: PropTypes.bool,

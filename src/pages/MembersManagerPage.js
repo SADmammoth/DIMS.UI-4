@@ -6,6 +6,7 @@ import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import UserContext from '../helpers/UserContext';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -31,41 +32,58 @@ class MembersManagerPage extends React.Component {
     });
   }
 
-  static renderMember(id, data) {
-    const {
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-    } = data;
-
+  static WrappedMemberCard({
+    id,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+    collapsed,
+    open,
+    close,
+  }) {
     return (
-      <MemberCard
-        id={id}
-        firstName={firstName}
-        lastName={lastName}
-        birthDate={birthDate}
-        direction={direction}
-        startDate={startDate}
-        email={email}
-        mobilePhone={mobilePhone}
-        skype={skype}
-        address={address}
-        sex={sex}
-        education={education}
-        universityAverageScore={universityAverageScore}
-        mathScore={mathScore}
-      />
+      <UserContext.Consumer>
+        {({ role }) => {
+          return (
+            <MemberCard
+              id={id}
+              firstName={firstName}
+              lastName={lastName}
+              birthDate={birthDate}
+              direction={direction}
+              startDate={startDate}
+              email={email}
+              mobilePhone={mobilePhone}
+              skype={skype}
+              address={address}
+              sex={sex}
+              education={education}
+              universityAverageScore={universityAverageScore}
+              mathScore={mathScore}
+              role={role}
+              collapsed={collapsed}
+              open={open}
+              close={close}
+            />
+          );
+        }}
+      </UserContext.Consumer>
     );
+  }
+
+  static renderMember(id, data) {
+    const WrappedMemberCard = MembersManagerPage.WrappedMemberCard;
+    return <WrappedMemberCard id={id} {...data} />;
   }
 
   render() {

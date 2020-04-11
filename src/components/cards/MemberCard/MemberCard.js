@@ -36,7 +36,6 @@ class MemberCard extends React.PureComponent {
   render() {
     const {
       id,
-      collapsed,
       firstName,
       lastName,
       email,
@@ -50,6 +49,8 @@ class MemberCard extends React.PureComponent {
       education,
       universityAverageScore,
       mathScore,
+      role,
+      collapsed,
       open,
       close,
     } = this.props;
@@ -80,8 +81,12 @@ class MemberCard extends React.PureComponent {
                 <TasksIcon className='icon-tasks' />
                 <span>Tasks</span>
               </Button>
-              <Button content='Delete' classMod='secondary' />
-              <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+              {role === 'admin' && (
+                <>
+                  <Button content='Delete' classMod='secondary' />
+                  <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+                </>
+              )}
               <Button content='More info' classMod='ghost' onClick={this.showModal} />
             </div>
           )}
@@ -117,6 +122,7 @@ const { handleClose, edit, setEdit, ...memberInfoPTypes } = MemberInfo.propTypes
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
   ...memberInfoPTypes,
 };
 
