@@ -13,12 +13,12 @@ function AssignButton(props) {
   };
   return (
     <>
-      <Button classMod={buttonClassMod} onClick={showModal} content={buttonContent}>
-        {children}
-      </Button>
       <Modal ref={modal}>
         <AssignForm {...assignFormProps} />
       </Modal>
+      <Button classMod={buttonClassMod} onClick={showModal} content={buttonContent}>
+        {children}
+      </Button>
     </>
   );
 }
