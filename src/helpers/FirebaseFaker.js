@@ -37,29 +37,29 @@ export default class FirebaseFaker {
     members.forEach((el) => Client.db.collection('memberTasks').add(el));
   }
 
-  static generateProgress(userID) {
-    let members = new Array(5).fill(null);
+  // static generateProgress(userID) {
+  //   let members = new Array(5).fill(null);
 
-    const generateTaskName = () => {
-      const taskName = `${faker.hacker.verb()} ${faker.hacker.adjective()} ${faker.hacker.noun()}`;
-      return taskName.charAt(0).toUpperCase() + taskName.slice(1);
-    };
+  //   const generateTaskName = () => {
+  //     const taskName = `${faker.hacker.verb()} ${faker.hacker.adjective()} ${faker.hacker.noun()}`;
+  //     return taskName.charAt(0).toUpperCase() + taskName.slice(1);
+  //   };
 
-    let startDate;
+  //   let startDate;
 
-    members = members.map(async () => ({
-      userID,
-      userName: (await Client.getMember(userID)).firstName,
-      taskName: generateTaskName(),
-      trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
-      trackDate: (() => {
-        startDate = faker.date.recent();
-        return startDate;
-      })(),
-    }));
+  //   members = members.map(async () => ({
+  //     userID,
+  //     userName: (await Client.getMember(userID)).firstName,
+  //     taskName: generateTaskName(),
+  //     trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
+  //     trackDate: (() => {
+  //       startDate = faker.date.recent();
+  //       return startDate;
+  //     })(),
+  //   }));
 
-    members.forEach(async (el) => Client.db.collection('progress').add(await el));
-  }
+  //   members.forEach(async (el) => Client.db.collection('progress').add(await el));
+  // }
 
   static generateTasks() {
     let tasks = new Array(faker.random.number({ min: 5, max: 10 })).fill(null);

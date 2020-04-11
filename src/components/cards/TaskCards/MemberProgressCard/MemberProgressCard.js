@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
+import Button from '../../../elements/Button/Button';
 
 function MemberProgressCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
-  const onClick = (collapsed) => {
+  const { taskName, trackNote, trackDate, collapsed, id, taskID, role, open, close } = props;
+  function onClick(collapsed) {
     collapsed ? open(id) : close(id);
-  };
+  }
 
   return (
     <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
@@ -15,7 +16,12 @@ function MemberProgressCard(props) {
       {!collapsed && (
         <>
           <div className='task-card__body'>
-            <p className='task-card__description'>{trackNote}</p>
+            <p className='task-card__description'>{trackNote}</p>{' '}
+            {(role === 'admin' || role === 'mentor') && (
+              <Button classMod='ghost' link={`/tasks/${taskID}`}>
+                Show in tasks
+              </Button>
+            )}
           </div>
         </>
       )}

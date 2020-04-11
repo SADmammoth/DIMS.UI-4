@@ -63,17 +63,23 @@ class Client {
   }
 
   static async getUserProgress(userID) {
-    const progress = await Client.db
-      .collection('progress')
-      .where('userID', '==', userID)
-      .get();
+    const track = await Client.getTracks(userID);
 
     const progressObject = {};
-    progress.docs.forEach((doc) => {
-      progressObject[doc.id] = doc.data();
-      progressObject[doc.id].trackDate = new Date(progressObject[doc.id].trackDate.seconds * 1000);
-    });
-
+    let userData = {};
+    console.log(track);
+    await Promise.all(
+      Object.entries(track).map(async ([id, data]) => {
+        const { memberTaskId, ...progressData } = data;
+        progressObject[id] = progressData;
+        userData = await Client.db
+          .collection('members')
+          .doc(userID)
+          .get();
+        progressObject[id].userName = userData.data().firstName;
+      }),
+    );
+    console.log(progressObject);
     return progressObject;
   }
 
@@ -120,13 +126,12 @@ class Client {
       .get();
 
     const tracksObject = {};
-    await Promise.all(
-      tracks.docs.map(async (doc) => {
-        tracksObject[doc.id] = doc.data();
-        tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
-        tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
-      }),
-    );
+    tracks.docs.map(async (doc) => {
+      tracksObject[doc.id] = doc.data();
+      tracksObject[doc.id].taskID = memberTasks[doc.data().memberTaskID].taskID;
+      tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
+      tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
+    });
     return tracksObject;
   }
 

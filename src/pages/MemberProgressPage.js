@@ -6,6 +6,7 @@ import MemberProgressCard from '../components/cards/TaskCards/MemberProgressCard
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import UserContext from '../helpers/UserContext';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
@@ -18,9 +19,31 @@ class MemberProgressPage extends React.Component {
     this.setState({ tasks: taskData });
   }
 
+  static WrappedMemberProgressCard({ id, taskID, taskName, trackNote, trackDate, collapsed, open, close }) {
+    return (
+      <UserContext.Consumer>
+        {({ role }) => {
+          return (
+            <MemberProgressCard
+              id={id}
+              taskID={taskID}
+              taskName={taskName}
+              trackNote={trackNote}
+              trackDate={trackDate}
+              collapsed={collapsed}
+              open={open}
+              close={close}
+              role={role}
+            />
+          );
+        }}
+      </UserContext.Consumer>
+    );
+  }
+
   static renderProgressCard(id, data) {
-    const { taskName, trackNote, trackDate } = data;
-    return <MemberProgressCard id={id} taskName={taskName} trackNote={trackNote} trackDate={trackDate} />;
+    const WrappedMemberProgressCard = MemberProgressPage.WrappedMemberProgressCard;
+    return <WrappedMemberProgressCard id={id} {...data} />;
   }
 
   renderProgress() {
