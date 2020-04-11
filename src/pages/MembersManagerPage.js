@@ -7,6 +7,7 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import UserContext from '../helpers/UserContext';
+import getNavItems from '../helpers/getNavItems';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -92,9 +93,11 @@ class MembersManagerPage extends React.Component {
         <Helmet>
           <title>Members</title>
         </Helmet>
-        <Header>
-          <h1>Members</h1>
-        </Header>
+        <UserContext>
+          {({ role, userID }) => {
+            return <Header title='Members' navItems={getNavItems({ role, userID }, this.props.match.path)} />;
+          }}
+        </UserContext>
         <ContainerComponent>
           <CollapsableItemsList items={this.renderMembers()} />
         </ContainerComponent>

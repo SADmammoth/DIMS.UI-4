@@ -7,6 +7,7 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import UserContext from '../helpers/UserContext';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
@@ -60,9 +61,16 @@ class MemberProgressPage extends React.Component {
     return (
       <>
         <Helmet>{`${anytask.userName || 'Name'}'s progress`}</Helmet>
-        <Header>
-          <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
-        </Header>
+        <UserContext>
+          {({ role, userID }) => {
+            return (
+              <Header
+                title={`${anytask.userName || 'Name'}'s progress`}
+                navItems={getNavItems({ role, userID }, this.props.match.path)}
+              />
+            );
+          }}
+        </UserContext>
         <ContainerComponent>
           <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
         </ContainerComponent>

@@ -8,6 +8,7 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import UserContext from '../helpers/UserContext';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -98,13 +99,22 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks, name } = this.state;
     const { taskSet } = this.props;
-    const title = `${name}'s tasks`;
+
     return (
       <>
-        <Helmet>
-          <title>{title}</title>
-        </Helmet>
-        <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
+        <UserContext>
+          {({ role, userID }) => {
+            const title = role === 'member' || taskSet === 'all' ? 'Tasks' : `${name}'s tasks`;
+            return (
+              <>
+                <Helmet>
+                  <title>{title}</title>
+                </Helmet>
+                <Header title={title} navItems={getNavItems({ role, userID }, this.props.match.path)} />
+              </>
+            );
+          }}
+        </UserContext>
         <ContainerComponent>
           <div>
             {Object.keys(tasks).length ? (
