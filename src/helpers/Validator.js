@@ -32,7 +32,7 @@ export default class Validator {
     'Password must contain at least: <ul><li>8 chars;</li><li>one uppercase and one lowercase letter;</li><li>any special character.</li></ul> Must use only alphanumeric and special characters.';
 
   static password = (userName, notContains = []) => {
-    const notContainsUnecaped = RegexpUnescapeArray(notContains);
+    const notContainsUnescaped = RegexpUnescapeArray(notContains);
 
     Validator.passwordMessage = `${Validator.passwordMessage.replace(
       / Mustn't contain: .*/,
@@ -58,8 +58,7 @@ export default class Validator {
       ')(.*)' +
       '$)';
 
-    console.log(basePasswordRegex);
-    return AddNotContains(basePasswordRegex, notContainsUnescaped).test(username);
+    return AddNotContains(basePasswordRegex, notContainsUnescaped).test(userName);
   };
 
   //

@@ -96,7 +96,7 @@ function followMaskComponent(input, maskArray) {
         event.preventDefault();
       }
       if (event.key === 'Backspace' /*backspace */) {
-        const target = event.target;
+        const { target } = event;
         let { value } = event.target;
         const start = target.selectionStart - 1;
         const end = target.selectionEnd;
@@ -133,6 +133,7 @@ function followMaskComponent(input, maskArray) {
           maskArray,
         );
         input.props.onKeyPress(event);
+        console.log(input.props);
         input.props.onInput(event);
         selectLast(event.target);
       }
@@ -140,10 +141,11 @@ function followMaskComponent(input, maskArray) {
     },
     onBlur: (event) => {
       const firstPlaceholder = event.target.value.indexOf('_');
-      event.target.value = event.target.value.slice(0, firstPlaceholder);
+      event.target.value = event.target.value.slice(
+        0,
+        firstPlaceholder < 0 ? event.target.value.length : firstPlaceholder,
+      );
       input.props.onBlur(event);
-      console.log(firstPlaceholder);
-      event.target.setSelectionRange(firstPlaceholder, firstPlaceholder);
     },
   });
 }

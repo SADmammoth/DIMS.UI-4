@@ -115,23 +115,29 @@ function Input(props) {
       if (!validator(e.target.value)) {
         alert('Bad input'); //TODO temp
       }
-      onChange(e);
+      onChange(e.target.name, e.target.value);
+    };
+
+    const onInputHandler = (e) => {
+      onInput(e.target.name, e.target.value);
     };
 
     return renderLabel(
-      <input
-        id={id}
-        type={type}
-        name={name}
-        className='form-control'
-        placeholder={description}
-        required={required ? 'required' : null}
-        onKeyPress={onKeyPress}
-        onInput={onInput}
-        onBlur={onBlur}
-        {...attributes}
-        value={value}
-      />,
+      renderMask(
+        <input
+          id={id}
+          type={type}
+          name={name}
+          className='form-control'
+          placeholder={description}
+          required={required ? 'required' : null}
+          onKeyPress={onKeyPress}
+          onInput={onInputHandler}
+          onBlur={onBlur}
+          {...attributes}
+          value={value}
+        />,
+      ),
     );
   }
 

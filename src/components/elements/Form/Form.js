@@ -28,8 +28,6 @@ class Form extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.state.values['mobilePhone']);
-    console.log(prevState.values, this.state.values);
     if (
       !this.compareObjects(prevProps.inputs, this.props.inputs) ||
       Object.keys(this.state.values).length !== this.props.inputs.length ||
@@ -46,6 +44,8 @@ class Form extends React.Component {
 
   updateValue = (name, value) => {
     const { values } = this.state;
+    console.log(values, name);
+    console.trace();
     values[name].value = value;
 
     this.setState({ values });
@@ -89,6 +89,7 @@ class Form extends React.Component {
     valueOptions,
     minSymbols,
     maxSymbols,
+    invalid,
   ) {
     return (
       <Input
