@@ -37,9 +37,8 @@ class Form extends React.Component {
 
   updateValue = (name, value) => {
     const { values } = this.state;
-    const { name } = event.target;
 
-    values[name].value = event.target.value;
+    values[name].value = value;
 
     this.setState({ values });
     this.createInputs();

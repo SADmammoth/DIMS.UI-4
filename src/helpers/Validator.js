@@ -7,13 +7,9 @@ export default class Validator {
     return /^[a-zA-Z][a-zA-Z0-9_.-]*@(?:(?!.*(?:-{2,}))[\w-]{2,255})\.(?:[a-zа-я]{2,10})$/.test(email);
   };
 
-<<<<<<< HEAD
-  static userNameMessage = 'userName must contain from 6 to 64 alphanumeric characters and underscore';
-=======
   //
 
-  static usernameMessage = 'Username must contain from 6 to 64 alphanumeric characters and underscore';
->>>>>>> d1c2498... feat: input mask
+  static userNameMessage = 'Username must contain from 6 to 64 alphanumeric characters and underscore';
 
   static userName = (userName, notContains) => {
     const notContainsUnescaped = RegexpUnescapeArray(notContains);

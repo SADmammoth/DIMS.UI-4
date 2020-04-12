@@ -28,7 +28,7 @@ class AuthenticationManager extends Component {
         return { status, message: 'Incorrect password' };
       }
       if (status === 'fail' && !found) {
-        return { status, message: 'Incorrect username' };
+        return { status, message: 'Incorrect userName' };
       }
 
       localStorage.setItem('authToken', token);

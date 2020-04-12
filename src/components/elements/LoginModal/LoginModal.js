@@ -9,7 +9,7 @@ const LoginModal = (props) => {
     <Modal show={props.show}>
       <Form
         inputs={loginModalInputAttributes()}
-        onSubmit={(data) => props.logIn(data.username, data.password)}
+        onSubmit={(data) => props.logIn(data.userName, data.password)}
         submitButton={<Button>Log in</Button>}
       />
     </Modal>
