@@ -12,6 +12,7 @@
 # production
 /build
 /dist
+/old.js
 
 # misc
 .DS_Store
