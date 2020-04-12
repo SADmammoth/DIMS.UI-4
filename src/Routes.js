@@ -7,6 +7,7 @@ import MemberTasksPage from './pages/MemberTasksPage';
 import MemberProgressPage from './pages/MemberProgressPage';
 import Error404Page from './pages/Error404Page';
 import MemberTracksPage from './pages/MemberTracksPage';
+import NewMember from './pages/NewMember';
 
 function Routes(props) {
   const { role, userID } = props;
@@ -26,6 +27,11 @@ function Routes(props) {
           );
         }}
       />
+      {role === 'admin' && (
+        <Route path='/members/new'>
+          <NewMember />
+        </Route>
+      )}
       {(role === 'admin' || role === 'mentor') && (
         <>
           <Route exact path='/'>

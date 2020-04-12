@@ -65,6 +65,7 @@ class MemberProgressPage extends React.Component {
           {({ role, userID }) => {
             return (
               <Header
+                role={role}
                 title={`${anytask.userName || 'Name'}'s progress`}
                 navItems={getNavItems({ role, userID }, this.props.match.path)}
               />

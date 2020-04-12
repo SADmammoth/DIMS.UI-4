@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 
 import ContainerComponent from '../ContainerComponent';
 import Nav from './Nav';
+import DirectionBadge from '../DirectionBadge';
 
 function Header(props) {
-  const { title, navItems } = props;
+  const { title, navItems, role } = props;
   return (
     <header className='header fixed-top'>
       <ContainerComponent display='flex'>
@@ -15,7 +16,13 @@ function Header(props) {
         </p>
         <div className='content'>
           <ContainerComponent display='flex'>
-            {title && <h1>{title}</h1>}
+            {title && (
+              <h1 className='page-title'>
+                {title}
+                <DirectionBadge direction={role} />
+              </h1>
+            )}
+
             {navItems && navItems.length && <Nav className='header__nav' navItems={navItems} />}
           </ContainerComponent>
         </div>

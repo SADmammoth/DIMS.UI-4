@@ -120,12 +120,4 @@
       margin-right: 20px;
     }
   }
-
-  .flex-column {
-    display: flex;
-    flex-direction: column;
-    & > div {
-      margin-bottom: 20px;
-    }
-  }
 }

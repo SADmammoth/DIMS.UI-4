@@ -1,4 +1,4 @@
-import Validator from '../../../../helpers/Validator';
+import Validator from '../../../helpers/Validator';
 
 export default function editMemberInputsAttributes({
   firstName,
@@ -70,14 +70,14 @@ export default function editMemberInputsAttributes({
       type: 'text',
       name: 'startDate',
       description: 'Start date',
-      value: `${startDate.getMonth()}-${startDate.getDate()}-${startDate.getFullYear()}`,
+      value: startDate && `${startDate.getMonth()}-${startDate.getDate()}-${startDate.getFullYear()}`,
       byCharValidator: Validator.dateByChar,
     },
     {
       type: 'text',
       name: 'birthDate',
       description: 'Birth date',
-      value: `${birthDate.getMonth()}-${birthDate.getDate()}-${birthDate.getFullYear()}`,
+      value: startDate && `${birthDate.getMonth()}-${birthDate.getDate()}-${birthDate.getFullYear()}`,
       byCharValidator: Validator.dateByChar,
     },
     {

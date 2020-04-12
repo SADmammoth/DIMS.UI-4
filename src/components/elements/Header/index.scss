@@ -10,6 +10,15 @@
   margin: 0;
   backdrop-filter: blur(10px);
   border-bottom: 2px solid $light-bg;
+  .page-title {
+    margin-top: 20px;
+    .direction-badge {
+      float: right;
+      margin-top: 5px;
+      margin-left: 10px;
+      padding: 5px;
+    }
+  }
   & + * {
     position: relative;
     top: 100px;

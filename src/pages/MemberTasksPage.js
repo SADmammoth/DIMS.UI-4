@@ -110,7 +110,7 @@ class MemberTasksPage extends React.Component {
                 <Helmet>
                   <title>{title}</title>
                 </Helmet>
-                <Header title={title} navItems={getNavItems({ role, userID }, this.props.match.path)} />
+                <Header role={role} title={title} navItems={getNavItems({ role, userID }, this.props.match.path)} />
               </>
             );
           }}

@@ -54,7 +54,9 @@ class MemberTracksPage extends React.Component {
         </Helmet>
         <UserContext>
           {({ role, userID }) => {
-            return <Header title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />;
+            return (
+              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+            );
           }}
         </UserContext>
         <ContainerComponent>

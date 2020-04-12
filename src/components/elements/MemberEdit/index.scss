@@ -1,7 +1,42 @@
-@import '../../../../assets/styles/scss/vars.scss';
-@import '../../../../assets/styles/scss/mixins.scss';
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
 
 .edit-member {
+  &_empty {
+    margin-top: 30px;
+    .member-info__header {
+      padding-right: 40px;
+      .member-info__title {
+        margin-left: 20px;
+      }
+    }
+    .member-info__contacts {
+      padding: 10px 25px;
+      .form-control {
+        width: 260px;
+      }
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .member-info__additional-info {
+      margin: 0;
+      width: 100%;
+    }
+    .button {
+      margin-right: 0;
+    }
+    hr {
+      width: 100%;
+    }
+  }
+  .container > & .address {
+    margin: 0;
+    margin-left: 25px;
+    .form-control {
+      width: calc(100% - 70px);
+    }
+  }
+
   .button {
     margin-top: 40px;
     margin-right: 70px;
@@ -78,5 +113,35 @@
     &[name='mathScore'] {
       width: 50px;
     }
+  }
+
+  .address {
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .flex-column {
+    float: left;
+    width: 40%;
+    box-sizing: border-box;
+    &:first-child {
+      margin-right: 5%;
+    }
+    font-size: 1.4rem;
+  }
+
+  &__additional-info {
+    margin: 0 auto;
+    width: calc(100% - 140px);
+    box-sizing: border-box;
+    padding: 2% 5%;
+    margin-top: 3%;
+    background: $primary-bg;
+    .date-badge {
+      font-size: 1.4rem;
+    }
+
+    @include clearfix;
   }
 }

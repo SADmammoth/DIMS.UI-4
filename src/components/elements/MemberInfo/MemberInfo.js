@@ -4,7 +4,7 @@ import DirectionBadge from '../DirectionBadge';
 import DateBadge from '../DateBadge';
 import Button from '../Button';
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
-import MemberEdit from './MemberEdit';
+import MemberEdit from '../MemberEdit';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';

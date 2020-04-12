@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Validator from '../../../../helpers/Validator';
-import Button from '../../Button';
-import Form from '../../Form';
+import Button from '../Button';
+import Form from '../Form';
 
-import { ReactComponent as FlagIcon } from '../../../../assets/icons/flag.svg';
-import { ReactComponent as SkypeIcon } from '../../../../assets/icons/skype.svg';
-import { ReactComponent as MobileIcon } from '../../../../assets/icons/Mobile.svg';
-import { ReactComponent as AddressIcon } from '../../../../assets/icons/Address.svg';
-import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelope.svg';
+import { ReactComponent as FlagIcon } from '../../../assets/icons/flag.svg';
+import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
+import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
+import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
+import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
 import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
 
@@ -20,13 +19,13 @@ class MemberEdit extends React.Component {
   }
 
   render() {
-    const { handleClose } = this.props;
+    const { handleClose, empty } = this.props;
 
     const { inputs } = this.state;
 
     return (
       <Form
-        className='edit-member'
+        className={`edit-member ${empty ? 'edit-member_empty' : ''}`}
         inputs={editMemberInputsAttributes(this.props)}
         onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
         submitButton={<Button content='Confirm' classMod='secondary' />}
@@ -91,7 +90,7 @@ class MemberEdit extends React.Component {
             </div>
           </FlexColumn>
         </div>
-        <Button content='Cancel' classMod='secondary' onClick={handleClose} />
+        {!empty && <Button content='Cancel' classMod='secondary' onClick={handleClose} />}
       </Form>
     );
   }

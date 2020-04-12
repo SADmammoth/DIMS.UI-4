@@ -1,12 +1,12 @@
 const NavItems = {
   admin: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { content: 'Tasks', link: '/tasks/:open?' },
-    // TODO Create member
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'New member', content: 'New member', link: '/members/new' },
   ],
   mentor: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
   ],
   member: [
     { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks/:open?' },

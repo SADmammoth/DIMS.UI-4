@@ -95,7 +95,9 @@ class MembersManagerPage extends React.Component {
         </Helmet>
         <UserContext>
           {({ role, userID }) => {
-            return <Header title='Members' navItems={getNavItems({ role, userID }, this.props.match.path)} />;
+            return (
+              <Header role={role} title='Members' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+            );
           }}
         </UserContext>
         <ContainerComponent>
