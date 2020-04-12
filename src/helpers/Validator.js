@@ -135,8 +135,7 @@ export default class Validator {
    * a    - AM / PM mark
    */
 
-  static dateTime = (date, masks = ['MM-dd-yyyy hh:mm:ss']) => {
-    Validator.dateTimeLastMasks = masks.replace(/[MmdyHhMmsa]/g, '#');
+  static dateTimeRegexp = (masks) => {
     const months = [
       'January',
       'February',
@@ -153,34 +152,134 @@ export default class Validator {
     ];
 
     const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
-    const Regexp = RegExp(
+    return RegExp(
       `(^${masks
         .map((mask) => {
           return RegexpUnescape(mask)
             .replace(/(^|[^M])M($|[^M])/g, '$1(?<_0>[1-9]|1[0-2])$2')
             .replace(/(^|[^M])MM($|[^M])/g, '$1(?<_0>0[1-9]|1[0-2])$2')
-            .replace(/(^|[^M])MMM($|[^M])/g, `$1(?<_0>${monthsShort.join(')|(')})$2`)
-            .replace(/(^|[^M])MMMM($|[^M])/g, `$1(?<_0>${months.join(')|(')})$2`)
-            .replace(/(^|[^d])d($|[^d])/g, '$1(?<_1>[1-9]|[12][0-9]|3[01])$2')
-            .replace(/(^|[^d])dd($|[^d])/g, '$1(?<_1>0[1-9]|[12][0-9]|3[01])$2')
-            .replace(/(^|[^y])yy($|[^y])/g, '$1(?<_2>[1-9][0-9])$2')
-            .replace(/(^|[^y])yyyy($|[^y])/g, '$1(?<_2>[1-9][0-9]{3})$2')
-            .replace(/(^|[^m])m($|[^m])/g, '$1(?<_3>0|[1-5][0-9])$2')
-            .replace(/(^|[^m])mm($|[^m])/g, '$1(?<_3>[0-5][0-9])$2')
-            .replace(/(^|[^s])s($|[^s])/g, '$1(?<_4>0|[1-5][0-9])$2')
-            .replace(/(^|[^s])ss($|[^s])/g, '$1(?<_4>[0-5][0-9])$2')
-            .replace(/(^|[^h])h($|[^h])/g, '$1(?<_5>[0-9]|1[0-2])$2')
-            .replace(/(^|[^h])hh($|[^h])/g, '$1(?<_5>0[0-9]|1[0-2])$2')
-            .replace(/(^|[^H])H($|[^H])/g, '$1(?<_5>[0-9]|1[0-9]|2[0-3])$2')
-            .replace(/(^|[^H])HH($|[^H])/g, '$1(?<_5>0[0-9]|1[0-9]|2[0-3])$2')
+            .replace(/(^|[^M])MMM($|[^M])/g, `$1(?<_1>${monthsShort.join(')|(')})$2`)
+            .replace(/(^|[^M])MMMM($|[^M])/g, `$1(?<_2>${months.join(')|(')})$2`)
+            .replace(/(^|[^d])d($|[^d])/g, '$1(?<_3>[1-9]|[12][0-9]|3[01])$2')
+            .replace(/(^|[^d])dd($|[^d])/g, '$1(?<_3>0[1-9]|[12][0-9]|3[01])$2')
+            .replace(/(^|[^y])yy($|[^y])/g, '$1(?<_4>[1-9][0-9])$2')
+            .replace(/(^|[^y])yyyy($|[^y])/g, '$1(?<_4>[1-9][0-9]{3})$2')
+            .replace(/(^|[^m])m($|[^m])/g, '$1(?<_5>0|[1-5][0-9])$2')
+            .replace(/(^|[^m])mm($|[^m])/g, '$1(?<_5>[0-5][0-9])$2')
+            .replace(/(^|[^s])s($|[^s])/g, '$1(?<_6>0|[1-5][0-9])$2')
+            .replace(/(^|[^s])ss($|[^s])/g, '$1(?<_6>[0-5][0-9])$2')
+            .replace(/(^|[^h])h($|[^h])/g, '$1(?<_7>[0-9]|1[0-2])$2')
+            .replace(/(^|[^h])hh($|[^h])/g, '$1(?<_7>0[0-9]|1[0-2])$2')
+            .replace(/(^|[^H])H($|[^H])/g, '$1(?<_8>[0-9]|1[0-9]|2[0-3])$2')
+            .replace(/(^|[^H])HH($|[^H])/g, '$1(?<_8>0[0-9]|1[0-9]|2[0-3])$2')
             .replace(/(^|[^a])a($|[^a])/g, '$1(AM|PM)$2');
         })
         .join('$)|(^')}$)`,
     );
+  };
+
+  static convertDateTime(input, mask) {
+    const Regexp = Validator.dateTimeRegexp([mask]);
+    const matchedInput = Regexp.exec(input).groups;
+    console.log(Regexp.exec(input));
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
+
+    let monthNum = parseInt(matchedInput['_0'], 10);
+    if (matchedInput['_1']) {
+      monthNum = monthsShort.indexOf(matchedInput['_1']) + 1;
+    }
+
+    if (matchedInput['_2']) {
+      monthNum = months.indexOf(matchedInput['_2']) + 1;
+    }
+
+    let hourNum = parseInt(matchedInput['_8']);
+    if (matchedInput['_7']) {
+      hourNum = parseInt(matchedInput['_7'], 10) + 12;
+    }
+
+    const date = [
+      parseInt(matchedInput['_4'], 10),
+      parseInt(matchedInput['_3'], 10),
+      monthNum,
+      hourNum,
+      parseInt(matchedInput['_5'], 10),
+      parseInt(matchedInput['_6'], 10),
+    ].filter((el) => el);
+
+    return new Date(...date);
+  }
+
+  static fromDateToMask(date, mask) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
+    return RegexpUnescape(mask)
+      .replace(/(^|[^M])M($|[^M])/g, `$1${date.getMonth()}$2`)
+      .replace(/(^|[^M])MM($|[^M])/g, `$1${date.getMonth() < 9 ? `0${date.getMonth()}` : date.getMonth()}$2`)
+      .replace(/(^|[^M])MMM($|[^M])/g, `$1${monthsShort[date.getMonth()]}$2`)
+      .replace(/(^|[^M])MMMM($|[^M])/g, `$1${months[date.getMonth()]}$2`)
+      .replace(/(^|[^d])d($|[^d])/g, `$1${date.getDate()}$2`)
+      .replace(/(^|[^d])dd($|[^d])/g, `$1${date.getDate() < 9 ? `0${date.getDate()}` : date.getDate()}$2`)
+      .replace(/(^|[^y])yy($|[^y])/g, `$1${date.getFullYear() % 100}$2`)
+      .replace(/(^|[^y])yyyy($|[^y])/g, `$1${date.getFullYear()}$2`)
+      .replace(/(^|[^m])m($|[^m])/g, `$1${date.getMinutes()}$2`)
+      .replace(/(^|[^m])mm($|[^m])/g, `$1${date.getMinutes() < 9 ? `0${date.getMinutes()}` : date.getMinutes()}$2`)
+      .replace(/(^|[^s])s($|[^s])/g, `$1${date.getSeconds()}$2`)
+      .replace(/(^|[^s])ss($|[^s])/g, `$1${date.getSeconds() < 9 ? `0${date.getSeconds()}` : date.getSeconds()}$2`)
+      .replace(/(^|[^h])h($|[^h])/g, `$1${date.getHours() - 12}$2`)
+      .replace(
+        /(^|[^h])hh($|[^h])/g,
+        `$1${date.getHours() - 12 < 9 ? `0${date.getHours() - 12}` : date.getHours() - 12}$2`,
+      )
+      .replace(/(^|[^H])H($|[^H])/g, `$1${date.getHours()}$2`)
+      .replace(/(^|[^H])HH($|[^H])/g, `$1${date.getHours() < 9 ? `0${date.getHours()}` : date.getHours()}$2`)
+      .replace(/(^|[^a])a($|[^a])/g, `$1${date.getHours > 12 ? 'PM' : 'AM'}$2`);
+  }
+
+  static dateTime = (date, masks = ['MM-dd-yyyy hh:mm:ss']) => {
+    let Regexp;
+    if (Object.keys(Validator.dateTimeLastMasks).length >= 10) {
+      Validator.dateTimeLastMasks = {};
+    }
+    if (!Validator.dateTimeLastMasks[masks.join(';')]) {
+      Regexp = Validator.dateTimeRegexp(masks);
+    } else {
+      Regexp = Validator.dateTimeLastMasks[masks.join(';')];
+    }
+    Validator.dateTimeLastMasks[masks.join(';')] = Regexp;
     return Regexp.test(date);
   };
 
-  static dateTimeLastMasks = [];
+  static dateTimeLastMasks = {};
 
   static dateTimeJS = (date) => {
     try {

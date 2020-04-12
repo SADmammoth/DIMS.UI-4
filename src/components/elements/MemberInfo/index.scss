@@ -124,6 +124,7 @@
   .flex-column {
     display: flex;
     flex-direction: column;
+    width: 45%;
     & > div {
       margin-bottom: 20px;
     }

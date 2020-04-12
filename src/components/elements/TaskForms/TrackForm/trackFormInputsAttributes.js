@@ -14,8 +14,12 @@ export default function trackFormInputsAttributes({ trackNote, trackDate }) {
       type: 'text',
       name: 'trackDate',
       label: 'Track date',
-      value: `${trackDate.getMonth()}-${trackDate.getDate()}-${trackDate.getFullYear()}`,
-      byCharValidator: Validator.dateByChar,
+      value: Validator.fromDateToMask(trackDate, 'dd-MM-yyyy'),
+      mask: '99-99-9999',
+      maskType: 'invisible',
+      byCharValidator: (input) => Validator.dateByChar(input, ['dd-MM-yyyy']),
+      validator: (input) => Validator.dateTime(input, ['dd-MM-yyyy']),
+      validationMessage: Validator.dateTimeMessage,
     },
   ];
 }

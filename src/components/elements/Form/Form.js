@@ -2,6 +2,7 @@ import React from 'react';
 import faker from 'faker';
 import PropTypes from 'prop-types';
 import Input from './Input';
+import notify from '../../../helpers/notify';
 
 class Form extends React.Component {
   constructor(props) {
@@ -52,7 +53,6 @@ class Form extends React.Component {
     const values = {};
     this.props.inputs.forEach((input) => {
       values[input.name] = {
-        type: input.type,
         id: input.name + faker.random.alphaNumeric(8),
         value: input.value,
       };
@@ -167,12 +167,33 @@ class Form extends React.Component {
     return values;
   }
 
+  errorNotification(description, message) {
+    notify('error', `${description} invalid input`, message);
+  }
+
+  checkValidity = (showMessage) => {
+    const { values } = this.state;
+    const findInputByName = (name) => {
+      return this.props.inputs.find((input) => input.name === name);
+    };
+    for (let valueName in values) {
+      let input = findInputByName(valueName);
+      if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
+        showMessage(input.description, input.validationMessage);
+        return false;
+      }
+    }
+    return true;
+  };
+
   onSubmit = (event) => {
-    if (onSubmit) {
-      event.preventDefault();
-      if (event.target.checkValidity()) {
+    if (this.checkValidity(this.errorNotification)) {
+      if (onSubmit) {
+        event.preventDefault();
         onSubmit(this.formatValues());
       }
+    } else {
+      event.preventDefault();
     }
   };
 
@@ -219,6 +240,7 @@ Form.propTypes = {
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
       ...inputProps,
+      validationMessage: PropTypes.string,
     }),
   ).isRequired,
   onSubmit: PropTypes.func,
