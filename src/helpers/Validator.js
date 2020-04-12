@@ -87,6 +87,17 @@ export default class Validator {
 
   static phone = (phone, masks = ['#* ###-##-##']) => {
     Validator.phoneLastMasks = masks;
+    console.log(
+      RegExp(
+        `(^${masks
+          .map((mask) =>
+            RegexpUnescape(mask)
+              .replace(/#\\\*/g, '[0-9]{2,4}')
+              .replace(/#/g, '[0-9]'),
+          )
+          .join('$)|(^')}$)`,
+      ).test(phone),
+    );
     return RegExp(
       `(^${masks
         .map((mask) =>

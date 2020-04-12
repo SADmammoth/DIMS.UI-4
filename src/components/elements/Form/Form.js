@@ -23,11 +23,19 @@ class Form extends React.Component {
     this.createInputs();
   }
 
-  componentDidUpdate() {
-    if (Object.values(this.state.values).length !== Object.values(this.props.inputs).length) {
+  compareObjects(obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(this.state.values['mobilePhone']);
+    console.log(prevState.values, this.state.values);
+    if (
+      !this.compareObjects(prevProps.inputs, this.props.inputs) ||
+      Object.keys(this.state.values).length !== this.props.inputs.length ||
+      !this.compareObjects(prevState.values, this.state.values)
+    ) {
       this.createValues();
-    }
-    if (Object.values(this.props.inputs).length !== Object.values(this.state.inputs).length) {
       this.createInputs();
     }
   }
@@ -53,7 +61,7 @@ class Form extends React.Component {
     const values = {};
     this.props.inputs.forEach((input) => {
       values[input.name] = {
-        id: input.name + faker.random.alphaNumeric(8),
+        id: input.name,
         value: input.value,
       };
     });
@@ -101,6 +109,7 @@ class Form extends React.Component {
         maxSymbols={maxSymbols}
         mask={mask}
         maskType={maskType}
+        invalid={invalid}
       />
     );
   }
@@ -132,7 +141,7 @@ class Form extends React.Component {
       } = input;
 
       inputsData[name] = Form.createInput(
-        Object.values(values)[i].id,
+        values[name].id,
         type,
         name,
         description,
@@ -145,10 +154,11 @@ class Form extends React.Component {
         required,
         label,
         attributes,
-        Object.values(values)[i].value,
+        values[name].value,
         valueOptions,
         minSymbols,
         maxSymbols,
+        !!values[name].invalid,
       );
     });
 
@@ -171,6 +181,20 @@ class Form extends React.Component {
     notify('error', `${description} invalid input`, message);
   }
 
+  highlightInput = (name) => {
+    const { values } = this.state;
+
+    values[name].invalid = true;
+    this.setState({ values }, () => this.createInputs());
+    setTimeout(() => this.unhighlightInput(name), 3000);
+  };
+
+  unhighlightInput = (name) => {
+    const { values } = this.state;
+    values[name].invalid = false;
+    this.setState({ values }, () => this.createInputs());
+  };
+
   checkValidity = (showMessage) => {
     const { values } = this.state;
     const findInputByName = (name) => {
@@ -179,7 +203,8 @@ class Form extends React.Component {
     for (let valueName in values) {
       let input = findInputByName(valueName);
       if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
-        showMessage(input.description, input.validationMessage);
+        this.highlightInput(valueName);
+        showMessage(input.label || input.description, input.validationMessage);
         return false;
       }
     }

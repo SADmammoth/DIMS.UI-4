@@ -54,7 +54,6 @@ export default function editMemberInputsAttributes({
       description: 'Mobile phone',
       value: mobilePhone,
       mask: '+999 (999) 999-9999',
-      validate: (input) => ValidityState.mobilePhone(input, ['+### (###) ###-####']),
       validationMessage: Validator.mobilePhoneMessage,
     },
     {

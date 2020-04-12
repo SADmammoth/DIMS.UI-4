@@ -24,6 +24,7 @@ function Input(props) {
     maxSymbols,
     mask,
     maskType,
+    invalid,
   } = props;
 
   function renderLabel(input) {
@@ -166,9 +167,9 @@ Input.propTypes = {
   maxSymbols: PropTypes.number,
   mask: PropTypes.string,
   maskType: PropTypes.string,
-
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
+  invalid: PropTypes.bool.isRequired,
 };
 
 export default Input;
