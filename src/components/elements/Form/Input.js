@@ -114,7 +114,11 @@ function Input(props) {
       if (!validator(e.target.value)) {
         alert('Bad input'); //TODO temp
       }
-      onChange(e);
+      onChange(e.target.name, e.target.value);
+    };
+
+    const onInputHandler = (e) => {
+      onInput(e.target.name, e.target.value);
     };
 
     return renderLabel(
@@ -126,7 +130,7 @@ function Input(props) {
         placeholder={description}
         required={required ? 'required' : null}
         onKeyPress={onKeyPress}
-        onInput={onInput}
+        onInput={onInputHandler}
         onBlur={onBlur}
         {...attributes}
         value={value}

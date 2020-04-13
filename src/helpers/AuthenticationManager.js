@@ -35,16 +35,17 @@ class AuthenticationManager extends Component {
       this.props.authorize(role, userID);
     }
 
-    this.props.authorize();
+    const { role, userID } = await Client.getUserInfoByToken(authToken);
+    this.props.authorize(role, userID);
     return { status: 'success', message: 'Login succesful' };
   };
 
   render() {
-    const { logInModalClass: LogInModal, children } = this.props;
+    const { logInFormClass: LogInForm, children } = this.props;
     return (
       <>
         {this.state.authenticated !== null &&
-          (this.state.authenticated ? children : <LogInModal logIn={this.logIn} show />)}
+          (this.state.authenticated ? children : <LogInForm logIn={this.logIn} show />)}
       </>
     );
   }
@@ -52,7 +53,7 @@ class AuthenticationManager extends Component {
 
 AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
-  logInModalClass: PropTypes.func.isRequired,
+  logInFormClass: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 

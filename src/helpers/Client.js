@@ -163,6 +163,14 @@ class Client {
       .get();
     return !!user.docs.length;
   }
+
+  static async getUserInfoByToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return { role: user.docs[0].data().role, userID: user.docs[0].data().userID };
+  }
 }
 
 export default Client;

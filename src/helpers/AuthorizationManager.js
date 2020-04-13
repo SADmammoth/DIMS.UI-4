@@ -3,7 +3,7 @@ import Client from './Client';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AuthenticationManager from './AuthenticationManager';
-import LoginModal from '../components/elements/LoginModal/LoginModal';
+import LoginForm from '../components/elements/LoginForm';
 import UserContext from './UserContext';
 
 class AuthorizationManager extends Component {
@@ -27,7 +27,7 @@ class AuthorizationManager extends Component {
     return (
       <>
         <UserContext.Provider value={this.state.authorizedUser}>
-          <AuthenticationManager logInModalClass={LoginModal} authorize={this.authorize}>
+          <AuthenticationManager logInFormClass={LoginForm} authorize={this.authorize}>
             {children}
           </AuthenticationManager>
         </UserContext.Provider>
