@@ -4,6 +4,7 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
+import notify from '../../../helpers/notify';
 
 function Input(props) {
   const {
@@ -25,6 +26,8 @@ function Input(props) {
     mask,
     maskType,
     invalid,
+    highlightInput,
+    validationMessage,
   } = props;
 
   function renderLabel(input) {
@@ -113,7 +116,8 @@ function Input(props) {
         return;
       }
       if (!validator(e.target.value)) {
-        alert('Bad input'); //TODO temp
+        highlightInput();
+        notify('error', `${description} invalid input`, validationMessage);
       }
       onChange(e.target.name, e.target.value);
     };
@@ -128,7 +132,7 @@ function Input(props) {
           id={id}
           type={type}
           name={name}
-          className='form-control'
+          className={`form-control${invalid ? ' invalid' : ''}`}
           placeholder={description}
           required={required ? 'required' : null}
           onKeyPress={onKeyPress}
@@ -155,6 +159,8 @@ Input.defaultProps = {
   validator: () => true,
   minSymbols: 0,
   maxSymbols: 1000,
+  highlightInput: () => {},
+  validationMessage: '',
 };
 
 Input.propTypes = {
@@ -176,6 +182,8 @@ Input.propTypes = {
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
   invalid: PropTypes.bool.isRequired,
+  highlightInput: PropTypes.func,
+  validationMessage: PropTypes.string,
 };
 
 export default Input;

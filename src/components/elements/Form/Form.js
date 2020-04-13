@@ -90,6 +90,8 @@ class Form extends React.Component {
     minSymbols,
     maxSymbols,
     invalid,
+    highlightInput,
+    validationMessage,
   ) {
     return (
       <Input
@@ -111,6 +113,8 @@ class Form extends React.Component {
         mask={mask}
         maskType={maskType}
         invalid={invalid}
+        highlightInput={highlightInput}
+        validationMessage={validationMessage}
       />
     );
   }
@@ -139,6 +143,7 @@ class Form extends React.Component {
         maxSymbols,
         mask,
         maskType,
+        validationMessage,
       } = input;
 
       inputsData[name] = Form.createInput(
@@ -160,6 +165,8 @@ class Form extends React.Component {
         minSymbols,
         maxSymbols,
         !!values[name].invalid,
+        () => this.highlightInput(name),
+        validationMessage,
       );
     });
 
