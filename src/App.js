@@ -4,6 +4,7 @@ import MembersManagerPage from './pages/MembersManagerPage';
 import MemberTasksPage from './pages/MemberTasksPage';
 import MemberProgressPage from './pages/MemberProgressPage';
 import Error404Page from './pages/Error404Page';
+import MemberTracksPage from './pages/MemberTracksPage';
 
 function App() {
   return (
@@ -16,11 +17,20 @@ function App() {
           <Route exact path='/members'>
             <MembersManagerPage />
           </Route>
-          <Route path='/members/:id/tasks'>
-            <MemberTasksPage />
+          <Route exact path='/members/:id/tasks/:open?'>
+            <MemberTasksPage taskSet='user' />
+          </Route>
+          <Route exact path='/tasks/:open?'>
+            <MemberTasksPage taskSet='all' />
+          </Route>
+          <Route path='/tasks/:open/edit'>
+            <MemberTasksPage edit taskSet='all' />
           </Route>
           <Route path='/members/:id/progress'>
             <MemberProgressPage />
+          </Route>
+          <Route path='/members/:id/tracks'>
+            <MemberTracksPage />
           </Route>
           <Route path='*'>
             <Error404Page />

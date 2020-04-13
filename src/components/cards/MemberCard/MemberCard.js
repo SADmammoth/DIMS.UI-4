@@ -1,86 +1,122 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import Button from '../../elements/Button';
 import CollapsedMemberCard from './CollapsedMemberCard';
-import MemberInfoModal from '../../modals/MemberInfoModal';
+import MemberInfo from '../../elements/MemberInfo';
+import Modal from '../../elements/Modal';
 
-const MemberCard = (props) => {
-  const {
-    id,
-    collapsed,
-    firstName,
-    lastName,
-    email,
-    startDate,
-    direction,
-    mobilePhone,
-    skype,
-    address,
-    sex,
-    birthDate,
-    education,
-    universityAverageScore,
-    mathScore,
-  } = props;
+import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
+import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 
-  let showModal;
+class MemberCard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { edit: false };
 
-  return (
-    <>
-      <article className={`member-card${!collapsed ? '_open' : ''}`}>
-        <CollapsedMemberCard
-          firstName={firstName}
-          lastName={lastName}
-          birthDate={birthDate}
-          direction={direction}
-          startDate={startDate}
-          onClick={() => (collapsed ? props.open(id) : props.close(id))}
-        />
-        {collapsed || (
-          <div className='member-card__body'>
-            <Button classMod='primary' link={`/members/${id}/progress`}>
-              <i className='icon-progress' />
-              <span>Progress</span>
-            </Button>
-            <Button classMod='primary' link={`/members/${id}/tasks`}>
-              <i className='icon-tasks' />
-              <span>Tasks</span>
-            </Button>
-            <Button content='Delete' classMod='secondary' />
-            <Button content='Edit' classMod='secondary' />
-            <Button content='More info' classMod='ghost' onClick={() => showModal()} />
-          </div>
-        )}
-      </article>
-      <MemberInfoModal
-        id={id}
-        firstName={firstName}
-        lastName={lastName}
-        birthDate={birthDate}
-        direction={direction}
-        startDate={startDate}
-        email={email}
-        mobilePhone={mobilePhone}
-        skype={skype}
-        address={address}
-        sex={sex}
-        education={education}
-        universityAverageScore={universityAverageScore}
-        mathScore={mathScore}
-        bindButton={(cb) => {
-          showModal = cb;
-        }}
-      />
-    </>
-  );
-};
+    this.modal = React.createRef();
+  }
 
-const { bindButton, ...MemberCardProps } = MemberInfoModal.propTypes;
+  closeEditModal = () => {
+    this.setState({ edit: false });
+    this.modal.current.handleClose();
+  };
+
+  showEditModal = () => {
+    this.modal.current.handleShow();
+    this.setState({ edit: true });
+  };
+
+  showModal = () => {
+    this.modal.current.handleShow();
+  };
+
+  editModal = (bool) => this.setState({ edit: !!bool });
+
+  render() {
+    const {
+      id,
+      collapsed,
+      firstName,
+      lastName,
+      email,
+      startDate,
+      direction,
+      mobilePhone,
+      skype,
+      address,
+      sex,
+      birthDate,
+      education,
+      universityAverageScore,
+      mathScore,
+      open,
+      close,
+    } = this.props;
+
+    function onClick() {
+      collapsed ? open(id) : close(id);
+    }
+
+    return (
+      <>
+        <article className={`member-card${!collapsed ? '_open' : ''}`}>
+          <CollapsedMemberCard
+            firstName={firstName}
+            lastName={lastName}
+            birthDate={birthDate}
+            direction={direction}
+            startDate={startDate}
+            onClick={onClick}
+          />
+          {collapsed || (
+            <div className='member-card__body'>
+              <Button classMod='primary' link={`/members/${id}/progress`}>
+                <ProgressIcon className='icon-progress' />
+                <span>Progress</span>
+              </Button>
+              <Button classMod='primary' link={`/members/${id}/tasks`}>
+                <TasksIcon className='icon-tasks' />
+                <span>Tasks</span>
+              </Button>
+              <Button content='Delete' classMod='secondary' />
+              <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+              <Button content='More info' classMod='ghost' onClick={this.showModal} />
+            </div>
+          )}
+        </article>
+        <Modal ref={this.modal} className='member-info'>
+          <MemberInfo
+            edit={this.state.edit}
+            setEdit={this.editModal}
+            id={id}
+            firstName={firstName}
+            lastName={lastName}
+            birthDate={birthDate}
+            direction={direction}
+            startDate={startDate}
+            email={email}
+            mobilePhone={mobilePhone}
+            skype={skype}
+            address={address}
+            sex={sex}
+            education={education}
+            universityAverageScore={universityAverageScore}
+            mathScore={mathScore}
+            handleClose={this.handleClose}
+          />
+        </Modal>
+      </>
+    );
+  }
+}
+
+const { handleClose, edit, setEdit, ...memberInfoPTypes } = MemberInfo.propTypes;
 
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  ...MemberCardProps,
+  ...memberInfoPTypes,
 };
 
 export default MemberCard;

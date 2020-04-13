@@ -5,15 +5,16 @@ import DirectionBadge from '../../elements/DirectionBadge';
 import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
+  // TODO
   const { firstName, lastName, birthDate, direction, startDate, onClick } = props;
   const age = new Date().getFullYear() - birthDate.getFullYear();
 
   return (
     <div className='member-card__header'>
-      <button type='button' className='button_invisible member-card__header__title' onClick={onClick}>
+      <p role='menu' className='interactive member-card__header__title' onClick={onClick}>
         <b>{firstName}</b>
         {` ${lastName}, ${age}`}
-      </button>
+      </p>
       <DateBadge date={startDate} type='startDate' />
       <DirectionBadge direction={direction} />
     </div>

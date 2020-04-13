@@ -1,58 +1,128 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import Client from '../helpers/Client';
-import MemberTaskCard from '../components/cards/MemberTaskCard/MemberTaskCard';
+import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import Container from '../components/elements/Container';
+import ContainerComponent from '../components/elements/ContainerComponent';
+import Header from '../components/elements/Header';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: {}, id: this.props.match.params.id, name: 'Name' };
+    this.state = { tasks: {}, taskSet: null, name: 'Name', members: [] };
   }
 
   async componentDidMount() {
-    this.getName();
-    const taskData = await Client.getUserTasks(this.state.id);
-    this.setState({ tasks: taskData });
+    this.update();
   }
 
-  async getName() {
-    this.setState({ name: (await Client.getMember(this.state.id)).firstName });
+  async componentDidUpdate() {
+    if (this.state.taskSet !== this.props.taskSet) {
+      this.update();
+    }
   }
 
-  static renderTask(id, data) {
-    const { taskName, taskDescription, state, taskStart, taskDeadline } = data;
+  static async getName(userId) {
+    return Client.getMember(userId);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.taskSet !== props.taskSet) {
+      return { ...state, tasks: {}, name: 'Name' };
+    }
+  }
+
+  async update() {
+    let taskData;
+    let { name } = this.state;
+    const userId = this.props.match.params.id;
+    let members;
+
+    if (this.props.taskSet === 'user') {
+      name = (await MemberTasksPage.getName(userId)).firstName;
+      taskData = await Client.getUserTasks(userId);
+    } else if (this.props.taskSet === 'all') {
+      taskData = await Client.getTasks();
+      members = Object.values(await Client.getMembers()).map((member) => {
+        return { firstName: member.firstName, lastName: member.lastName };
+      });
+    }
+
+    this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
+  }
+
+  static renderTask(id, data, taskSet, members, edit) {
+    const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
+    let feature;
+
+    switch (taskSet) {
+      case 'all':
+        feature = 'assign';
+        break;
+      case 'user':
+        feature = 'track';
+        break;
+      default:
+        throw Error('Bad task set');
+    }
+
     return (
       <MemberTaskCard
         id={id}
+        edit={edit}
+        taskID={taskID}
         taskName={taskName}
         taskDescription={taskDescription}
         state={state}
         taskStart={taskStart}
         taskDeadline={taskDeadline}
+        feature={feature}
+        assignedTo={assignedTo}
+        members={members}
       />
     );
   }
 
   renderTasks() {
-    const { tasks } = this.state;
-    return Object.entries(tasks).map((task) => {
-      const id = task[0];
-      const data = task[1];
-      return MemberTasksPage.renderTask(id, data);
+    const { tasks, members } = this.state;
+    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
+      return MemberTasksPage.renderTask(id, data, this.props.taskSet, members, this.props.edit);
     });
   }
 
   render() {
     const { tasks, name } = this.state;
+    const { taskSet } = this.props;
+    const title = `${name}'s tasks`;
     return (
-      <Container>
-        <h1>{`${name}'s tasks`}</h1>
-        <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderTasks()} /> : 'No tasks'}</div>
-      </Container>
+      <>
+        <Helmet>
+          <title>{title}</title>
+        </Helmet>
+        <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
+        <ContainerComponent>
+          <div>
+            {Object.keys(tasks).length ? (
+              <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+            ) : (
+              'No tasks'
+            )}
+          </div>
+        </ContainerComponent>
+      </>
     );
   }
 }
+
+MemberTasksPage.defaultProps = {
+  edit: false,
+};
+
+MemberTasksPage.propTypes = {
+  taskSet: PropTypes.string.isRequired,
+  edit: PropTypes.bool,
+};
 
 export default withRouter(MemberTasksPage);

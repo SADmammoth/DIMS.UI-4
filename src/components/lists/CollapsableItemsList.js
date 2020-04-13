@@ -7,40 +7,38 @@ class CollapsableItemsList extends Component {
     this.state = { items: {}, open: null };
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const { items, open } = props;
+    const { items: stateItems } = state;
+    if (Object.keys(stateItems).length !== items.length) {
+      const itemsData = {};
+      items.forEach((child) => {
+        itemsData[child.props.id] = { collapsed: true };
+      });
+      return { ...state, items: itemsData };
+    }
+  }
+
   async componentDidMount() {
-    const { items } = this.props;
-    const { items: stateItems } = this.state;
-
-    if (Object.keys(stateItems).length !== items.length) {
-      const itemsData = {};
-      items.forEach((child) => {
-        itemsData[child.props.id] = { collapsed: true };
-      });
-
-      this.setState({
-        items: itemsData,
-      });
-    }
+    const { open } = this.props;
+    this.openOnLoad(open);
+    document.body.addEventListener('keydown', this.navigationKeys);
   }
 
-  async componentDidUpdate() {
-    const { items } = this.props;
-    const { items: stateItems } = this.state;
-
-    if (Object.keys(stateItems).length !== items.length) {
-      const itemsData = {};
-      items.forEach((child) => {
-        itemsData[child.props.id] = { collapsed: true };
-      });
-
-      this.setState({
-        items: itemsData,
-      });
+  openOnLoad = (id) => {
+    if (id) {
+      setTimeout(() => {
+        if (document.getElementById(id)) {
+          document.getElementById(id).scrollIntoView();
+        }
+      }, 0);
+      this.open(id);
     }
-  }
+  };
 
   open = (id) => {
     const { open, items } = this.state;
+    console.log(items);
     if (open) {
       items[open].collapsed = true;
     }
@@ -56,7 +54,36 @@ class CollapsableItemsList extends Component {
     }
     items[id].collapsed = true;
 
-    this.setState({ items, open: id });
+    this.setState({ items, open: null });
+  };
+
+  navigationKeys = (event) => {
+    const isUp = event.key === 'ArrowUp';
+    const isDown = event.key === 'ArrowDown'; // TODO
+    if (isUp || isDown) {
+      const { open, items } = this.state;
+      if (isUp && !open) {
+        return;
+      }
+      const itemsKeys = Object.keys(items);
+      if (isDown && !open) {
+        this.open(itemsKeys[0]);
+        return;
+      }
+
+      const index = itemsKeys.indexOf(open);
+      if (isDown) {
+        if (index !== itemsKeys.length - 1) {
+          this.open(itemsKeys[index + 1]);
+        }
+      }
+
+      if (isUp) {
+        if (index !== 0) {
+          this.open(itemsKeys[index - 1]);
+        }
+      }
+    }
   };
 
   render() {
@@ -80,6 +107,7 @@ class CollapsableItemsList extends Component {
 }
 
 CollapsableItemsList.propTypes = {
+  open: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 

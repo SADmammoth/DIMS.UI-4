@@ -1,41 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ReactComponent as FlagIcon } from '../../assets/icons/flag.svg';
+import { ReactComponent as TaskDateIcon } from '../../assets/icons/TaskDate.svg';
 
 function DateBadge(props) {
   const { date, type } = props;
-  let iconClass;
-  let tooltip;
-  switch (type) {
-    case 'startDate':
-      iconClass = 'icon-flag';
-      tooltip = 'Start date';
-      break;
-    case 'endDate':
-      iconClass = 'icon-flag error-color';
-      tooltip = 'Deadline';
-      break;
-    case 'trackStart':
-      iconClass = 'icon-taskdate';
-      tooltip = 'Track start date';
-      break;
-    case 'trackSuccess':
-      iconClass = 'icon-taskdate success-color';
-      tooltip = 'Task success date';
-      break;
-    case 'trackFail':
-      iconClass = 'icon-taskdate error-color';
-      tooltip = 'Task fail date';
-      break;
-    default:
-      iconClass = null;
-  }
+  const DateTypes = {
+    startDate: <FlagIcon title='Start date' className='icon-flag common-text-color' />,
+    endDate: <FlagIcon title='End date' className='icon-flag error-color' />,
+    trackStart: <TaskDateIcon title='Track start date' className='icon-taskdate common-text-color' />,
+    trackSuccess: <TaskDateIcon title='Track success date' className='icon-taskdate success-color' />,
+    trackFail: <TaskDateIcon title='Track fail date' className='icon-taskdate fail-color' />,
+  };
+
   return (
     <p className='date-badge'>
-      {iconClass && <i className={iconClass} title={tooltip} />}
+      {DateTypes[type]}
       {date.toLocaleDateString()}
     </p>
   );
 }
+
+DateBadge.DateTypes = Object.freeze({
+  startDate: 'startDate',
+  endDate: 'endDate',
+  trackStart: 'trackStart',
+  trackSuccess: 'trackSuccess',
+  trackFail: 'trackFail',
+});
 
 DateBadge.defaultProps = {
   type: '',
@@ -43,7 +35,7 @@ DateBadge.defaultProps = {
 
 DateBadge.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
-  type: PropTypes.oneOf(['startDate', 'endDate', 'trackStart', 'trackSuccess', 'trackFail']),
+  type: PropTypes.oneOf(Object.values(DateBadge.DateTypes)),
 };
 
 export default DateBadge;
