@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import ContainerComponent from '../ContainerComponent';
 import Nav from './Nav';
-import DirectionBadge from '../DirectionBadge';
+import TextBadge from '../TextBadge';
 
 function Header(props) {
   const { title, navItems, role } = props;
@@ -19,7 +19,7 @@ function Header(props) {
             {title && (
               <h1 className='page-title'>
                 {title}
-                <DirectionBadge direction={role} />
+                <TextBadge>{role}</TextBadge>
               </h1>
             )}
 

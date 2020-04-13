@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DirectionBadge from '../DirectionBadge';
+import TextBadge from '../TextBadge';
 import DateBadge from '../DateBadge';
 import Button from '../Button';
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
@@ -55,7 +55,7 @@ const MemberInfo = (props) => {
               {` ${lastName}`}
             </p>
             <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-            <DirectionBadge direction={direction} />
+            <TextBadge>{direction}</TextBadge>
           </div>
           <div className='member-info__body'>
             <div className='member-info__contacts'>

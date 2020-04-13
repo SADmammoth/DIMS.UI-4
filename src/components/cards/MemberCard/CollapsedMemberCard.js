@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DirectionBadge from '../../elements/DirectionBadge';
+import TextBadge from '../../elements/TextBadge';
 import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
@@ -15,7 +15,7 @@ function CollapsedMemberCard(props) {
         {` ${lastName}, ${age}`}
       </p>
       <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-      <DirectionBadge direction={direction} />
+      <TextBadge>{direction}</TextBadge>
     </div>
   );
 }
