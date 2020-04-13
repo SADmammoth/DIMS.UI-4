@@ -33,11 +33,11 @@ class AuthenticationManager extends Component {
 
       localStorage.setItem('authToken', token);
       this.props.authorize(role, userID);
+    } else {
+      const { role, userID } = await Client.getUserInfoByToken(authToken);
+      this.props.authorize(role, userID);
     }
-
-    const { role, userID } = await Client.getUserInfoByToken(authToken);
-    this.props.authorize(role, userID);
-    return { status: 'success', message: 'Login succesful' };
+    return { status: 'success', message: 'Login successful' };
   };
 
   render() {
