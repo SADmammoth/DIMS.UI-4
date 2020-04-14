@@ -9,6 +9,8 @@ import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
 import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
+import ButtonGroup from '../ButtonGroup/ButtonGroup';
+import FlexColumn from '../FlexColumn';
 
 const MemberInfo = (props) => {
   const {
@@ -49,7 +51,7 @@ const MemberInfo = (props) => {
               <b>{firstName}</b>
               {` ${lastName}`}
             </p>
-            <DateBadge date={startDate} type='startDate' />
+            <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
             <DirectionBadge direction={direction} />
           </div>
           <div className='member-info__body'>
@@ -76,7 +78,7 @@ const MemberInfo = (props) => {
             </div>
           </div>
           <div className='member-info__additional-info'>
-            <div className='flex-column'>
+            <FlexColumn>
               <div>
                 <span className='list-key'>Sex:</span>
                 <span>{sex}</span>
@@ -85,8 +87,8 @@ const MemberInfo = (props) => {
                 <span className='list-key'>Birth date:</span>
                 <DateBadge date={birthDate} />
               </div>
-            </div>
-            <div className='flex-column'>
+            </FlexColumn>
+            <FlexColumn>
               <div>
                 <span className='list-key'>Education:</span>
                 <span>{education}</span>
@@ -99,9 +101,9 @@ const MemberInfo = (props) => {
                 <span className='list-key'>CT math score:</span>
                 <span>{mathScore}</span>
               </div>
-            </div>
+            </FlexColumn>
           </div>
-          <div className='button-block'>
+          <ButtonGroup>
             <Button classMod='primary' link={`/members/${id}/progress`}>
               <i className='icon-progress' />
               <span>Progress</span>
@@ -112,7 +114,7 @@ const MemberInfo = (props) => {
             </Button>
             <Button content='Delete' classMod='secondary' />
             <Button content='Edit' classMod='secondary' onClick={openEditModal} />
-          </div>
+          </ButtonGroup>
         </>
       )}
     </>

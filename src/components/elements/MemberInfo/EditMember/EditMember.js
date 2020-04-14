@@ -11,6 +11,7 @@ import { ReactComponent as MobileIcon } from '../../../../assets/icons/Mobile.sv
 import { ReactComponent as AddressIcon } from '../../../../assets/icons/Address.svg';
 import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelope.svg';
 import editMemberInputsAttributes from './editMemberInputsAttributes';
+import FlexColumn from '../../FlexColumn';
 
 class EditMember extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class EditMember extends React.Component {
           </div>
         </div>
         <div className='member-info__additional-info'>
-          <div className='flex-column'>
+          <FlexColumn>
             <div>
               <span className='list-key'>Sex:</span>
               <span>{inputs.sex}</span>
@@ -74,8 +75,8 @@ class EditMember extends React.Component {
               <span className='list-key'>Birth date:</span>
               {inputs.birthDate}
             </div>
-          </div>
-          <div className='flex-column'>
+          </FlexColumn>
+          <FlexColumn>
             <div>
               <span className='list-key'>Education:</span>
               <span>{inputs.education}</span>
@@ -88,7 +89,7 @@ class EditMember extends React.Component {
               <span className='list-key'>CT math score:</span>
               <span>{inputs.mathScore}</span>
             </div>
-          </div>
+          </FlexColumn>
         </div>
         <Button content='Cancel' classMod='secondary' onClick={handleClose} />
       </Form>

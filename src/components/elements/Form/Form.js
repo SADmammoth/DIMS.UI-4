@@ -13,7 +13,7 @@ class Form extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!checkNames(Object.values(this.props.inputs))) {
       throw Error('Inputs names repeat'); // TODO
     }

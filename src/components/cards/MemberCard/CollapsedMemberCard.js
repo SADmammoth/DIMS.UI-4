@@ -5,17 +5,16 @@ import DirectionBadge from '../../elements/DirectionBadge';
 import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
-  // TODO
-  const { firstName, lastName, birthDate, direction, startDate, onClick } = props;
+  const { firstName, lastName, birthDate, direction, startDate, onClick, collapsed } = props;
   const age = new Date().getFullYear() - birthDate.getFullYear();
 
   return (
     <div className='member-card__header'>
-      <p role='menu' className='interactive member-card__header__title' onClick={onClick}>
+      <p role='menu' className='interactive member-card__header__title' onClick={() => onClick(collapsed)}>
         <b>{firstName}</b>
         {` ${lastName}, ${age}`}
       </p>
-      <DateBadge date={startDate} type='startDate' />
+      <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
       <DirectionBadge direction={direction} />
     </div>
   );
@@ -27,8 +26,13 @@ CollapsedMemberCard.propTypes = {
   birthDate: PropTypes.instanceOf(Date).isRequired,
   direction: PropTypes.string.isRequired,
   startDate: PropTypes.instanceOf(Date).isRequired,
+  collapsed: PropTypes.bool.isRequired,
 
   onClick: PropTypes.func.isRequired,
 };
 
-export default CollapsedMemberCard;
+function areEqual(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+export default React.memo(CollapsedMemberCard, areEqual);

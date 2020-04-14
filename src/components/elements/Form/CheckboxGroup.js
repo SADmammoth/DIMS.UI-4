@@ -7,15 +7,14 @@ function CheckboxGroup(props) {
     /*
      * 'commonValue' is value of checkbox group by name, means array or string
      * consists of values of checked checkboxes  */
-
-    let values = typeof commonValue === 'string' ? commonValue.split(',') : commonValue;
+    let values = sliceValue(commonValue);
 
     const onClick = (event) => {
       if (type === 'checkbox') {
         if (event.target.checked) {
           values.push(event.target.value);
         } else {
-          values = values.filter((value) => value !== event.target.value);
+          values[values.indexOf(event.target.value)] = undefined;
         }
         event.target.value = values;
       }
@@ -36,6 +35,10 @@ function CheckboxGroup(props) {
         <label htmlFor={id + value}>{value}</label>
       </div>
     );
+  }
+
+  function sliceValue(value) {
+    return typeof value === 'string' ? value.split(',') : value;
   }
 
   function renderCheckboxes() {

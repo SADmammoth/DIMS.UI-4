@@ -5,13 +5,13 @@ import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
-  function onClick() {
+  const onClick = (collapsed) => {
     collapsed ? open(id) : close(id);
-  }
+  };
 
   return (
     <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} onClick={onClick} />
+      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
       {!collapsed && (
         <>
           <div className='task-card__body'>
@@ -34,4 +34,8 @@ MemberProgressCard.propTypes = {
   trackDate: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default MemberProgressCard;
+function areEqual(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+export default React.memo(MemberProgressCard, areEqual);
