@@ -7,11 +7,12 @@ import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import Spinner from '../components/elements/Spinner/Spinner';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: {}, taskSet: null, name: 'Name', members: [] };
+    this.state = { tasks: null, taskSet: null, name: 'Name', members: [] };
   }
 
   componentDidMount() {
@@ -30,7 +31,7 @@ class MemberTasksPage extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (state.taskSet !== props.taskSet) {
-      return { ...state, tasks: {}, name: 'Name' };
+      return { ...state, tasks: null, name: 'Name' };
     }
   }
 
@@ -103,13 +104,17 @@ class MemberTasksPage extends React.Component {
         </Helmet>
         <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
         <ContainerComponent>
-          <div>
-            {Object.keys(tasks).length ? (
-              <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
-            ) : (
-              'No tasks'
-            )}
-          </div>
+          {tasks ? (
+            <div>
+              {Object.keys(tasks).length ? (
+                <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+              ) : (
+                'No tasks'
+              )}
+            </div>
+          ) : (
+            <Spinner centered />
+          )}
         </ContainerComponent>
       </>
     );

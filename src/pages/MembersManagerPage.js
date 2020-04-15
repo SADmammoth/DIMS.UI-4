@@ -6,11 +6,12 @@ import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import Spinner from '../components/elements/Spinner';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { members: {} };
+    this.state = { members: null };
   }
 
   async componentDidMount() {
@@ -69,6 +70,7 @@ class MembersManagerPage extends React.Component {
   }
 
   render() {
+    const { members } = this.state;
     return (
       <>
         <Helmet>
@@ -78,7 +80,7 @@ class MembersManagerPage extends React.Component {
           <h1>Members</h1>
         </Header>
         <ContainerComponent>
-          <CollapsableItemsList items={this.renderMembers()} />
+          {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
         </ContainerComponent>
       </>
     );

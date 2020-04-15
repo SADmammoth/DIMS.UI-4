@@ -6,11 +6,12 @@ import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import Spinner from '../components/elements/Spinner/Spinner';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tracks: {} };
+    this.state = { tracks: null };
   }
 
   async componentDidMount() {
@@ -45,6 +46,7 @@ class MemberTracksPage extends React.Component {
   }
 
   render() {
+    const { tracks } = this.state;
     return (
       <>
         <Helmet>
@@ -54,9 +56,11 @@ class MemberTracksPage extends React.Component {
           <h1>Your Task tracks</h1>
         </Header>
         <ContainerComponent>
-          <div>
-            {Object.keys(this.state.tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
-          </div>
+          {tracks ? (
+            <div>{Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}</div>
+          ) : (
+            <Spinner centered />
+          )}
         </ContainerComponent>
       </>
     );

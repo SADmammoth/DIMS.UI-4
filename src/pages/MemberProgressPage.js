@@ -6,11 +6,12 @@ import MemberProgressCard from '../components/cards/TaskCards/MemberProgressCard
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import Spinner from '../components/elements/Spinner/Spinner';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: {}, id: this.props.match.params.id };
+    this.state = { tasks: null, id: this.props.match.params.id };
   }
 
   async componentDidMount() {
@@ -32,7 +33,7 @@ class MemberProgressPage extends React.Component {
 
   render() {
     const { tasks } = this.state;
-    const anytask = Object.values(tasks)[0] || {};
+    const anytask = (tasks && Object.values(tasks)[0]) || {};
 
     return (
       <>
@@ -41,7 +42,11 @@ class MemberProgressPage extends React.Component {
           <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
         </Header>
         <ContainerComponent>
-          <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
+          {tasks ? (
+            <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
+          ) : (
+            <Spinner centered />
+          )}
         </ContainerComponent>
       </>
     );

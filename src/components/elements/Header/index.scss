@@ -10,9 +10,10 @@ header {
   margin: 0;
   backdrop-filter: blur(10px);
   border-bottom: 2px solid $light-bg;
-  & + * {
+  & + .container {
     position: relative;
     top: 100px;
+    height: calc(100vh - 100px);
   }
   .content {
     margin-left: 40px;
