@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
+import CollapsableCard from '../../CollapsableCard';
+import DateBadge from '../../../elements/DateBadge';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
-  const onClick = (collapsed) => {
-    collapsed ? open(id) : close(id);
-  };
 
   return (
-    <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
-      {!collapsed && (
-        <>
-          <div className='task-card__body'>
-            <p className='task-card__description'>{trackNote}</p>
-          </div>
-        </>
-      )}
-    </article>
+    <CollapsableCard id={id} className='task-progress' cardClass='task' collapsed={collapsed} open={open} close={close}>
+      <CollapsableCard.Header>
+        <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
+        <DateBadge type={DateBadge.DateTypes.trackStart} date={trackDate} />
+      </CollapsableCard.Header>
+      <CollapsableCard.Body>
+        <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
+      </CollapsableCard.Body>
+    </CollapsableCard>
   );
 }
 

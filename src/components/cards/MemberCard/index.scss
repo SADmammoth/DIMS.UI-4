@@ -2,17 +2,15 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .member-card {
-  &_open {
-    border: 3px solid $highlight-bg;
-  }
-
-  &_open > &__header {
+  &.open > &__header {
     background-color: $highlight-bg;
     position: relative;
   }
 
   &__body {
     padding: 10px 30px;
+    border: 3px solid $highlight-bg;
+    margin-top: -5px;
 
     .button {
       margin: 0 5px;

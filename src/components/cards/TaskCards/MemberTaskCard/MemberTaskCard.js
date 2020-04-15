@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import CollapsedMemberTaskCard from './CollapsedMemberTaskCard';
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg';
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import CollapsableCard from '../../CollapsableCard';
 
 function MemberTaskCard(props) {
   const {
@@ -26,68 +26,68 @@ function MemberTaskCard(props) {
     edit,
   } = props;
 
-  function onClick(collapsed) {
-    collapsed ? open(id) : close(id);
-  }
-
   return (
-    <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberTaskCard taskName={taskName} onClick={onClick} collapsed={collapsed} />
-      {collapsed || (
-        <>
-          {state && (
-            <div className='state'>
-              <span>{state}</span>
-            </div>
+    <CollapsableCard
+      id={id}
+      cardClass='task'
+      className={`task-card_${state.toLowerCase()}`}
+      collapsed={collapsed}
+      open={open}
+      close={close}
+    >
+      <CollapsableCard.Header>
+        <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
+      </CollapsableCard.Header>
+      {state && (
+        <div className='state'>
+          <span>{state}</span>
+        </div>
+      )}
+      <CollapsableCard.Body>
+        <div className='task-card__dates'>
+          <DateBadge type={DateBadge.DateTypes.startDate} date={taskStart} />
+          <DateBadge type={DateBadge.DateTypes.endDate} date={taskDeadline} />
+        </div>
+
+        <p className='task-card__description'>{taskDescription}</p>
+
+        {feature === 'assign' && (
+          <>
+            <h3>Assigned to:</h3>
+            <ul className='inline-list'>
+              {assignedTo.map((user) => (
+                <li>
+                  <Link to={`/members/${user.userID}/tasks/${user.memberTaskID}`}>
+                    <b>{user.firstName}</b>
+                    {` ${user.lastName}`}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        <ButtonGroup>
+          {feature === 'track' && (
+            <TrackButton taskName={taskName} buttonClassMod='primary'>
+              <TrackIcon className='icon-track' />
+              <span>Track</span>
+            </TrackButton>
           )}
 
-          <div className='task-card__body'>
-            <div className='task-card__dates'>
-              <DateBadge type={DateBadge.DateTypes.startDate} date={taskStart} />
-              <DateBadge type={DateBadge.DateTypes.endDate} date={taskDeadline} />
-            </div>
+          {feature === 'assign' && (
+            <Button classMod='primary'>
+              <TrackIcon className='icon-tasks' />
+              <span>Assign</span>
+            </Button>
+          )}
 
-            <p className='task-card__description'>{taskDescription}</p>
+          <Button classMod='secondary' content='Delete' />
 
-            {feature === 'assign' && (
-              <>
-                <h3>Assigned to:</h3>
-                <ul className='inline-list'>
-                  {assignedTo.map((user) => (
-                    <li>
-                      <Link to={`/members/${user.userID}/tasks/${user.memberTaskID}`}>
-                        <b>{user.firstName}</b>
-                        {` ${user.lastName}`}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            <ButtonGroup>
-              {feature === 'track' && (
-                <TrackButton taskName={taskName} buttonClassMod='primary'>
-                  <TrackIcon className='icon-track' />
-                  <span>Track</span>
-                </TrackButton>
-              )}
-
-              {feature === 'assign' && (
-                <Button classMod='primary'>
-                  <TrackIcon className='icon-tasks' />
-                  <span>Assign</span>
-                </Button>
-              )}
-
-              <Button classMod='secondary' content='Delete' />
-
-              <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
-            </ButtonGroup>
-          </div>
-        </>
-      )}
-    </article>
+          <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
+        </ButtonGroup>
+      </CollapsableCard.Body>
+    </CollapsableCard>
   );
 }
 

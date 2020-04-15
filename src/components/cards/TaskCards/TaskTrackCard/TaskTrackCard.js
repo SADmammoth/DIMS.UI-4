@@ -2,44 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import CollapsedTaskTrackCard from './CollapsedTaskTrackCard';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import CollapsableCard from '../../CollapsableCard/CollapsableCard';
+import DateBadge from '../../../elements/DateBadge';
 
 function TaskTrackCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, memberTaskID } = props;
-
-  function onClick(collapsed) {
-    collapsed ? props.open(id) : props.close(id);
-  }
+  const { taskName, trackNote, trackDate, collapsed, id, memberTaskID, open, close } = props;
 
   return (
-    <article className={`task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedTaskTrackCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
-      {collapsed || (
-        <>
-          <div className='task-card__body'>
-            <p className='task-card__description'>{trackNote}</p>
-            <ButtonGroup>
-              <Button classMod='secondary' content='Delete' />
-              <TrackButton
-                buttonClassMod='secondary'
-                taskName={taskName}
-                trackDate={trackDate}
-                trackNote={trackNote}
-                buttonContent='Edit'
-              />
-              <Button
-                classMod='ghost'
-                link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}
-                content='Show in tasks'
-              />
-            </ButtonGroup>
-          </div>
-        </>
-      )}
-    </article>
+    <CollapsableCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
+      <CollapsableCard.Header>
+        <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
+        <DateBadge type='trackStart' date={trackDate} />
+      </CollapsableCard.Header>
+      <CollapsableCard.Body>
+        <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
+        <ButtonGroup>
+          <Button classMod='secondary' content='Delete' />
+          <TrackButton
+            buttonClassMod='secondary'
+            taskName={taskName}
+            trackDate={trackDate}
+            trackNote={trackNote}
+            buttonContent='Edit'
+          />
+          <Button
+            classMod='ghost'
+            link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}
+            content='Show in tasks'
+          />
+        </ButtonGroup>
+      </CollapsableCard.Body>
+    </CollapsableCard>
   );
 }
 

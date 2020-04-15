@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '../../elements/Button';
-import CollapsedMemberCard from './CollapsedMemberCard';
 import MemberInfo from '../../elements/MemberInfo';
 import Modal from '../../elements/Modal';
 
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
+import CollapsableCard from '../CollapsableCard';
+import DateBadge from '../../elements/DateBadge';
+import DirectionBadge from '../../elements/DirectionBadge/DirectionBadge';
 
 class MemberCard extends React.PureComponent {
   constructor(props) {
@@ -54,38 +56,33 @@ class MemberCard extends React.PureComponent {
       close,
     } = this.props;
 
-    const onClick = (collapsed) => {
-      collapsed ? open(id) : close(id);
-    };
+    const age = new Date().getFullYear() - birthDate.getFullYear();
 
     return (
       <>
-        <article className={`member-card${!collapsed ? '_open' : ''}`}>
-          <CollapsedMemberCard
-            firstName={firstName}
-            lastName={lastName}
-            birthDate={birthDate}
-            direction={direction}
-            startDate={startDate}
-            onClick={onClick}
-            collapsed={collapsed}
-          />
-          {collapsed || (
-            <div className='member-card__body'>
-              <Button classMod='primary' link={`/members/${id}/progress`}>
-                <ProgressIcon className='icon-progress' />
-                <span>Progress</span>
-              </Button>
-              <Button classMod='primary' link={`/members/${id}/tasks`}>
-                <TasksIcon className='icon-tasks' />
-                <span>Tasks</span>
-              </Button>
-              <Button content='Delete' classMod='secondary' />
-              <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
-              <Button content='More info' classMod='ghost' onClick={this.showModal} />
-            </div>
-          )}
-        </article>
+        <CollapsableCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
+          <CollapsableCard.Header>
+            <CollapsableCard.Title>
+              <b>{firstName}</b>
+              {` ${lastName}, ${age}`}
+            </CollapsableCard.Title>
+            <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
+            <DirectionBadge direction={direction} />
+          </CollapsableCard.Header>
+          <CollapsableCard.Body>
+            <Button classMod='primary' link={`/members/${id}/progress`}>
+              <ProgressIcon className='icon-progress' />
+              <span>Progress</span>
+            </Button>
+            <Button classMod='primary' link={`/members/${id}/tasks`}>
+              <TasksIcon className='icon-tasks' />
+              <span>Tasks</span>
+            </Button>
+            <Button content='Delete' classMod='secondary' />
+            <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+            <Button content='More info' classMod='ghost' onClick={this.showModal} />
+          </CollapsableCard.Body>
+        </CollapsableCard>
         <Modal ref={this.modal} className='member-info'>
           <MemberInfo
             edit={this.state.edit}

@@ -18,18 +18,17 @@
     background: $primary-bg;
     padding: 10px 35px;
 
+    &__title {
+      font-size: 1.2rem;
+      border-bottom: 1px solid $dark-bg;
+      float: left;
+    }
+
     @include clearfix;
   }
-  &__title {
-    font-size: 1.2rem;
-    border-bottom: 1px solid $dark-bg;
-    float: left;
-  }
   margin-bottom: 5px;
-  &.open > & {
-    &__header {
-      background: $highlight-bg;
-    }
+  &.open > &__header {
+    background: $highlight-bg;
   }
 
   .state {
@@ -56,7 +55,7 @@
   }
 
   &__body {
-    border: 5px solid $highlight-bg;
+    border: 3px solid $highlight-bg;
     padding: 20px;
     @include clearfix();
     .date-badge {
