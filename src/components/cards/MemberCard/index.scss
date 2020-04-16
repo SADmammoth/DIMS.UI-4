@@ -16,7 +16,7 @@
       margin: 0 5px;
     }
 
-    .button:not(.button_primary) {
+    & > .button:not(.button_primary) {
       float: right;
     }
   }

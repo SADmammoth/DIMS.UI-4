@@ -29,11 +29,15 @@ class Modal extends React.PureComponent {
   render() {
     return (
       <>
-        <article className={`modal ${this.state.show ? 'show' : ''} ${this.props.className || ''}`}>
-          {this.props.children}
-        </article>
+        {this.state.show && (
+          <>
+            <article className={`modal ${this.state.show ? 'show' : ''} ${this.props.className || ''}`}>
+              {this.props.children}
+            </article>
 
-        {this.props.backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
+            {this.props.backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
+          </>
+        )}
       </>
     );
   }

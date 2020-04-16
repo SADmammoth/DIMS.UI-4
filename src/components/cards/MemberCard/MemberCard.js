@@ -10,6 +10,7 @@ import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import CollapsableCard from '../CollapsableCard';
 import DateBadge from '../../elements/DateBadge';
 import DirectionBadge from '../../elements/DirectionBadge/DirectionBadge';
+import DialogButton from '../../elements/DialogButton';
 
 class MemberCard extends React.PureComponent {
   constructor(props) {
@@ -78,7 +79,19 @@ class MemberCard extends React.PureComponent {
               <TasksIcon className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <Button content='Delete' classMod='secondary' />
+            <DialogButton
+              buttonClassMod='secondary'
+              buttonContent='Delete'
+              message={
+                <p>
+                  Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                </p>
+              }
+              confirmButtonClassMod='error'
+              confirmButtonContent='Delete'
+              dialogValue={id}
+              onSubmit={({ dialogValue }) => console.log(dialogValue)}
+            />
             <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
             <Button content='More info' classMod='ghost' onClick={this.showModal} />
           </CollapsableCard.Body>

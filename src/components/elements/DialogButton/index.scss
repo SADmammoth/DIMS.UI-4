@@ -1,0 +1,25 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.dialog {
+  width: 22vw;
+  text-align: center;
+  padding-bottom: 10px;
+
+  .button-block {
+    display: flex;
+    justify-content: center;
+    @include clearfix;
+    .button {
+      float: left;
+    }
+  }
+
+  &__head {
+    background: $primary-bg;
+    padding: 20px;
+    margin: 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+  }
+}

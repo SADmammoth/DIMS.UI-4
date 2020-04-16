@@ -6,6 +6,9 @@ function CollapsableCardBody(props) {
   return (
     <div className={`${cardClass}-card__body`}>
       {React.Children.map(children, (child) => {
+        if (!child) {
+          return child;
+        }
         return React.cloneElement(child, { cardClass });
       })}
     </div>

@@ -26,12 +26,18 @@ class CollapsableCard extends React.PureComponent {
       <>
         <article id={id} className={`${className || ''} ${cardClass}-card${!collapsed ? ' open' : ''}`}>
           {React.Children.map(children, (child) => {
+            if (!child) {
+              return child;
+            }
             return child.type === CollapsableCard.Header
               ? React.cloneElement(child, { onClick, collapsed, cardClass })
               : null;
           })}
           {!collapsed &&
             React.Children.map(children, (child) => {
+              if (!child) {
+                return child;
+              }
               if (child.type === CollapsableCard.Body || child.type === CollapsableCard.Description) {
                 return React.cloneElement(child, { cardClass });
               }

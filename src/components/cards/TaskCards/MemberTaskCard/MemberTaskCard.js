@@ -9,6 +9,7 @@ import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
+import DialogButton from '../../../elements/DialogButton/DialogButton';
 
 function MemberTaskCard(props) {
   const {
@@ -30,7 +31,7 @@ function MemberTaskCard(props) {
     <CollapsableCard
       id={id}
       cardClass='task'
-      className={`task-card_${state.toLowerCase()}`}
+      className={state ? `task-card_${state.toLowerCase()}` : null}
       collapsed={collapsed}
       open={open}
       close={close}
@@ -82,7 +83,19 @@ function MemberTaskCard(props) {
             </Button>
           )}
 
-          <Button classMod='secondary' content='Delete' />
+          <DialogButton
+            buttonClassMod='secondary'
+            buttonContent='Delete'
+            message={
+              <p>
+                Are you confident, you want to delete task <b>{taskName}</b>?
+              </p>
+            }
+            confirmButtonClassMod='error'
+            confirmButtonContent='Delete'
+            dialogValue={id}
+            onSubmit={({ dialogValue }) => console.log(dialogValue)}
+          />
 
           <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
         </ButtonGroup>

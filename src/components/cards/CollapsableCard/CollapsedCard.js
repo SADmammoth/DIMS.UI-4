@@ -8,6 +8,9 @@ function CollapsedCard(props) {
   return (
     <div className={`${cardClass}-card__header`}>
       {React.Children.map(children, (child) => {
+        if (!child) {
+          return child;
+        }
         if (child.type === CollapsableCardTitle) {
           return React.cloneElement(child, { onClick: () => onClick(collapsed), cardClass });
         }

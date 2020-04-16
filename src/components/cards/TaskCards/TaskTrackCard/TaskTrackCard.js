@@ -7,6 +7,7 @@ import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard/CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
+import DialogButton from '../../../elements/DialogButton/DialogButton';
 
 function TaskTrackCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, memberTaskID, open, close } = props;
@@ -20,7 +21,19 @@ function TaskTrackCard(props) {
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
         <ButtonGroup>
-          <Button classMod='secondary' content='Delete' />
+          <DialogButton
+            buttonClassMod='secondary'
+            buttonContent='Delete'
+            message={
+              <p>
+                Are you confident, you want to delete track <b>{taskName}</b>?
+              </p>
+            }
+            confirmButtonClassMod='error'
+            confirmButtonContent='Delete'
+            dialogValue={id}
+            onSubmit={({ dialogValue }) => console.log(dialogValue)}
+          />
           <TrackButton
             buttonClassMod='secondary'
             taskName={taskName}
