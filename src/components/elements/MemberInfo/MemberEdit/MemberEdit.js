@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Validator from '../../../../helpers/Validator';
 import Button from '../../Button';
 import Form from '../../Form';
 
@@ -12,6 +11,7 @@ import { ReactComponent as AddressIcon } from '../../../../assets/icons/Address.
 import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelope.svg';
 import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
+import TextBadge from '../../TextBadge/TextBadge';
 
 class MemberEdit extends React.Component {
   constructor(props) {
@@ -20,14 +20,15 @@ class MemberEdit extends React.Component {
   }
 
   render() {
-    const { handleClose } = this.props;
+    const { handleClose, onSubmit, empty } = this.props;
 
     const { inputs } = this.state;
 
     return (
       <Form
-        className='edit-member'
+        className={`edit-member ${empty ? 'edit-member_empty' : ''}`}
         inputs={editMemberInputsAttributes(this.props)}
+        onSubmit={onSubmit}
         onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
         submitButton={<Button content='Confirm' classMod='secondary' />}
       >
@@ -40,7 +41,7 @@ class MemberEdit extends React.Component {
             <FlagIcon className='icon-flag common-text-color' />
             {inputs.startDate}
           </div>
-          <div className='direction-badge'>{inputs.direction}</div>
+          <TextBadge>{inputs.direction}</TextBadge>
         </div>
         <div className='member-info__body'>
           <div className='member-info__contacts'>
@@ -91,7 +92,7 @@ class MemberEdit extends React.Component {
             </div>
           </FlexColumn>
         </div>
-        <Button content='Cancel' classMod='secondary' onClick={handleClose} />
+        {!empty && <Button content='Cancel' classMod='secondary' onClick={handleClose} />}
       </Form>
     );
   }
@@ -112,7 +113,9 @@ MemberEdit.propTypes = {
   education: PropTypes.string.isRequired,
   universityAverageScore: PropTypes.number.isRequired,
   mathScore: PropTypes.number.isRequired,
+  empty: PropTypes.bool.isRequired,
 
+  onSubmit: PropTypes.func,
   handleClose: PropTypes.func,
 };
 

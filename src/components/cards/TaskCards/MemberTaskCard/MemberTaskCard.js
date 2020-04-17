@@ -9,13 +9,14 @@ import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
+import { AssignButton } from '../../../elements/AssignForm';
 import DialogButton from '../../../elements/DialogButton/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
 
 function MemberTaskCard(props) {
   const {
     taskName,
-    taskID,
+    taskId,
     taskDescription,
     state,
     taskStart,
@@ -55,14 +56,13 @@ function MemberTaskCard(props) {
         </div>
 
         <CollapsableCard.Description>{taskDescription}</CollapsableCard.Description>
-
         {role === 'admin' && taskSet === 'all' && (
           <>
             <h3>Assigned to:</h3>
             <ul className='inline-list'>
               {assignedTo.map((user) => (
                 <li>
-                  <Link to={`/members/${user.userID}/tasks/${user.memberTaskID}`}>
+                  <Link to={`/members/${user.userId}/tasks/${user.memberTaskId}`}>
                     <b>{user.firstName}</b>
                     {` ${user.lastName}`}
                   </Link>
@@ -128,10 +128,25 @@ MemberTaskCard.propTypes = {
   taskSet: PropTypes.oneOf(['all', 'user']).isRequired,
   role: PropTypes.string.isRequired,
   assignedTo: PropTypes.arrayOf(
-    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+    PropTypes.shape({
+      userId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
   ),
   members: PropTypes.arrayOf(
-    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+    PropTypes.shape({
+      userId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
+  ),
+  members: PropTypes.arrayOf(
+    PropTypes.shape({
+      userID: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
   ),
 
   taskName: PropTypes.string.isRequired,

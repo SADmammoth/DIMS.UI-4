@@ -96,8 +96,6 @@ export default class Validator {
 
   //
 
-  //
-
   static dateTimeMessage = 'Invalid date format';
 
   /* *
@@ -215,21 +213,21 @@ export default class Validator {
 
     const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
 
-    let monthNum = parseInt(matchedInput.month, 10);
+    let monthNum = parseInt(matchedInput.monthNumber, 10) - 1;
 
     if (matchedInput.monthShort) {
-      monthNum = monthsShort.indexOf(matchedInput.monthShort) + 1;
+      monthNum = monthsShort.indexOf(matchedInput.monthShort);
     }
 
     if (matchedInput.monthFull) {
-      monthNum = months.indexOf(matchedInput.monthFull) + 1;
+      monthNum = months.indexOf(matchedInput.monthFull);
     }
 
     let hourNum = parseInt(matchedInput.hours, 10);
     if (matchedInput.hours12) {
       hourNum = parseInt(matchedInput.hours12, 10) + 12;
     }
-
+    console.log(monthNum);
     const date = [
       parseInt(matchedInput.year, 10),
       monthNum,
@@ -301,6 +299,11 @@ export default class Validator {
     return true;
   };
 
+  static dateTimeInPast(input, mask) {
+    const date = Validator.dateByMask(input, mask);
+    return date < new Date();
+  }
+
   static float(number, from, to) {
     const num = parseFloat(number);
     return num <= to && num >= from;
@@ -312,6 +315,19 @@ export default class Validator {
   }
 
   //
+
+  static parsePhoneByMask(phone, mask) {
+    const formattedPhone = mask.split('');
+    const phoneNumbers = phone.replace(/[^0-9]/g, '').split('');
+    let phoneIndex = 0;
+    for (let index = 0; index < mask.length; index++) {
+      if (formattedPhone[index] === '9') {
+        formattedPhone[index] = phoneNumbers[phoneIndex];
+        phoneIndex++;
+      }
+    }
+    return formattedPhone.join('');
+  }
 
   //* By char validators
 

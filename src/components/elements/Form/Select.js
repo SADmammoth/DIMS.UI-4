@@ -7,7 +7,10 @@ function Select(props) {
   }
 
   return (
-    <select className='form-select' {...props}>
+    <select className='form-select' name={props.name} value={props.value || null} onChange={props.onChange}>
+      <option disabled selected='selected'>
+        {props.description}
+      </option>
       {props.valueOptions.map((value) => renderOption(value))}
     </select>
   );

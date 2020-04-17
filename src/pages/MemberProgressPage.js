@@ -28,7 +28,7 @@ class MemberProgressPage extends React.Component {
           return (
             <MemberProgressCard
               id={id}
-              taskID={taskID}
+              taskId={taskId}
               taskName={taskName}
               trackNote={trackNote}
               trackDate={trackDate}
@@ -63,12 +63,12 @@ class MemberProgressPage extends React.Component {
       <>
         <Helmet>{`${anytask.userName || 'Name'}'s progress`}</Helmet>
         <UserContext>
-          {({ role, userID }) => {
+          {({ role, userId }) => {
             return (
               <Header
                 role={role}
                 title={`${anytask.userName || 'Name'}'s progress`}
-                navItems={getNavItems({ role, userID }, this.props.match.path)}
+                navItems={getNavItems({ role, userId }, this.props.match.path)}
               />
             );
           }}

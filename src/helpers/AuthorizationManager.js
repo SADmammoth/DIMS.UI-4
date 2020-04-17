@@ -9,12 +9,17 @@ import UserContext from './UserContext';
 class AuthorizationManager extends Component {
   constructor(props) {
     super(props);
-    this.state = { authorizedUser: { role: 'guest', userID: 'guest' }, roles: ['guest', 'member', 'admin', 'mentor'] };
+    this.state = {
+      authorizedUser: { role: 'guest', userID: 'guest' },
+      roles: ['guest', 'member', 'admin', 'mentor'],
+    };
   }
 
   authorize = (role, userID) => {
     if (!role || !userID) {
-      this.setState({ authorizedUser: JSON.parse(localStorage.getItem('userInfo')) });
+      this.setState({
+        authorizedUser: JSON.parse(localStorage.getItem('userInfo')),
+      });
     }
     if (this.state.roles.includes(role)) {
       localStorage.setItem('userInfo', JSON.stringify({ role, userID }));

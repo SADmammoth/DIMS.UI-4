@@ -10,7 +10,7 @@ import MemberTracksPage from './pages/MemberTracksPage';
 import NewMember from './pages/NewMember';
 
 function Routes(props) {
-  const { role, userID } = props;
+  const { role, userId } = props;
   return (
     <Switch>
       <Route path='/404'>
@@ -20,7 +20,7 @@ function Routes(props) {
         exact
         path='/members/:id/tasks/:open?'
         render={(props) => {
-          return role === 'member' && props.match.params.id !== userID ? (
+          return role === 'member' && props.match.params.id !== userId ? (
             <Redirect to='/404' />
           ) : (
             <MemberTasksPage taskSet='user' />
@@ -54,12 +54,12 @@ function Routes(props) {
       {role === 'member' && (
         <>
           <Route exact path='/'>
-            <Redirect to={`/members/${userID}/tasks`} />
+            <Redirect to={`/members/${userId}/tasks`} />
           </Route>
           <Route
             path='/members/:id/tracks'
             render={(props) => {
-              return props.match.params.id !== userID ? <Redirect to='/404' /> : <MemberTracksPage />;
+              return props.match.params.id !== userId ? <Redirect to='/404' /> : <MemberTracksPage />;
             }}
           />
         </>
@@ -73,7 +73,7 @@ function Routes(props) {
 
 Routes.propTypes = {
   role: PropTypes.string.isRequired,
-  userID: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default Routes;

@@ -49,8 +49,8 @@ TaskEdit.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
   assignedTo: PropTypes.arrayOf(
     PropTypes.shape({
-      memberTaskID: PropTypes.string,
-      userID: PropTypes.string,
+      memberTaskId: PropTypes.string,
+      userId: PropTypes.string,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
     }),

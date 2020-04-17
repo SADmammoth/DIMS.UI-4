@@ -14,7 +14,9 @@ class AuthenticationManager extends Component {
   }
 
   logIn = async (login, password) => {
-    this.setState({ authenticated: (await this.authenticate(login, password)).status === 'success' });
+    this.setState({
+      authenticated: (await this.authenticate(login, password)).status === 'success',
+    });
   };
 
   authenticate = async (login, password) => {

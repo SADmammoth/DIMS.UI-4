@@ -9,8 +9,8 @@ const App = (props) => {
     <Router>
       <AuthorizationManager>
         <UserContext.Consumer>
-          {({ role, userID }) => {
-            return <Routes role={role} userID={userID} />;
+          {({ role, userId }) => {
+            return <Routes role={role} userId={userId} />;
           }}
         </UserContext.Consumer>
       </AuthorizationManager>

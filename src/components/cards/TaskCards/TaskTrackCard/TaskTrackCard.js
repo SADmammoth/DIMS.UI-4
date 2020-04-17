@@ -10,7 +10,7 @@ import DateBadge from '../../../elements/DateBadge';
 import DialogButton from '../../../elements/DialogButton/DialogButton';
 
 function TaskTrackCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, memberTaskID, open, close } = props;
+  const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close } = props;
 
   return (
     <CollapsableCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
@@ -43,7 +43,7 @@ function TaskTrackCard(props) {
           />
           <Button
             classMod='ghost'
-            link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}
+            link={`/members/${props.match.params.id}/tasks/${memberTaskId}`}
             content='Show in tasks'
           />
         </ButtonGroup>
@@ -54,7 +54,7 @@ function TaskTrackCard(props) {
 
 TaskTrackCard.propTypes = {
   id: PropTypes.string.isRequired,
-  memberTaskID: PropTypes.string.isRequired,
+  memberTaskId: PropTypes.string.isRequired,
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,

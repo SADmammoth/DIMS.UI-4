@@ -6,7 +6,7 @@ import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button/Button';
 
 function MemberProgressCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
+  const { taskName, trackNote, trackDate, collapsed, id, open, close, role, taskId } = props;
 
   return (
     <CollapsableCard id={id} className='task-progress' cardClass='task' collapsed={collapsed} open={open} close={close}>
@@ -17,7 +17,7 @@ function MemberProgressCard(props) {
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
         {(role === 'admin' || role === 'mentor') && (
-          <Button classMod='ghost' link={`/tasks/${taskID}`}>
+          <Button classMod='ghost' link={`/tasks/${taskId}`}>
             Show in tasks
           </Button>
         )}

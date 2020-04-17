@@ -186,8 +186,12 @@ class Form extends React.Component {
     return values;
   }
 
-  errorNotification(description, message) {
-    notify('error', `${description} invalid input`, message);
+  errorNotification(title, message) {
+    notify('error', title, message);
+  }
+
+  successNotification(title, message) {
+    notify('success', title, message);
   }
 
   highlightInput = (name) => {
@@ -213,18 +217,33 @@ class Form extends React.Component {
       let input = findInputByName(valueName);
       if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
         this.highlightInput(valueName);
-        showMessage(input.label || input.description, input.validationMessage);
+        showMessage(`${input.label || input.description} invalid input`, input.validationMessage);
         return false;
       }
     }
     return true;
   };
 
+  onResponseReceived = (response) => {
+    if (response && response.status === 200) {
+      this.successNotification('Success', 'Data sent and accepted by server');
+    } else {
+      this.errorNotification('Server error', response ? response.toString() : response);
+    }
+  };
+
+  onResponseError = (error) => {
+    this.errorNotification('Server error', error.response ? error.response.data.Message : error.toString());
+  };
+
   onSubmit = (event) => {
+    const { onSubmit } = this.props;
     if (this.checkValidity(this.errorNotification)) {
       if (onSubmit) {
         event.preventDefault();
-        onSubmit(this.formatValues());
+        onSubmit(this.formatValues())
+          .then(this.onResponseReceived)
+          .catch(this.onResponseError);
       }
     } else {
       event.preventDefault();

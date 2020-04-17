@@ -62,7 +62,7 @@ class MemberTasksPage extends React.Component {
   }
 
   static wrappedMemberTask = ({ collapsed, id, taskSet, members, edit, open, close, ...data }) => {
-    const { taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
+    const { taskId, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
       <UserContext.Consumer>
         {({ role }) => {
@@ -70,7 +70,7 @@ class MemberTasksPage extends React.Component {
             <MemberTaskCard
               id={id}
               edit={edit}
-              taskID={taskID}
+              taskId={taskId}
               taskName={taskName}
               taskDescription={taskDescription}
               state={state}
@@ -109,14 +109,14 @@ class MemberTasksPage extends React.Component {
     return (
       <>
         <UserContext>
-          {({ role, userID }) => {
+          {({ role, userId }) => {
             const title = role === 'member' || taskSet === 'all' ? 'Tasks' : `${name}'s tasks`;
             return (
               <>
                 <Helmet>
                   <title>{title}</title>
                 </Helmet>
-                <Header role={role} title={title} navItems={getNavItems({ role, userID }, this.props.match.path)} />
+                <Header role={role} title={title} navItems={getNavItems({ role, userId }, this.props.match.path)} />
               </>
             );
           }}

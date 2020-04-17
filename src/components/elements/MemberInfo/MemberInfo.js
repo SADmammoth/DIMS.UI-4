@@ -13,6 +13,8 @@ import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
 import ButtonGroup from '../ButtonGroup/ButtonGroup';
 import FlexColumn from '../FlexColumn';
+import Client from '../../../helpers/Client';
+import DialogButton from '../DialogButton/DialogButton';
 
 const MemberInfo = (props) => {
   const {
@@ -117,7 +119,21 @@ const MemberInfo = (props) => {
             </Button>
             {role === 'admin' && (
               <>
-                <Button content='Delete' classMod='secondary' />
+                <DialogButton
+                  buttonClassMod='secondary'
+                  buttonContent='Delete'
+                  message={
+                    <p>
+                      Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                    </p>
+                  }
+                  confirmButtonClassMod='error'
+                  confirmButtonContent='Delete'
+                  dialogValue={id}
+                  onSubmit={({ dialogValue }) => {
+                    return Client.deleteMember(dialogValue);
+                  }}
+                />
                 <Button content='Edit' classMod='secondary' onClick={openEditModal} />
               </>
             )}

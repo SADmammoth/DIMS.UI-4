@@ -18,6 +18,7 @@ class MembersManagerPage extends React.Component {
 
   async componentDidMount() {
     const membersData = await Client.getMembers();
+    console.log(membersData);
     this.setState({
       members: membersData,
     });
@@ -96,9 +97,9 @@ class MembersManagerPage extends React.Component {
           <title>Members</title>
         </Helmet>
         <UserContext>
-          {({ role, userID }) => {
+          {({ role, userId }) => {
             return (
-              <Header role={role} title='Members' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+              <Header role={role} title='Members' navItems={getNavItems({ role, userId }, this.props.match.path)} />
             );
           }}
         </UserContext>

@@ -9,7 +9,7 @@ function TaskEditButton(props) {
   const modal = React.createRef();
 
   const openModal = (event) => {
-    props.history.push(`/tasks/${props.taskID}/edit`);
+    props.history.push(`/tasks/${props.taskId}/edit`);
     modal.current.handleShow();
   };
 

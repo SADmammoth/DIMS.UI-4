@@ -9,8 +9,9 @@ import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.s
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import CollapsableCard from '../CollapsableCard';
 import DateBadge from '../../elements/DateBadge';
-import DirectionBadge from '../../elements/DirectionBadge/DirectionBadge';
+import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
+import Client from '../../../helpers/Client';
 
 class MemberCard extends React.PureComponent {
   constructor(props) {
@@ -19,6 +20,10 @@ class MemberCard extends React.PureComponent {
 
     this.modal = React.createRef();
   }
+
+  editOff = () => {
+    this.setState({ edit: false });
+  };
 
   closeEditModal = () => {
     this.setState({ edit: false });
@@ -69,7 +74,7 @@ class MemberCard extends React.PureComponent {
               {` ${lastName}, ${age}`}
             </CollapsableCard.Title>
             <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-            <DirectionBadge direction={direction} />
+            <TextBadge>{direction}</TextBadge>
           </CollapsableCard.Header>
           <CollapsableCard.Body>
             <Button classMod='primary' link={`/members/${id}/progress`}>
@@ -80,24 +85,30 @@ class MemberCard extends React.PureComponent {
               <TasksIcon className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <DialogButton
-              buttonClassMod='secondary'
-              buttonContent='Delete'
-              message={
-                <p>
-                  Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                </p>
-              }
-              confirmButtonClassMod='error'
-              confirmButtonContent='Delete'
-              dialogValue={id}
-              onSubmit={({ dialogValue }) => console.log(dialogValue)}
-            />
-            <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+            {role === 'admin' && (
+              <>
+                <DialogButton
+                  buttonClassMod='secondary'
+                  buttonContent='Delete'
+                  message={
+                    <p>
+                      Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                    </p>
+                  }
+                  confirmButtonClassMod='error'
+                  confirmButtonContent='Delete'
+                  dialogValue={id}
+                  onSubmit={({ dialogValue }) => {
+                    return Client.deleteMember(dialogValue);
+                  }}
+                />
+                <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+              </>
+            )}
             <Button content='More info' classMod='ghost' onClick={this.showModal} />
           </CollapsableCard.Body>
         </CollapsableCard>
-        <Modal ref={this.modal} className='member-info'>
+        <Modal ref={this.modal} className='member-info' onClose={this.editOff}>
           <MemberInfo
             edit={this.state.edit}
             setEdit={this.editModal}
@@ -116,6 +127,7 @@ class MemberCard extends React.PureComponent {
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
             handleClose={this.closeEditModal}
+            role={role}
           />
         </Modal>
       </>

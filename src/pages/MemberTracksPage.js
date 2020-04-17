@@ -6,7 +6,7 @@ import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
-import Spinner from '../components/elements/Spinner';
+import Spinner from '../components/elements/Spinner/Spinner';
 import UserContext from '../helpers/UserContext';
 import getNavItems from '../helpers/getNavItems';
 
@@ -35,11 +35,11 @@ class MemberTracksPage extends React.Component {
   }
 
   static renderTaskTrack(id, data) {
-    const { memberTaskID, taskName, trackNote, trackDate } = data;
+    const { memberTaskId, taskName, trackNote, trackDate } = data;
     return (
       <TaskTrackCard
         id={id}
-        memberTaskID={memberTaskID}
+        memberTaskId={memberTaskId}
         taskName={taskName}
         trackNote={trackNote}
         trackDate={trackDate}
@@ -55,9 +55,9 @@ class MemberTracksPage extends React.Component {
           <title>Task tracks</title>
         </Helmet>
         <UserContext>
-          {({ role, userID }) => {
+          {({ role, userId }) => {
             return (
-              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userId }, this.props.match.path)} />
             );
           }}
         </UserContext>
