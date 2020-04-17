@@ -39,6 +39,56 @@ class Client {
     return membersObject;
   }
 
+  static postMember(
+    Name,
+    LastName,
+    Email,
+    Direction,
+    Sex,
+    Education,
+    BirthDate,
+    UniversityAverageScore,
+    MathScore,
+    Address,
+    MobilePhone,
+    Skype,
+    StartDate,
+  ) {
+    if (
+      !Name ||
+      !LastName ||
+      !Email ||
+      !Direction ||
+      !Sex ||
+      !Education ||
+      !BirthDate ||
+      !UniversityAverageScore ||
+      !MathScore ||
+      !Address ||
+      !MobilePhone ||
+      !Skype ||
+      !StartDate
+    ) {
+      return new Promise();
+    }
+
+    return axios.post(path.join(Client.apiPath, 'create'), {
+      Name,
+      LastName,
+      Email,
+      DirectionId: Client.directions.indexOf(Direction) + 1,
+      Sex: Sex === 'Male' ? 'M' : 'F',
+      Education,
+      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
+      UniversityAverageScore: parseFloat(UniversityAverageScore),
+      MathScore: MathScore / 10.0,
+      Address,
+      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
+      Skype,
+      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+    });
+  }
+
   //   static async getUserTasks(userId) {
   //     const tasks = await Client.db
   //       .collection('memberTasks')
