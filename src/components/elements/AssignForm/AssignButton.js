@@ -6,7 +6,6 @@ import AssignForm from './AssignForm';
 
 function AssignButton(props) {
   const { buttonClassMod, children, buttonContent, ...assignFormProps } = props;
-  console.log(assignFormProps);
   const modal = React.createRef();
   const showModal = (event) => {
     modal.current.handleShow();

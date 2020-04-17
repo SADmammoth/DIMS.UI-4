@@ -5,7 +5,7 @@ import Validator from './Validator';
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
-  static directions = ['.Net', 'Java', 'Front-end', 'Salesforce'];
+  static directions = ['Front-end', '.Net'];
 
   static createMembersObject(memberResponse) {
     let member = {};
@@ -14,7 +14,6 @@ class Client {
     member.lastName = lastName;
     const birthDate = new Date();
     birthDate.setFullYear(new Date().getFullYear() - memberResponse.Age);
-    console.log(birthDate);
     member.birthDate = birthDate;
     member.email = memberResponse.Email;
     member.direction = memberResponse.Direction;
@@ -73,6 +72,58 @@ class Client {
     }
 
     return axios.post(path.join(Client.apiPath, 'create'), {
+      Name,
+      LastName,
+      Email,
+      DirectionId: Client.directions.indexOf(Direction) + 1,
+      Sex: Sex === 'Male' ? 'M' : 'F',
+      Education,
+      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
+      UniversityAverageScore: parseFloat(UniversityAverageScore),
+      MathScore: MathScore / 10.0,
+      Address,
+      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
+      Skype,
+      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+    });
+  }
+
+  static editMember(
+    UserId,
+    Name,
+    LastName,
+    Email,
+    Direction,
+    Sex,
+    Education,
+    BirthDate,
+    UniversityAverageScore,
+    MathScore,
+    Address,
+    MobilePhone,
+    Skype,
+    StartDate,
+  ) {
+    if (
+      !UserId ||
+      !Name ||
+      !LastName ||
+      !Email ||
+      !Direction ||
+      !Sex ||
+      !Education ||
+      !BirthDate ||
+      !UniversityAverageScore ||
+      !MathScore ||
+      !Address ||
+      !MobilePhone ||
+      !Skype ||
+      !StartDate
+    ) {
+      return new Promise();
+    }
+
+    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId), {
       Name,
       LastName,
       Email,

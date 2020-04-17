@@ -11,7 +11,6 @@ import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
 import { AssignButton } from '../../../elements/AssignForm';
 import DialogButton from '../../../elements/DialogButton/DialogButton';
-import { AssignButton } from '../../../elements/AssignForm';
 
 function MemberTaskCard(props) {
   const {
@@ -104,7 +103,7 @@ function MemberTaskCard(props) {
             </>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
-            <Button classMod='ghost' link={`/tasks/${taskID}`}>
+            <Button classMod='ghost' link={`/tasks/${taskId}`}>
               Show in tasks
             </Button>
           )}

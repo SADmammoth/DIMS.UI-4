@@ -49,8 +49,14 @@ class NewMember extends React.Component {
       skype,
       Validator.dateByMask(startDate, 'dd-MM-yyyy'),
     )
-      .then(() => this.setState({ loading: false }))
-      .catch(() => this.setState({ loading: false }));
+      .then((response) => {
+        this.setState({ loading: false });
+        return Response;
+      })
+      .catch((response) => {
+        this.setState({ loading: false });
+        return Response;
+      });
   };
 
   render() {

@@ -5,7 +5,6 @@ import Form from '../Form/Form';
 import Button from '../Button/Button';
 
 function AssignForm(props) {
-  console.log(props);
   return (
     <Form
       className='assign-form'

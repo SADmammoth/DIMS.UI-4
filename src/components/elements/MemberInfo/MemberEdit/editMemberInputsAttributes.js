@@ -1,4 +1,5 @@
 import Validator from '../../../../helpers/Validator';
+import Client from '../../../../helpers/Client';
 
 export default function editMemberInputsAttributes({
   firstName,
@@ -15,7 +16,6 @@ export default function editMemberInputsAttributes({
   universityAverageScore,
   mathScore,
 }) {
-  console.log(Validator.dateByMask('10-10-2000', 'MM-dd-yyyy'));
   return [
     {
       type: 'text',
@@ -96,7 +96,7 @@ export default function editMemberInputsAttributes({
       name: 'direction',
       description: 'Direction',
       value: direction,
-      valueOptions: ['Java', 'Salesforce', '.Net', 'Frontent'], //TODO Replace with request
+      valueOptions: Client.directions,
     },
     {
       type: 'text',

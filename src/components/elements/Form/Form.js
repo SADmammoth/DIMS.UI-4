@@ -122,7 +122,6 @@ class Form extends React.Component {
 
   createInputs() {
     const { values } = this.state;
-    console.log(values['mobilePhone'] && values['mobilePhone'].value);
     const { inputs, onInputsUpdate } = this.props;
     if (!Object.keys(values).length) {
       return;

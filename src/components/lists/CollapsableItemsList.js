@@ -38,7 +38,6 @@ class CollapsableItemsList extends Component {
 
   open = (id) => {
     const { open, items } = this.state;
-    console.log(items);
     if (open) {
       items[open].collapsed = true;
     }

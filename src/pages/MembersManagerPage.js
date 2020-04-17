@@ -16,13 +16,17 @@ class MembersManagerPage extends React.Component {
     this.state = { members: null };
   }
 
-  async componentDidMount() {
-    const membersData = await Client.getMembers();
-    console.log(membersData);
-    this.setState({
-      members: membersData,
-    });
+  componentDidMount() {
+    this.reloadMembers();
   }
+
+  reloadMembers = () => {
+    return Client.getMembers().then((membersData) =>
+      this.setState({
+        members: membersData,
+      }),
+    );
+  };
 
   renderMembers() {
     const { members } = this.state;
@@ -31,7 +35,7 @@ class MembersManagerPage extends React.Component {
     }
 
     return Object.entries(members).map(({ 0: id, 1: data }) => {
-      return MembersManagerPage.renderMember(id, data);
+      return MembersManagerPage.renderMember(id, data, this.reloadMembers);
     });
   }
 
@@ -53,6 +57,7 @@ class MembersManagerPage extends React.Component {
     collapsed,
     open,
     close,
+    reloadMembers,
   }) {
     return (
       <UserContext.Consumer>
@@ -77,6 +82,7 @@ class MembersManagerPage extends React.Component {
               collapsed={collapsed}
               open={open}
               close={close}
+              reloadMembers={reloadMembers}
             />
           );
         }}
@@ -84,9 +90,9 @@ class MembersManagerPage extends React.Component {
     );
   }
 
-  static renderMember(id, data) {
+  static renderMember(id, data, reloadMembers) {
     const WrappedMemberCard = MembersManagerPage.WrappedMemberCard;
-    return <WrappedMemberCard id={id} {...data} />;
+    return <WrappedMemberCard id={id} {...data} reloadMembers={reloadMembers} />;
   }
 
   render() {

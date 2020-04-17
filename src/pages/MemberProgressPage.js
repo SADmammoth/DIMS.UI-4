@@ -21,7 +21,7 @@ class MemberProgressPage extends React.Component {
     this.setState({ tasks: taskData });
   }
 
-  static WrappedMemberProgressCard({ id, taskID, taskName, trackNote, trackDate, collapsed, open, close }) {
+  static WrappedMemberProgressCard({ id, taskId, taskName, trackNote, trackDate, collapsed, open, close }) {
     return (
       <UserContext.Consumer>
         {({ role }) => {

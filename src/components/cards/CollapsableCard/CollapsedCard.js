@@ -4,7 +4,6 @@ import CollapsableCardTitle from './CollapsableCardTitle';
 
 function CollapsedCard(props) {
   const { children, cardClass, onClick, collapsed } = props;
-  console.log(children);
   return (
     <div className={`${cardClass}-card__header`}>
       {React.Children.map(children, (child) => {

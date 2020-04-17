@@ -26,6 +26,7 @@ class MemberCard extends React.PureComponent {
   };
 
   closeEditModal = () => {
+    this.props.reloadMembers();
     this.setState({ edit: false });
     this.modal.current.handleClose();
   };
@@ -141,6 +142,7 @@ MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
+  reloadMembers: PropTypes.func.isRequired,
   ...memberInfoPTypes,
 };
 
