@@ -89,6 +89,10 @@ class Client {
     });
   }
 
+  static deleteMember(userId) {
+    return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
+  }
+
   //   static async getUserTasks(userId) {
   //     const tasks = await Client.db
   //       .collection('memberTasks')
