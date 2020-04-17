@@ -17,7 +17,6 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
       },
     });
   }
-
   switch (type) {
     case 'invisible':
       return followInvisibleMask(resultInput, maskArray);

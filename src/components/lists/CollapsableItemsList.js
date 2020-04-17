@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 class CollapsableItemsList extends Component {
   constructor(props) {
     super(props);
-    this.state = { items: {}, open: null };
+    this.state = { items: {}, open: undefined };
   }
 
   static getDerivedStateFromProps(props, state) {
     const { items, open } = props;
     const { items: stateItems } = state;
-    if (Object.keys(stateItems).length !== items.length) {
+    if (Object.values(stateItems).length !== items.length) {
       const itemsData = {};
       items.forEach((child) => {
         itemsData[child.props.id] = { collapsed: true };

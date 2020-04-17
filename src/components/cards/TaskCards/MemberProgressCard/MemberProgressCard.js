@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import CollapsableCard from '../../CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
+import Button from '../../../elements/Button/Button';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
@@ -15,6 +16,11 @@ function MemberProgressCard(props) {
       </CollapsableCard.Header>
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
+        {(role === 'admin' || role === 'mentor') && (
+          <Button classMod='ghost' link={`/tasks/${taskID}`}>
+            Show in tasks
+          </Button>
+        )}
       </CollapsableCard.Body>
     </CollapsableCard>
   );

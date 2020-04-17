@@ -130,3 +130,10 @@ a:visited {
   border-color: $error;
   animation: 1s invalid;
 }
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  & > div {
+    margin-bottom: 20px;
+  }
+}

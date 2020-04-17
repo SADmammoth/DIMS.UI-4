@@ -6,7 +6,9 @@ import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
-import Spinner from '../components/elements/Spinner/Spinner';
+import Spinner from '../components/elements/Spinner';
+import UserContext from '../helpers/UserContext';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
@@ -52,9 +54,13 @@ class MemberTracksPage extends React.Component {
         <Helmet>
           <title>Task tracks</title>
         </Helmet>
-        <Header>
-          <h1>Your Task tracks</h1>
-        </Header>
+        <UserContext>
+          {({ role, userID }) => {
+            return (
+              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+            );
+          }}
+        </UserContext>
         <ContainerComponent>
           {tracks ? (
             <div>{Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}</div>

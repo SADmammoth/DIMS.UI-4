@@ -44,8 +44,6 @@ class Form extends React.Component {
 
   updateValue = (name, value) => {
     const { values } = this.state;
-    console.log(values, name);
-    console.trace();
     values[name].value = value;
 
     this.setState({ values });
@@ -54,7 +52,10 @@ class Form extends React.Component {
 
   //* Create values
   createValue(id, type, name) {
-    this.setState((state) => ({ ...state, values: { ...state.values, [name]: { type, id } } }));
+    this.setState((state) => ({
+      ...state,
+      values: { ...state.values, [name]: { type, id } },
+    }));
   }
 
   createValues() {
@@ -179,7 +180,7 @@ class Form extends React.Component {
   // * Format values to pass to onSubmit
   formatValues() {
     const values = {};
-    Object.entries(this.state.values).forEach(({ name, valueItem }) => {
+    Object.entries(this.state.values).forEach(([name, valueItem]) => {
       values[name] = valueItem.value;
     });
     return values;

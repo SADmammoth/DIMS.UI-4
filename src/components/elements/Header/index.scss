@@ -1,7 +1,7 @@
 @import '../../../assets/styles/scss/vars.scss';
 @import '../../../assets/styles/scss/mixins.scss';
 
-header {
+.header {
   height: 80px;
   background: $header-bg;
   z-index: 99;
@@ -10,17 +10,37 @@ header {
   margin: 0;
   backdrop-filter: blur(10px);
   border-bottom: 2px solid $light-bg;
-  & + .container {
+  .page-title {
+    margin-top: 20px;
+    .text-badge {
+      float: right;
+      margin-top: 5px;
+      margin-left: 10px;
+      padding: 5px;
+    }
+  }
+  & + * {
     position: relative;
     top: 100px;
     height: calc(100vh - 100px);
+  }
+  & > .container {
+    position: relative;
   }
   .content {
     margin-left: 40px;
     background: $primary-bg;
     padding: 0 20px;
-    width: 100%;
+    padding-right: 100%;
     box-sizing: border-box;
     height: 80px;
+  }
+  &__nav {
+    position: absolute;
+    align-self: center;
+    right: 0;
+    & > ul {
+      display: flex;
+    }
   }
 }
