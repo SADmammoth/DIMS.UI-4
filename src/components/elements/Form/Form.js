@@ -2,6 +2,7 @@ import React from 'react';
 import faker from 'faker';
 import PropTypes from 'prop-types';
 import Input from './Input';
+import notify from '../../../helpers/notify';
 
 class Form extends React.Component {
   constructor(props) {
@@ -22,11 +23,17 @@ class Form extends React.Component {
     this.createInputs();
   }
 
-  componentDidUpdate() {
-    if (Object.values(this.state.values).length !== Object.values(this.props.inputs).length) {
+  compareObjects(obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      !this.compareObjects(prevProps.inputs, this.props.inputs) ||
+      Object.keys(this.state.values).length !== this.props.inputs.length ||
+      !this.compareObjects(prevState.values, this.state.values)
+    ) {
       this.createValues();
-    }
-    if (Object.values(this.props.inputs).length !== Object.values(this.state.inputs).length) {
       this.createInputs();
     }
   }
@@ -35,11 +42,11 @@ class Form extends React.Component {
     return this.state.input[name];
   }
 
-  updateValue = (event) => {
+  updateValue = (name, value) => {
     const { values } = this.state;
-    const { name } = event.target;
-
-    values[name].value = event.target.value;
+    console.log(values, name);
+    console.trace();
+    values[name].value = value;
 
     this.setState({ values });
     this.createInputs();
@@ -54,8 +61,7 @@ class Form extends React.Component {
     const values = {};
     this.props.inputs.forEach((input) => {
       values[input.name] = {
-        type: input.type,
-        id: input.name + faker.random.alphaNumeric(8),
+        id: input.name,
         value: input.value,
       };
     });
@@ -72,6 +78,8 @@ class Form extends React.Component {
     description,
     onInput,
     onChange,
+    mask,
+    maskType,
     validator,
     byCharValidator,
     required,
@@ -81,6 +89,9 @@ class Form extends React.Component {
     valueOptions,
     minSymbols,
     maxSymbols,
+    invalid,
+    highlightInput,
+    validationMessage,
   ) {
     return (
       <Input
@@ -99,12 +110,18 @@ class Form extends React.Component {
         value={value}
         minSymbols={minSymbols}
         maxSymbols={maxSymbols}
+        mask={mask}
+        maskType={maskType}
+        invalid={invalid}
+        highlightInput={highlightInput}
+        validationMessage={validationMessage}
       />
     );
   }
 
   createInputs() {
     const { values } = this.state;
+    console.log(values['mobilePhone'] && values['mobilePhone'].value);
     const { inputs, onInputsUpdate } = this.props;
     if (!Object.keys(values).length) {
       return;
@@ -124,24 +141,32 @@ class Form extends React.Component {
         valueOptions,
         minSymbols,
         maxSymbols,
+        mask,
+        maskType,
+        validationMessage,
       } = input;
 
       inputsData[name] = Form.createInput(
-        Object.values(values)[i].id,
+        values[name].id,
         type,
         name,
         description,
         this.updateValue, // onInput
         this.updateValue, // onChange
+        mask,
+        maskType,
         validator,
         byCharValidator,
         required,
         label,
         attributes,
-        Object.values(values)[i].value,
+        values[name].value,
         valueOptions,
         minSymbols,
         maxSymbols,
+        !!values[name].invalid,
+        () => this.highlightInput(name),
+        validationMessage,
       );
     });
 
@@ -160,12 +185,48 @@ class Form extends React.Component {
     return values;
   }
 
+  errorNotification(description, message) {
+    notify('error', `${description} invalid input`, message);
+  }
+
+  highlightInput = (name) => {
+    const { values } = this.state;
+
+    values[name].invalid = true;
+    this.setState({ values }, () => this.createInputs());
+    setTimeout(() => this.unhighlightInput(name), 3000);
+  };
+
+  unhighlightInput = (name) => {
+    const { values } = this.state;
+    values[name].invalid = false;
+    this.setState({ values }, () => this.createInputs());
+  };
+
+  checkValidity = (showMessage) => {
+    const { values } = this.state;
+    const findInputByName = (name) => {
+      return this.props.inputs.find((input) => input.name === name);
+    };
+    for (let valueName in values) {
+      let input = findInputByName(valueName);
+      if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
+        this.highlightInput(valueName);
+        showMessage(input.label || input.description, input.validationMessage);
+        return false;
+      }
+    }
+    return true;
+  };
+
   onSubmit = (event) => {
-    if (onSubmit) {
-      event.preventDefault();
-      if (event.target.checkValidity()) {
+    if (this.checkValidity(this.errorNotification)) {
+      if (onSubmit) {
+        event.preventDefault();
         onSubmit(this.formatValues());
       }
+    } else {
+      event.preventDefault();
     }
   };
 
@@ -212,6 +273,7 @@ Form.propTypes = {
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
       ...inputProps,
+      validationMessage: PropTypes.string,
     }),
   ).isRequired,
   onSubmit: PropTypes.func,

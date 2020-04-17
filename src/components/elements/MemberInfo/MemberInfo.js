@@ -4,7 +4,7 @@ import DirectionBadge from '../DirectionBadge';
 import DateBadge from '../DateBadge';
 import Button from '../Button';
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
-import EditMember from './EditMember';
+import MemberEdit from './MemberEdit';
 import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
 import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
@@ -38,7 +38,7 @@ const MemberInfo = (props) => {
   return (
     <>
       {edit ? (
-        <EditMember {...props} />
+        <MemberEdit {...props} />
       ) : (
         <>
           <div className='member-info__header'>
