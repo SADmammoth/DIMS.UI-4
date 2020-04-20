@@ -54,9 +54,9 @@ class MemberCard extends React.PureComponent {
       close,
     } = this.props;
 
-    function onClick() {
+    const onClick = (collapsed) => {
       collapsed ? open(id) : close(id);
-    }
+    };
 
     return (
       <>
@@ -68,6 +68,7 @@ class MemberCard extends React.PureComponent {
             direction={direction}
             startDate={startDate}
             onClick={onClick}
+            collapsed={collapsed}
           />
           {collapsed || (
             <div className='member-card__body'>
@@ -103,7 +104,7 @@ class MemberCard extends React.PureComponent {
             education={education}
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
-            handleClose={this.handleClose}
+            handleClose={this.closeEditModal}
           />
         </Modal>
       </>

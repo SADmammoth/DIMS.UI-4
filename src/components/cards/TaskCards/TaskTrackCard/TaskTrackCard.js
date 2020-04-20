@@ -5,26 +5,23 @@ import { withRouter } from 'react-router-dom';
 import CollapsedTaskTrackCard from './CollapsedTaskTrackCard';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
+import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 
-function MemberTaskCard(props) {
+function TaskTrackCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, memberTaskID } = props;
 
-  function onClick() {
-    if (collapsed) {
-      props.open(id);
-    } else {
-      props.close(id);
-    }
+  function onClick(collapsed) {
+    collapsed ? props.open(id) : props.close(id);
   }
 
   return (
     <article className={`task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedTaskTrackCard taskName={taskName} trackDate={trackDate} onClick={onClick} />
+      <CollapsedTaskTrackCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
       {collapsed || (
         <>
           <div className='task-card__body'>
             <p className='task-card__description'>{trackNote}</p>
-            <div className='button-block'>
+            <ButtonGroup>
               <Button classMod='secondary' content='Delete' />
               <TrackButton
                 buttonClassMod='secondary'
@@ -38,7 +35,7 @@ function MemberTaskCard(props) {
                 link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}
                 content='Show in tasks'
               />
-            </div>
+            </ButtonGroup>
           </div>
         </>
       )}
@@ -46,7 +43,7 @@ function MemberTaskCard(props) {
   );
 }
 
-MemberTaskCard.propTypes = {
+TaskTrackCard.propTypes = {
   id: PropTypes.string.isRequired,
   memberTaskID: PropTypes.string.isRequired,
   collapsed: PropTypes.bool.isRequired,
@@ -58,4 +55,8 @@ MemberTaskCard.propTypes = {
   trackDate: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default withRouter(MemberTaskCard);
+function areEqual(prevProps, nextProps) {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}
+
+export default withRouter(React.memo(TaskTrackCard, areEqual));

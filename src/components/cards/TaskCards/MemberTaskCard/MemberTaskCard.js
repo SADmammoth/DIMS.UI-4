@@ -8,6 +8,8 @@ import Button from '../../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg';
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
+import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberTaskCard(props) {
   const {
@@ -25,13 +27,13 @@ function MemberTaskCard(props) {
     edit,
   } = props;
 
-  function onClick() {
+  function onClick(collapsed) {
     collapsed ? open(id) : close(id);
   }
 
   return (
     <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberTaskCard taskName={taskName} onClick={onClick} />
+      <CollapsedMemberTaskCard taskName={taskName} onClick={onClick} collapsed={collapsed} />
       {collapsed || (
         <>
           {state && (
@@ -42,8 +44,8 @@ function MemberTaskCard(props) {
 
           <div className='task-card__body'>
             <div className='task-card__dates'>
-              <DateBadge type='startDate' date={taskStart} />
-              <DateBadge type='endDate' date={taskDeadline} />
+              <DateBadge type={DateBadge.DateTypes.startDate} date={taskStart} />
+              <DateBadge type={DateBadge.DateTypes.endDate} date={taskDeadline} />
             </div>
 
             <p className='task-card__description'>{taskDescription}</p>
@@ -64,7 +66,7 @@ function MemberTaskCard(props) {
               </>
             )}
 
-            <div className='button-block'>
+            <ButtonGroup>
               {feature === 'track' && (
                 <TrackButton taskName={taskName} buttonClassMod='primary'>
                   <TrackIcon className='icon-track' />
@@ -82,7 +84,7 @@ function MemberTaskCard(props) {
               <Button classMod='secondary' content='Delete' />
 
               <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
-            </div>
+            </ButtonGroup>
           </div>
         </>
       )}
@@ -112,4 +114,4 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default MemberTaskCard;
+export default React.memo(MemberTaskCard, compareObjects);

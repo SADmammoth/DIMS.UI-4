@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Modal extends React.Component {
+class Modal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { show: false };

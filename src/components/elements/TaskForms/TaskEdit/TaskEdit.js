@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
-import Validator from '../../../../helpers/Validator';
 import taskEditInputsAttributes from './taskEditInputsAttributes';
 
-class TaskEdit extends React.Component {
+class TaskEdit extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { inputs: {} };

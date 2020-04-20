@@ -14,11 +14,11 @@ class MemberTasksPage extends React.Component {
     this.state = { tasks: {}, taskSet: null, name: 'Name', members: [] };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.update();
   }
 
-  async componentDidUpdate() {
+  componentDidUpdate() {
     if (this.state.taskSet !== this.props.taskSet) {
       this.update();
     }

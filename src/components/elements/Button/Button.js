@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 function Button(props) {
-  function onClick(event) {
-    props.onClick ? props.onClick(event) : props.history.push(props.link);
+  const { classMod, type, content, children, history, link, onClick } = props;
+  function onClickHandler(event) {
+    onClick ? onClick(event) : history.push(link);
   }
-  // TODO
   return (
-    <button className={`button button${`_${props.classMod}` || ''}`} type={props.type} onClick={onClick}>
-      {props.content || props.children}
+    <button className={`button button${`_${classMod}` || ''}`} type={type} onClick={onClickHandler}>
+      {content || children}
     </button>
   );
 }
@@ -23,6 +23,7 @@ Button.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   history: PropTypes.any.isRequired,
   classMod: PropTypes.string,
+  link: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.objectOf(PropTypes.object)]),
 };
 
