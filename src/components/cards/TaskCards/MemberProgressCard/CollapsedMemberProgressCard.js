@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DateBadge from '../../../elements/DateBadge';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function CollapsedMemberProgressCard(props) {
   const { taskName, trackDate, onClick, collapsed } = props;
@@ -27,8 +28,4 @@ CollapsedMemberProgressCard.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(CollapsedMemberProgressCard, areEqual);
+export default React.memo(CollapsedMemberProgressCard, compareObjects);

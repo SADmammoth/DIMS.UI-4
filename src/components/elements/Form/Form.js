@@ -1,8 +1,8 @@
 import React from 'react';
-import faker from 'faker';
 import PropTypes from 'prop-types';
 import Input from './Input';
 import notify from '../../../helpers/notify';
+import compareObjects from '../../../helpers/compareObjects';
 
 class Form extends React.Component {
   constructor(props) {
@@ -19,15 +19,11 @@ class Form extends React.Component {
     this.createInputs();
   }
 
-  compareObjects(obj1, obj2) {
-    return JSON.stringify(obj1) === JSON.stringify(obj2);
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (
-      !this.compareObjects(prevProps.inputs, this.props.inputs) ||
+      !compareObjects(prevProps.inputs, this.props.inputs) ||
       Object.keys(this.state.values).length !== this.props.inputs.length ||
-      !this.compareObjects(prevState.values, this.state.values)
+      !compareObjects(prevState.values, this.state.values)
     ) {
       this.createValues();
       this.createInputs();
@@ -243,10 +239,6 @@ class Form extends React.Component {
       </>
     );
   }
-}
-
-function checkNames(inputs) {
-  return !inputs.every((input, index) => inputs.slice(index + 1).find((anotherInput) => input.name === anotherInput));
 }
 
 Form.defaultProps = {

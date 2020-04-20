@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import DirectionBadge from '../../elements/DirectionBadge';
 import DateBadge from '../../elements/DateBadge';
+import calculateAge from '../../../helpers/calculateAge';
+import compareObjects from '../../../helpers/compareObjects';
 
 function CollapsedMemberCard(props) {
   const { firstName, lastName, birthDate, direction, startDate, onClick, collapsed } = props;
@@ -35,12 +37,4 @@ CollapsedMemberCard.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-function calculateAge(birthDate) {
-  return new Date().getFullYear() - birthDate.getFullYear();
-}
-
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(CollapsedMemberCard, areEqual);
+export default React.memo(CollapsedMemberCard, compareObjects);

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 
 function CheckboxGroup(props) {
   function renderCheckbox(value, { value: commonValue, id, type, name, onInput, attributes }) {
@@ -7,11 +8,11 @@ function CheckboxGroup(props) {
     /*
      * 'commonValue' is value of checkbox group by name, means array or string
      * consists of values of checked checkboxes  */
-    let values = checkboxValueSeparator(commonValue);
+    const values = checkboxValueSeparator(commonValue);
 
     const onClick = (event) => {
       if (type === 'checkbox') {
-        let { checked, value } = event;
+        const { checked, value } = event;
         if (checked) {
           values.push(value);
         } else {
@@ -36,10 +37,6 @@ function CheckboxGroup(props) {
         <label htmlFor={id + value}>{value}</label>
       </div>
     );
-  }
-
-  function checkboxValueSeparator(value) {
-    return typeof value === 'string' ? value.split(',') : value;
   }
 
   function renderCheckboxes() {

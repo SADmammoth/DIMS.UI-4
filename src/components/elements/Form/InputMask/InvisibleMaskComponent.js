@@ -1,7 +1,7 @@
 import React from 'react';
 
-const escapedCharactersRegex = /([9aAh%#\\])\\(?!\\)/g;
-const specialCharactersRegex = /[9aAh%#\\](?!(\\)(?!\\))/g;
+import maskEscapedCharsRegex from '../../../../helpers/maskEscapedCharsRegex';
+import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
 
 function InvisibleMaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
@@ -9,7 +9,7 @@ function InvisibleMaskComponent(input, maskArray) {
       input.props.onInput({
         target: {
           name: input.props.name,
-          value: input.props.value + maskArray[input.props.value.length].replace(escapedCharactersRegex, '$1'),
+          value: input.props.value + maskArray[input.props.value.length].replace(maskEscapedCharsRegex, '$1'),
         },
       });
     }
@@ -17,11 +17,11 @@ function InvisibleMaskComponent(input, maskArray) {
 
   const onFocus = (event) => {
     if (!event.target.value || event.target.value === '') {
-      const firstPlaceholder = maskArray.findIndex((el) => specialCharactersRegex.test(el));
+      const firstPlaceholder = maskArray.findIndex((el) => maskSpecialCharsRegex.test(el));
       event.target.value = maskArray
         .splice(0, firstPlaceholder)
         .join('')
-        .replace(escapedCharactersRegex, '$1');
+        .replace(maskEscapedCharsRegex, '$1');
       event.target.setSelectionRange(firstPlaceholder + 1, firstPlaceholder + 1);
     }
   };

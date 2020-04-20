@@ -1,8 +1,9 @@
 import React from 'react';
 import Validator from '../../../../helpers/Validator';
+import getValueFromMask from '../../../../helpers/getValueFromMask';
 
-const escapedCharactersRegex = /([9aAh%#\\])\\(?!\\)/g;
-const specialCharactersRegex = /[9aAh%#\\](?!(\\)(?!\\))/g;
+import maskEscapedCharsRegex from '../../../../helpers/maskEscapedCharsRegex';
+import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
@@ -46,8 +47,8 @@ function MaskComponent(input, maskArray) {
       `[^${maskArray
         .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
         .join('')
-        .replace(specialCharactersRegex, '')
-        .replace(escapedCharactersRegex, '$1')}]+`,
+        .replace(maskSpecialCharsRegex, '')
+        .replace(maskEscapedCharsRegex, '$1')}]+`,
       'g',
     );
     value.splice(start, end - start, target.value.substring(start, end).replace(charactersToDelete, '_'));
@@ -57,10 +58,8 @@ function MaskComponent(input, maskArray) {
   };
 
   const onKeyPress = (event) => {
-    if (
-      Validator.maskByChar(event.target.value.slice(0, event.target.value.indexOf('_')) + event.key, maskArray.join(''))
-    ) {
-      event.target.value = addMask(event.target.value.slice(0, event.target.value.indexOf('_')) + event.key, maskArray);
+    if (Validator.maskByChar(getValueFromMask(event.target.value) + event.key, maskArray.join(''))) {
+      event.target.value = addMask(getValueFromMask(event.target.value) + event.key, maskArray);
       input.props.onKeyPress(event);
       input.props.onInput(event);
       setCursorToEndOfInput(event.target);
@@ -69,11 +68,7 @@ function MaskComponent(input, maskArray) {
   };
 
   const onBlur = (event) => {
-    const firstPlaceholder = event.target.value.indexOf('_');
-    event.target.value = event.target.value.slice(
-      0,
-      firstPlaceholder < 0 ? event.target.value.length : firstPlaceholder,
-    );
+    event.target.value = getValueFromMask(event.target.value);
     input.props.onBlur(event);
   };
 
@@ -88,7 +83,7 @@ function MaskComponent(input, maskArray) {
 
 function addMask(string, maskArray) {
   const mask = string.length ? maskArray.slice(string.length).join('') : maskArray.join('');
-  return string + mask.replace(specialCharactersRegex, '_').replace(escapedCharactersRegex, '$1');
+  return string + mask.replace(maskSpecialCharsRegex, '_').replace(maskEscapedCharsRegex, '$1');
 }
 
 export default MaskComponent;
