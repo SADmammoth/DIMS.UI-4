@@ -4,9 +4,14 @@ import DateBadge from '../../../elements/DateBadge';
 
 function CollapsedTaskTrackCard(props) {
   const { taskName, trackDate, onClick, collapsed } = props;
+
+  const onClickHandler = () => {
+    onClick(collapsed);
+  };
+
   return (
     <div className='task-card__header'>
-      <p role='menu' className='interactive task-card__title' onClick={() => onClick(collapsed)}>
+      <p role='menu' className='interactive task-card__title' onClick={onClickHandler}>
         {taskName}
       </p>
       <DateBadge type='trackStart' date={trackDate} />

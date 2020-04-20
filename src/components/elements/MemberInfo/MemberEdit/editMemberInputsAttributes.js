@@ -15,7 +15,6 @@ export default function editMemberInputsAttributes({
   universityAverageScore,
   mathScore,
 }) {
-  console.log(Validator.dateByMask('10-10-2000', 'MM-dd-yyyy'));
   return [
     {
       type: 'text',

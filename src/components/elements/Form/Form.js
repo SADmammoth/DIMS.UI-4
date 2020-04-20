@@ -15,10 +15,6 @@ class Form extends React.Component {
   }
 
   componentDidMount() {
-    if (!checkNames(Object.values(this.props.inputs))) {
-      throw Error('Inputs names repeat'); // TODO
-    }
-
     this.createValues();
     this.createInputs();
   }
@@ -44,8 +40,6 @@ class Form extends React.Component {
 
   updateValue = (name, value) => {
     const { values } = this.state;
-    console.log(values, name);
-    console.trace();
     values[name].value = value;
 
     this.setState({ values });
@@ -146,6 +140,8 @@ class Form extends React.Component {
         validationMessage,
       } = input;
 
+      const higlightInputCallback = () => this.highlightInput(name);
+
       inputsData[name] = Form.createInput(
         values[name].id,
         type,
@@ -165,7 +161,7 @@ class Form extends React.Component {
         minSymbols,
         maxSymbols,
         !!values[name].invalid,
-        () => this.highlightInput(name),
+        higlightInputCallback,
         validationMessage,
       );
     });

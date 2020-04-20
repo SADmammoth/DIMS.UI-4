@@ -52,14 +52,16 @@ function Input(props) {
 
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
+      const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
+      const onInputHandler = (e) => onInput(e.target.name, e.target.value);
       return renderLabel(
         <CheckboxGroup
           id={id}
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           label={label}
           attributes={attributes}

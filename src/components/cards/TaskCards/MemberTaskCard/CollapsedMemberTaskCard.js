@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 
 function CollapsedMemberTaskCard(props) {
   const { taskName, onClick, collapsed } = props;
+
+  const onClickHandler = () => {
+    onClick(collapsed);
+  };
+
   return (
     <div className='task-card__header'>
-      <p role='menu' className='interactive task-card__title' onClick={() => onClick(collapsed)}>
+      <p role='menu' className='interactive task-card__title' onClick={onClickHandler}>
         {taskName}
       </p>
     </div>

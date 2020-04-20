@@ -6,8 +6,10 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
   if (input.props.type === 'textarea' || input.props.type === 'select') {
     return input;
   }
-  const maskArray = mask.split(/(a\\(?!\\))|(h\\(?!\\))|(#\\(?!\\))|(9\\(?!\\))|(\\\\)|()/).filter((el) => el);
 
+  const escapedCharactersOrEmptyRegex = /([9aAh%#\\])\\(?!\\)|()/;
+  const maskArray = mask.split(escapedCharactersOrEmptyRegex).filter((el) => el);
+  console.log(maskArray);
   if (validate && type === 'invisible') {
     resultInput = React.cloneElement(resultInput, {
       onKeyPress: (e) => {
@@ -26,14 +28,17 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
   }
 }
 
+const escapedCharactersRegex = /([9aAh%#\\])\\(?!\\)/g;
+const notEscapedCharactersRegex = /[9aAh%#](?!(\\)(?!\\))/g;
+
 function followInvisibleMaskComponent(input, maskArray) {
   const onFocus = (event) => {
     if (!event.target.value || event.target.value === '') {
-      const firstPlaceholder = maskArray.findIndex((el) => /[9aAh%#](?!(\\)(?!\\))/.test(el));
+      const firstPlaceholder = maskArray.findIndex((el) => notEscapedCharactersRegex.test(el));
       event.target.value = maskArray
         .splice(0, firstPlaceholder)
         .join('')
-        .replace(/([9aAh%#])\\(?!\\)/s, '$1');
+        .replace(escapedCharactersRegex, '$1');
       event.target.setSelectionRange(firstPlaceholder + 1, firstPlaceholder + 1);
     }
   };
@@ -69,7 +74,7 @@ function followInvisibleMask(input, maskArray) {
       input.props.onInput({
         target: {
           name: input.props.name,
-          value: input.props.value + maskArray[input.props.value.length].replace(/([9aAh%#])\\(?!\\)/, '$1'),
+          value: input.props.value + maskArray[input.props.value.length].replace(escapedCharactersRegex, '$1'),
         },
       });
     }
@@ -99,30 +104,29 @@ function followMaskComponent(input, maskArray) {
       event.preventDefault();
     }
     if (event.key === 'Backspace') {
-      const { target } = event;
-      let { value } = event.target;
-      const start = target.selectionStart - 1;
-      const end = target.selectionEnd;
-      value = value.split('');
-      value.splice(
-        start,
-        end - start,
-        target.value.substring(start, end).replace(
-          new RegExp(
-            `[^${maskArray
-              .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
-              .join('')
-              .replace(/[9aAh%#](?!(\\)(?!\\))/g, '')
-              .replace(/([9aAh%#])\\(?!\\)/, '$1')}]+`,
-            'g',
-          ),
-          '_',
-        ),
-      );
-      event.target.value = value.join('');
-      event.target.setSelectionRange(start, end - 1);
-      event.preventDefault();
+      handleBackspaceInMask(event);
     }
+  };
+
+  const handleBackspaceInMask = (event) => {
+    const { target } = event;
+    let { value } = event.target;
+    const start = target.selectionStart - 1;
+    const end = target.selectionEnd;
+    value = value.split('');
+
+    const charactersToDelete = new RegExp(
+      `[^${maskArray
+        .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
+        .join('')
+        .replace(notEscapedCharactersRegex, '')
+        .replace(escapedCharactersRegex, '$1')}]+`,
+      'g',
+    );
+    value.splice(start, end - start, target.value.substring(start, end).replace(charactersToDelete, '_'));
+    event.target.value = value.join('');
+    event.target.setSelectionRange(start, end - 1);
+    event.preventDefault();
   };
 
   const onKeyPress = (event) => {
@@ -167,7 +171,7 @@ function followMask(input, maskArray) {
 
 function addMask(string, maskArray) {
   const mask = string.length ? maskArray.slice(string.length).join('') : maskArray.join('');
-  return string + mask.replace(/[9aAh%#](?!(\\)(?!\\))/g, '_').replace(/([9aAh%#])\\(?!\\)/, '$1');
+  return string + mask.replace(notEscapedCharactersRegex, '_').replace(escapedCharactersRegex, '$1');
 }
 
 export default MaskedInput;

@@ -6,11 +6,15 @@ import DateBadge from '../../elements/DateBadge';
 
 function CollapsedMemberCard(props) {
   const { firstName, lastName, birthDate, direction, startDate, onClick, collapsed } = props;
-  const age = new Date().getFullYear() - birthDate.getFullYear();
+  const age = calculateAge(birthDate);
+
+  const onClickHandler = () => {
+    onClick(collapsed);
+  };
 
   return (
     <div className='member-card__header'>
-      <p role='menu' className='interactive member-card__header__title' onClick={() => onClick(collapsed)}>
+      <p role='menu' className='interactive member-card__header__title' onClick={onClickHandler}>
         <b>{firstName}</b>
         {` ${lastName}, ${age}`}
       </p>
@@ -30,6 +34,10 @@ CollapsedMemberCard.propTypes = {
 
   onClick: PropTypes.func.isRequired,
 };
+
+function calculateAge(birthDate) {
+  return new Date().getFullYear() - birthDate.getFullYear();
+}
 
 function areEqual(prevProps, nextProps) {
   return JSON.stringify(prevProps) === JSON.stringify(nextProps);
