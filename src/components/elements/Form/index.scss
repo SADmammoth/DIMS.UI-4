@@ -1,0 +1,9 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+@include invalidBounceKeyframes(2);
+
+.form-control.invalid {
+  border-color: $error;
+  animation: 1s invalidBounce;
+}
