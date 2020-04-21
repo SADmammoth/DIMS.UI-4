@@ -1,11 +1,11 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import MemberEdit from '../components/elements/MemberEdit';
+import { withRouter } from 'react-router-dom';
+import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
 import ContainerComponent from '../components/elements/ContainerComponent/ContainerComponent';
 import UserContext from '../helpers/UserContext';
 import Header from '../components/elements/Header/Header';
 import getNavItems from '../helpers/getNavItems';
-import { withRouter } from 'react-router-dom';
 
 function NewMember(props) {
   return (
