@@ -197,7 +197,6 @@ export default class Validator {
   static dateByMask(input, mask) {
     const Regexp = new RegExp(Validator.dateTimeRegexpString([mask]));
     const matchedInput = Regexp.exec(input).groups;
-    console.log(Regexp.exec(input));
     const months = [
       'January',
       'February',

@@ -38,7 +38,7 @@ class CollapsableItemsList extends Component {
 
   open = (id) => {
     const { open, items } = this.state;
-    console.log(items);
+
     if (open) {
       items[open].collapsed = true;
     }
@@ -56,7 +56,7 @@ class CollapsableItemsList extends Component {
 
   navigationKeys = (event) => {
     const isUp = event.key === 'ArrowUp';
-    const isDown = event.key === 'ArrowDown'; // TODO
+    const isDown = event.key === 'ArrowDown';
     if (isUp || isDown) {
       const { open, items } = this.state;
       if (isUp && !open) {
