@@ -2,7 +2,7 @@ import React from 'react';
 import Validator from '../../../../helpers/Validator';
 import InvisibleMaskComponent from './InvisibleMaskComponent';
 import MaskComponent from './MaskComponent';
-import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskEscapedCarsOrEmptyRegex';
+import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskEscapedCharsOrEmptyRegex';
 
 function MaskedInput(input, mask, validate = false, type = 'default') {
   let resultInput = input;

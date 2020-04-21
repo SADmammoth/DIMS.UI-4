@@ -6,12 +6,6 @@ import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBefor
 import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';
 
 function InvisibleMaskComponent(input, maskArray) {
-  if (maskArray[input.props.value.length]) {
-    if (maskSpecialCharsRegex.test(maskArray[input.props.value.length])) {
-      input.props.onInput(invisibleMaskOnInputValue(input.props.name, input.props.value, maskArray));
-    }
-  }
-
   const onFocus = (event) => {
     if (!event.target.value || event.target.value === '') {
       event.target.value = getMaskCharsBeforePlaceholder(maskArray);
@@ -32,6 +26,11 @@ function InvisibleMaskComponent(input, maskArray) {
       value.splice(start, end - start, '');
       event.target.value = value.join('');
       event.preventDefault();
+    }
+    if (maskArray[input.props.value.length]) {
+      if (!maskSpecialCharsRegex.test(maskArray[input.props.value.length])) {
+        input.props.onInput(invisibleMaskOnInputValue(input.props.name, input.props.value, maskArray));
+      }
     }
   };
 
