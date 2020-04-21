@@ -4,7 +4,7 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
-import notify from '../../../helpers/notify';
+import errorNotification from '../../../helpers/errorNotification';
 
 function Input(props) {
   const {
@@ -50,10 +50,11 @@ function Input(props) {
     return input;
   }
 
+  const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
+  const onInputHandler = (e) => onInput(e.target.name, e.target.value);
+
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
-      const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
-      const onInputHandler = (e) => onInput(e.target.name, e.target.value);
       return renderLabel(
         <CheckboxGroup
           id={id}
@@ -79,8 +80,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -96,8 +97,8 @@ function Input(props) {
           id={id}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -119,7 +120,7 @@ function Input(props) {
       }
       if (!validator(e.target.value)) {
         highlightInput();
-        notify('error', `${description} invalid input`, validationMessage);
+        errorNotification(description, validationMessage);
       }
       onChange(e.target.name, e.target.value);
     };

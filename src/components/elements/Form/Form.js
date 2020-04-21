@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Input from './Input';
 import notify from '../../../helpers/notify';
 import compareObjects from '../../../helpers/compareObjects';
+import errorNotification from '../../../helpers/errorNotification';
 
 class Form extends React.Component {
   constructor(props) {
@@ -177,10 +178,6 @@ class Form extends React.Component {
     return values;
   }
 
-  errorNotification(description, message) {
-    notify('error', `${description} invalid input`, message);
-  }
-
   highlightInput = (name) => {
     const { values } = this.state;
 
@@ -212,7 +209,7 @@ class Form extends React.Component {
   };
 
   onSubmit = (event) => {
-    if (this.checkValidity(this.errorNotification)) {
+    if (this.checkValidity(errorNotification)) {
       if (onSubmit) {
         event.preventDefault();
         onSubmit(this.formatValues());
