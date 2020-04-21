@@ -35,7 +35,7 @@ class Client {
       .collection('memberTasks')
       .where('userID', '==', userID)
       .get();
-    console.log(tasks.docs.map((el) => el.data()));
+
     const tasksObject = {};
     let taskData = {};
     await Promise.all(
@@ -49,7 +49,6 @@ class Client {
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
       }),
     );
-    console.log(tasksObject);
     return tasksObject;
   }
 
@@ -112,7 +111,6 @@ class Client {
       .collection('memberTasks')
       .where('taskID', '==', taskID)
       .get();
-    console.log(memberTasks.docs.map((doc) => doc.data()));
     return memberTasks.docs.map((doc) => {
       return { userID: doc.data().userID, memberTaskID: doc.id };
     });

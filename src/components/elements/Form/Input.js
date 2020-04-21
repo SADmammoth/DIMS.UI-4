@@ -4,6 +4,7 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
+import errorNotification from '../../../helpers/errorNotification';
 
 function Input(props) {
   const {
@@ -24,7 +25,13 @@ function Input(props) {
     maxSymbols,
     mask,
     maskType,
+    invalid,
+    highlightInput,
+    validationMessage,
   } = props;
+
+  const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
+  const onInputHandler = (e) => onInput(e.target.name, e.target.value);
 
   function renderLabel(input) {
     return label ? (
@@ -54,8 +61,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           label={label}
           attributes={attributes}
@@ -73,8 +80,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -90,8 +97,8 @@ function Input(props) {
           id={id}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -112,7 +119,8 @@ function Input(props) {
         return;
       }
       if (!validator(e.target.value)) {
-        alert('Bad input'); //TODO temp
+        highlightInput();
+        errorNotification(description, validationMessage);
       }
       onChange(e.target.name, e.target.value);
     };
@@ -122,19 +130,21 @@ function Input(props) {
     };
 
     return renderLabel(
-      <input
-        id={id}
-        type={type}
-        name={name}
-        className='form-control'
-        placeholder={description}
-        required={required ? 'required' : null}
-        onKeyPress={onKeyPress}
-        onInput={onInputHandler}
-        onBlur={onBlur}
-        {...attributes}
-        value={value}
-      />,
+      renderMask(
+        <input
+          id={id}
+          type={type}
+          name={name}
+          className={`form-control${invalid ? ' invalid' : ''}`}
+          placeholder={description}
+          required={required ? 'required' : null}
+          onKeyPress={onKeyPress}
+          onInput={onInputHandler}
+          onBlur={onBlur}
+          {...attributes}
+          value={value}
+        />,
+      ),
     );
   }
 
@@ -152,6 +162,8 @@ Input.defaultProps = {
   validator: () => true,
   minSymbols: 0,
   maxSymbols: 1000,
+  highlightInput: () => {},
+  validationMessage: '',
 };
 
 Input.propTypes = {
@@ -170,9 +182,11 @@ Input.propTypes = {
   maxSymbols: PropTypes.number,
   mask: PropTypes.string,
   maskType: PropTypes.string,
-
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
+  invalid: PropTypes.bool.isRequired,
+  highlightInput: PropTypes.func,
+  validationMessage: PropTypes.string,
 };
 
 export default Input;

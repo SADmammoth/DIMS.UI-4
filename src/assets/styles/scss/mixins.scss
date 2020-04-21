@@ -22,3 +22,19 @@
     box-sizing: border-box;
   }
 }
+
+@mixin invalidBounceKeyframes($bounceCount) {
+  @keyframes invalidBounce {
+    @for $i from 0 through ($bounceCount - 1) {
+      #{100 / ($bounceCount * 2) * ($i * 2)}% {
+        border-color: inherit;
+      }
+      #{100 / ($bounceCount * 2) * ($i * 2 + 1)}% {
+        border-color: $error;
+      }
+    }
+    100% {
+      border-color: inherit;
+    }
+  }
+}

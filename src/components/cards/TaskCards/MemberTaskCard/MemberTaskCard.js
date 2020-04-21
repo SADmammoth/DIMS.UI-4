@@ -10,6 +10,7 @@ import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import { AssignButton } from '../../../elements/AssignForm';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberTaskCard(props) {
   const {
@@ -128,8 +129,4 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(MemberTaskCard, areEqual);
+export default React.memo(MemberTaskCard, compareObjects);

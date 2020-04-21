@@ -109,7 +109,7 @@ class MemberCard extends React.PureComponent {
             education={education}
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
-            handleClose={this.handleClose}
+            handleClose={this.closeEditModal}
           />
         </Modal>
       </>

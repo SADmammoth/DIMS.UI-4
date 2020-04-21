@@ -12,7 +12,7 @@ function TextArea(props) {
     if (checkCount(event.target.value, 0, maxSymbols)) {
       onInput(event);
     } else {
-      alert('Bad input'); //TODO temp
+      alert('Bad input');
     }
   };
 
@@ -20,7 +20,7 @@ function TextArea(props) {
     if (checkCount(event.target.value, minSymbols, maxSymbols)) {
       onChange(event);
     } else {
-      alert('Bad input'); //TODO temp
+      alert('Bad input');
     }
   };
 
