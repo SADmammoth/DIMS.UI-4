@@ -226,7 +226,6 @@ export default class Validator {
     if (matchedInput.hours12) {
       hourNum = parseInt(matchedInput.hours12, 10) + 12;
     }
-    console.log(monthNum);
     const date = [
       parseInt(matchedInput.year, 10),
       monthNum,
