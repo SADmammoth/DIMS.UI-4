@@ -14,12 +14,13 @@ import { connect } from 'react-redux';
 class MembersManagerPage extends React.Component {
   renderMembers() {
     const { members } = this.props;
+    console.log(members);
     if (!Object.keys(members).length) {
       return [];
     }
 
     return Object.entries(members).map(({ 0: id, 1: data }) => {
-      return MembersManagerPage.renderMember(id, data, this.reloadMembers);
+      return MembersManagerPage.renderMember(id, data);
     });
   }
 
@@ -66,7 +67,6 @@ class MembersManagerPage extends React.Component {
               collapsed={collapsed}
               open={open}
               close={close}
-              reloadMembers={reloadMembers}
             />
           );
         }}
@@ -81,7 +81,6 @@ class MembersManagerPage extends React.Component {
 
   render() {
     const { members } = this.props;
-    alert(0);
     return (
       <>
         <Helmet>

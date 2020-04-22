@@ -24,15 +24,7 @@ class DialogButton extends React.Component {
 
   onSubmit = (data) => {
     this.setState({ loading: true });
-    return this.props
-      .onSubmit(data)
-      .then(() => {
-        this.setState({ loading: false });
-        this.onCancel();
-      })
-      .catch(() => {
-        this.setState({ loading: false });
-      });
+    return this.props.onSubmit(data);
   };
 
   render() {

@@ -9,6 +9,8 @@ import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
 import Validator from '../helpers/Validator';
 import Spinner from '../components/elements/Spinner/Spinner';
+import { addMember } from '../redux/actions/membersActions';
+import store from '../redux';
 
 class NewMember extends React.Component {
   constructor(props) {
@@ -32,6 +34,26 @@ class NewMember extends React.Component {
     mathScore,
   }) => {
     this.setState({ loading: true });
+    const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
+    const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
+
+    store.dispatch(
+      addMember({
+        firstName,
+        lastName,
+        email,
+        skype,
+        mobilePhone,
+        address,
+        sex,
+        calculatedStartDate,
+        calculatedBirthDate,
+        direction,
+        education,
+        universityAverageScore,
+        mathScore,
+      }),
+    );
 
     return Client.postMember(
       firstName,
@@ -40,13 +62,13 @@ class NewMember extends React.Component {
       direction,
       sex,
       education,
-      Validator.dateByMask(birthDate, 'dd-MM-yyyy'),
+      calculatedBirthDate,
       universityAverageScore,
       mathScore,
       address,
       mobilePhone,
       skype,
-      Validator.dateByMask(startDate, 'dd-MM-yyyy'),
+      calculatedStartDate,
     )
       .then((response) => {
         this.setState({ loading: false });

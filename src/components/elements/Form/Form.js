@@ -219,10 +219,12 @@ class Form extends React.Component {
   };
 
   onResponseReceived = (response) => {
-    if (response && response.status === 200) {
-      this.successNotification('Success', 'Data sent and accepted by server');
-    } else {
-      this.errorNotification('Server error', response ? response.toString() : response);
+    if (response) {
+      if (response.status === 200) {
+        this.successNotification('Success', 'Data sent and accepted by server');
+      } else {
+        this.errorNotification('Server error', response ? response.toString() : response);
+      }
     }
   };
 

@@ -20,8 +20,12 @@ class MemberEdit extends React.Component {
     this.state = { inputs: {} };
   }
 
+  onInputsUpdate = (inputsComponents) => {
+    this.setState({ inputs: inputsComponents });
+  };
+
   render() {
-    const { handleClose, onSubmit, empty } = this.props;
+    const { handleClose, onSubmit } = this.props;
 
     const { inputs } = this.state;
 
@@ -30,7 +34,7 @@ class MemberEdit extends React.Component {
         className='edit-member'
         inputs={editMemberInputsAttributes(this.props)}
         onSubmit={onSubmit}
-        onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
+        onInputsUpdate={this.onInputsUpdate}
         submitButton={<Button content='Confirm' classMod='secondary' />}
       >
         <div className='member-info__header'>
@@ -42,7 +46,7 @@ class MemberEdit extends React.Component {
             <FlagIcon className='icon-flag common-text-color' />
             {inputs.startDate}
           </div>
-          <div className='direction-badge'>{inputs.direction}</div>
+          <TextBadge>{inputs.direction}</TextBadge>
         </div>
         <div className='member-info__body'>
           <div className='member-info__contacts'>

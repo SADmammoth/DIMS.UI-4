@@ -12,6 +12,11 @@ import DateBadge from '../../elements/DateBadge';
 import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
 import Client from '../../../helpers/Client';
+import dispatchAndFetch from '../../../redux/middleware/dispatchAndFetch';
+import store from '../../../redux';
+import { deleteMember } from '../../../redux/actions/membersActions';
+import calculateAge from '../../../helpers/calculateAge';
+import compareObjects from '../../../helpers/compareObjects';
 
 class MemberCard extends React.PureComponent {
   constructor(props) {
@@ -21,12 +26,15 @@ class MemberCard extends React.PureComponent {
     this.modal = React.createRef();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !compareObjects(this.props, nextProps) || !compareObjects(this.state, nextState);
+  }
+
   editOff = () => {
     this.setState({ edit: false });
   };
 
   closeEditModal = () => {
-    this.props.reloadMembers();
     this.setState({ edit: false });
     this.modal.current.handleClose();
   };
@@ -64,7 +72,7 @@ class MemberCard extends React.PureComponent {
       close,
     } = this.props;
 
-    const age = new Date().getFullYear() - birthDate.getFullYear();
+    const age = calculateAge(birthDate);
 
     return (
       <>
@@ -100,6 +108,7 @@ class MemberCard extends React.PureComponent {
                   confirmButtonContent='Delete'
                   dialogValue={id}
                   onSubmit={({ dialogValue }) => {
+                    store.dispatch(deleteMember(dialogValue));
                     return Client.deleteMember(dialogValue);
                   }}
                 />
@@ -142,7 +151,6 @@ MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  reloadMembers: PropTypes.func.isRequired,
   ...memberInfoPTypes,
 };
 

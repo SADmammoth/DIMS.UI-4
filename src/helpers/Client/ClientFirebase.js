@@ -18,6 +18,8 @@ firebase.initializeApp(config);
 class Client {
   static db = firebase.firestore();
 
+  static directions = ['Front-end', '.Net', 'Salesforce', 'Java'];
+
   static async getMembers() {
     const members = await Client.db.collection('members').get();
 
@@ -60,6 +62,10 @@ class Client {
 
     return member.data();
   }
+
+  static async editMember(userId) {}
+
+  static async deleteMember(userId) {}
 
   static async getUserProgress(userID) {
     const track = await Client.getTracks(userID);

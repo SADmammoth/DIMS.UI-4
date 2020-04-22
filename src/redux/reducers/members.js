@@ -19,7 +19,7 @@ export default function members(state = initialState, action) {
 }
 
 function setMembers(state, members) {
-  if (state.members && Object.keys(state.members).length) {
+  if (state && Object.keys(state).length) {
     return state;
   }
   return { ...members };
@@ -31,7 +31,7 @@ function addMember(state, data) {
 }
 
 function editMember(state, id, newData) {
-  if (state.members[id]) {
+  if (state[id]) {
     const oldMemberData = { ...state[id] };
     if (!compareObjects(oldMemberData, newData)) {
       return { ...state, [id]: newData };
@@ -41,8 +41,9 @@ function editMember(state, id, newData) {
 }
 
 function deleteMember(state, id) {
-  if (state.members[id]) {
-    return { ...state.slice(0, id), ...state.slice(id + 1) };
+  if (state[id]) {
+    const { [id]: deleted, ...rest } = state;
+    return { ...rest };
   }
   return state;
 }

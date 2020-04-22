@@ -227,12 +227,12 @@ export default class Validator {
       hourNum = parseInt(matchedInput.hours12, 10) + 12;
     }
     const date = [
-      parseInt(matchedInput.year, 10),
-      monthNum,
-      parseInt(matchedInput.day, 10),
-      hourNum,
-      parseInt(matchedInput.minutes, 10),
-      parseInt(matchedInput.seconds, 10),
+      parseInt(matchedInput.year, 10) || '1990',
+      monthNum || 1,
+      parseInt(matchedInput.day, 10) || 1,
+      hourNum || 0,
+      parseInt(matchedInput.minutes, 10) || 0,
+      parseInt(matchedInput.seconds, 10) || 0,
     ].filter((el) => el);
 
     return new Date(...date);

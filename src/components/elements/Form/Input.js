@@ -126,10 +126,6 @@ function Input(props) {
       onChange(e.target.name, e.target.value);
     };
 
-    const onInputHandler = (e) => {
-      onInput(e.target.name, e.target.value);
-    };
-
     return renderLabel(
       renderMask(
         <input

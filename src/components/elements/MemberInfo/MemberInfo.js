@@ -17,6 +17,8 @@ import Client from '../../../helpers/Client';
 import DialogButton from '../DialogButton/DialogButton';
 import Spinner from '../Spinner';
 import Validator from '../../../helpers/Validator';
+import { deleteMember, editMember } from '../../../redux/actions/membersActions';
+import store from '../../../redux';
 
 class MemberInfo extends React.Component {
   constructor(props) {
@@ -24,41 +26,59 @@ class MemberInfo extends React.Component {
     this.state = { loading: false };
   }
 
-  editMember = (
-    UserId,
-    {
-      firstName,
-      lastName,
-      email,
-      skype,
-      mobilePhone,
-      address,
-      sex,
-      startDate,
-      birthDate,
-      direction,
-      education,
-      universityAverageScore,
-      mathScore,
-    },
-  ) => {
+  editMember = ({
+    firstName,
+    lastName,
+    email,
+    skype,
+    mobilePhone,
+    address,
+    sex,
+    startDate,
+    birthDate,
+    direction,
+    education,
+    universityAverageScore,
+    mathScore,
+  }) => {
     this.setState({ loading: true });
 
+    const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
+    const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
+    console.log(birthDate);
+    store.dispatch(
+      editMember(this.props.id, {
+        firstName,
+        lastName,
+        email,
+        skype,
+        mobilePhone,
+        address,
+        sex,
+        startDate: calculatedStartDate,
+        birthDate: calculatedBirthDate,
+        direction,
+        education,
+        universityAverageScore,
+        mathScore,
+      }),
+    );
+
     return Client.editMember(
-      UserId,
+      this.props.id,
       firstName,
       lastName,
       email,
       direction,
       sex,
       education,
-      Validator.dateByMask(birthDate, 'dd-MM-yyyy'),
+      calculatedBirthDate,
       universityAverageScore,
       mathScore,
       address,
       mobilePhone,
       skype,
-      Validator.dateByMask(startDate, 'dd-MM-yyyy'),
+      calculatedStartDate,
     )
       .then((response) => {
         this.setState({ loading: false });
@@ -100,12 +120,7 @@ class MemberInfo extends React.Component {
         {!this.state.loading ? (
           <>
             {edit ? (
-              <MemberEdit
-                onSubmit={(data) => {
-                  return this.editMember(id, data);
-                }}
-                {...this.props}
-              />
+              <MemberEdit onSubmit={this.editMember} {...this.props} />
             ) : (
               <>
                 <div className='member-info__header'>
@@ -193,6 +208,7 @@ class MemberInfo extends React.Component {
                         confirmButtonContent='Delete'
                         dialogValue={id}
                         onSubmit={({ dialogValue }) => {
+                          store.dispatch(deleteMember(dialogValue));
                           return Client.deleteMember(dialogValue);
                         }}
                       />
