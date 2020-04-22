@@ -9,27 +9,11 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner';
 import UserContext from '../helpers/UserContext';
 import getNavItems from '../helpers/getNavItems';
+import { connect } from 'react-redux';
 
 class MembersManagerPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { members: null };
-  }
-
-  componentDidMount() {
-    this.reloadMembers();
-  }
-
-  reloadMembers = () => {
-    return Client.getMembers().then((membersData) =>
-      this.setState({
-        members: membersData,
-      }),
-    );
-  };
-
   renderMembers() {
-    const { members } = this.state;
+    const { members } = this.props;
     if (!Object.keys(members).length) {
       return [];
     }
@@ -96,7 +80,8 @@ class MembersManagerPage extends React.Component {
   }
 
   render() {
-    const { members } = this.state;
+    const { members } = this.props;
+    alert(0);
     return (
       <>
         <Helmet>
@@ -117,4 +102,8 @@ class MembersManagerPage extends React.Component {
   }
 }
 
-export default withRouter(MembersManagerPage);
+export default withRouter(
+  connect((state) => {
+    return { members: state.members };
+  })(MembersManagerPage),
+);

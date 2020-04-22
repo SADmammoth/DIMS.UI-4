@@ -3,18 +3,25 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import AuthorizationManager from './helpers/AuthorizationManager';
 import Routes from './Routes';
 import UserContext from './helpers/UserContext';
+import store from './redux';
+import { Provider } from 'react-redux';
+import Preloader from './Preloader';
 
 const App = (props) => {
   return (
-    <Router>
-      <AuthorizationManager>
-        <UserContext.Consumer>
-          {({ role, userId }) => {
-            return <Routes role={role} userId={userId} />;
-          }}
-        </UserContext.Consumer>
-      </AuthorizationManager>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Preloader>
+          <AuthorizationManager>
+            <UserContext.Consumer>
+              {({ role, userId }) => {
+                return <Routes role={role} userId={userId} />;
+              }}
+            </UserContext.Consumer>
+          </AuthorizationManager>
+        </Preloader>
+      </Router>
+    </Provider>
   );
 };
 
