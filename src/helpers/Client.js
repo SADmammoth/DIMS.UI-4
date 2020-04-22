@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import md5 from 'md5';
 
 //* Firebase configuration
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
@@ -34,7 +35,7 @@ class Client {
       .collection('memberTasks')
       .where('userID', '==', userID)
       .get();
-    console.log(tasks.docs.map((el) => el.data()));
+
     const tasksObject = {};
     let taskData = {};
     await Promise.all(
@@ -46,10 +47,8 @@ class Client {
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
-        tasksObject[doc.id].id = doc.data().taskID;
       }),
     );
-    console.log(tasksObject);
     return tasksObject;
   }
 
@@ -63,17 +62,23 @@ class Client {
   }
 
   static async getUserProgress(userID) {
-    const progress = await Client.db
-      .collection('progress')
-      .where('userID', '==', userID)
-      .get();
+    const track = await Client.getTracks(userID);
 
     const progressObject = {};
-    progress.docs.forEach((doc) => {
-      progressObject[doc.id] = doc.data();
-      progressObject[doc.id].trackDate = new Date(progressObject[doc.id].trackDate.seconds * 1000);
-    });
-
+    let userData = {};
+    console.log(track);
+    await Promise.all(
+      Object.entries(track).map(async ([id, data]) => {
+        const { memberTaskId, ...progressData } = data;
+        progressObject[id] = progressData;
+        userData = await Client.db
+          .collection('members')
+          .doc(userID)
+          .get();
+        progressObject[id].userName = userData.data().firstName;
+      }),
+    );
+    console.log(progressObject);
     return progressObject;
   }
 
@@ -106,7 +111,6 @@ class Client {
       .collection('memberTasks')
       .where('taskID', '==', taskID)
       .get();
-    console.log(memberTasks.docs.map((doc) => doc.data()));
     return memberTasks.docs.map((doc) => {
       return { userID: doc.data().userID, memberTaskID: doc.id };
     });
@@ -120,14 +124,50 @@ class Client {
       .get();
 
     const tracksObject = {};
-    await Promise.all(
-      tracks.docs.map(async (doc) => {
-        tracksObject[doc.id] = doc.data();
-        tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
-        tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
-      }),
-    );
+    tracks.docs.map(async (doc) => {
+      tracksObject[doc.id] = doc.data();
+      tracksObject[doc.id].taskID = memberTasks[doc.data().memberTaskID].taskID;
+      tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
+      tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
+    });
     return tracksObject;
+  }
+
+  static async signIn(login, password) {
+    const user = await Client.db
+      .collection('users')
+      .where('login', '==', login)
+      .get();
+    if (user) {
+      console.log(md5(password), user.docs[0].data().password, user.docs[0].data().password === md5(password));
+      if (user.docs[0].data().password === md5(password)) {
+        return {
+          status: 'success',
+          found: true,
+          token: user.docs[0].data().token,
+          role: user.docs[0].data().role,
+          userID: user.docs[0].data().userID,
+        };
+      }
+      return { status: 'fail', found: true };
+    }
+    return { status: 'fail', found: false };
+  }
+
+  static async checkToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return !!user.docs.length;
+  }
+
+  static async getUserInfoByToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return { role: user.docs[0].data().role, userID: user.docs[0].data().userID };
   }
 }
 

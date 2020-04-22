@@ -1,36 +1,20 @@
 import React from 'react';
 
-import maskEscapedCharsRegex from '../../../../helpers/maskEscapedCharsRegex';
 import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
+import placeInputCursorToEnd from '../../../../helpers/placeInputCursorToEnd';
+import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBeforePlaceholder';
+import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';
 
 function InvisibleMaskComponent(input, maskArray) {
-  if (maskArray[input.props.value.length]) {
-    if (specialCharactersRegex.test(maskArray[input.props.value.length])) {
-      input.props.onInput({
-        target: {
-          name: input.props.name,
-          value: input.props.value + maskArray[input.props.value.length].replace(maskEscapedCharsRegex, '$1'),
-        },
-      });
-    }
-  }
-
   const onFocus = (event) => {
     if (!event.target.value || event.target.value === '') {
-      const firstPlaceholder = maskArray.findIndex((el) => maskSpecialCharsRegex.test(el));
-      event.target.value = maskArray
-        .splice(0, firstPlaceholder)
-        .join('')
-        .replace(maskEscapedCharsRegex, '$1');
-      event.target.setSelectionRange(firstPlaceholder + 1, firstPlaceholder + 1);
+      event.target.value = getMaskCharsBeforePlaceholder(maskArray);
+      placeInputCursorToEnd(event.target, maskArray);
     }
   };
 
   const onKeyDown = (event) => {
-    if (event.key.includes('Arrow')) {
-      event.preventDefault();
-    }
-    if (event.key === 'Delete') {
+    if (event.key.includes('Arrow') || event.key === 'Delete') {
       event.preventDefault();
     }
     if (event.key === 'Backspace') {
@@ -42,6 +26,11 @@ function InvisibleMaskComponent(input, maskArray) {
       value.splice(start, end - start, '');
       event.target.value = value.join('');
       event.preventDefault();
+    }
+    if (maskArray[input.props.value.length]) {
+      if (!maskSpecialCharsRegex.test(maskArray[input.props.value.length])) {
+        input.props.onInput(invisibleMaskOnInputValue(input.props.name, input.props.value, maskArray));
+      }
     }
   };
 

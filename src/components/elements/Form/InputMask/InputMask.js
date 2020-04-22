@@ -2,6 +2,7 @@ import React from 'react';
 import Validator from '../../../../helpers/Validator';
 import InvisibleMaskComponent from './InvisibleMaskComponent';
 import MaskComponent from './MaskComponent';
+import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskEscapedCharsOrEmptyRegex';
 
 function MaskedInput(input, mask, validate = false, type = 'default') {
   let resultInput = input;
@@ -9,8 +10,7 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
     return input;
   }
 
-  const escapedCharactersOrEmptyRegex = /([9aAh%#\\])\\(?!\\)|()/;
-  const maskArray = mask.split(escapedCharactersOrEmptyRegex).filter((el) => el);
+  const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => el);
 
   if (validate && type === 'invisible') {
     resultInput = React.cloneElement(resultInput, {
@@ -22,12 +22,7 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
     });
   }
 
-  switch (type) {
-    case 'invisible':
-      return InvisibleMaskComponent(resultInput, maskArray);
-    default:
-      return MaskComponent(resultInput, maskArray);
-  }
+  return type === 'invisible' ? InvisibleMaskComponent(resultInput, maskArray) : MaskComponent(resultInput, maskArray);
 }
 
 export default MaskedInput;

@@ -4,6 +4,7 @@ import getValueFromMask from '../../../../helpers/getValueFromMask';
 
 import maskEscapedCharsRegex from '../../../../helpers/maskEscapedCharsRegex';
 import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
+import addMask from '../../../../helpers/addMask';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
@@ -79,11 +80,6 @@ function MaskComponent(input, maskArray) {
     onKeyPress,
     onBlur,
   });
-}
-
-function addMask(string, maskArray) {
-  const mask = string.length ? maskArray.slice(string.length).join('') : maskArray.join('');
-  return string + mask.replace(maskSpecialCharsRegex, '_').replace(maskEscapedCharsRegex, '$1');
 }
 
 export default MaskComponent;

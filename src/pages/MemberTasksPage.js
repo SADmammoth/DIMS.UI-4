@@ -7,6 +7,8 @@ import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
+import UserContext from '../helpers/UserContext';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -53,36 +55,38 @@ class MemberTasksPage extends React.Component {
     this.setState({ tasks: taskData, name, taskSet: this.props.taskSet, members });
   }
 
-  static renderTask(id, data, taskSet, members, edit) {
-    const { id: taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
-    let feature;
-
-    switch (taskSet) {
-      case 'all':
-        feature = 'assign';
-        break;
-      case 'user':
-        feature = 'track';
-        break;
-      default:
-        throw Error('Bad task set');
-    }
-
+  static wrappedMemberTask = ({ collapsed, id, taskSet, members, edit, open, close, ...data }) => {
+    const { taskID, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
-      <MemberTaskCard
-        id={id}
-        edit={edit}
-        taskID={taskID}
-        taskName={taskName}
-        taskDescription={taskDescription}
-        state={state}
-        taskStart={taskStart}
-        taskDeadline={taskDeadline}
-        feature={feature}
-        assignedTo={assignedTo}
-        members={members}
-      />
+      <UserContext.Consumer>
+        {({ role }) => {
+          return (
+            <MemberTaskCard
+              id={id}
+              edit={edit}
+              taskID={taskID}
+              taskName={taskName}
+              taskDescription={taskDescription}
+              state={state}
+              taskStart={taskStart}
+              taskDeadline={taskDeadline}
+              taskSet={taskSet}
+              role={role}
+              open={open}
+              close={close}
+              collapsed={collapsed}
+              assignedTo={assignedTo}
+              members={members}
+            />
+          );
+        }}
+      </UserContext.Consumer>
     );
+  };
+
+  static renderTask(id, data, taskSet, members, edit) {
+    const WrappedMemberTask = MemberTasksPage.wrappedMemberTask;
+    return <WrappedMemberTask id={id} taskSet={taskSet} members={members} edit={edit} {...data} />;
   }
 
   renderTasks() {
@@ -95,13 +99,22 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks, name } = this.state;
     const { taskSet } = this.props;
-    const title = `${name}'s tasks`;
+
     return (
       <>
-        <Helmet>
-          <title>{title}</title>
-        </Helmet>
-        <Header>{taskSet !== 'all' && <h1>{title}</h1>}</Header>
+        <UserContext>
+          {({ role, userID }) => {
+            const title = role === 'member' || taskSet === 'all' ? 'Tasks' : `${name}'s tasks`;
+            return (
+              <>
+                <Helmet>
+                  <title>{title}</title>
+                </Helmet>
+                <Header role={role} title={title} navItems={getNavItems({ role, userID }, this.props.match.path)} />
+              </>
+            );
+          }}
+        </UserContext>
         <ContainerComponent>
           <div>
             {Object.keys(tasks).length ? (

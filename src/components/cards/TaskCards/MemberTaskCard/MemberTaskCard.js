@@ -9,19 +9,23 @@ import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg'
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import { AssignButton } from '../../../elements/AssignForm';
 import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberTaskCard(props) {
   const {
     taskName,
+    taskID,
     taskDescription,
     state,
     taskStart,
     taskDeadline,
     collapsed,
     id,
-    feature,
+    taskSet,
+    role,
     assignedTo,
+    members,
     open,
     close,
     edit,
@@ -30,7 +34,7 @@ function MemberTaskCard(props) {
   function onClick(collapsed) {
     collapsed ? open(id) : close(id);
   }
-
+  console.log(props);
   return (
     <article id={id} className={`task-card ${state && `task-card_${state.toLowerCase()}`} ${collapsed ? '' : 'open'}`}>
       <CollapsedMemberTaskCard taskName={taskName} onClick={onClick} collapsed={collapsed} />
@@ -50,7 +54,7 @@ function MemberTaskCard(props) {
 
             <p className='task-card__description'>{taskDescription}</p>
 
-            {feature === 'assign' && (
+            {role === 'admin' && taskSet === 'all' && (
               <>
                 <h3>Assigned to:</h3>
                 <ul className='inline-list'>
@@ -67,23 +71,29 @@ function MemberTaskCard(props) {
             )}
 
             <ButtonGroup>
-              {feature === 'track' && (
+              {role === 'member' && (
                 <TrackButton taskName={taskName} buttonClassMod='primary'>
                   <TrackIcon className='icon-track' />
                   <span>Track</span>
                 </TrackButton>
               )}
-
-              {feature === 'assign' && (
-                <Button classMod='primary'>
+              {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
+                <AssignButton buttonClassMod='primary' assignedTo={assignedTo} members={members}>
                   <TrackIcon className='icon-tasks' />
                   <span>Assign</span>
+                </AssignButton>
+              )}
+              {(role === 'admin' || role === 'mentor') && (
+                <>
+                  <Button classMod='secondary' content='Delete' />
+                  <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
+                </>
+              )}
+              {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
+                <Button classMod='ghost' link={`/tasks/${taskID}`}>
+                  Show in tasks
                 </Button>
               )}
-
-              <Button classMod='secondary' content='Delete' />
-
-              <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
             </ButtonGroup>
           </div>
         </>
@@ -94,6 +104,7 @@ function MemberTaskCard(props) {
 
 MemberTaskCard.defaultProps = {
   assignedTo: [],
+  members: [],
 };
 
 MemberTaskCard.propTypes = {
@@ -102,8 +113,12 @@ MemberTaskCard.propTypes = {
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  feature: PropTypes.oneOf(['track', 'assign']).isRequired,
+  taskSet: PropTypes.oneOf(['all', 'user']).isRequired,
+  role: PropTypes.string.isRequired,
   assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+  ),
+  members: PropTypes.arrayOf(
     PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
   ),
 

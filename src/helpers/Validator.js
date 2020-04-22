@@ -26,8 +26,6 @@ export default class Validator {
 
   //
 
-  //
-
   static passwordMessage =
     'Password must contain at least: <ul><li>8 chars;</li><li>one uppercase and one lowercase letter;</li><li>any special character.</li></ul> Must use only alphanumeric and special characters.';
 
@@ -95,6 +93,8 @@ export default class Validator {
   };
 
   static lastMask = {};
+
+  //
 
   //
 
@@ -197,7 +197,6 @@ export default class Validator {
   static dateByMask(input, mask) {
     const Regexp = new RegExp(Validator.dateTimeRegexpString([mask]));
     const matchedInput = Regexp.exec(input).groups;
-    console.log(Regexp.exec(input));
     const months = [
       'January',
       'February',
