@@ -111,25 +111,6 @@ a:visited {
   display: inline-block;
 }
 
-@keyframes invalid {
-  from {
-    border-color: inherit;
-  }
-  30% {
-    border-color: $error;
-  }
-  60% {
-    border-color: inherit;
-  }
-  to {
-    border-color: $error;
-  }
-}
-
-.form-control.invalid {
-  border-color: $error;
-  animation: 1s invalid;
-}
 .flex-column {
   display: flex;
   flex-direction: column;

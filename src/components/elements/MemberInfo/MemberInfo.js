@@ -11,7 +11,7 @@ import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
 import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
-import ButtonGroup from '../ButtonGroup/ButtonGroup';
+import ButtonGroup from '../ButtonGroup';
 import FlexColumn from '../FlexColumn';
 import Client from '../../../helpers/Client';
 import DialogButton from '../DialogButton/DialogButton';

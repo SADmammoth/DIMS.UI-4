@@ -55,7 +55,7 @@ class CollapsableItemsList extends Component {
 
   navigationKeys = (event) => {
     const isUp = event.key === 'ArrowUp';
-    const isDown = event.key === 'ArrowDown'; // TODO
+    const isDown = event.key === 'ArrowDown';
     if (isUp || isDown) {
       const { open, items } = this.state;
       if (isUp && !open) {

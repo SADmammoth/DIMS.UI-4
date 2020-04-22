@@ -5,6 +5,7 @@ import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
 import notify from '../../../helpers/notify';
+import errorNotification from '../../../helpers/errorNotification';
 
 function Input(props) {
   const {
@@ -29,6 +30,9 @@ function Input(props) {
     highlightInput,
     validationMessage,
   } = props;
+
+  const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
+  const onInputHandler = (e) => onInput(e.target.name, e.target.value);
 
   function renderLabel(input) {
     return label ? (
@@ -58,8 +62,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           label={label}
           attributes={attributes}
@@ -77,8 +81,8 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -94,8 +98,8 @@ function Input(props) {
           id={id}
           name={name}
           description={description}
-          onChange={(e) => onChange(e.target.name, e.target.value)}
-          onInput={(e) => onInput(e.target.name, e.target.value)}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           attributes={attributes}
           value={value}
@@ -117,7 +121,7 @@ function Input(props) {
       }
       if (!validator(e.target.value)) {
         highlightInput();
-        notify('error', `${description} invalid input`, validationMessage);
+        errorNotification(description, validationMessage);
       }
       onChange(e.target.name, e.target.value);
     };

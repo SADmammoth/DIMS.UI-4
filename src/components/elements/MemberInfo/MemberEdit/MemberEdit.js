@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Validator from '../../../../helpers/Validator';
 import Button from '../../Button';
 import Form from '../../Form';
 
@@ -26,7 +27,7 @@ class MemberEdit extends React.Component {
 
     return (
       <Form
-        className={`edit-member ${empty ? 'edit-member_empty' : ''}`}
+        className='edit-member'
         inputs={editMemberInputsAttributes(this.props)}
         onSubmit={onSubmit}
         onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
@@ -41,7 +42,7 @@ class MemberEdit extends React.Component {
             <FlagIcon className='icon-flag common-text-color' />
             {inputs.startDate}
           </div>
-          <TextBadge>{inputs.direction}</TextBadge>
+          <div className='direction-badge'>{inputs.direction}</div>
         </div>
         <div className='member-info__body'>
           <div className='member-info__contacts'>
@@ -92,7 +93,7 @@ class MemberEdit extends React.Component {
             </div>
           </FlexColumn>
         </div>
-        {!empty && <Button content='Cancel' classMod='secondary' onClick={handleClose} />}
+        <Button content='Cancel' classMod='secondary' onClick={handleClose} />
       </Form>
     );
   }

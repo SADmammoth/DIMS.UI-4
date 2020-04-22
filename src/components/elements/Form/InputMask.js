@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Validator from '../../../helpers/Validator';
 
 function MaskedInput(input, mask, validate = false, type = 'default') {
@@ -26,131 +27,123 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
 }
 
 function followInvisibleMaskComponent(input, maskArray) {
-  const onFocus = (event) => {
-    if (!event.target.value || event.target.value === '') {
-      const firstPlaceholder = maskArray.findIndex((el) => /[9aAh%#](?!(\\)(?!\\))/.test(el));
-      event.target.value = maskArray
-        .splice(0, firstPlaceholder)
-        .join('')
-        .replace(/([9aAh%#])\\(?!\\)/s, '$1');
-      event.target.setSelectionRange(firstPlaceholder + 1, firstPlaceholder + 1);
-    }
-  };
-
-  const onKeyDown = (event) => {
-    if (event.key.includes('Arrow')) {
-      event.preventDefault();
-    }
-    if (event.key === 'Delete') {
-      event.preventDefault();
-    }
-    if (event.key === 'Backspace') {
-      const { target } = event;
-      let { value } = event.target;
-      const start = target.selectionStart - 1;
-      const end = target.selectionEnd;
-      value = value.split('');
-      value.splice(start, end - start, '');
-      event.target.value = value.join('');
-      event.preventDefault();
-    }
-  };
-
   return React.cloneElement(input, {
-    onFocus,
-    onKeyDown,
+    onFocus: (event) => {
+      if (!event.target.value || event.target.value === '') {
+        const firstPlaceholder = maskArray.findIndex((el) => /[9aAh%#](?!(\\)(?!\\))/.test(el));
+        event.target.value = maskArray
+          .splice(0, firstPlaceholder)
+          .join('')
+          .replace(/([9aAh%#])\\(?!\\)/s, '$1');
+        event.target.setSelectionRange(firstPlaceholder + 1, firstPlaceholder + 1);
+      }
+    },
+    onKeyDown: (event) => {
+      if (event.key.includes('Arrow')) {
+        event.preventDefault();
+      }
+      if (event.key === 'Delete') {
+        event.preventDefault();
+      }
+      if (event.key === 'Backspace' /*backspace */) {
+        const target = event.target;
+        let { value } = event.target;
+        const start = target.selectionStart - 1;
+        const end = target.selectionEnd;
+        value = value.split('');
+        value.splice(start, end - start, '');
+        event.target.value = value.join('');
+        event.preventDefault();
+      }
+    },
   });
 }
 
 function followInvisibleMask(input, maskArray) {
   if (maskArray[input.props.value.length]) {
-    if (/[^9aAh%#](?!(\\)(?!\\))/.test(maskArray[input.props.value.length])) {
-      input.props.onInput({
-        target: {
-          name: input.props.name,
-          value: input.props.value + maskArray[input.props.value.length].replace(/([9aAh%#])\\(?!\\)/, '$1'),
-        },
-      });
+    if ((input.props.value && input.props.value !== '') || /[9aAh%#](?!(\\)(?!\\))/.test(maskArray[0])) {
+      if (!/[9aAh%#](?!(\\)(?!\\))/.test(maskArray[input.props.value.length])) {
+        input.props.onInput({
+          target: {
+            name: input.props.name,
+            value: input.props.value + maskArray[input.props.value.length].replace(/([9aAh%#])\\(?!\\)/, '$1'),
+          },
+        });
+      }
     }
   }
   return followInvisibleMaskComponent(input, maskArray);
 }
 
 function followMaskComponent(input, maskArray) {
-  function setCursorToEndOfInput(eventTarget) {
-    const firstPlaceholder = eventTarget.value.indexOf('_');
-    eventTarget.setSelectionRange(firstPlaceholder, firstPlaceholder);
+  function selectLast(target) {
+    const firstPlaceholder = target.value.indexOf('_');
+    target.setSelectionRange(firstPlaceholder, firstPlaceholder);
   }
-
-  const onClick = (event) => {
-    setCursorToEndOfInput(event.target);
-  };
-
-  const onFocus = (event) => {
-    event.target.value = addMask(event.target.value, maskArray);
-  };
-
-  const onKeyDown = (event) => {
-    if (event.key.includes('Arrow')) {
-      event.preventDefault();
-    }
-    if (event.key === 'Delete') {
-      event.preventDefault();
-    }
-    if (event.key === 'Backspace') {
-      const { target } = event;
-      let { value } = event.target;
-      const start = target.selectionStart - 1;
-      const end = target.selectionEnd;
-      value = value.split('');
-      value.splice(
-        start,
-        end - start,
-        target.value.substring(start, end).replace(
-          new RegExp(
-            `[^${maskArray
-              .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
-              .join('')
-              .replace(/[9aAh%#](?!(\\)(?!\\))/g, '')
-              .replace(/([9aAh%#])\\(?!\\)/, '$1')}]+`,
-            'g',
-          ),
-          '_',
-        ),
-      );
-      event.target.value = value.join('');
-      event.target.setSelectionRange(start, end - 1);
-      event.preventDefault();
-    }
-  };
-
-  const onKeyPress = (event) => {
-    if (
-      Validator.maskByChar(event.target.value.slice(0, event.target.value.indexOf('_')) + event.key, maskArray.join(''))
-    ) {
-      event.target.value = addMask(event.target.value.slice(0, event.target.value.indexOf('_')) + event.key, maskArray);
-      input.props.onKeyPress(event);
-      input.props.onInput(event);
-      setCursorToEndOfInput(event.target);
-    }
-    event.preventDefault();
-  };
-
-  const onBlur = (event) => {
-    const firstPlaceholder = event.target.value.indexOf('_');
-    event.target.value = event.target.value.slice(
-      0,
-      firstPlaceholder < 0 ? event.target.value.length : firstPlaceholder,
-    );
-    input.props.onBlur(event);
-  };
-
   return React.cloneElement(input, {
-    onClick,
-    onFocus,
-    onKeyDown,
-    onKeyPress,
-    onBlur,
+    onClick: (event) => {
+      selectLast(event.target);
+    },
+    onFocus: (event) => {
+      event.target.value = addMask(event.target.value, maskArray);
+    },
+    onKeyDown: (event) => {
+      if (event.key.includes('Arrow')) {
+        event.preventDefault();
+      }
+      if (event.key === 'Delete') {
+        event.preventDefault();
+      }
+      if (event.key === 'Backspace' /*backspace */) {
+        const target = event.target;
+        let { value } = event.target;
+        const start = target.selectionStart - 1;
+        const end = target.selectionEnd;
+        value = value.split('');
+        value.splice(
+          start,
+          end - start,
+          target.value.substring(start, end).replace(
+            new RegExp(
+              `[^${maskArray
+                .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
+                .join('')
+                .replace(/[9aAh%#](?!(\\)(?!\\))/g, '')
+                .replace(/([9aAh%#])\\(?!\\)/, '$1')}]+`,
+              'g',
+            ),
+            '_',
+          ),
+        );
+        event.target.value = value.join('');
+        event.target.setSelectionRange(start, end - 1);
+        event.preventDefault();
+      }
+    },
+    onKeyPress: (event) => {
+      if (
+        Validator.maskByChar(
+          event.target.value.slice(0, event.target.value.indexOf('_')) + event.key,
+          maskArray.join(''),
+        )
+      ) {
+        event.target.value = addMask(
+          event.target.value.slice(0, event.target.value.indexOf('_')) + event.key,
+          maskArray,
+        );
+        input.props.onKeyPress(event);
+        input.props.onInput(event);
+        selectLast(event.target);
+      }
+      event.preventDefault();
+    },
+    onBlur: (event) => {
+      const firstPlaceholder = event.target.value.indexOf('_');
+      event.target.value = event.target.value.slice(0, firstPlaceholder);
+      input.props.onBlur(event);
+      console.log(firstPlaceholder);
+      event.target.setSelectionRange(firstPlaceholder, firstPlaceholder);
+    },
   });
 }
 

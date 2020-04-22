@@ -10,6 +10,7 @@ function Toast(props) {
     </article>
   );
 }
+
 Toast.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

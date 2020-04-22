@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CollapsableCard from '../../CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button/Button';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close, role, taskId } = props;
@@ -37,8 +38,4 @@ MemberProgressCard.propTypes = {
   trackDate: PropTypes.instanceOf(Date).isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(MemberProgressCard, areEqual);
+export default React.memo(MemberProgressCard, compareObjects);

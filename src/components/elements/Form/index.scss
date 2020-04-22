@@ -38,3 +38,10 @@
     border: 2px solid $common-text;
   }
 }
+
+@include invalidBounceKeyframes(2);
+
+.form-control.invalid {
+  border-color: $error;
+  animation: 1s invalidBounce;
+}
