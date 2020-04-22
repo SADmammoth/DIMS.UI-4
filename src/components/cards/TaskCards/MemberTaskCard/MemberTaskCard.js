@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button';
@@ -32,6 +33,8 @@ function MemberTaskCard(props) {
     edit,
   } = props;
 
+  const assignedToIds = assignedTo.map((user) => user.userID);
+  console.log(members);
   return (
     <CollapsableCard
       id={id}
@@ -62,9 +65,9 @@ function MemberTaskCard(props) {
             <ul className='inline-list'>
               {assignedTo.map((user) => (
                 <li>
-                  <Link to={`/members/${user.userId}/tasks/${user.memberTaskId}`}>
-                    <b>{user.firstName}</b>
-                    {` ${user.lastName}`}
+                  <Link to={`/members/${user.userID}/tasks/${user.memberTaskId}`}>
+                    <b>{members[user.userID] ? members[user.userID].firstName : 'First name'}</b>
+                    {` ${members[user.userID] ? members[user.userID].lastName : 'Last name'}`}
                   </Link>
                 </li>
               ))}
@@ -80,7 +83,7 @@ function MemberTaskCard(props) {
             </TrackButton>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
-            <AssignButton buttonClassMod='primary' assignedTo={assignedTo} members={members}>
+            <AssignButton buttonClassMod='primary' assignedTo={assignedToIds} members={members}>
               <TrackIcon className='icon-tasks' />
               <span>Assign</span>
             </AssignButton>
@@ -100,7 +103,13 @@ function MemberTaskCard(props) {
                 dialogValue={id}
                 onSubmit={({ dialogValue }) => console.log(dialogValue)}
               />
-              <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
+              <TaskEditButton
+                buttonClassMod='secondary'
+                {...props}
+                show={edit}
+                members={members}
+                buttonContent='Edit'
+              />
             </>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
@@ -156,4 +165,11 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-export default React.memo(MemberTaskCard, compareObjects);
+export default React.memo(
+  connect((state) => {
+    return {
+      members: state.members,
+    };
+  })(MemberTaskCard),
+  compareObjects,
+);

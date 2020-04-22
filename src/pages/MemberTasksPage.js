@@ -10,11 +10,12 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
 import UserContext from '../helpers/UserContext';
 import getNavItems from '../helpers/getNavItems';
+import { connect } from 'react-redux';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tasks: null, taskSet: null, name: 'Name', members: [] };
+    this.state = { tasks: null, taskSet: null };
   }
 
   componentDidMount() {
@@ -27,10 +28,6 @@ class MemberTasksPage extends React.Component {
     }
   }
 
-  static async getName(userId) {
-    return Client.getMember(userId);
-  }
-
   static getDerivedStateFromProps(props, state) {
     if (state.taskSet !== props.taskSet) {
       return { ...state, tasks: null, name: 'Name' };
@@ -39,29 +36,21 @@ class MemberTasksPage extends React.Component {
 
   async update() {
     let taskData;
-    let { name } = this.state;
     const userId = this.props.match.params.id;
-    let members;
 
     if (this.props.taskSet === 'user') {
-      name = (await MemberTasksPage.getName(userId)).firstName;
       taskData = await Client.getUserTasks(userId);
     } else if (this.props.taskSet === 'all') {
       taskData = await Client.getTasks();
-      members = Object.values(await Client.getMembers()).map((member) => {
-        return { firstName: member.firstName, lastName: member.lastName };
-      });
     }
 
     this.setState({
       tasks: taskData,
-      name,
       taskSet: this.props.taskSet,
-      members,
     });
   }
 
-  static wrappedMemberTask = ({ collapsed, id, taskSet, members, edit, open, close, ...data }) => {
+  static wrappedMemberTask = ({ collapsed, id, taskSet, edit, open, close, ...data }) => {
     const { taskId, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
       <UserContext.Consumer>
@@ -82,7 +71,6 @@ class MemberTasksPage extends React.Component {
               close={close}
               collapsed={collapsed}
               assignedTo={assignedTo}
-              members={members}
             />
           );
         }}
@@ -90,21 +78,21 @@ class MemberTasksPage extends React.Component {
     );
   };
 
-  static renderTask(id, data, taskSet, members, edit) {
+  static renderTask(id, data, taskSet, edit) {
     const WrappedMemberTask = MemberTasksPage.wrappedMemberTask;
-    return <WrappedMemberTask id={id} taskSet={taskSet} members={members} edit={edit} {...data} />;
+    return <WrappedMemberTask id={id} taskSet={taskSet} edit={edit} {...data} />;
   }
 
   renderTasks() {
-    const { tasks, members } = this.state;
+    const { tasks } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberTasksPage.renderTask(id, data, this.props.taskSet, members, this.props.edit);
+      return MemberTasksPage.renderTask(id, data, this.props.taskSet, this.props.edit);
     });
   }
 
   render() {
-    const { tasks, name } = this.state;
-    const { taskSet } = this.props;
+    const { tasks } = this.state;
+    const { taskSet, name } = this.props;
 
     return (
       <>
@@ -141,11 +129,18 @@ class MemberTasksPage extends React.Component {
 
 MemberTasksPage.defaultProps = {
   edit: false,
+  name: 'Name',
 };
 
 MemberTasksPage.propTypes = {
   taskSet: PropTypes.string.isRequired,
   edit: PropTypes.bool,
+  name: PropTypes.string,
 };
 
-export default withRouter(MemberTasksPage);
+export default withRouter(
+  connect((state, ownProps) => {
+    const member = state.members[ownProps.match.params.id];
+    return { name: member ? member.firstName : 'Name' };
+  })(MemberTasksPage),
+);

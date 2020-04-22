@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 
 function CheckboxGroup(props) {
-  function renderCheckbox(value, { value: commonValue, id, type, name, onInput, attributes }) {
+  function renderCheckbox(valueOption, { value: commonValue, id, type, name, onInput, attributes }) {
     //* 'value' variable is 'value' property of current checkbox
     /*
      * 'commonValue' is value of checkbox group by name, means array or string
@@ -22,25 +22,27 @@ function CheckboxGroup(props) {
       }
       onInput(event);
     };
+    console.log(values, valueOption.value);
     return (
       <div className='form-group'>
         <input
-          id={id + value}
+          id={id + valueOption.value}
           name={name}
           type={type}
           className={`form-${type}`}
-          value={value}
+          value={valueOption.value}
           onClick={onClick}
           {...attributes}
-          checked={values === value || values.includes(value)}
+          checked={values === valueOption.value || values.includes(valueOption.value)}
         />
-        <label htmlFor={id + value}>{value}</label>
+        <label htmlFor={id + valueOption.value}>{valueOption.label}</label>
       </div>
     );
   }
 
   function renderCheckboxes() {
-    return props.valueOptions.map((value) => renderCheckbox(value, props));
+    console.log(props.valueOptions);
+    return props.valueOptions.map((valueOption) => renderCheckbox(valueOption, props));
   }
 
   const { type, id } = props;
@@ -61,7 +63,12 @@ CheckboxGroup.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 
   // List of buttons values in group
-  valueOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  valueOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ).isRequired,
   description: PropTypes.string,
   onInput: PropTypes.func,
   onChange: PropTypes.func,

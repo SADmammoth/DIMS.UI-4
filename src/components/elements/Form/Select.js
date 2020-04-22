@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Select(props) {
-  function renderOption(value) {
-    return <option value={value}>{value}</option>;
+  function renderOption(valueOption) {
+    return <option value={valueOption.value}>{valueOption.label}</option>;
   }
 
   return (
@@ -17,7 +17,12 @@ function Select(props) {
 }
 
 Select.propTypes = {
-  valueOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  valueOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default Select;

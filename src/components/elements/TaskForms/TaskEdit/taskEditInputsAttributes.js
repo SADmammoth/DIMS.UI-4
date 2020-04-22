@@ -37,7 +37,9 @@ export default function taskEditInputsAttributes({ taskDescription, taskStart, t
       name: 'members',
       label: 'Assigned to members',
       value: assignedTo.map((member) => `${member.firstName} ${member.lastName}`),
-      valueOptions: members.map((member) => `${member.firstName} ${member.lastName}`),
+      valueOptions: members.map((member) => {
+        return { label: `${member.firstName} ${member.lastName}`, value: member.id };
+      }),
     },
   ];
 }

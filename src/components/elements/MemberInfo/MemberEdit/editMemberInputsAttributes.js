@@ -67,7 +67,10 @@ export default function editMemberInputsAttributes({
       name: 'sex',
       description: 'Sex',
       value: sex,
-      valueOptions: ['Male', 'Female'],
+      valueOptions: [
+        { label: 'Male', value: 'Male' },
+        { label: 'Female', value: 'Female' },
+      ],
     },
     {
       type: 'text',
@@ -96,7 +99,9 @@ export default function editMemberInputsAttributes({
       name: 'direction',
       description: 'Direction',
       value: direction,
-      valueOptions: Client.directions,
+      valueOptions: Client.directions.map((direction) => {
+        return { label: direction, value: direction };
+      }),
     },
     {
       type: 'text',
