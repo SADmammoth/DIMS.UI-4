@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import CollapsableCard from '../../CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;

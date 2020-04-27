@@ -44,14 +44,14 @@ class MemberProgressPage extends React.Component {
   }
 
   renderProgressCard(id, data) {
-    const WrappedMemberProgressCard = MemberProgressPage.WrappedMemberProgressCard;
+    const WrappedMemberProgressCard = this.WrappedMemberProgressCard;
     return <WrappedMemberProgressCard id={id} {...data} />;
   }
 
   renderProgress() {
     const { tasks } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberProgressPage.renderProgressCard(id, data);
+      return this.renderProgressCard(id, data);
     });
   }
 

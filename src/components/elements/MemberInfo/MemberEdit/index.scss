@@ -2,12 +2,17 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .edit-member {
+  font-size: 1.2rem;
+
+  .member-info__header {
+    padding-right: 40px;
+  }
+  .member-info__title {
+    margin-left: 25px;
+  }
+
   .button {
     margin-top: 40px;
-    margin-right: 70px;
-    &:last-child {
-      margin-right: 20px;
-    }
     float: right;
   }
 
@@ -32,9 +37,21 @@
   }
 
   .address {
+    margin-left: 25px;
     .form-control {
-      width: calc(100% - 90px - 25px);
+      width: calc(100% - 50px - 25px);
     }
+  }
+
+  hr {
+    width: 100%;
+  }
+
+  .member-info__additional-info {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    display: flex;
   }
 
   .form-radio {

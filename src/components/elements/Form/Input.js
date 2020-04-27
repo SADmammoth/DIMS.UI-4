@@ -30,9 +30,6 @@ function Input(props) {
     validationMessage,
   } = props;
 
-  const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
-  const onInputHandler = (e) => onInput(e.target.name, e.target.value);
-
   function renderLabel(input) {
     return label ? (
       <div className='form-group'>

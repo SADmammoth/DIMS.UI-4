@@ -9,7 +9,7 @@ import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.s
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import CollapsableCard from '../CollapsableCard';
 import DateBadge from '../../elements/DateBadge';
-import DirectionBadge from '../../elements/DirectionBadge/DirectionBadge';
+import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
 
 class MemberCard extends React.PureComponent {
@@ -69,7 +69,7 @@ class MemberCard extends React.PureComponent {
               {` ${lastName}, ${age}`}
             </CollapsableCard.Title>
             <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-            <DirectionBadge direction={direction} />
+            <TextBadge>{direction}</TextBadge>
           </CollapsableCard.Header>
           <CollapsableCard.Body>
             <Button classMod='primary' link={`/members/${id}/progress`}>

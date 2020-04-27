@@ -21,7 +21,7 @@ class MemberEdit extends React.Component {
   }
 
   render() {
-    const { handleClose } = this.props;
+    const { handleClose, empty } = this.props;
 
     const { inputs } = this.state;
 
@@ -92,7 +92,7 @@ class MemberEdit extends React.Component {
             </div>
           </FlexColumn>
         </div>
-        <Button content='Cancel' classMod='secondary' onClick={handleClose} />
+        <>{empty || <Button content='Cancel' classMod='secondary' onClick={handleClose} />}</>
       </Form>
     );
   }
