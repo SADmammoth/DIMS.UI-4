@@ -1,10 +1,21 @@
-$primary-bg: #a5dfae;
-$highlight-bg: #6dd37b;
-$dark-bg: #57b163;
-$light-bg: #e3ffe7;
-$header-bg: #bbfac396;
-$common-text: #137a21;
-$light-text: #e9ffec;
+$primary-bg: var(--primary-bg);
+$highlight-bg: var(--highlight-bg);
+$dark-bg: var(--dark-bg);
+$light-bg: var(--light-bg);
+$header-bg: var(--header-bg);
+$common-text: var(--common-text);
+$light-text: var(--light-text);
+
 $success: #00ff26;
 $error: #dd8e8e;
 $info: #249cff;
+
+:root {
+  --primary-bg: #a5dfae;
+  --highlight-bg: #6dd37b;
+  --dark-bg: #57b163;
+  --light-bg: #e3ffe7;
+  --header-bg: #bbfac396;
+  --common-text: #137a21;
+  --light-text: #e9ffec;
+}

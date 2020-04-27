@@ -12,7 +12,7 @@
     height: auto;
   }
   .content {
-    background: transparentize($primary-bg, 0.5);
+    background: $primary-bg;
     height: 100vh;
     box-sizing: border-box;
     text-align: center;

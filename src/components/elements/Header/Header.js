@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ContainerComponent from '../ContainerComponent';
 import Nav from './Nav';
 import TextBadge from '../TextBadge';
+import SettingsButton from '../../cards/SettingsButton/SettingsButton';
 
 function Header(props) {
   const { title, navItems, role } = props;
@@ -23,6 +24,7 @@ function Header(props) {
               </h1>
             )}
 
+            <SettingsButton />
             {navItems && navItems.length && <Nav className='header__nav' navItems={navItems} />}
           </ContainerComponent>
         </div>
