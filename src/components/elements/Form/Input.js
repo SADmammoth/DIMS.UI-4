@@ -36,6 +36,39 @@ function Input(props) {
     );
   }
 
+  function renderMask(input) {
+    if (mask && mask !== '') {
+      return InputMask(input, mask, !byCharValidator, maskType);
+    }
+    return input;
+  }
+
+  const onChangeHandler = (e) => {
+    if (!e.target.value) {
+      return;
+    }
+    if (!validator(e.target.value)) {
+      highlightInput();
+      errorNotification(description, validationMessage);
+    }
+    onChange(e.target.name, e.target.value);
+  };
+
+  const onInputHandler = (e) => {
+    onInput(e.target.name, e.target.value);
+  };
+
+  const onKeyPressHandler = (e) => {
+    if (!byCharValidator(e.target.value + e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const onError = (e) => {
+    highlightInput();
+    errorNotification(description, validationMessage);
+  };
+
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
       return renderLabel(
@@ -44,14 +77,13 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
-          onChange={onChange}
-          onInput={onInput}
+          onKeyPress={onKeyPressHandler}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
           required={required}
           label={label}
           attributes={attributes}
           value={value}
-          byCharValidator={byCharValidator}
-          validator={validator}
           valueOptions={valueOptions}
         />,
       );
@@ -68,8 +100,6 @@ function Input(props) {
           required={required}
           attributes={attributes}
           value={value}
-          byCharValidator={byCharValidator}
-          validator={validator}
           valueOptions={valueOptions}
         />,
       );
@@ -80,8 +110,9 @@ function Input(props) {
           id={id}
           name={name}
           description={description}
-          onChange={onChange}
-          onInput={onInput}
+          onChange={onChangeHandler}
+          onInput={onInputHandler}
+          onError={onError}
           required={required}
           attributes={attributes}
           value={value}
@@ -91,36 +122,22 @@ function Input(props) {
       );
     }
 
-    const onKeyPress = (e) => {
-      if (!byCharValidator(e.target.value + e.key)) {
-        e.preventDefault();
-      }
-    };
-
-    const onBlur = (e) => {
-      if (!e.target.value) {
-        return;
-      }
-      if (!validator(e.target.value)) {
-        alert('Bad input'); //TODO temp
-      }
-      onChange(e);
-    };
-
     return renderLabel(
-      <input
-        id={id}
-        type={type}
-        name={name}
-        className='form-control'
-        placeholder={description}
-        required={required ? 'required' : null}
-        onKeyPress={onKeyPress}
-        onInput={onInput}
-        onBlur={onBlur}
-        {...attributes}
-        value={value}
-      />,
+      renderMask(
+        <input
+          id={id}
+          type={type}
+          name={name}
+          className={`form-control${invalid ? ' invalid' : ''}`}
+          placeholder={description}
+          required={required ? 'required' : null}
+          onKeyPress={onKeyPressHandler}
+          onInput={onInputHandler}
+          onBlur={onChangeHandler}
+          {...attributes}
+          value={value}
+        />,
+      ),
     );
   }
 

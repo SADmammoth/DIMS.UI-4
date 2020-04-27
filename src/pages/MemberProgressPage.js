@@ -7,6 +7,8 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
+import UserContextConsumer from '../helpers/UserContextConsumer';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
@@ -19,9 +21,31 @@ class MemberProgressPage extends React.Component {
     this.setState({ tasks: taskData });
   }
 
-  static renderProgressCard(id, data) {
-    const { taskName, trackNote, trackDate } = data;
-    return <MemberProgressCard id={id} taskName={taskName} trackNote={trackNote} trackDate={trackDate} />;
+  WrappedMemberProgressCard({ id, taskID, taskName, trackNote, trackDate, collapsed, open, close }) {
+    return (
+      <UserContextConsumer>
+        {({ role }) => {
+          return (
+            <MemberProgressCard
+              id={id}
+              taskID={taskID}
+              taskName={taskName}
+              trackNote={trackNote}
+              trackDate={trackDate}
+              collapsed={collapsed}
+              open={open}
+              close={close}
+              role={role}
+            />
+          );
+        }}
+      </UserContextConsumer>
+    );
+  }
+
+  renderProgressCard(id, data) {
+    const WrappedMemberProgressCard = MemberProgressPage.WrappedMemberProgressCard;
+    return <WrappedMemberProgressCard id={id} {...data} />;
   }
 
   renderProgress() {
@@ -38,9 +62,17 @@ class MemberProgressPage extends React.Component {
     return (
       <>
         <Helmet>{`${anytask.userName || 'Name'}'s progress`}</Helmet>
-        <Header>
-          <h1>{`${anytask.userName || 'Name'}'s progress`}</h1>
-        </Header>
+        <UserContextConsumer>
+          {({ role, userID }) => {
+            return (
+              <Header
+                role={role}
+                title={`${anytask.userName || 'Name'}'s progress`}
+                navItems={getNavItems({ role, userID }, this.props.match.path)}
+              />
+            );
+          }}
+        </UserContextConsumer>
         <ContainerComponent>
           {tasks ? (
             <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>

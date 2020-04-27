@@ -1,0 +1,40 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.login {
+  width: 100vw;
+  .logo {
+    width: 40vw;
+    left: 8vw;
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(50%);
+    height: auto;
+  }
+  .content {
+    background: transparentize($primary-bg, 0.5);
+    height: 100vh;
+    box-sizing: border-box;
+    text-align: center;
+    left: 50vw;
+    position: absolute;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &-form {
+    width: 22vw;
+    display: flex;
+    flex-direction: column;
+    .form-control {
+      margin-top: 10px;
+      height: 35px;
+      font-size: 1.2rem;
+    }
+    .button {
+      width: 100%;
+      margin: 30px auto;
+    }
+  }
+}

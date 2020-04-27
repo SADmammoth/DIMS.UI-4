@@ -12,6 +12,7 @@ import { ReactComponent as AddressIcon } from '../../../../assets/icons/Address.
 import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelope.svg';
 import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
+import TextBadge from '../../TextBadge/TextBadge';
 
 class EditMember extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class EditMember extends React.Component {
             <FlagIcon className='icon-flag common-text-color' />
             {inputs.startDate}
           </div>
-          <div className='direction-badge'>{inputs.direction}</div>
+          <TextBadge>{inputs.direction}</TextBadge>
         </div>
         <div className='member-info__body'>
           <div className='member-info__contacts'>

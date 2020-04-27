@@ -7,6 +7,8 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner';
+import UserContextConsumer from '../helpers/UserContextConsumer';
+import getNavItems from '../helpers/getNavItems';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -28,45 +30,62 @@ class MembersManagerPage extends React.Component {
     }
 
     return Object.entries(members).map(({ 0: id, 1: data }) => {
-      return MembersManagerPage.renderMember(id, data);
+      return this.renderMember(id, data);
     });
   }
 
-  static renderMember(id, data) {
-    const {
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-    } = data;
-
+  WrappedMemberCard({
+    id,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+    collapsed,
+    open,
+    close,
+  }) {
     return (
-      <MemberCard
-        id={id}
-        firstName={firstName}
-        lastName={lastName}
-        birthDate={birthDate}
-        direction={direction}
-        startDate={startDate}
-        email={email}
-        mobilePhone={mobilePhone}
-        skype={skype}
-        address={address}
-        sex={sex}
-        education={education}
-        universityAverageScore={universityAverageScore}
-        mathScore={mathScore}
-      />
+      <UserContextConsumer>
+        {({ role }) => {
+          return (
+            <MemberCard
+              id={id}
+              firstName={firstName}
+              lastName={lastName}
+              birthDate={birthDate}
+              direction={direction}
+              startDate={startDate}
+              email={email}
+              mobilePhone={mobilePhone}
+              skype={skype}
+              address={address}
+              sex={sex}
+              education={education}
+              universityAverageScore={universityAverageScore}
+              mathScore={mathScore}
+              role={role}
+              collapsed={collapsed}
+              open={open}
+              close={close}
+            />
+          );
+        }}
+      </UserContextConsumer>
     );
+  }
+
+  renderMember(id, data) {
+    const WrappedMemberCard = this.WrappedMemberCard;
+    return <WrappedMemberCard id={id} {...data} />;
   }
 
   render() {
@@ -76,9 +95,13 @@ class MembersManagerPage extends React.Component {
         <Helmet>
           <title>Members</title>
         </Helmet>
-        <Header>
-          <h1>Members</h1>
-        </Header>
+        <UserContextConsumer>
+          {({ role, userID }) => {
+            return (
+              <Header role={role} title='Members' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+            );
+          }}
+        </UserContextConsumer>
         <ContainerComponent>
           {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
         </ContainerComponent>

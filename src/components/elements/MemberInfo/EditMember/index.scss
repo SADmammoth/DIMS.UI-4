@@ -15,6 +15,11 @@
     width: 45%;
   }
 
+  .member-info__contacts {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .date-badge {
     .form-control {
       font-size: 1rem !important;
@@ -51,7 +56,7 @@
     }
   }
 
-  .direction-badge {
+  .text-badge {
     width: 150px;
   }
 
@@ -64,8 +69,12 @@
     outline: none;
   }
 
+  [class*='icon-'] {
+    fill: $common-text;
+  }
+
   .form-control {
-    width: 280px;
+    width: 250px;
     font-size: 1.2rem;
 
     &[name='firstName'],

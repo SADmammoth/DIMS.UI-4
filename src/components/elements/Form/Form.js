@@ -161,10 +161,10 @@ class Form extends React.Component {
   }
 
   onSubmit = (event) => {
-    if (onSubmit) {
-      event.preventDefault();
-      if (event.target.checkValidity()) {
-        onSubmit(this.formatValues());
+    if (this.checkValidity(errorNotification)) {
+      if (this.props.onSubmit) {
+        event.preventDefault();
+        this.props.onSubmit(this.formatValues());
       }
     }
   };

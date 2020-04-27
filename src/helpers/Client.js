@@ -129,6 +129,43 @@ class Client {
     );
     return tracksObject;
   }
+
+  static async signIn(login, password) {
+    console.log(login);
+    const user = await Client.db
+      .collection('users')
+      .where('login', '==', login)
+      .get();
+    if (user) {
+      if (user.docs[0].data().password === md5(password)) {
+        return {
+          status: 'success',
+          found: true,
+          token: user.docs[0].data().token,
+          role: user.docs[0].data().role,
+          userID: user.docs[0].data().userID,
+        };
+      }
+      return { status: 'fail', found: true };
+    }
+    return { status: 'fail', found: false };
+  }
+
+  static async checkToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return !!user.docs.length;
+  }
+
+  static async getUserInfoByToken(token) {
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    return { role: user.docs[0].data().role, userID: user.docs[0].data().userID };
+  }
 }
 
 export default Client;

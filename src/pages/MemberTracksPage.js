@@ -7,6 +7,8 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
+import UserContextConsumer from '../helpers/UserContextConsumer';
+import getNavItems from '../helpers/getNavItems';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
@@ -28,11 +30,11 @@ class MemberTracksPage extends React.Component {
     }
 
     return Object.entries(tracks).map(({ 0: id, 1: data }) => {
-      return MemberTracksPage.renderTaskTrack(id, data);
+      return this.renderTaskTrack(id, data);
     });
   }
 
-  static renderTaskTrack(id, data) {
+  renderTaskTrack(id, data) {
     const { memberTaskID, taskName, trackNote, trackDate } = data;
     return (
       <TaskTrackCard
@@ -45,6 +47,7 @@ class MemberTracksPage extends React.Component {
     );
   }
 
+  /* TODO Create HOC for UserContextConsumer */
   render() {
     const { tracks } = this.state;
     return (
@@ -52,9 +55,13 @@ class MemberTracksPage extends React.Component {
         <Helmet>
           <title>Task tracks</title>
         </Helmet>
-        <Header>
-          <h1>Your Task tracks</h1>
-        </Header>
+        <UserContextConsumer>
+          {({ role, userID }) => {
+            return (
+              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />
+            );
+          }}
+        </UserContextConsumer>
         <ContainerComponent>
           {tracks ? (
             <div>{Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}</div>
