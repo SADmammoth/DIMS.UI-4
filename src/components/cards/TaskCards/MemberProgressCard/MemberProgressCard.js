@@ -31,8 +31,4 @@ MemberProgressCard.propTypes = {
   trackDate: PropTypes.instanceOf(Date).isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(MemberProgressCard, areEqual);
+export default React.memo(MemberProgressCard, compareObjects);

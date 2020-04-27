@@ -4,7 +4,7 @@ import AuthorizationManager from './helpers/AuthorizationManager';
 import Routes from './Routes';
 import UserContextConsumer from './helpers/UserContextConsumer';
 
-function App() {
+const App = (props) => {
   return (
     <Router>
       <AuthorizationManager>
@@ -16,6 +16,6 @@ function App() {
       </AuthorizationManager>
     </Router>
   );
-}
+};
 
 export default App;

@@ -14,7 +14,7 @@ import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
 import TextBadge from '../../TextBadge/TextBadge';
 
-class EditMember extends React.Component {
+class MemberEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = { inputs: {} };
@@ -98,7 +98,7 @@ class EditMember extends React.Component {
   }
 }
 
-EditMember.propTypes = {
+MemberEdit.propTypes = {
   id: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
@@ -117,4 +117,4 @@ EditMember.propTypes = {
   handleClose: PropTypes.func,
 };
 
-export default EditMember;
+export default MemberEdit;

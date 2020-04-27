@@ -111,16 +111,14 @@ a:visited {
   outline: none;
   display: inline-block;
 }
-<<<<<<< head ======= .flex-column {
+.flex-column {
   display: flex;
   flex-direction: column;
   & > div {
     margin-bottom: 20px;
   }
 }
-
 a,
 a:visited {
   color: inherit;
 }
->>>>>>>e3de80b...feat: theme styles;

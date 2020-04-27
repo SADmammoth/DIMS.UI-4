@@ -10,18 +10,23 @@ import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
 import DialogButton from '../../../elements/DialogButton/DialogButton';
+import { AssignButton } from '../../../elements/AssignForm';
+import compareObjects from '../../../../helpers/compareObjects';
 
 function MemberTaskCard(props) {
   const {
     taskName,
+    taskID,
     taskDescription,
     state,
     taskStart,
     taskDeadline,
     collapsed,
     id,
-    feature,
+    taskSet,
+    role,
     assignedTo,
+    members,
     open,
     close,
     edit,
@@ -50,9 +55,9 @@ function MemberTaskCard(props) {
           <DateBadge type={DateBadge.DateTypes.endDate} date={taskDeadline} />
         </div>
 
-        <p className='task-card__description'>{taskDescription}</p>
+        <CollapsableCard.Description>{taskDescription}</CollapsableCard.Description>
 
-        {feature === 'assign' && (
+        {role === 'admin' && taskSet === 'all' && (
           <>
             <h3>Assigned to:</h3>
             <ul className='inline-list'>
@@ -69,35 +74,41 @@ function MemberTaskCard(props) {
         )}
 
         <ButtonGroup>
-          {feature === 'track' && (
+          {role === 'member' && (
             <TrackButton taskName={taskName} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
             </TrackButton>
           )}
-
-          {feature === 'assign' && (
-            <Button classMod='primary'>
+          {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
+            <AssignButton buttonClassMod='primary' assignedTo={assignedTo} members={members}>
               <TrackIcon className='icon-tasks' />
               <span>Assign</span>
+            </AssignButton>
+          )}
+          {(role === 'admin' || role === 'mentor') && (
+            <>
+              <DialogButton
+                buttonClassMod='secondary'
+                buttonContent='Delete'
+                message={
+                  <p>
+                    Are you confident, you want to delete task <b>{taskName}</b>?
+                  </p>
+                }
+                confirmButtonClassMod='error'
+                confirmButtonContent='Delete'
+                dialogValue={id}
+                onSubmit={({ dialogValue }) => console.log(dialogValue)}
+              />
+              <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
+            </>
+          )}
+          {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
+            <Button classMod='ghost' link={`/tasks/${taskID}`}>
+              Show in tasks
             </Button>
           )}
-
-          <DialogButton
-            buttonClassMod='secondary'
-            buttonContent='Delete'
-            message={
-              <p>
-                Are you confident, you want to delete task <b>{taskName}</b>?
-              </p>
-            }
-            confirmButtonClassMod='error'
-            confirmButtonContent='Delete'
-            dialogValue={id}
-            onSubmit={({ dialogValue }) => console.log(dialogValue)}
-          />
-
-          <TaskEditButton buttonClassMod='secondary' {...props} show={edit} buttonContent='Edit' />
         </ButtonGroup>
       </CollapsableCard.Body>
     </CollapsableCard>
@@ -106,6 +117,7 @@ function MemberTaskCard(props) {
 
 MemberTaskCard.defaultProps = {
   assignedTo: [],
+  members: [],
 };
 
 MemberTaskCard.propTypes = {
@@ -114,8 +126,12 @@ MemberTaskCard.propTypes = {
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  feature: PropTypes.oneOf(['track', 'assign']).isRequired,
+  taskSet: PropTypes.oneOf(['all', 'user']).isRequired,
+  role: PropTypes.string.isRequired,
   assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
+  ),
+  members: PropTypes.arrayOf(
     PropTypes.shape({ userID: PropTypes.string, firstName: PropTypes.string, lastName: PropTypes.string }),
   ),
 
@@ -126,8 +142,4 @@ MemberTaskCard.propTypes = {
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default React.memo(MemberTaskCard, areEqual);
+export default React.memo(MemberTaskCard, compareObjects);

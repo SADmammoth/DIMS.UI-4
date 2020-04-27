@@ -39,7 +39,6 @@ class MemberCard extends React.PureComponent {
   render() {
     const {
       id,
-      collapsed,
       firstName,
       lastName,
       email,
@@ -53,6 +52,8 @@ class MemberCard extends React.PureComponent {
       education,
       universityAverageScore,
       mathScore,
+      role,
+      collapsed,
       open,
       close,
     } = this.props;
@@ -114,7 +115,7 @@ class MemberCard extends React.PureComponent {
             education={education}
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
-            handleClose={this.handleClose}
+            handleClose={this.closeEditModal}
           />
         </Modal>
       </>
@@ -127,6 +128,7 @@ const { handleClose, edit, setEdit, ...memberInfoPTypes } = MemberInfo.propTypes
 MemberCard.propTypes = {
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
   ...memberInfoPTypes,
 };
 
