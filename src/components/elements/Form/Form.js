@@ -75,6 +75,7 @@ class Form extends React.Component {
     byCharValidator,
     required,
     label,
+    placeholder,
     attributes,
     value,
     valueOptions,
@@ -98,6 +99,7 @@ class Form extends React.Component {
         attributes={attributes}
         valueOptions={valueOptions}
         label={label}
+        placeholder={placeholder}
         value={value}
         minSymbols={minSymbols}
         maxSymbols={maxSymbols}
@@ -126,6 +128,7 @@ class Form extends React.Component {
         description,
         required,
         label,
+        placeholder,
         attributes,
         byCharValidator,
         validator,
@@ -164,6 +167,7 @@ class Form extends React.Component {
         byCharValidator,
         required,
         label,
+        placeholder,
         attributes,
         values[name].value,
         valueOptions,

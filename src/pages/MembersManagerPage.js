@@ -9,6 +9,7 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner';
 import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MembersManagerPage extends React.Component {
   constructor(props) {
@@ -102,9 +103,12 @@ class MembersManagerPage extends React.Component {
             );
           }}
         </UserContextConsumer>
-        <ContainerComponent>
-          {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
-        </ContainerComponent>
+        <main>
+          <ContainerComponent>
+            {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

@@ -8,7 +8,7 @@ import addMask from '../../../../helpers/addMask';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
-    if (!input.props.value || input.props.value === '') {
+    if (input.props.value && input.props.value !== '') {
       return input;
     }
   }

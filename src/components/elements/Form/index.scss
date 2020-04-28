@@ -60,3 +60,7 @@
   font-weight: bold;
   margin: 8px;
 }
+
+input::placeholder {
+  color: $muted-text;
+}

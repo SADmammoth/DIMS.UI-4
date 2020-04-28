@@ -88,7 +88,7 @@ class CollapsableItemsList extends Component {
     const { items: stateItems } = this.state;
 
     return (
-      <ul className='list_no-type'>
+      <ul className='list_no-type collapsable-items-list'>
         {items.map((item) => (
           <li key={item.props.id}>
             {React.cloneElement(item, {

@@ -10,6 +10,7 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
 import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -115,19 +116,22 @@ class MemberTasksPage extends React.Component {
             );
           }}
         </UserContextConsumer>
-        <ContainerComponent>
-          {tasks ? (
-            <div>
-              {Object.keys(tasks).length ? (
-                <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
-              ) : (
-                'No tasks'
-              )}
-            </div>
-          ) : (
-            <Spinner centered />
-          )}
-        </ContainerComponent>
+        <main>
+          <ContainerComponent>
+            {tasks ? (
+              <div>
+                {Object.keys(tasks).length ? (
+                  <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+                ) : (
+                  'No tasks'
+                )}
+              </div>
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

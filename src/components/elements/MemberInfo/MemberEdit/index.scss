@@ -2,27 +2,64 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .edit-member {
-  font-size: 1.2rem;
-
-  .member-info__header {
-    padding-right: 40px;
+  &.empty {
+    .member-info__header {
+      padding: 10px;
+      padding-right: 40px;
+      .member-info__title {
+        margin-left: 20px;
+      }
+    }
+    .member-info__contacts {
+      padding: 10px 25px;
+      .form-control {
+        width: 260px;
+      }
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .member-info__additional-info {
+      margin: 0;
+      width: 100%;
+    }
+    .button {
+      margin-right: 0 !important;
+    }
+    hr {
+      width: 100%;
+    }
+    .flex-column {
+      width: 47%;
+    }
   }
-  .member-info__title {
+  .flex-column > div {
+    display: flex;
+  }
+  .radio-group {
+    display: flex;
+    & > * {
+      margin-right: 5px;
+    }
+  }
+  .container > & .address {
+    margin: 0;
     margin-left: 25px;
+    .form-control {
+      width: calc(100% - 70px);
+    }
   }
 
   .button {
     margin-top: 40px;
+    margin-right: 70px;
+    &:last-child {
+      margin-right: 20px;
+    }
     float: right;
   }
 
   .flex-column {
     width: 45%;
-  }
-
-  .member-info__contacts {
-    margin-left: 0;
-    margin-right: 0;
   }
 
   .date-badge {
@@ -37,21 +74,9 @@
   }
 
   .address {
-    margin-left: 25px;
     .form-control {
-      width: calc(100% - 50px - 25px);
+      width: calc(100% - 90px - 25px);
     }
-  }
-
-  hr {
-    width: 100%;
-  }
-
-  .member-info__additional-info {
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
-    display: flex;
   }
 
   .form-radio {
@@ -86,12 +111,8 @@
     outline: none;
   }
 
-  [class*='icon-'] {
-    fill: $common-text;
-  }
-
   .form-control {
-    width: 250px;
+    width: 280px;
     font-size: 1.2rem;
 
     &[name='firstName'],
@@ -104,5 +125,35 @@
     &[name='mathScore'] {
       width: 50px;
     }
+  }
+
+  .address {
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .flex-column {
+    float: left;
+    width: 40%;
+    box-sizing: border-box;
+    &:first-child {
+      margin-right: 5%;
+    }
+    font-size: 1.4rem;
+  }
+
+  &__additional-info {
+    margin: 0 auto;
+    width: calc(100% - 140px);
+    box-sizing: border-box;
+    padding: 2% 5%;
+    margin-top: 3%;
+    background: $primary-bg;
+    .date-badge {
+      font-size: 1.4rem;
+    }
+
+    @include clearfix;
   }
 }

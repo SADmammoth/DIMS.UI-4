@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
-import InputMask from './InputMask';
 import errorNotification from '../../../helpers/errorNotification';
+import InputMask from './InputMask';
 
 function Input(props) {
   const {
@@ -16,6 +16,7 @@ function Input(props) {
     onInput,
     required,
     label,
+    placeholder,
     attributes,
     value,
     byCharValidator,
@@ -136,7 +137,7 @@ function Input(props) {
           type={type}
           name={name}
           className={`form-control${invalid ? ' invalid' : ''}`}
-          placeholder={description}
+          placeholder={placeholder}
           required={required ? 'required' : null}
           onKeyPress={onKeyPressHandler}
           onInput={onInputHandler}
@@ -156,6 +157,7 @@ Input.defaultProps = {
   onChange: () => {},
   required: false,
   label: false,
+  placeholder: null,
   attributes: [],
   value: '',
   byCharValidator: () => true,
@@ -175,6 +177,7 @@ Input.propTypes = {
   onChange: PropTypes.func,
   required: PropTypes.bool,
   label: PropTypes.string,
+  placeholder: PropTypes.string,
   attributes: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.any,
   valueOptions: PropTypes.arrayOf(PropTypes.string),

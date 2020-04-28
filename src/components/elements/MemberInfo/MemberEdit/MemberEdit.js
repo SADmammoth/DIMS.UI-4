@@ -27,7 +27,7 @@ class MemberEdit extends React.Component {
 
     return (
       <Form
-        className='edit-member'
+        className={`edit-member${empty ? ' empty' : ''}`}
         inputs={editMemberInputsAttributes(this.props)}
         onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
         submitButton={<Button content='Confirm' classMod='secondary' />}

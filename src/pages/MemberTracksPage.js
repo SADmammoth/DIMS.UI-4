@@ -9,6 +9,7 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
 import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
@@ -62,13 +63,18 @@ class MemberTracksPage extends React.Component {
             );
           }}
         </UserContextConsumer>
-        <ContainerComponent>
-          {tracks ? (
-            <div>{Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}</div>
-          ) : (
-            <Spinner centered />
-          )}
-        </ContainerComponent>
+        <main>
+          <ContainerComponent>
+            {tracks ? (
+              <div>
+                {Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
+              </div>
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

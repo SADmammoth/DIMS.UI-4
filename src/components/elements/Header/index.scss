@@ -8,12 +8,21 @@
   width: 100vw;
   padding: 0;
   margin: 0;
-  backdrop-filter: blur(10px);
   border-bottom: 2px solid $light-bg;
+
+  @include acrylic-glass-effect;
+
+  .site-title {
+    padding-right: 40px;
+    width: 120px;
+    box-sizing: border-box;
+  }
+
   .page-title {
     margin-top: 20px;
+    display: inline-block;
     .text-badge {
-      float: right;
+      display: inline-block;
       margin-top: 5px;
       margin-left: 10px;
       padding: 5px;
@@ -25,25 +34,62 @@
     top: 100px;
     height: calc(100vh - 100px);
   }
+  & > .container {
+    position: relative;
+  }
 
   .content {
-    margin-left: 40px;
     background: $primary-bg;
     padding: 0 20px;
-    padding-right: 100%;
+    padding-right: calc((100vw - 1000px) / 2);
     box-sizing: border-box;
     height: 80px;
-    & > .container {
-      width: 58vw;
-      position: relative;
-    }
   }
   &__nav {
+    float: right;
     position: absolute;
     align-self: center;
+    display: flex;
     right: 0;
     & > ul {
       display: flex;
+    }
+  }
+
+  .nav-modal.show + .button {
+    background: $light-bg;
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .nav-modal {
+    box-shadow: -2px 2px 6px $dark-bg;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: auto;
+    transform: none;
+    background: $primary-bg;
+    width: 170px;
+    height: 110px;
+    padding: 0;
+    z-index: 1000;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      width: 170px;
+      li {
+        width: 100%;
+      }
+      .button {
+        border: 2px solid $light-bg;
+        width: 100%;
+      }
     }
   }
 }

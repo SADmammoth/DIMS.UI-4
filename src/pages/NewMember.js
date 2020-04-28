@@ -6,6 +6,7 @@ import ContainerComponent from '../components/elements/ContainerComponent/Contai
 import UserContextConsumer from '../helpers/UserContextConsumer';
 import Header from '../components/elements/Header/Header';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 function NewMember(props) {
   return (
@@ -18,9 +19,12 @@ function NewMember(props) {
           return <Header role={role} title='New member' navItems={getNavItems({ role, userID }, props.match.path)} />;
         }}
       </UserContextConsumer>
-      <ContainerComponent>
-        <MemberEdit empty />
-      </ContainerComponent>
+      <main>
+        <ContainerComponent>
+          <MemberEdit empty />
+        </ContainerComponent>
+      </main>
+      <Footer />
     </>
   );
 }
