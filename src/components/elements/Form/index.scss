@@ -45,3 +45,18 @@
   border-color: $error;
   animation: 1s invalidBounce;
 }
+
+.form-select {
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid $dark-bg;
+  background: $light-bg;
+  color: $common-text;
+  outline: none;
+  display: inline-block;
+}
+
+.form-label {
+  font-weight: bold;
+  margin: 8px;
+}

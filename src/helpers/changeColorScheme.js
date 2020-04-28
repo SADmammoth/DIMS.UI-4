@@ -1,4 +1,5 @@
 export default function changeColorScheme({
+  name,
   primaryBg,
   highlightBg,
   darkBg,
@@ -7,7 +8,6 @@ export default function changeColorScheme({
   commonText,
   lightText,
 }) {
-  console.log(primaryBg);
   document.documentElement.setAttribute(
     'style',
     `--primary-bg:${primaryBg};--highlight-bg:${highlightBg};--dark-bg:${darkBg};--light-bg:${lightBg};--header-bg:${headerBg};--common-text:${commonText};--light-text:${lightText};`,
@@ -16,6 +16,7 @@ export default function changeColorScheme({
   sessionStorage.setItem(
     'colorScheme',
     JSON.stringify({
+      name,
       primaryBg,
       highlightBg,
       darkBg,
@@ -25,10 +26,12 @@ export default function changeColorScheme({
       lightText,
     }),
   );
+  changeColorScheme.currentTheme = name;
 }
 
 const themes = {
   light: {
+    name: 'light',
     primaryBg: '#a5dfae',
     highlightBg: '#6dd37b',
     darkBg: '#57b163',
@@ -38,11 +41,12 @@ const themes = {
     lightText: '#e9ffec',
   },
   dark: {
-    primaryBg: '#163819',
-    highlightBg: '#123a15',
-    darkBg: '#1f5326',
-    lightBg: '#1f5326',
-    headerBg: '#2e723796',
+    name: 'dark',
+    primaryBg: '#00695C',
+    highlightBg: '#00897b',
+    darkBg: '#009688',
+    lightBg: '#004D40',
+    headerBg: '#00968896',
     commonText: '#8bbb91',
     lightText: '#8bbb91',
   },

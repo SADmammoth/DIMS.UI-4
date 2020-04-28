@@ -135,17 +135,29 @@ class Form extends React.Component {
         mask,
         maskType,
         validationMessage,
+        onChange,
+        onInput,
       } = input;
 
       const higlightInputCallback = () => this.highlightInput(name);
+
+      const onChangeHandler = (name, value) => {
+        onChange && onChange(name, value);
+        this.updateValue(name, value);
+      };
+
+      const onInputHandler = (name, value) => {
+        onInput && onInput(name, value);
+        this.updateValue(name, value);
+      };
 
       inputsData[name] = Form.createInput(
         values[name].id,
         type,
         name,
         description,
-        this.updateValue, // onInput
-        this.updateValue, // onChange
+        onInputHandler, // onInput
+        onChangeHandler, // onChange
         mask,
         maskType,
         validator,

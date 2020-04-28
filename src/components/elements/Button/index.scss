@@ -60,6 +60,8 @@
   }
   &_invisible {
     background: transparent;
+    fill: $common-text;
+    color: $common-text;
     border: none;
     color: inherit;
     outline: none;

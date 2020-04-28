@@ -19,14 +19,13 @@
       padding: 5px;
     }
   }
+
   & + * {
     position: relative;
     top: 100px;
     height: calc(100vh - 100px);
   }
-  & > .container {
-    position: relative;
-  }
+
   .content {
     margin-left: 40px;
     background: $primary-bg;
@@ -34,6 +33,10 @@
     padding-right: 100%;
     box-sizing: border-box;
     height: 80px;
+    & > .container {
+      width: 58vw;
+      position: relative;
+    }
   }
   &__nav {
     position: absolute;
