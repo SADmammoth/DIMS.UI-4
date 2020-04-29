@@ -80,15 +80,15 @@ class MemberEdit extends React.Component {
           <FlexColumn>
             <div>
               <span className='list-key'>Education:</span>
-              <span>{inputs.education}</span>
+              {inputs.education}
             </div>
             <div>
               <span className='list-key'>University average score:</span>
-              <span>{inputs.universityAverageScore}</span>
+              {inputs.universityAverageScore}
             </div>
             <div>
               <span className='list-key'>CT math score:</span>
-              <span>{inputs.mathScore}</span>
+              {inputs.mathScore}
             </div>
           </FlexColumn>
         </div>

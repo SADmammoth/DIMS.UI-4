@@ -12,9 +12,6 @@
     }
     .member-info__contacts {
       padding: 10px 25px;
-      .form-control {
-        width: 260px;
-      }
       margin-left: 0;
       margin-right: 0;
     }
@@ -28,10 +25,8 @@
     hr {
       width: 100%;
     }
-    .flex-column {
-      width: 47%;
-    }
   }
+
   .flex-column > div {
     display: flex;
   }
@@ -41,6 +36,7 @@
       margin-right: 5px;
     }
   }
+
   .container > & .address {
     margin: 0;
     margin-left: 25px;
@@ -60,6 +56,12 @@
 
   .flex-column {
     width: 45%;
+  }
+
+  .member-info__contacts {
+    .form-control {
+      width: 75%;
+    }
   }
 
   .date-badge {
@@ -112,7 +114,8 @@
   }
 
   .form-control {
-    width: 280px;
+    width: 60%;
+    height: 1.4rem;
     font-size: 1.2rem;
 
     &[name='firstName'],
@@ -133,27 +136,34 @@
     font-size: 1.4rem;
   }
 
-  .flex-column {
-    float: left;
-    width: 40%;
+  .member-info__additional-info {
     box-sizing: border-box;
-    &:first-child {
-      margin-right: 5%;
-    }
-    font-size: 1.4rem;
-  }
-
-  &__additional-info {
-    margin: 0 auto;
-    width: calc(100% - 140px);
-    box-sizing: border-box;
-    padding: 2% 5%;
+    display: flex;
     margin-top: 3%;
     background: $primary-bg;
     .date-badge {
       font-size: 1.4rem;
     }
 
+    @media screen and (max-width: 1000px) {
+      & {
+        display: flex;
+        flex-direction: column;
+        .flex-column {
+          width: 100%;
+          & > * {
+            margin: 8px auto;
+          }
+        }
+      }
+    }
+
     @include clearfix;
+  }
+
+  @media screen and (max-width: 1000px) {
+    & {
+      margin-bottom: 20vh;
+    }
   }
 }
