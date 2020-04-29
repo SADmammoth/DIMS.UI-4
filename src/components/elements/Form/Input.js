@@ -141,7 +141,7 @@ function Input(props) {
           required={required ? 'required' : null}
           onKeyPress={onKeyPressHandler}
           onInput={onInputHandler}
-          onBlur={onChangeHandler}
+          onChange={onChangeHandler}
           {...attributes}
           value={value}
         />,
@@ -158,7 +158,7 @@ Input.defaultProps = {
   required: false,
   label: false,
   placeholder: null,
-  attributes: [],
+  attributes: {},
   value: '',
   byCharValidator: () => true,
   validator: () => true,
@@ -174,7 +174,7 @@ Input.publicProps = {
   description: PropTypes.string,
   onInput: PropTypes.func,
   onChange: PropTypes.func,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   placeholder: PropTypes.string,
   attributes: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.any,

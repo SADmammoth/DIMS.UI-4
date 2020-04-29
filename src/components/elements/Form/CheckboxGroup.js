@@ -10,7 +10,7 @@ function CheckboxGroup(props) {
      * consists of values of checked checkboxes  */
     const values = checkboxValueSeparator(commonValue);
 
-    const onClick = (event) => {
+    const onChange = (event) => {
       if (type === 'checkbox') {
         const { checked, value } = event;
         if (checked) {
@@ -23,14 +23,14 @@ function CheckboxGroup(props) {
       onInput(event);
     };
     return (
-      <div className='form-group'>
+      <div key={currentValue} className='form-group'>
         <input
           id={id + currentValue}
           name={name}
           type={type}
           className={`form-${type}`}
           value={currentValue}
-          onClick={onClick}
+          onChange={onChange}
           {...attributes}
           checked={values === currentValue || values.includes(currentValue)}
         />

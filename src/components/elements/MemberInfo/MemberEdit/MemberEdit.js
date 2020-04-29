@@ -97,27 +97,28 @@ class MemberEdit extends React.Component {
 }
 
 MemberEdit.defaultProps = {
+  id: null,
   empty: false,
 };
 
 MemberEdit.propTypes = {
-  id: PropTypes.string.isRequired,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  startDate: PropTypes.instanceOf(Date).isRequired,
-  direction: PropTypes.string.isRequired,
-  mobilePhone: PropTypes.string.isRequired,
-  skype: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  sex: PropTypes.string.isRequired,
-  birthDate: PropTypes.instanceOf(Date).isRequired,
-  education: PropTypes.string.isRequired,
-  universityAverageScore: PropTypes.number.isRequired,
-  mathScore: PropTypes.number.isRequired,
+  id: PropTypes.string,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
+  startDate: PropTypes.instanceOf(Date),
+  direction: PropTypes.string,
+  mobilePhone: PropTypes.string,
+  skype: PropTypes.string,
+  address: PropTypes.string,
+  sex: PropTypes.string,
+  birthDate: PropTypes.instanceOf(Date),
+  education: PropTypes.string,
+  universityAverageScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  mathScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   empty: PropTypes.bool,
-  handleClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
 };
 
 export default MemberEdit;

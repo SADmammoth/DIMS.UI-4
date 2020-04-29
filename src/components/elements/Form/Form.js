@@ -92,6 +92,7 @@ class Form extends React.Component {
   ) {
     return (
       <Input
+        key={id}
         id={id}
         type={type}
         name={name}
@@ -271,6 +272,7 @@ Form.defaultProps = {
   submitButton: <button type='submit'>Submit</button>,
   onInputsUpdate: (inputs) => inputs,
 };
+
 Form.propTypes = {
   method: PropTypes.string,
   action: PropTypes.string,

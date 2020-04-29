@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 function Select(props) {
   const { valueOptions, ...restProps } = props;
   function renderOption(value) {
-    return <option value={value}>{value}</option>;
+    return (
+      <option key={value} value={value}>
+        {value}
+      </option>
+    );
   }
 
   return (

@@ -58,4 +58,6 @@ TaskEdit.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object),
 };
 
+//TODO Implement adaptivity
+
 export default TaskEdit;

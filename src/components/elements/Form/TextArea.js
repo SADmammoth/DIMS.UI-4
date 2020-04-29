@@ -28,7 +28,7 @@ function TextArea(props) {
     }
   };
 
-  const onBlur = (event) => {
+  const onChangeHandler = (event) => {
     if (checkCount(event.target.value, minSymbols, maxSymbols)) {
       onChange(event);
     } else {
@@ -42,7 +42,7 @@ function TextArea(props) {
       className='form-textarea'
       name={name}
       onInput={inputHandler}
-      onBlur={onBlur}
+      onChange={onChangeHandler}
       required={required}
       {...attributes}
       value={value}

@@ -62,7 +62,7 @@ function MemberTaskCard(props) {
             <h3>Assigned to:</h3>
             <ul className='inline-list'>
               {assignedTo.map((user) => (
-                <li>
+                <li key={user.userID}>
                   <Link to={`/members/${user.userID}/tasks/${user.memberTaskID}`}>
                     <b>{user.firstName}</b>
                     {` ${user.lastName}`}
@@ -92,9 +92,9 @@ function MemberTaskCard(props) {
                 buttonClassMod='secondary'
                 buttonContent='Delete'
                 message={
-                  <p>
+                  <>
                     Are you confident, you want to delete task <b>{taskName}</b>?
-                  </p>
+                  </>
                 }
                 confirmButtonClassMod='error'
                 confirmButtonContent='Delete'
@@ -118,6 +118,7 @@ function MemberTaskCard(props) {
 MemberTaskCard.defaultProps = {
   assignedTo: [],
   members: [],
+  state: null,
 };
 
 MemberTaskCard.propTypes = {
@@ -137,7 +138,7 @@ MemberTaskCard.propTypes = {
 
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
-  state: PropTypes.string.isRequired,
+  state: PropTypes.string,
   taskStart: PropTypes.instanceOf(Date).isRequired,
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
 };
