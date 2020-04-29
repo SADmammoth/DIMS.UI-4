@@ -12,6 +12,7 @@ function MaskComponent(input, maskArray) {
       return input;
     }
   }
+
   function setCursorToEndOfInput(eventTarget) {
     const firstPlaceholder = eventTarget.value.indexOf('_');
     eventTarget.setSelectionRange(firstPlaceholder, firstPlaceholder);

@@ -166,4 +166,8 @@
       margin-bottom: 20vh;
     }
   }
+
+  [class*='icon-'] {
+    fill: $common-text;
+  }
 }
