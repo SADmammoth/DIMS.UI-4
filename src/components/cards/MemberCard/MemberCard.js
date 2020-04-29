@@ -135,6 +135,7 @@ class MemberCard extends React.PureComponent {
             universityAverageScore={universityAverageScore}
             mathScore={mathScore}
             handleClose={this.closeEditModal}
+            role={role}
           />
         </Modal>
       </>

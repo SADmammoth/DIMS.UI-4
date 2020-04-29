@@ -13,6 +13,7 @@ import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
 import ButtonGroup from '../ButtonGroup';
 import FlexColumn from '../FlexColumn';
+import ContainerComponent from '../ContainerComponent/ContainerComponent';
 
 const MemberInfo = (props) => {
   const {
@@ -72,13 +73,13 @@ const MemberInfo = (props) => {
                 <span>{mobilePhone}</span>
               </a>
             </div>
-            <div>
-              <p className='address'>
+            <div className='address'>
+              <p>
                 <AddressIcon className='icon-address' />
                 {address}
               </p>
-              <hr />
             </div>
+            <hr />
           </div>
           <div className='member-info__additional-info'>
             <FlexColumn>
