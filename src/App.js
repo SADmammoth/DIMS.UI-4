@@ -8,15 +8,15 @@ import ThemePreloader from './ThemePreloader';
 const App = (props) => {
   return (
     <Router>
-      <AuthorizationManager>
-        <ThemePreloader>
+      <ThemePreloader>
+        <AuthorizationManager>
           <UserContextConsumer>
             {({ role, userID }) => {
               return <Routes role={role} userID={userID} />;
             }}
           </UserContextConsumer>
-        </ThemePreloader>
-      </AuthorizationManager>
+        </AuthorizationManager>
+      </ThemePreloader>
     </Router>
   );
 };

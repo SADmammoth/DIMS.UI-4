@@ -2,6 +2,8 @@ import Client from './Client';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
+import LogOut from './LogOut';
 
 class AuthenticationManager extends Component {
   constructor(props) {
@@ -16,6 +18,12 @@ class AuthenticationManager extends Component {
   logIn = async (login, password) => {
     const authResponse = await this.authenticate(login, password);
     this.setState({ authenticated: authResponse.status === 'success' });
+  };
+
+  logOut = () => {
+    this.setState({ authenticated: null });
+    localStorage.removeItem('authToken');
+    this.props.deleteUserInfo();
   };
 
   authenticate = async (login, password) => {
@@ -45,8 +53,13 @@ class AuthenticationManager extends Component {
     const { logInFormClass: LogInForm, children } = this.props;
     return (
       <>
-        {this.state.authenticated !== null &&
-          (this.state.authenticated ? children : <LogInForm logIn={this.logIn} show />)}
+        {this.state.authenticated !== null && (this.state.authenticated ? children : <Redirect to='/login' />)}
+        <Route exact path='/login'>
+          {!this.state.authenticated ? <LogInForm logIn={this.logIn} show /> : <Redirect to='/' />}
+        </Route>
+        <Route exact path='/logout'>
+          <LogOut logOut={this.logOut} />
+        </Route>
       </>
     );
   }
@@ -55,6 +68,7 @@ class AuthenticationManager extends Component {
 AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
   logInFormClass: PropTypes.func.isRequired,
+  deleteUserInfo: PropTypes.func.isRequired,
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 

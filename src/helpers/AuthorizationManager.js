@@ -22,12 +22,21 @@ class AuthorizationManager extends Component {
     }
   };
 
+  deleteUserInfo = () => {
+    localStorage.removeItem('userInfo');
+    this.setState({ authorizedUser: { role: 'guest', userID: 'guest' } });
+  };
+
   render() {
     const { children } = this.props;
     return (
       <>
         <UserContext.Provider value={this.state.authorizedUser}>
-          <AuthenticationManager logInFormClass={LoginForm} authorize={this.authorize}>
+          <AuthenticationManager
+            logInFormClass={LoginForm}
+            authorize={this.authorize}
+            deleteUserInfo={this.deleteUserInfo}
+          >
             {children}
           </AuthenticationManager>
         </UserContext.Provider>

@@ -45,6 +45,9 @@ class SettingsButton extends React.Component {
           >
             {this.state.inputs.theme}
           </Form>
+          <Button classMod='secondary' link='/logout'>
+            Log out
+          </Button>
           <div className='about'>Done by Maxim Logvinenko</div>
         </Modal>
         <Button classMod='invisible'>
