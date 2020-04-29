@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
 import Modal from '../Modal';
 import { ReactComponent as MenuIcon } from '../../../assets/icons/menu.svg';

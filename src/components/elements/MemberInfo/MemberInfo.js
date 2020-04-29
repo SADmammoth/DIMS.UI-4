@@ -13,7 +13,6 @@ import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
 import ButtonGroup from '../ButtonGroup';
 import FlexColumn from '../FlexColumn';
-import ContainerComponent from '../ContainerComponent/ContainerComponent';
 
 const MemberInfo = (props) => {
   const {
@@ -129,7 +128,7 @@ const MemberInfo = (props) => {
   );
 };
 
-MemberInfo.defaultTypes = {
+MemberInfo.defaultProps = {
   edit: false,
 };
 
@@ -146,13 +145,13 @@ MemberInfo.propTypes = {
   sex: PropTypes.string.isRequired,
   birthDate: PropTypes.instanceOf(Date).isRequired,
   education: PropTypes.string.isRequired,
-  universityAverageScore: PropTypes.number.isRequired,
-  mathScore: PropTypes.number.isRequired,
+  universityAverageScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  mathScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   role: PropTypes.string.isRequired,
 
-  handleClose: PropTypes.func,
+  handleClose: PropTypes.func.isRequired,
   edit: PropTypes.bool,
-  setEdit: PropTypes.string.isRequired,
+  setEdit: PropTypes.func.isRequired,
 };
 
 export default MemberInfo;

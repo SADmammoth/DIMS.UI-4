@@ -11,8 +11,9 @@ function CollapsableCardTitle(props) {
 }
 
 CollapsableCardTitle.propTypes = {
-  cardClass: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  cardClass: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default CollapsableCardTitle;

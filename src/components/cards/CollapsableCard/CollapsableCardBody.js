@@ -16,7 +16,8 @@ function CollapsableCardBody(props) {
 }
 
 CollapsableCardBody.propTypes = {
-  cardClass: PropTypes.string.isRequired,
+  cardClass: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default CollapsableCardBody;

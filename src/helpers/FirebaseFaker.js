@@ -96,7 +96,7 @@ function saveAsFile(content, filename) {
   const blob = new Blob([content], { type: 'text/text' });
   const anchor = document.createElement('a');
 
-  anchor.download = filename + '.txt';
+  anchor.download = `${filename}.txt`;
   anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
   anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
   anchor.click();

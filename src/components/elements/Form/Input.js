@@ -72,7 +72,7 @@ function Input(props) {
     }
   };
 
-  const onError = (e) => {
+  const onError = () => {
     highlightInput();
     errorNotification(description, validationMessage);
   };
@@ -168,14 +168,12 @@ Input.defaultProps = {
   validationMessage: '',
 };
 
-Input.propTypes = {
-  id: PropTypes.string.isRequired,
+Input.publicProps = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   onInput: PropTypes.func,
   onChange: PropTypes.func,
-  required: PropTypes.bool,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   attributes: PropTypes.objectOf(PropTypes.string),
@@ -187,9 +185,15 @@ Input.propTypes = {
   maskType: PropTypes.string,
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
+  validationMessage: PropTypes.string,
+};
+
+Input.propTypes = {
+  id: PropTypes.string.isRequired,
+  required: PropTypes.bool,
   invalid: PropTypes.bool.isRequired,
   highlightInput: PropTypes.func,
-  validationMessage: PropTypes.string,
+  ...Input.publicProps,
 };
 
 export default Input;

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from './Input';
-import notify from '../../../helpers/notify';
 import compareObjects from '../../../helpers/compareObjects';
 import errorNotification from '../../../helpers/errorNotification';
 
@@ -21,10 +20,13 @@ class Form extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { inputs } = this.props;
+    const { values } = this.state;
+
     if (
-      !compareObjects(prevProps.inputs, this.props.inputs) ||
-      Object.keys(this.state.values).length !== this.props.inputs.length ||
-      !compareObjects(prevState.values, this.state.values)
+      !compareObjects(prevProps.inputs, inputs) ||
+      Object.keys(values).length !== inputs.length ||
+      !compareObjects(prevState.values, values)
     ) {
       this.createValues();
       this.createInputs();
@@ -32,7 +34,8 @@ class Form extends React.Component {
   }
 
   getInput(name) {
-    return this.state.input[name];
+    const { input } = this.state;
+    return input[name];
   }
 
   updateValue = (name, value) => {
@@ -49,8 +52,10 @@ class Form extends React.Component {
   }
 
   createValues() {
+    const { inputs } = this.props;
     const values = {};
-    this.props.inputs.forEach((input) => {
+
+    inputs.forEach((input) => {
       values[input.name] = {
         id: input.name,
         value: input.value,
@@ -114,14 +119,14 @@ class Form extends React.Component {
 
   createInputs() {
     const { values } = this.state;
-    console.log(values['mobilePhone'] && values['mobilePhone'].value);
     const { inputs, onInputsUpdate } = this.props;
+
     if (!Object.keys(values).length) {
       return;
     }
 
     const inputsData = {};
-    inputs.forEach((input, i) => {
+    inputs.forEach((input) => {
       const {
         type,
         name,
@@ -144,14 +149,14 @@ class Form extends React.Component {
 
       const higlightInputCallback = () => this.highlightInput(name);
 
-      const onChangeHandler = (name, value) => {
-        onChange && onChange(name, value);
-        this.updateValue(name, value);
+      const onChangeHandler = (inputName, value) => {
+        if (onChange) onChange(inputName, value);
+        this.updateValue(inputName, value);
       };
 
-      const onInputHandler = (name, value) => {
-        onInput && onInput(name, value);
-        this.updateValue(name, value);
+      const onInputHandler = (inputName, value) => {
+        if (onInput) onInput(inputName, value);
+        this.updateValue(inputName, value);
       };
 
       inputsData[name] = Form.createInput(
@@ -213,8 +218,9 @@ class Form extends React.Component {
     const findInputByName = (name) => {
       return this.props.inputs.find((input) => input.name === name);
     };
+    let input;
     for (let valueName in values) {
-      let input = findInputByName(valueName);
+      input = findInputByName(valueName);
       if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
         this.highlightInput(valueName);
         showMessage(input.label || input.description, input.validationMessage);
@@ -225,10 +231,11 @@ class Form extends React.Component {
   };
 
   onSubmit = (event) => {
+    const { onSubmit: onSubmitHandler } = this.props;
     if (this.checkValidity(errorNotification)) {
-      if (this.props.onSubmit) {
+      if (onSubmitHandler) {
         event.preventDefault();
-        this.props.onSubmit(this.formatValues());
+        onSubmitHandler(this.formatValues());
       }
     } else {
       event.preventDefault();
@@ -237,6 +244,7 @@ class Form extends React.Component {
 
   render() {
     const { method, action, className, style, submitButton, children } = this.props;
+    const { inputs } = this.state;
     return (
       <>
         <form
@@ -246,7 +254,7 @@ class Form extends React.Component {
           style={{ ...style }}
           onSubmit={this.onSubmit}
         >
-          {children || Object.values(this.state.inputs)}
+          {children || Object.values(inputs)}
           {React.cloneElement(submitButton, { type: 'submit' })}
         </form>
       </>
@@ -263,9 +271,6 @@ Form.defaultProps = {
   submitButton: <button type='submit'>Submit</button>,
   onInputsUpdate: (inputs) => inputs,
 };
-
-const { onSubmit, onInput, ...inputProps } = Input.propTypes;
-
 Form.propTypes = {
   method: PropTypes.string,
   action: PropTypes.string,
@@ -273,13 +278,13 @@ Form.propTypes = {
   style: PropTypes.objectOf(PropTypes.string),
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
-      ...inputProps,
+      ...Input.publicProps,
       validationMessage: PropTypes.string,
     }),
   ).isRequired,
   onSubmit: PropTypes.func,
   submitButton: PropTypes.element,
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,

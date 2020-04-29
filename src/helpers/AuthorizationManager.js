@@ -1,5 +1,3 @@
-import Client from './Client';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AuthenticationManager from './AuthenticationManager';
@@ -13,10 +11,11 @@ class AuthorizationManager extends Component {
   }
 
   authorize = (role, userID) => {
+    const { roles } = this.state;
     if (!role || !userID) {
       this.setState({ authorizedUser: JSON.parse(localStorage.getItem('userInfo')) });
     }
-    if (this.state.roles.includes(role)) {
+    if (roles.includes(role)) {
       localStorage.setItem('userInfo', JSON.stringify({ role, userID }));
       this.setState({ authorizedUser: { role, userID } });
     }
@@ -29,9 +28,10 @@ class AuthorizationManager extends Component {
 
   render() {
     const { children } = this.props;
+    const { authorizedUser } = this.state;
     return (
       <>
-        <UserContext.Provider value={this.state.authorizedUser}>
+        <UserContext.Provider value={authorizedUser}>
           <AuthenticationManager
             logInFormClass={LoginForm}
             authorize={this.authorize}
@@ -46,7 +46,7 @@ class AuthorizationManager extends Component {
 }
 
 AuthorizationManager.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthorizationManager;

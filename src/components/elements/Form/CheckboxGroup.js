@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 
 function CheckboxGroup(props) {
-  function renderCheckbox(value, { value: commonValue, id, type, name, onInput, attributes }) {
+  function renderCheckbox(currentValue, { value: commonValue, id, type, name, onInput, attributes }) {
     //* 'value' variable is 'value' property of current checkbox
     /*
      * 'commonValue' is value of checkbox group by name, means array or string
@@ -25,16 +25,16 @@ function CheckboxGroup(props) {
     return (
       <div className='form-group'>
         <input
-          id={id + value}
+          id={id + currentValue}
           name={name}
           type={type}
           className={`form-${type}`}
-          value={value}
+          value={currentValue}
           onClick={onClick}
           {...attributes}
-          checked={values === value || values.includes(value)}
+          checked={values === currentValue || values.includes(currentValue)}
         />
-        <label htmlFor={id + value}>{value}</label>
+        <label htmlFor={id + currentValue}>{currentValue}</label>
       </div>
     );
   }

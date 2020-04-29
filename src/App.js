@@ -5,7 +5,7 @@ import Routes from './Routes';
 import UserContextConsumer from './helpers/UserContextConsumer';
 import ThemePreloader from './ThemePreloader';
 
-const App = (props) => {
+const App = () => {
   return (
     <Router>
       <ThemePreloader>

@@ -78,7 +78,7 @@ function Routes(props) {
 
 Routes.propTypes = {
   role: PropTypes.string.isRequired,
-  userID: PropTypes.string.isRequired,
+  userID: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 export default Routes;

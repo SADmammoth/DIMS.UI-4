@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Validator from '../../../../helpers/Validator';
 import Button from '../../Button';
 import Form from '../../Form';
 
@@ -98,6 +96,10 @@ class MemberEdit extends React.Component {
   }
 }
 
+MemberEdit.defaultProps = {
+  empty: false,
+};
+
 MemberEdit.propTypes = {
   id: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
@@ -114,7 +116,8 @@ MemberEdit.propTypes = {
   universityAverageScore: PropTypes.number.isRequired,
   mathScore: PropTypes.number.isRequired,
 
-  handleClose: PropTypes.func,
+  empty: PropTypes.bool,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default MemberEdit;

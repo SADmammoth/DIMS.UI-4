@@ -1,6 +1,5 @@
 import React from 'react';
 
-import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
 import placeInputCursorToEnd from '../../../../helpers/placeInputCursorToEnd';
 import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBeforePlaceholder';
 import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';

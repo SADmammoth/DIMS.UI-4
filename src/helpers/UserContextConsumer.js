@@ -7,12 +7,8 @@ function UserContextConsumer({ children }) {
   return <UserContext.Consumer>{children}</UserContext.Consumer>;
 }
 
-UserContextConsumer.defaultProps = {
-  children: null,
-};
-
 UserContextConsumer.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.func.isRequired,
 };
 
 export default UserContextConsumer;

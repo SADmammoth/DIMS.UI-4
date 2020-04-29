@@ -66,7 +66,6 @@ class Client {
 
     const progressObject = {};
     let userData = {};
-    console.log(track);
     await Promise.all(
       Object.entries(track).map(async ([id, data]) => {
         const { memberTaskId, ...progressData } = data;
@@ -78,7 +77,6 @@ class Client {
         progressObject[id].userName = userData.data().firstName;
       }),
     );
-    console.log(progressObject);
     return progressObject;
   }
 

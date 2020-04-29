@@ -58,6 +58,8 @@ class MemberCard extends React.PureComponent {
       close,
     } = this.props;
 
+    const { edit } = this.state;
+
     const age = new Date().getFullYear() - birthDate.getFullYear();
 
     return (
@@ -118,7 +120,7 @@ class MemberCard extends React.PureComponent {
         </CollapsableCard>
         <Modal ref={this.modal} className='member-info'>
           <MemberInfo
-            edit={this.state.edit}
+            edit={edit}
             setEdit={this.editModal}
             id={id}
             firstName={firstName}

@@ -7,7 +7,7 @@ function TextBadge(props) {
 }
 
 TextBadge.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default TextBadge;

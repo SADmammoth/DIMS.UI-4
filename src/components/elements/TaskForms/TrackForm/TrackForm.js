@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
 import TextBadge from '../../TextBadge';
-import Validator from '../../../../helpers/Validator';
 import trackFormInputsAttributes from './trackFormInputsAttributes';
 
 class TrackForm extends React.Component {

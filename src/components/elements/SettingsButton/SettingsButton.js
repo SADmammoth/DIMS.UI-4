@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Button from '../../elements/Button';
+import Button from '../Button';
 import { ReactComponent as SettingsIcon } from '../../../assets/icons/settings.svg';
-import Modal from '../../elements/Modal';
+import Modal from '../Modal';
 import changeColorScheme, { themes } from '../../../helpers/changeColorScheme';
-import Form from '../../elements/Form/Form';
+import Form from '../Form';
 
 class SettingsButton extends React.Component {
   constructor(props) {
@@ -23,6 +22,8 @@ class SettingsButton extends React.Component {
       changeColorScheme(themes[value]);
     }
 
+    const { inputs } = this.state;
+
     return (
       <>
         <Modal ref={modal} className='settings'>
@@ -38,12 +39,12 @@ class SettingsButton extends React.Component {
                 onChange: changeTheme,
               },
             ]}
-            onInputsUpdate={(inputs) => {
-              this.setState(inputs);
+            onInputsUpdate={(inputsData) => {
+              this.setState(inputsData);
             }}
             submitButton={<></>}
           >
-            {this.state.inputs.theme}
+            {inputs.theme}
           </Form>
           <Button classMod='secondary' link='/logout'>
             Log out
@@ -57,7 +58,5 @@ class SettingsButton extends React.Component {
     );
   }
 }
-
-SettingsButton.propTypes = {};
 
 export default SettingsButton;

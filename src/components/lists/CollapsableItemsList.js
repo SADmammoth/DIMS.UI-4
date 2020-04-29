@@ -8,7 +8,7 @@ class CollapsableItemsList extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { items, open } = props;
+    const { items } = props;
     const { items: stateItems } = state;
     if (Object.values(stateItems).length !== items.length) {
       const itemsData = {};
@@ -17,6 +17,7 @@ class CollapsableItemsList extends Component {
       });
       return { ...state, items: itemsData };
     }
+    return state;
   }
 
   async componentDidMount() {
@@ -102,6 +103,10 @@ class CollapsableItemsList extends Component {
     );
   }
 }
+
+CollapsableItemsList.defaultProps = {
+  open: null,
+};
 
 CollapsableItemsList.propTypes = {
   open: PropTypes.string,

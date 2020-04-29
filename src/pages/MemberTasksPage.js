@@ -36,6 +36,7 @@ class MemberTasksPage extends React.Component {
     if (state.taskSet !== props.taskSet) {
       return { ...state, tasks: null, name: 'Name' };
     }
+    return state;
   }
 
   async update() {
@@ -44,10 +45,12 @@ class MemberTasksPage extends React.Component {
     const userId = this.props.match.params.id;
     let members;
 
-    if (this.props.taskSet === 'user') {
+    const { taskSet } = this.props;
+
+    if (taskSet === 'user') {
       name = (await MemberTasksPage.getName(userId)).firstName;
       taskData = await Client.getUserTasks(userId);
-    } else if (this.props.taskSet === 'all') {
+    } else if (taskSet === 'all') {
       taskData = await Client.getTasks();
       members = Object.values(await Client.getMembers()).map((member) => {
         return { firstName: member.firstName, lastName: member.lastName };

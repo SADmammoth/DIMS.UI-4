@@ -1,8 +1,7 @@
-import Client from './Client';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
+import Client from './Client';
 import LogOut from './LogOut';
 
 class AuthenticationManager extends Component {
@@ -21,12 +20,14 @@ class AuthenticationManager extends Component {
   };
 
   logOut = () => {
+    const { deleteUserInfo } = this.props;
     this.setState({ authenticated: null });
     localStorage.removeItem('authToken');
-    this.props.deleteUserInfo();
+    deleteUserInfo();
   };
 
   authenticate = async (login, password) => {
+    const { authorize } = this.props;
     const authToken = localStorage.getItem('authToken');
     if (!authToken || !(await Client.checkToken(authToken))) {
       if (!login || !password) {
@@ -41,21 +42,22 @@ class AuthenticationManager extends Component {
       }
 
       localStorage.setItem('authToken', token);
-      this.props.authorize(role, userID);
+      authorize(role, userID);
     } else {
       const { role, userID } = await Client.getUserInfoByToken(authToken);
-      this.props.authorize(role, userID);
+      authorize(role, userID);
     }
     return { status: 'success', message: 'Login successful' };
   };
 
   render() {
     const { logInFormClass: LogInForm, children } = this.props;
+    const { authenticated } = this.state;
     return (
       <>
-        {this.state.authenticated !== null && (this.state.authenticated ? children : <Redirect to='/login' />)}
+        {authenticated !== null && (authenticated ? children : <Redirect to='/login' />)}
         <Route exact path='/login'>
-          {!this.state.authenticated ? <LogInForm logIn={this.logIn} show /> : <Redirect to='/' />}
+          {!authenticated ? <LogInForm logIn={this.logIn} show /> : <Redirect to='/' />}
         </Route>
         <Route exact path='/logout'>
           <LogOut logOut={this.logOut} />
@@ -69,7 +71,7 @@ AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
   logInFormClass: PropTypes.func.isRequired,
   deleteUserInfo: PropTypes.func.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthenticationManager;

@@ -4,9 +4,11 @@ import { withRouter } from 'react-router-dom';
 
 function Button(props) {
   const { classMod, type, content, children, history, link, onClick } = props;
+
   function onClickHandler(event) {
-    onClick ? onClick(event) : history.push(link);
+    return onClick ? onClick(event) : history.push(link);
   }
+
   return (
     <button className={`button button${`_${classMod}` || ''}`} type={type} onClick={onClickHandler}>
       {content || children}
@@ -24,7 +26,8 @@ Button.propTypes = {
   history: PropTypes.any.isRequired,
   classMod: PropTypes.string,
   link: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.objectOf(PropTypes.object)]),
+  children: PropTypes.node,
+  onClick: PropTypes.func,
 };
 
 export default withRouter(Button);
