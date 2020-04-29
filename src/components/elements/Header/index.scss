@@ -13,9 +13,10 @@
   @include acrylic-glass-effect;
 
   .site-title {
-    padding-right: 40px;
-    width: 120px;
+    padding-right: 5vw;
+    width: 10vw;
     box-sizing: border-box;
+    min-width: 100px;
   }
 
   .page-title {

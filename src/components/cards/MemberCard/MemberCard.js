@@ -68,8 +68,20 @@ class MemberCard extends React.PureComponent {
               <b>{firstName}</b>
               {` ${lastName}, ${age}`}
             </CollapsableCard.Title>
-            <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-            <TextBadge>{direction}</TextBadge>
+            <>
+              {window.matchMedia('(max-width: 1000px)').matches || (
+                <>
+                  <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
+                </>
+              )}
+            </>
+            <>
+              {window.matchMedia('(max-width: 400px)').matches || (
+                <>
+                  <TextBadge>{direction}</TextBadge>
+                </>
+              )}
+            </>
           </CollapsableCard.Header>
           <CollapsableCard.Body>
             <Button classMod='primary' link={`/members/${id}/progress`}>
@@ -80,20 +92,27 @@ class MemberCard extends React.PureComponent {
               <TasksIcon className='icon-tasks' />
               <span>Tasks</span>
             </Button>
-            <DialogButton
-              buttonClassMod='secondary'
-              buttonContent='Delete'
-              message={
-                <p>
-                  Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                </p>
-              }
-              confirmButtonClassMod='error'
-              confirmButtonContent='Delete'
-              dialogValue={id}
-              onSubmit={({ dialogValue }) => console.log(dialogValue)}
-            />
-            <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+            <>
+              {window.matchMedia('(max-width: 400px)').matches || (
+                <>
+                  <DialogButton
+                    buttonClassMod='secondary'
+                    buttonContent='Delete'
+                    message={
+                      <p>
+                        Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                      </p>
+                    }
+                    confirmButtonClassMod='error'
+                    confirmButtonContent='Delete'
+                    dialogValue={id}
+                    onSubmit={({ dialogValue }) => console.log(dialogValue)}
+                  />
+
+                  <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+                </>
+              )}
+            </>
             <Button content='More info' classMod='ghost' onClick={this.showModal} />
           </CollapsableCard.Body>
         </CollapsableCard>
