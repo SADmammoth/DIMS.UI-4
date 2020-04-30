@@ -24,7 +24,7 @@ class AuthenticationManager extends Component {
       if (!login || !password) {
         return { status: 'fail' };
       }
-      const { status, found, token, role, userID } = await Client.signIn(login, password);
+      const { status, found, token, role, userId } = await Client.signIn(login, password);
       if (status === 'fail' && found) {
         return { status, message: 'Incorrect password' };
       }
@@ -33,10 +33,10 @@ class AuthenticationManager extends Component {
       }
 
       localStorage.setItem('authToken', token);
-      this.props.authorize(role, userID);
+      this.props.authorize(role, userId);
     } else {
-      const { role, userID } = await Client.getUserInfoByToken(authToken);
-      this.props.authorize(role, userID);
+      const { role, userId } = await Client.getUserInfoByToken(authToken);
+      this.props.authorize(role, userId);
     }
     return { status: 'success', message: 'Login successful' };
   };

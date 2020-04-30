@@ -10,20 +10,20 @@ class AuthorizationManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authorizedUser: { role: 'guest', userID: 'guest' },
+      authorizedUser: { role: 'guest', userId: 'guest' },
       roles: ['guest', 'member', 'admin', 'mentor'],
     };
   }
 
-  authorize = (role, userID) => {
-    if (!role || !userID) {
+  authorize = (role, userId) => {
+    if (!role || !userId) {
       this.setState({
         authorizedUser: JSON.parse(localStorage.getItem('userInfo')),
       });
     }
     if (this.state.roles.includes(role)) {
-      localStorage.setItem('userInfo', JSON.stringify({ role, userID }));
-      this.setState({ authorizedUser: { role, userID } });
+      localStorage.setItem('userInfo', JSON.stringify({ role, userId }));
+      this.setState({ authorizedUser: { role, userId } });
     }
   };
 

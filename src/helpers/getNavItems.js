@@ -14,11 +14,11 @@ const NavItems = {
   ],
 };
 
-export default function getNavItems({ role, userID }, currentRoute) {
+export default function getNavItems({ role, userId }, currentRoute) {
   return NavItems[role].map((item) => {
     let itemCopy = { ...item };
     itemCopy.active = itemCopy.link === currentRoute;
-    itemCopy.link = itemCopy.link.replace(':id', userID);
+    itemCopy.link = itemCopy.link.replace(':id', userId);
     itemCopy.link = itemCopy.link.replace(/\/:[^/]*/g, '');
     return itemCopy;
   });

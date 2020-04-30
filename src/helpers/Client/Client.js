@@ -158,6 +158,7 @@ class Client {
   static createTasksObject(tasksResponse) {
     const { TaskId, Name, Description, StartDate, DeadlineDate } = tasksResponse;
     const tasks = {};
+    tasks.id = TaskId.toString();
     tasks.taskId = TaskId;
     tasks.taskName = Name;
     tasks.description = Description;
@@ -170,15 +171,19 @@ class Client {
     const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'))).data;
 
     const tasksObject = {};
-    tasks.forEach((task) => {
-      tasksObject[task.TaskId] = Client.createTasksObject(task);
-    });
+    await Promise.all(
+      tasks.map(async (task) => {
+        tasksObject[task.TaskId] = Client.createTasksObject(task);
+        tasksObject[task.TaskId].assignedTo = await this.getAssigned(task.TaskId);
+      }),
+    );
     return tasksObject;
   }
 
   static createUserTasksObject(userTasksResponse) {
     const { UserId, TaskId, TaskName, Description, StartDate, DeadlineDate, State } = userTasksResponse;
-    let userTasks = {};
+    const userTasks = {};
+    userTasks.id = TaskId.toString() + UserId.toString();
     userTasks.userId = UserId;
     userTasks.taskId = TaskId;
     userTasks.taskName = TaskName;
@@ -201,6 +206,23 @@ class Client {
 
   static assignTask(taskId, usersIds) {
     return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId), usersIds);
+  }
+
+  static async getAssigned(taskId) {
+    const allUsers = await this.getMembers();
+    const assignedTo = [];
+    let userTasks;
+    await Promise.all(
+      Object.entries(allUsers).map(async ([userId, user]) => {
+        userTasks = await this.getUserTasks(userId);
+        Object.values(userTasks).forEach((userTask) => {
+          if (userTask.taskId === taskId) {
+            assignedTo.push({ userId, firstName: user.firstName, lastName: user.lastName, memberTaskId: userTask.id });
+          }
+        });
+      }),
+    );
+    return assignedTo;
   }
 
   static deleteMember(userId) {

@@ -33,7 +33,7 @@ function MemberTaskCard(props) {
     edit,
   } = props;
 
-  const assignedToIds = assignedTo.map((user) => user.userID);
+  const assignedToIds = assignedTo.map((user) => user.userId);
   console.log(members);
   return (
     <CollapsableCard
@@ -67,9 +67,9 @@ function MemberTaskCard(props) {
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
                     <li>
-                      <Link to={`/members/${user.userID}/tasks/${user.memberTaskId}`}>
-                        <b>{members[user.userID] ? members[user.userID].firstName : 'First name'}</b>
-                        {` ${members[user.userID] ? members[user.userID].lastName : 'Last name'}`}
+                      <Link to={`/members/${user.userId}/tasks/${user.memberTaskId}`}>
+                        <b>{members[user.userId] ? members[user.userId].firstName : 'First name'}</b>
+                        {` ${members[user.userId] ? members[user.userId].lastName : 'Last name'}`}
                       </Link>
                     </li>
                   ))}
@@ -160,7 +160,7 @@ MemberTaskCard.propTypes = {
   ),
   members: PropTypes.arrayOf(
     PropTypes.shape({
-      userID: PropTypes.string,
+      userId: PropTypes.string,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
     }),
