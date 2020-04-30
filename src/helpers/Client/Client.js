@@ -259,6 +259,10 @@ class Client {
     return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
   }
 
+  static deleteTask(taskId) {
+    return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
+  }
+
   static async checkToken(token) {
     return true;
   }

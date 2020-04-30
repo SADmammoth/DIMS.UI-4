@@ -133,7 +133,9 @@ function MemberTaskCard(props) {
                 confirmButtonClassMod='error'
                 confirmButtonContent='Delete'
                 dialogValue={id}
-                onSubmit={({ dialogValue }) => console.log(dialogValue)}
+                onSubmit={({ dialogValue }) => {
+                  return Client.deleteTask(dialogValue);
+                }}
               />
               <TaskEditButton
                 buttonClassMod='secondary'
