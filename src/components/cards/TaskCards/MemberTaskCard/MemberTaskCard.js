@@ -13,6 +13,9 @@ import CollapsableCard from '../../CollapsableCard';
 import { AssignButton } from '../../../elements/AssignForm';
 import DialogButton from '../../../elements/DialogButton/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';
+import Client from '../../../../helpers/Client/Client';
+import Validator from '../../../../helpers/Validator';
+import checkboxValueSeparator from '../../../../helpers/checkboxValueSeparator';
 
 function MemberTaskCard(props) {
   const {
@@ -34,7 +37,26 @@ function MemberTaskCard(props) {
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
-  console.log(members);
+
+  const editTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
+    const assignedTo = checkboxValueSeparator(members);
+    if (
+      !compareObjects(
+        assignedTo,
+        assignedTo.map((el) => el.userId),
+      )
+    ) {
+      await Client.assignTask(taskId, assignedTo);
+    }
+    return Client.editTask(
+      taskId,
+      taskName,
+      taskDescription,
+      Validator.dateByMask(taskStart, 'dd-MM-yyyy'),
+      Validator.dateByMask(taskDeadline, 'dd-MM-yyyy'),
+    );
+  };
+
   return (
     <CollapsableCard
       id={id}
@@ -121,6 +143,7 @@ function MemberTaskCard(props) {
                 assignedTo={assignedTo}
                 show={edit}
                 members={members}
+                onSubmit={editTask}
                 buttonContent='Edit'
               />
             </>
@@ -186,3 +209,5 @@ export default React.memo(
   })(MemberTaskCard),
   compareObjects,
 );
+
+// TODO add success/fail

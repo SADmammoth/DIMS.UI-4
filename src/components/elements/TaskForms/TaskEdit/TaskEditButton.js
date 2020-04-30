@@ -8,6 +8,8 @@ import Modal from '../../Modal';
 function TaskEditButton(props) {
   const modal = React.createRef();
 
+  const { onSubmit, buttonContent, buttonClassMod, ...otherProps } = props;
+
   const openModal = (event) => {
     props.history.push(`/tasks/${props.taskId}/edit`);
     modal.current.handleShow();
@@ -21,13 +23,24 @@ function TaskEditButton(props) {
     modal.current.handleClose();
   };
 
+  const onSubmitHandler = (data) => {
+    return onSubmit(data)
+      .then((res) => {
+        handleClose();
+        return res;
+      })
+      .then((res) => {
+        return res;
+      });
+  };
+
   return (
     <>
-      <Button classMod={props.buttonClassMod} onClick={openModal}>
-        {props.children || props.buttonContent}
+      <Button classMod={buttonClassMod} onClick={openModal}>
+        {props.children || buttonContent}
       </Button>
       <Modal ref={modal} show={props.show} className='task-edit' onClose={onClose}>
-        <TaskEdit {...props} />
+        <TaskEdit onSubmit={onSubmitHandler} {...otherProps} />
         <Button classMod='secondary' onClick={handleClose}>
           Cancel
         </Button>
