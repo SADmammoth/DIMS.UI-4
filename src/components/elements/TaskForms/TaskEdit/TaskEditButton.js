@@ -16,6 +16,11 @@ function TaskEditButton(props) {
   const onClose = () => {
     props.history.goBack();
   };
+
+  const handleClose = () => {
+    modal.current.handleClose();
+  };
+
   return (
     <>
       <Button classMod={props.buttonClassMod} onClick={openModal}>
@@ -23,6 +28,9 @@ function TaskEditButton(props) {
       </Button>
       <Modal ref={modal} show={props.show} className='task-edit' onClose={onClose}>
         <TaskEdit {...props} />
+        <Button classMod='secondary' onClick={handleClose}>
+          Cancel
+        </Button>
       </Modal>
     </>
   );

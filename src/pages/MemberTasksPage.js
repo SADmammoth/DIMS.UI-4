@@ -144,3 +144,5 @@ export default withRouter(
     return { name: member ? member.firstName : 'Name' };
   })(MemberTasksPage),
 );
+
+// TODO add create task

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import path from 'path';
 import Validator from '../Validator';
+import compareObjects from '../compareObjects';
 
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
@@ -138,7 +139,7 @@ class Client {
       return new Promise();
     }
 
-    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId), {
+    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
       Name,
       LastName,
       Email,
@@ -161,7 +162,7 @@ class Client {
     tasks.id = TaskId.toString();
     tasks.taskId = TaskId;
     tasks.taskName = Name;
-    tasks.description = Description;
+    tasks.taskDescription = Description;
     tasks.taskStart = new Date(StartDate);
     tasks.taskDeadline = new Date(DeadlineDate);
     return tasks;
@@ -190,7 +191,7 @@ class Client {
     userTasks.taskDescription = Description;
     userTasks.taskStart = new Date(StartDate);
     userTasks.taskDeadline = new Date(DeadlineDate);
-    userTasks.status = State;
+    userTasks.state = State;
     return userTasks;
   }
 
@@ -205,7 +206,7 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId), usersIds);
+    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
   }
 
   static async getAssigned(taskId) {
@@ -223,6 +224,16 @@ class Client {
       }),
     );
     return assignedTo;
+  }
+
+  static editTask(TaskId, Name, Description, StartDate, DeadlineDate) {
+    return axios.put(path.join(Client.apiPath, 'task', 'edit'), {
+      TaskId,
+      Name,
+      Description,
+      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+      DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
+    });
   }
 
   static deleteMember(userId) {

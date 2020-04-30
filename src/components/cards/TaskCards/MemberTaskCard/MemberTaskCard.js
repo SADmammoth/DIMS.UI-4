@@ -113,7 +113,12 @@ function MemberTaskCard(props) {
               />
               <TaskEditButton
                 buttonClassMod='secondary'
-                {...props}
+                taskId={taskId}
+                taskName={taskName}
+                taskDescription={taskDescription}
+                taskStart={taskStart}
+                taskDeadline={taskDeadline}
+                assignedTo={assignedTo}
                 show={edit}
                 members={members}
                 buttonContent='Edit'

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
 import taskEditInputsAttributes from './taskEditInputsAttributes';
+import Client from '../../../../helpers/Client';
+import compareObjects from '../../../../helpers/compareObjects';
+import Validator from '../../../../helpers/Validator';
 
 class TaskEdit extends React.PureComponent {
   constructor(props) {
@@ -11,17 +14,37 @@ class TaskEdit extends React.PureComponent {
   }
 
   render() {
-    const { taskName } = this.props;
+    const { assignedTo, taskId } = this.props;
     const { inputs } = this.state;
+
+    const onSubmit = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
+      if (
+        !compareObjects(
+          members,
+          assignedTo.map((el) => el.userId),
+        )
+      ) {
+        await Client.assignTask(taskId, members);
+      }
+      return Client.editTask(
+        taskId,
+        taskName,
+        taskDescription,
+        Validator.dateByMask(taskStart, 'dd-MM-yyyy'),
+        Validator.dateByMask(taskDeadline, 'dd-MM-yyyy'),
+      );
+    };
+
     return (
       <>
         <Form
           inputs={taskEditInputsAttributes(this.props)}
           onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
+          onSubmit={onSubmit}
           submitButton={<Button content='Confirm' classMod='secondary' />}
         >
           <div className='task-edit__header'>
-            <p className='task-edit__title'>{taskName}</p>
+            <p className='task-edit__title'>{inputs.taskName}</p>
           </div>
           <div className='task-edit__body'>
             <div className='task-edit__description'>{inputs.taskDescription}</div>
@@ -43,6 +66,7 @@ TaskEdit.defaultProps = {
 };
 
 TaskEdit.propTypes = {
+  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
   taskStart: PropTypes.instanceOf(Date).isRequired,

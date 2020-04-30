@@ -1,12 +1,26 @@
 import Validator from '../../../../helpers/Validator';
 
-export default function taskEditInputsAttributes({ taskDescription, taskStart, taskDeadline, assignedTo, members }) {
+export default function taskEditInputsAttributes({
+  taskName,
+  taskDescription,
+  taskStart,
+  taskDeadline,
+  assignedTo,
+  members,
+}) {
+  console.log(taskDescription);
+
   return [
+    {
+      type: 'text',
+      name: 'taskName',
+      value: taskName,
+    },
     {
       type: 'textarea',
       name: 'taskDescription',
       label: 'Task description',
-      minSymbols: 50,
+      minSymbols: 4,
       maxSymbols: 600,
       value: taskDescription,
     },
@@ -36,9 +50,9 @@ export default function taskEditInputsAttributes({ taskDescription, taskStart, t
       type: 'checkbox',
       name: 'members',
       label: 'Assigned to members',
-      value: assignedTo.map((member) => `${member.firstName} ${member.lastName}`),
-      valueOptions: members.map((member) => {
-        return { label: `${member.firstName} ${member.lastName}`, value: member.id };
+      value: assignedTo.map((member) => member.userId),
+      valueOptions: Object.entries(members).map(([id, member]) => {
+        return { label: `${member.firstName} ${member.lastName}`, value: id };
       }),
     },
   ];
