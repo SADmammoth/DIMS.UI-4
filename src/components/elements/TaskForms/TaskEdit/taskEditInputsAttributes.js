@@ -8,12 +8,13 @@ export default function taskEditInputsAttributes({
   assignedTo,
   members,
 }) {
-  console.log(taskDescription);
+  console.log(members);
 
   return [
     {
       type: 'text',
       name: 'taskName',
+      description: 'Task name',
       value: taskName,
     },
     {
@@ -28,7 +29,8 @@ export default function taskEditInputsAttributes({
       type: 'text',
       name: 'taskStart',
       label: 'Task start',
-      value: Validator.fromDateToMask(taskStart, 'dd-MM-yyyy'),
+      description: '##-##-####',
+      value: taskStart && Validator.fromDateToMask(taskStart, 'dd-MM-yyyy'),
       mask: '99-99-9999',
       maskType: 'invisible',
       byCharValidator: (input) => Validator.dateByChar(input, ['dd-MM-yyyy']),
@@ -39,7 +41,8 @@ export default function taskEditInputsAttributes({
       type: 'text',
       name: 'taskDeadline',
       label: 'Task deadline',
-      value: Validator.fromDateToMask(taskDeadline, 'dd-MM-yyyy'),
+      description: '##-##-####',
+      value: taskDeadline && Validator.fromDateToMask(taskDeadline, 'dd-MM-yyyy'),
       mask: '99-99-9999',
       maskType: 'invisible',
       byCharValidator: (input) => Validator.dateByChar(input, ['dd-MM-yyyy']),

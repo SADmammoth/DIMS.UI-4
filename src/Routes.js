@@ -8,6 +8,7 @@ import MemberProgressPage from './pages/MemberProgressPage';
 import Error404Page from './pages/Error404Page';
 import MemberTracksPage from './pages/MemberTracksPage';
 import NewMember from './pages/NewMember';
+import NewTask from './pages/NewTask';
 
 function Routes(props) {
   const { role, userId } = props;
@@ -18,7 +19,7 @@ function Routes(props) {
       </Route>
       <Route
         exact
-        path='/members/:id/tasks/:open?'
+        path='/members/:id/tasks/id:open?'
         render={(props) => {
           return role === 'member' && props.match.params.id !== userId ? (
             <Redirect to='/404' />
@@ -40,10 +41,16 @@ function Routes(props) {
           <Route exact path='/members'>
             <MembersManagerPage />
           </Route>
-          <Route exact path='/tasks/:open?'>
+          <Route exact path='/tasks/new'>
+            <NewTask />
+          </Route>
+          <Route exact path='/tasks/'>
             <MemberTasksPage taskSet='all' />
           </Route>
-          <Route path='/tasks/:open/edit'>
+          <Route exact path='/tasks/id:open?'>
+            <MemberTasksPage taskSet='all' />
+          </Route>
+          <Route exact path='/tasks/id:open/edit'>
             <MemberTasksPage edit taskSet='all' />
           </Route>
           <Route path='/members/:id/progress'>

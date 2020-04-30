@@ -11,7 +11,7 @@ function TaskEditButton(props) {
   const { onSubmit, buttonContent, buttonClassMod, ...otherProps } = props;
 
   const openModal = (event) => {
-    props.history.push(`/tasks/${props.taskId}/edit`);
+    props.history.push(`/tasks/id${props.taskId}/edit`);
     modal.current.handleShow();
   };
 

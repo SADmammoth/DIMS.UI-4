@@ -1,15 +1,17 @@
 const NavItems = {
   admin: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/id/:open?' },
     { id: 'New member', content: 'New member', link: '/members/new' },
+    { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   mentor: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/id/:open?' },
+    { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   member: [
-    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks/id/:open?' },
     { id: 'Tracks', content: 'Tracks', link: '/members/:id/tracks' },
   ],
 };

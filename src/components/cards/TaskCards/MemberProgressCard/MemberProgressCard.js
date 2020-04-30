@@ -18,7 +18,7 @@ function MemberProgressCard(props) {
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
         {(role === 'admin' || role === 'mentor') && (
-          <Button classMod='ghost' link={`/tasks/${taskId}`}>
+          <Button classMod='ghost' link={`/tasks/id${taskId}`}>
             Show in tasks
           </Button>
         )}

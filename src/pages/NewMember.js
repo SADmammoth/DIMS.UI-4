@@ -72,11 +72,11 @@ class NewMember extends React.Component {
     )
       .then((response) => {
         this.setState({ loading: false });
-        return Response;
+        return response;
       })
       .catch((response) => {
         this.setState({ loading: false });
-        return Response;
+        return response;
       });
   };
 

@@ -236,6 +236,15 @@ class Client {
     });
   }
 
+  static postTask(Name, Description, StartDate, DeadlineDate) {
+    return axios.post(path.join(Client.apiPath, 'task', 'create'), {
+      Name,
+      Description,
+      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+      DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
+    });
+  }
+
   static deleteMember(userId) {
     return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
   }

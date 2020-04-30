@@ -89,7 +89,7 @@ function MemberTaskCard(props) {
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
                     <li>
-                      <Link to={`/members/${user.userId}/tasks/${user.memberTaskId}`}>
+                      <Link to={`/members/${user.userId}/tasks/id${user.memberTaskId}`}>
                         <b>{members[user.userId] ? members[user.userId].firstName : 'First name'}</b>
                         {` ${members[user.userId] ? members[user.userId].lastName : 'Last name'}`}
                       </Link>
@@ -149,7 +149,7 @@ function MemberTaskCard(props) {
             </>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
-            <Button classMod='ghost' link={`/tasks/${taskId}`}>
+            <Button classMod='ghost' link={`/tasks/id${taskId}`}>
               Show in tasks
             </Button>
           )}

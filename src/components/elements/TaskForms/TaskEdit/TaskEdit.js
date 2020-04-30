@@ -12,7 +12,7 @@ class TaskEdit extends React.PureComponent {
   }
 
   render() {
-    const { onSubmit } = this.props;
+    const { onSubmit, empty } = this.props;
     const { inputs, loading } = this.state;
 
     const onSubmitHandler = (data) => {

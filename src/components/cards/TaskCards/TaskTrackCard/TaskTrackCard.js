@@ -43,7 +43,7 @@ function TaskTrackCard(props) {
           />
           <Button
             classMod='ghost'
-            link={`/members/${props.match.params.id}/tasks/${memberTaskId}`}
+            link={`/members/${props.match.params.id}/tasks/id${memberTaskId}`}
             content='Show in tasks'
           />
         </ButtonGroup>
