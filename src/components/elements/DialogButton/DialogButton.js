@@ -24,7 +24,11 @@ class DialogButton extends React.Component {
 
   onSubmit = (data) => {
     this.setState({ loading: true });
-    return this.props.onSubmit(data);
+    return this.props.onSubmit(data).then((res) => {
+      this.setState({ loading: false });
+      this.modal.current.handleClose();
+      return res;
+    });
   };
 
   render() {
@@ -79,6 +83,7 @@ DialogButton.propTypes = {
   buttonClassMod: PropTypes.string.isRequired,
   dialogValue: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  reload: PropTypes.func.isRequired,
 };
 
 export default DialogButton;

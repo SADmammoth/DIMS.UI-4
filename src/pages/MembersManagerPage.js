@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 class MembersManagerPage extends React.Component {
   renderMembers() {
     const { members } = this.props;
-    console.log(members);
     if (!Object.keys(members).length) {
       return [];
     }

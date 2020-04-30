@@ -1,6 +1,5 @@
 export default function calculateAge(birthDate) {
   let now = new Date();
-  console.log(birthDate);
   if (now.getMonth() === birthDate.getMonth()) {
     if (now.getDate() > birthDate.getDate()) {
       return new Date().getFullYear() - birthDate.getFullYear() - 1;

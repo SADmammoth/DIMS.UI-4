@@ -26,3 +26,7 @@ const App = (props) => {
 };
 
 export default App;
+
+// TODO merge pages
+// TODO fix errors
+// TODO improve adaptivity

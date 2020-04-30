@@ -141,7 +141,6 @@ function followMaskComponent(input, maskArray) {
       const firstPlaceholder = event.target.value.indexOf('_');
       event.target.value = event.target.value.slice(0, firstPlaceholder);
       input.props.onBlur(event);
-      console.log(firstPlaceholder);
       event.target.setSelectionRange(firstPlaceholder, firstPlaceholder);
     },
   });

@@ -72,7 +72,7 @@ class Client {
 
     const progressObject = {};
     let userData = {};
-    console.log(track);
+
     await Promise.all(
       Object.entries(track).map(async ([id, data]) => {
         const { memberTaskId, ...progressData } = data;
@@ -84,7 +84,7 @@ class Client {
         progressObject[id].userName = userData.data().firstName;
       }),
     );
-    console.log(progressObject);
+
     return progressObject;
   }
 
@@ -145,7 +145,6 @@ class Client {
       .where('login', '==', login)
       .get();
     if (user) {
-      console.log(md5(password), user.docs[0].data().password, user.docs[0].data().password === md5(password));
       if (user.docs[0].data().password === md5(password)) {
         return {
           status: 'success',

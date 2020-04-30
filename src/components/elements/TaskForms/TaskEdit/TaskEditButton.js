@@ -8,7 +8,7 @@ import Modal from '../../Modal';
 function TaskEditButton(props) {
   const modal = React.createRef();
 
-  const { onSubmit, buttonContent, buttonClassMod, ...otherProps } = props;
+  const { onSubmit, buttonContent, buttonClassMod, reload, ...otherProps } = props;
 
   const openModal = (event) => {
     props.history.push(`/tasks/id${props.taskId}/edit`);
@@ -27,6 +27,7 @@ function TaskEditButton(props) {
     return onSubmit(data)
       .then((res) => {
         handleClose();
+        reload();
         return res;
       })
       .then((res) => {
@@ -52,6 +53,7 @@ function TaskEditButton(props) {
 TaskEditButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   buttonClassMod: PropTypes.string.isRequired,
+  reload: PropTypes.func.isRequired,
   ...TaskEdit.propTypes,
 };
 

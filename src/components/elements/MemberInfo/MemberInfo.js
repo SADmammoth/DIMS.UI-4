@@ -45,7 +45,7 @@ class MemberInfo extends React.Component {
 
     const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
     const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
-    console.log(birthDate);
+
     store.dispatch(
       editMember(this.props.id, {
         firstName,

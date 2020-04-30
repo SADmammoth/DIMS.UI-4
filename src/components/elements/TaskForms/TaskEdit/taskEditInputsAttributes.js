@@ -8,8 +8,6 @@ export default function taskEditInputsAttributes({
   assignedTo,
   members,
 }) {
-  console.log(members);
-
   return [
     {
       type: 'text',

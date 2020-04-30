@@ -19,12 +19,10 @@ function CheckboxGroup(props) {
           values.splice(values.indexOf(value), 1);
         }
         event.target.value = values;
-        console.log(event.target.value);
         onChange(event);
       }
     };
 
-    console.log(values, valueOption.value);
     return (
       <div className='form-group'>
         <input
@@ -43,7 +41,6 @@ function CheckboxGroup(props) {
   }
 
   function renderCheckboxes() {
-    console.log(props.valueOptions);
     return props.valueOptions.map((valueOption) => renderCheckbox(valueOption, props));
   }
 

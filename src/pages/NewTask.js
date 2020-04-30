@@ -57,7 +57,7 @@ class NewTask extends React.Component {
 
   render() {
     const { members } = this.props;
-    console.log(members);
+
     return (
       <>
         <Helmet>

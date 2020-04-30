@@ -35,6 +35,7 @@ function MemberTaskCard(props) {
     open,
     close,
     edit,
+    reload,
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
@@ -109,13 +110,19 @@ function MemberTaskCard(props) {
 
         <ButtonGroup>
           {role === 'member' && (
-            <TrackButton taskName={taskName} buttonClassMod='primary'>
+            <TrackButton reload={reload} taskName={taskName} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
             </TrackButton>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
-            <AssignButton buttonClassMod='primary' taskId={taskId} assignedTo={assignedToIds} members={members}>
+            <AssignButton
+              reload={reload}
+              buttonClassMod='primary'
+              taskId={taskId}
+              assignedTo={assignedToIds}
+              members={members}
+            >
               <TrackIcon className='icon-tasks' />
               <span>Assign</span>
             </AssignButton>
@@ -136,6 +143,7 @@ function MemberTaskCard(props) {
                 onSubmit={({ dialogValue }) => {
                   return Client.deleteTask(dialogValue);
                 }}
+                reload={reload}
               />
               <TaskEditButton
                 buttonClassMod='secondary'
@@ -149,15 +157,22 @@ function MemberTaskCard(props) {
                 members={members}
                 onSubmit={editTask}
                 buttonContent='Edit'
+                reload={reload}
               />
             </>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
             <>
-              <ChangeStateButton buttonClassMod='success' taskId={taskId} userId={userId} state='success'>
+              <ChangeStateButton
+                reload={reload}
+                buttonClassMod='success'
+                taskId={taskId}
+                userId={userId}
+                state='success'
+              >
                 Success
               </ChangeStateButton>
-              <ChangeStateButton buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
+              <ChangeStateButton reload={reload} buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
                 Fail
               </ChangeStateButton>
               <Button classMod='ghost' link={`/tasks/id${taskId}`}>
@@ -211,6 +226,7 @@ MemberTaskCard.propTypes = {
   state: PropTypes.string.isRequired,
   taskStart: PropTypes.instanceOf(Date).isRequired,
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
+  reload: PropTypes.func.isRequired,
 };
 
 export default React.memo(
@@ -221,5 +237,3 @@ export default React.memo(
   })(MemberTaskCard),
   compareObjects,
 );
-
-// TODO add success/fail

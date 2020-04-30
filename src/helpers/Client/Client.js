@@ -199,7 +199,7 @@ class Client {
   static async getUserTasks(userId) {
     const userTasks = (await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId))).data;
     const userTasksObject = {};
-    console.log(userTasks);
+
     userTasks.forEach((userTask) => {
       userTasksObject[userTask.TaskId.toString() + userTask.UserId.toString()] = Client.createUserTasksObject(userTask);
     });

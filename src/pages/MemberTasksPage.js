@@ -50,7 +50,7 @@ class MemberTasksPage extends React.Component {
     });
   }
 
-  static wrappedMemberTask = ({ collapsed, id, taskSet, edit, open, close, ...data }) => {
+  wrappedMemberTask = ({ collapsed, id, taskSet, edit, open, close, ...data }) => {
     const { taskId, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
       <UserContext.Consumer>
@@ -71,6 +71,7 @@ class MemberTasksPage extends React.Component {
               close={close}
               collapsed={collapsed}
               assignedTo={assignedTo}
+              reload={() => this.update()}
             />
           );
         }}
@@ -78,15 +79,15 @@ class MemberTasksPage extends React.Component {
     );
   };
 
-  static renderTask(id, data, taskSet, edit) {
-    const WrappedMemberTask = MemberTasksPage.wrappedMemberTask;
+  renderTask(id, data, taskSet, edit) {
+    const WrappedMemberTask = this.wrappedMemberTask;
     return <WrappedMemberTask id={id} taskSet={taskSet} edit={edit} {...data} />;
   }
 
   renderTasks() {
     const { tasks } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberTasksPage.renderTask(id, data, this.props.taskSet, this.props.edit);
+      return this.renderTask(id, data, this.props.taskSet, this.props.edit);
     });
   }
 
