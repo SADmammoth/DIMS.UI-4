@@ -18,8 +18,8 @@ class CollapsableCard extends React.PureComponent {
   render() {
     const { id, collapsed, open, close, cardClass, children, className } = this.props;
 
-    const onClick = (collapsed) => {
-      collapsed ? open(id) : close(id);
+    const onClick = (isCollapsed) => {
+      return isCollapsed ? open(id) : close(id);
     };
 
     return (
@@ -52,13 +52,19 @@ class CollapsableCard extends React.PureComponent {
   }
 }
 
+CollapsableCard.defaultProps = {
+  cardClass: 'card',
+  className: 'card',
+};
+
 CollapsableCard.propTypes = {
   id: PropTypes.string.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  cardClass: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  cardClass: PropTypes.string,
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default CollapsableCard;

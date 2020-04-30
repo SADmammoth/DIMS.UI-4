@@ -2,8 +2,10 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .member-info {
+  padding: 0 0 30px !important;
   width: 80vw;
-  height: 90vh;
+  max-height: 90vh;
+  overflow-y: auto;
 
   &__header {
     background-color: $primary-bg;
@@ -13,7 +15,7 @@
       position: absolute;
       height: 100%;
       top: 0;
-      width: 50px;
+      width: 1.5vw;
       background-color: $highlight-bg;
       color: $common-text;
       font-size: 1.5rem;
@@ -33,34 +35,72 @@
       margin-top: 7px;
     }
 
+    @media screen and (max-width: 1100px) {
+      & {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+      }
+      .button {
+        display: none;
+      }
+      .text-badge,
+      .date-badge {
+        float: none;
+        margin: 10px 20px;
+      }
+    }
+
     padding: 25px 0;
-    padding-right: 70px;
+    padding-right: 2vw;
     @include clearfix;
   }
 
   &__title {
     float: left;
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin: 0;
-    margin-left: 80px;
+    margin-left: 3vw;
+  }
+
+  hr {
+    width: calc(100% - 4vw);
+    margin: 0 2vw;
   }
 
   &__contacts {
-    font-size: 1.4rem;
-    margin: 3% 70px;
+    font-size: 1.2rem;
+    margin: 3% 2vw;
     display: flex;
     justify-content: center;
     text-align: center;
     background: $primary-bg;
     padding: 20px 20px;
-
     a {
       text-decoration: none;
       color: inherit;
     }
 
+    @media screen and (max-width: 950px) {
+      flex-wrap: wrap;
+      & > * {
+        margin: 2%;
+        width: auto !important;
+      }
+    }
+
     & > * {
-      width: 50%;
+      &:nth-child(1) {
+        width: 50%;
+      }
+      &:nth-child(2) {
+        width: 30%;
+      }
+      &:nth-child(3) {
+        width: 35%;
+      }
       &:first-child {
         justify-self: flex-start;
         text-align: left;
@@ -75,16 +115,13 @@
       font-size: 1.3rem;
     }
   }
-
   .address {
-    margin: 2%;
-    margin-left: 90px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    margin-left: 3vw;
   }
-
   .flex-column {
     float: left;
-    width: 47%;
+    width: 40%;
     box-sizing: border-box;
     & > * {
       margin-bottom: 20px;
@@ -92,17 +129,16 @@
     &:first-child {
       margin-right: 5%;
     }
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   &__additional-info {
-    margin: 0 auto;
-    width: calc(100% - 140px);
+    margin: 0 2vw;
     box-sizing: border-box;
     padding: 2% 5%;
     margin-top: 3%;
     background: $primary-bg;
     .date-badge {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       display: inline-block;
       margin: 0;
     }
@@ -110,11 +146,11 @@
     @include clearfix;
   }
 
-  & > .button-block {
-    position: absolute;
-    bottom: 50px;
-    right: 70px;
-    width: calc(100% - 140px);
+  .button-block {
+    margin: 2% 2vw;
+    width: calc(100% - 4vw);
+    @include clearfix();
+
     .button:not(.button_primary) {
       margin-left: 20px;
       float: right;
@@ -123,6 +159,27 @@
     .button_primary {
       float: left;
       margin-right: 20px;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    .address {
+      text-align: center;
+      margin-left: 0;
+    }
+
+    .button-block {
+      max-width: 80vw;
+      margin-top: 20px;
+      width: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      & > .button {
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-left: 0 !important;
+      }
     }
   }
 

@@ -41,13 +41,15 @@ class MemberInfo extends React.Component {
     universityAverageScore,
     mathScore,
   }) => {
+    const { id, handleClose } = this.props;
+
     this.setState({ loading: true });
 
     const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
     const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
 
     store.dispatch(
-      editMember(this.props.id, {
+      editMember(id, {
         firstName,
         lastName,
         email,
@@ -65,7 +67,7 @@ class MemberInfo extends React.Component {
     );
 
     return Client.editMember(
-      this.props.id,
+      id,
       firstName,
       lastName,
       email,
@@ -82,7 +84,7 @@ class MemberInfo extends React.Component {
     )
       .then((response) => {
         this.setState({ loading: false });
-        this.props.handleClose();
+        handleClose();
         return response;
       })
       .catch((response) => {
@@ -113,11 +115,13 @@ class MemberInfo extends React.Component {
       role,
     } = this.props;
 
+    const { loading } = this.state;
+
     const openEditModal = () => setEdit(true);
 
     return (
       <>
-        {!this.state.loading ? (
+        {!loading ? (
           <>
             {edit ? (
               <MemberEdit onSubmit={this.editMember} {...this.props} />
@@ -151,13 +155,13 @@ class MemberInfo extends React.Component {
                       <span>{mobilePhone}</span>
                     </a>
                   </div>
-                  <div>
-                    <p className='address'>
+                  <div className='address'>
+                    <p>
                       <AddressIcon className='icon-address' />
                       {address}
                     </p>
-                    <hr />
                   </div>
+                  <hr />
                 </div>
                 <div className='member-info__additional-info'>
                   <FlexColumn>
@@ -200,9 +204,9 @@ class MemberInfo extends React.Component {
                         buttonClassMod='secondary'
                         buttonContent='Delete'
                         message={
-                          <p>
+                          <>
                             Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                          </p>
+                          </>
                         }
                         confirmButtonClassMod='error'
                         confirmButtonContent='Delete'
@@ -227,7 +231,7 @@ class MemberInfo extends React.Component {
   }
 }
 
-MemberInfo.defaultTypes = {
+MemberInfo.defaultProps = {
   edit: false,
 };
 
@@ -244,13 +248,13 @@ MemberInfo.propTypes = {
   sex: PropTypes.string.isRequired,
   birthDate: PropTypes.instanceOf(Date).isRequired,
   education: PropTypes.string.isRequired,
-  universityAverageScore: PropTypes.number.isRequired,
-  mathScore: PropTypes.number.isRequired,
+  universityAverageScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  mathScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   role: PropTypes.string.isRequired,
 
-  handleClose: PropTypes.func,
+  handleClose: PropTypes.func.isRequired,
   edit: PropTypes.bool,
-  setEdit: PropTypes.string.isRequired,
+  setEdit: PropTypes.func.isRequired,
 };
 
 export default MemberInfo;

@@ -8,84 +8,79 @@ import MemberProgressPage from './pages/MemberProgressPage';
 import Error404Page from './pages/Error404Page';
 import MemberTracksPage from './pages/MemberTracksPage';
 import NewMember from './pages/NewMember';
+import ScrollToTop from './ScrollToTop';
 import NewTask from './pages/NewTask';
 
 function Routes(props) {
   const { role, userId } = props;
+
+  const renderMemberTasksPage = (props) => {
+    const { match } = props;
+    return role === 'member' && match.params.id !== userId ? (
+      <Redirect to='/404' />
+    ) : (
+      <MemberTasksPage taskSet='user' />
+    );
+  };
+
+  const renderTracksPage = (props) => {
+    const { match } = props;
+    return match.params.id !== userId ? <Redirect to='/404' /> : <MemberTracksPage />;
+  };
+
+  /* TODO Leave one 404 route */
   return (
-    <Switch>
-      <Route path='/404'>
-        <Error404Page />
-      </Route>
-      <Route
-        exact
-        path='/members/:id/tasks/'
-        render={(props) => {
-          return role === 'member' && props.match.params.id !== userId ? (
-            <Redirect to='/404' />
-          ) : (
-            <MemberTasksPage taskSet='user' />
-          );
-        }}
-      />
-      <Route
-        exact
-        path='/members/:id/tasks/id:open?'
-        render={(props) => {
-          return role === 'member' && props.match.params.id !== userId ? (
-            <Redirect to='/404' />
-          ) : (
-            <MemberTasksPage taskSet='user' />
-          );
-        }}
-      />
-      {role === 'admin' && (
-        <Route path='/members/new'>
-          <NewMember />
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path='/404'>
+          <Error404Page />
         </Route>
-      )}
-      {(role === 'admin' || role === 'mentor') && (
-        <>
-          <Route exact path='/'>
-            <Redirect to='/members' />
+        <Route exact path='/members/:id/tasks/' render={renderMemberTasksPage} />
+        <Route exact path='/members/:id/tasks/id:open?' render={renderMemberTasksPage} />
+        {role === 'admin' && (
+          <Route path='/members/new'>
+            <NewMember />
           </Route>
-          <Route exact path='/members'>
-            <MembersManagerPage />
-          </Route>
-          <Route exact path='/tasks/new'>
-            <NewTask />
-          </Route>
-          <Route exact path='/tasks/'>
-            <MemberTasksPage taskSet='all' />
-          </Route>
-          <Route exact path='/tasks/id:open?'>
-            <MemberTasksPage taskSet='all' />
-          </Route>
-          <Route exact path='/tasks/id:open/edit'>
-            <MemberTasksPage edit taskSet='all' />
-          </Route>
-          <Route path='/members/:id/progress'>
-            <MemberProgressPage />
-          </Route>
-        </>
-      )}
-      {role === 'member' && (
-        <>
-          <Route exact path='/'>
-            <Redirect to={`/members/${userId}/tasks`} />
-          </Route>
-          <Route
-            path='/members/:id/tracks'
-            render={(props) => {
-              return props.match.params.id !== userId ? <Redirect to='/404' /> : <MemberTracksPage />;
-            }}
-          />
-        </>
-      )}
-      <Route path='*'>
-        <Redirect to='/404' />
-      </Route>
-    </Switch>
+        )}
+        {(role === 'admin' || role === 'mentor') && (
+          <>
+            <Route exact path='/'>
+              <Redirect to='/members' />
+            </Route>
+            <Route exact path='/members'>
+              <MembersManagerPage />
+            </Route>
+            <Route exact path='/tasks/'>
+              <MemberTasksPage />
+            </Route>
+            <Route exact path='/tasks/new'>
+              <NewTask />
+            </Route>
+            <Route exact path='/tasks/id:open?'>
+              <MemberTasksPage />
+            </Route>
+            <Route path='/tasks/id:open/edit'>
+              <MemberTasksPage edit />
+            </Route>
+            <Route path='/members/:id/progress'>
+              <MemberProgressPage />
+            </Route>
+          </>
+        )}
+        {role === 'member' && (
+          <>
+            <Route exact path='/'>
+              <Redirect to={`/members/${userId}/tasks`} />
+            </Route>
+            <Route path='/members/:id/tracks' render={renderTracksPage} />
+          </>
+        )}
+        <Route path='*'>
+          <Redirect to='/404' />
+        </Route>
+      </Switch>
+    </>
   );
 }
 

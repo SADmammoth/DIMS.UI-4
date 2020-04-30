@@ -13,7 +13,8 @@ class Modal extends React.PureComponent {
   }
 
   handleClose = () => {
-    this.props.onClose();
+    const { onClose } = this.props;
+    onClose();
     this.setState({ show: false });
   };
 
@@ -26,16 +27,24 @@ class Modal extends React.PureComponent {
     this.handleClose();
   };
 
+  toggle() {
+    const { show } = this.state;
+    if (show) {
+      this.handleClose();
+    } else {
+      this.handleShow();
+    }
+  }
+
   render() {
+    const { show } = this.state;
+    const { children, backface, className } = this.props;
     return (
       <>
-        {this.state.show && (
+        {show && (
           <>
-            <article className={`modal ${this.state.show ? 'show' : ''} ${this.props.className || ''}`}>
-              {this.props.children}
-            </article>
-
-            {this.props.backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
+            <article className={`modal ${show ? 'show' : ''} ${className || ''}`}>{children}</article>
+            {backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
           </>
         )}
       </>
@@ -54,6 +63,7 @@ Modal.propTypes = {
   className: PropTypes.string,
   backface: PropTypes.bool,
   onClose: PropTypes.func,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default Modal;

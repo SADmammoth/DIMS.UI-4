@@ -7,8 +7,9 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
@@ -30,11 +31,11 @@ class MemberTracksPage extends React.Component {
     }
 
     return Object.entries(tracks).map(({ 0: id, 1: data }) => {
-      return MemberTracksPage.renderTaskTrack(id, data);
+      return this.renderTaskTrack(id, data);
     });
   }
 
-  static renderTaskTrack(id, data) {
+  renderTaskTrack(id, data) {
     const { memberTaskId, taskName, trackNote, trackDate } = data;
     return (
       <TaskTrackCard
@@ -47,6 +48,7 @@ class MemberTracksPage extends React.Component {
     );
   }
 
+  /* TODO Create HOC for UserContextConsumer */
   render() {
     const { tracks } = this.state;
     return (
@@ -54,20 +56,25 @@ class MemberTracksPage extends React.Component {
         <Helmet>
           <title>Task tracks</title>
         </Helmet>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             return (
               <Header role={role} title='Task tracks' navItems={getNavItems({ role, userId }, this.props.match.path)} />
             );
           }}
-        </UserContext>
-        <ContainerComponent>
-          {tracks ? (
-            <div>{Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}</div>
-          ) : (
-            <Spinner centered />
-          )}
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {tracks ? (
+              <div>
+                {Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
+              </div>
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

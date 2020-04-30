@@ -10,7 +10,11 @@ describe('checkFormNames', () => {
       { type: 'test', name: 'email' },
       { type: 'test', name: 'REPEATS' },
     ];
-    expect(checkFormNames(inputs)).toBe(false);
+
+    const actual = checkFormNames(inputs);
+    const expected = false;
+
+    expect(actual).toBe(expected);
   });
   test('Returns true if no repeats', () => {
     const inputs = [
@@ -20,6 +24,10 @@ describe('checkFormNames', () => {
       { type: 'test', name: 'email' },
       { type: 'test', name: 'about' },
     ];
-    expect(checkFormNames(inputs)).toBe(true);
+
+    const actual = checkFormNames(inputs);
+    const expected = true;
+
+    expect(actual).toBe(expected);
   });
 });

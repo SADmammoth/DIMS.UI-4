@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Validator from '../../../../helpers/Validator';
 import Button from '../../Button';
 import Form from '../../Form';
 
@@ -25,13 +23,13 @@ class MemberEdit extends React.Component {
   };
 
   render() {
-    const { handleClose, onSubmit } = this.props;
+    const { handleClose, empty, onSubmit } = this.props;
 
     const { inputs } = this.state;
 
     return (
       <Form
-        className='edit-member'
+        className={`edit-member${empty ? ' empty' : ''}`}
         inputs={editMemberInputsAttributes(this.props)}
         onSubmit={onSubmit}
         onInputsUpdate={this.onInputsUpdate}
@@ -85,42 +83,47 @@ class MemberEdit extends React.Component {
           <FlexColumn>
             <div>
               <span className='list-key'>Education:</span>
-              <span>{inputs.education}</span>
+              {inputs.education}
             </div>
             <div>
               <span className='list-key'>University average score:</span>
-              <span>{inputs.universityAverageScore}</span>
+              {inputs.universityAverageScore}
             </div>
             <div>
               <span className='list-key'>CT math score:</span>
-              <span>{inputs.mathScore}</span>
+              {inputs.mathScore}
             </div>
           </FlexColumn>
         </div>
-        <Button content='Cancel' classMod='secondary' onClick={handleClose} />
+        <>{empty || <Button content='Cancel' classMod='secondary' onClick={handleClose} />}</>
       </Form>
     );
   }
 }
 
-MemberEdit.propTypes = {
-  id: PropTypes.string.isRequired,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  startDate: PropTypes.instanceOf(Date).isRequired,
-  direction: PropTypes.string.isRequired,
-  mobilePhone: PropTypes.string.isRequired,
-  skype: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  sex: PropTypes.string.isRequired,
-  birthDate: PropTypes.instanceOf(Date).isRequired,
-  education: PropTypes.string.isRequired,
-  universityAverageScore: PropTypes.number.isRequired,
-  mathScore: PropTypes.number.isRequired,
-  empty: PropTypes.bool.isRequired,
+MemberEdit.defaultProps = {
+  id: null,
+  empty: false,
+};
 
-  onSubmit: PropTypes.func,
+MemberEdit.propTypes = {
+  id: PropTypes.string,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.string,
+  startDate: PropTypes.instanceOf(Date),
+  direction: PropTypes.string,
+  mobilePhone: PropTypes.string,
+  skype: PropTypes.string,
+  address: PropTypes.string,
+  sex: PropTypes.string,
+  birthDate: PropTypes.instanceOf(Date),
+  education: PropTypes.string,
+  universityAverageScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  mathScore: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+  empty: PropTypes.bool,
+  onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func,
 };
 

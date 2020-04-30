@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CollapsableCardDescription from './CollapsableCardDescription';
 
 function CollapsableCardBody(props) {
   const { cardClass, children } = props;
@@ -9,14 +10,18 @@ function CollapsableCardBody(props) {
         if (!child) {
           return child;
         }
-        return React.cloneElement(child, { cardClass });
+        if (child.type === CollapsableCardDescription) {
+          return React.cloneElement(child, { cardClass });
+        }
+        return child;
       })}
     </div>
   );
 }
 
 CollapsableCardBody.propTypes = {
-  cardClass: PropTypes.string.isRequired,
+  cardClass: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default CollapsableCardBody;

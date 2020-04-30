@@ -8,9 +8,8 @@ import Modal from '../../Modal';
 function TaskEditButton(props) {
   const modal = React.createRef();
 
-  const { onSubmit, buttonContent, buttonClassMod, reload, ...otherProps } = props;
-
-  const openModal = (event) => {
+  const { onSubmit, buttonContent, buttonClassMod, reload, children, show, ...otherProps } = props;
+  const openModal = () => {
     props.history.push(`/tasks/id${props.taskId}/edit`);
     modal.current.handleShow();
   };
@@ -38,9 +37,9 @@ function TaskEditButton(props) {
   return (
     <>
       <Button classMod={buttonClassMod} onClick={openModal}>
-        {props.children || buttonContent}
+        {children || buttonContent}
       </Button>
-      <Modal ref={modal} show={props.show} className='task-edit' onClose={onClose}>
+      <Modal ref={modal} show={show} className='task-edit' onClose={onClose}>
         <TaskEdit onSubmit={onSubmitHandler} {...otherProps} />
         <Button classMod='secondary' onClick={handleClose}>
           Cancel

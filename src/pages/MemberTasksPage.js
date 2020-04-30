@@ -9,8 +9,9 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -32,15 +33,18 @@ class MemberTasksPage extends React.Component {
     if (state.taskSet !== props.taskSet) {
       return { ...state, tasks: null, name: 'Name' };
     }
+    return state;
   }
 
   async update() {
     let taskData;
     const userId = this.props.match.params.id;
 
-    if (this.props.taskSet === 'user') {
+    const { taskSet } = this.props;
+
+    if (taskSet === 'user') {
       taskData = await Client.getUserTasks(userId);
-    } else if (this.props.taskSet === 'all') {
+    } else if (taskSet === 'all') {
       taskData = await Client.getTasks();
     }
 
@@ -53,7 +57,7 @@ class MemberTasksPage extends React.Component {
   wrappedMemberTask = ({ collapsed, id, taskSet, edit, open, close, ...data }) => {
     const { taskId, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
     return (
-      <UserContext.Consumer>
+      <UserContextConsumer>
         {({ role }) => {
           return (
             <MemberTaskCard
@@ -75,7 +79,7 @@ class MemberTasksPage extends React.Component {
             />
           );
         }}
-      </UserContext.Consumer>
+      </UserContextConsumer>
     );
   };
 
@@ -94,10 +98,9 @@ class MemberTasksPage extends React.Component {
   render() {
     const { tasks } = this.state;
     const { taskSet, name } = this.props;
-
     return (
       <>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             const title = role === 'member' || taskSet === 'all' ? 'Tasks' : `${name}'s tasks`;
             return (
@@ -109,20 +112,23 @@ class MemberTasksPage extends React.Component {
               </>
             );
           }}
-        </UserContext>
-        <ContainerComponent>
-          {tasks ? (
-            <div>
-              {Object.keys(tasks).length ? (
-                <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
-              ) : (
-                'No tasks'
-              )}
-            </div>
-          ) : (
-            <Spinner centered />
-          )}
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {tasks ? (
+              <div>
+                {Object.keys(tasks).length ? (
+                  <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+                ) : (
+                  'No tasks'
+                )}
+              </div>
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }
@@ -131,10 +137,11 @@ class MemberTasksPage extends React.Component {
 MemberTasksPage.defaultProps = {
   edit: false,
   name: 'Name',
+  taskSet: 'all',
 };
 
 MemberTasksPage.propTypes = {
-  taskSet: PropTypes.string.isRequired,
+  taskSet: PropTypes.string,
   edit: PropTypes.bool,
   name: PropTypes.string,
 };

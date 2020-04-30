@@ -25,9 +25,9 @@ function TaskTrackCard(props) {
             buttonClassMod='secondary'
             buttonContent='Delete'
             message={
-              <p>
+              <>
                 Are you confident, you want to delete track <b>{taskName}</b>?
-              </p>
+              </>
             }
             confirmButtonClassMod='error'
             confirmButtonContent='Delete'

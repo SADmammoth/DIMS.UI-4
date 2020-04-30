@@ -1,10 +1,8 @@
-import Client from './Client';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AuthenticationManager from './AuthenticationManager';
 import LoginForm from '../components/elements/LoginForm';
-import UserContext from './UserContext';
+import { UserContext } from './UserContextConsumer';
 
 class AuthorizationManager extends Component {
   constructor(props) {
@@ -16,23 +14,32 @@ class AuthorizationManager extends Component {
   }
 
   authorize = (role, userId) => {
+    const { roles } = this.state;
     if (!role || !userId) {
-      this.setState({
-        authorizedUser: JSON.parse(localStorage.getItem('userInfo')),
-      });
+      this.setState({ authorizedUser: JSON.parse(localStorage.getItem('userInfo')) });
     }
-    if (this.state.roles.includes(role)) {
+    if (roles.includes(role)) {
       localStorage.setItem('userInfo', JSON.stringify({ role, userId }));
       this.setState({ authorizedUser: { role, userId } });
     }
   };
 
+  deleteUserInfo = () => {
+    localStorage.removeItem('userInfo');
+    this.setState({ authorizedUser: { role: 'guest', userID: 'guest' } });
+  };
+
   render() {
     const { children } = this.props;
+    const { authorizedUser } = this.state;
     return (
       <>
-        <UserContext.Provider value={this.state.authorizedUser}>
-          <AuthenticationManager logInFormClass={LoginForm} authorize={this.authorize}>
+        <UserContext.Provider value={authorizedUser}>
+          <AuthenticationManager
+            logInFormClass={LoginForm}
+            authorize={this.authorize}
+            deleteUserInfo={this.deleteUserInfo}
+          >
             {children}
           </AuthenticationManager>
         </UserContext.Provider>
@@ -42,7 +49,7 @@ class AuthorizationManager extends Component {
 }
 
 AuthorizationManager.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthorizationManager;

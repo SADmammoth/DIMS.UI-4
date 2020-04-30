@@ -6,7 +6,8 @@ import compareObjects from '../compareObjects';
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
-  static directions = ['Front-end', '.Net'];
+  static directions = ['React', '.Net', 'Angular', 'Java'];
+
   static states = ['active', 'success', 'fail'];
 
   static createMembersObject(memberResponse) {

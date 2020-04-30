@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Button/Button';
 
 function ButtonGroup(props) {
   const { children } = props;
@@ -8,7 +7,7 @@ function ButtonGroup(props) {
 }
 
 ButtonGroup.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.instanceOf(Button)).isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
 
 export default ButtonGroup;

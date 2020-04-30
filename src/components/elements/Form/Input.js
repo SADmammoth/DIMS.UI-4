@@ -4,7 +4,6 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
-import notify from '../../../helpers/notify';
 import errorNotification from '../../../helpers/errorNotification';
 
 function Input(props) {
@@ -17,6 +16,7 @@ function Input(props) {
     onInput,
     required,
     label,
+    placeholder,
     attributes,
     value,
     byCharValidator,
@@ -30,9 +30,6 @@ function Input(props) {
     highlightInput,
     validationMessage,
   } = props;
-
-  const onChangeHandler = (e) => onChange(e.target.name, e.target.value);
-  const onInputHandler = (e) => onInput(e.target.name, e.target.value);
 
   function renderLabel(input) {
     return label ? (
@@ -54,6 +51,32 @@ function Input(props) {
     return input;
   }
 
+  const onChangeHandler = (e) => {
+    if (!e.target.value) {
+      return;
+    }
+    if (!validator(e.target.value)) {
+      highlightInput();
+      errorNotification(description, validationMessage);
+    }
+    onChange(e.target.name, e.target.value);
+  };
+
+  const onInputHandler = (e) => {
+    onInput(e.target.name, e.target.value);
+  };
+
+  const onKeyPressHandler = (e) => {
+    if (!byCharValidator(e.target.value + e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const onError = () => {
+    highlightInput();
+    errorNotification(description, validationMessage);
+  };
+
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
       return renderLabel(
@@ -62,14 +85,13 @@ function Input(props) {
           type={type}
           name={name}
           description={description}
+          onKeyPress={onKeyPressHandler}
           onChange={onChangeHandler}
           onInput={onInputHandler}
           required={required}
           label={label}
           attributes={attributes}
           value={value}
-          byCharValidator={byCharValidator}
-          validator={validator}
           valueOptions={valueOptions}
         />,
       );
@@ -86,8 +108,6 @@ function Input(props) {
           required={required}
           attributes={attributes}
           value={value}
-          byCharValidator={byCharValidator}
-          validator={validator}
           valueOptions={valueOptions}
         />,
       );
@@ -100,6 +120,7 @@ function Input(props) {
           description={description}
           onChange={onChangeHandler}
           onInput={onInputHandler}
+          onError={onError}
           required={required}
           attributes={attributes}
           value={value}
@@ -109,23 +130,6 @@ function Input(props) {
       );
     }
 
-    const onKeyPress = (e) => {
-      if (!byCharValidator(e.target.value + e.key)) {
-        e.preventDefault();
-      }
-    };
-
-    const onBlur = (e) => {
-      if (!e.target.value) {
-        return;
-      }
-      if (!validator(e.target.value)) {
-        highlightInput();
-        errorNotification(description, validationMessage);
-      }
-      onChange(e.target.name, e.target.value);
-    };
-
     return renderLabel(
       renderMask(
         <input
@@ -133,11 +137,11 @@ function Input(props) {
           type={type}
           name={name}
           className={`form-control${invalid ? ' invalid' : ''}`}
-          placeholder={description}
+          placeholder={placeholder}
           required={required ? 'required' : null}
-          onKeyPress={onKeyPress}
+          onKeyPress={onKeyPressHandler}
           onInput={onInputHandler}
-          onBlur={onBlur}
+          onChange={onChangeHandler}
           {...attributes}
           value={value}
         />,
@@ -153,7 +157,8 @@ Input.defaultProps = {
   onChange: () => {},
   required: false,
   label: false,
-  attributes: [],
+  placeholder: null,
+  attributes: {},
   value: '',
   byCharValidator: () => true,
   validator: () => true,
@@ -163,15 +168,14 @@ Input.defaultProps = {
   validationMessage: '',
 };
 
-Input.propTypes = {
-  id: PropTypes.string.isRequired,
+Input.publicProps = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   onInput: PropTypes.func,
   onChange: PropTypes.func,
-  required: PropTypes.bool,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  placeholder: PropTypes.string,
   attributes: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.any,
   valueOptions: PropTypes.arrayOf(PropTypes.string),
@@ -181,9 +185,15 @@ Input.propTypes = {
   maskType: PropTypes.string,
   byCharValidator: PropTypes.func,
   validator: PropTypes.func,
+  validationMessage: PropTypes.string,
+};
+
+Input.propTypes = {
+  id: PropTypes.string.isRequired,
+  required: PropTypes.bool,
   invalid: PropTypes.bool.isRequired,
   highlightInput: PropTypes.func,
-  validationMessage: PropTypes.string,
+  ...Input.publicProps,
 };
 
 export default Input;

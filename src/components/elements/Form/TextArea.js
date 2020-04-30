@@ -2,7 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function TextArea(props) {
-  const { id, name, description, onInput, onChange, required, attributes, value, minSymbols, maxSymbols } = props;
+  const {
+    id,
+    name,
+    description,
+    onInput,
+    onChange,
+    required,
+    attributes,
+    value,
+    minSymbols,
+    maxSymbols,
+    onError,
+  } = props;
 
   function checkCount(input, min, max) {
     return input.length <= max && input.length >= min;
@@ -12,15 +24,15 @@ function TextArea(props) {
     if (checkCount(event.target.value, 0, maxSymbols)) {
       onInput(event);
     } else {
-      alert('Bad input');
+      onError(event);
     }
   };
 
-  const onBlur = (event) => {
+  const onChangeHandler = (event) => {
     if (checkCount(event.target.value, minSymbols, maxSymbols)) {
       onChange(event);
     } else {
-      alert('Bad input');
+      onError(event);
     }
   };
 
@@ -30,7 +42,7 @@ function TextArea(props) {
       className='form-textarea'
       name={name}
       onInput={inputHandler}
-      onBlur={onBlur}
+      onChange={onChangeHandler}
       required={required}
       {...attributes}
       value={value}
@@ -51,6 +63,7 @@ TextArea.propTypes = {
   value: PropTypes.any,
   minSymbols: PropTypes.number,
   maxSymbols: PropTypes.number,
+  onError: PropTypes.func.isRequired,
 };
 
 export default TextArea;

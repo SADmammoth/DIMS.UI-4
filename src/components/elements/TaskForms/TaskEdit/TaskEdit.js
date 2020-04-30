@@ -79,4 +79,6 @@ TaskEdit.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
+//TODO Implement adaptivity
+
 export default TaskEdit;

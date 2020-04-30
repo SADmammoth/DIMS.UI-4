@@ -1,16 +1,16 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ContainerComponent from '../components/elements/ContainerComponent';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import Header from '../components/elements/Header';
 import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
 import Validator from '../helpers/Validator';
 import Spinner from '../components/elements/Spinner';
 import TaskEdit from '../components/elements/TaskForms/TaskEdit';
-import { connect } from 'react-redux';
 import compareObjects from '../helpers/compareObjects';
 import checkboxValueSeparator from '../helpers/checkboxValueSeparator';
 
@@ -63,7 +63,7 @@ class NewTask extends React.Component {
         <Helmet>
           <title>New task</title>
         </Helmet>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             return (
               <Header
@@ -79,7 +79,7 @@ class NewTask extends React.Component {
               />
             );
           }}
-        </UserContext>
+        </UserContextConsumer>
         <ContainerComponent>
           {!this.state.loading && Object.keys(members).length ? (
             <TaskEdit empty members={members} onSubmit={this.postTask} />

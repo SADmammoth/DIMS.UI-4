@@ -7,8 +7,9 @@ import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberProgressPage extends React.Component {
   constructor(props) {
@@ -17,13 +18,14 @@ class MemberProgressPage extends React.Component {
   }
 
   async componentDidMount() {
-    const taskData = await Client.getUserProgress(this.state.id);
+    const { id } = this.state;
+    const taskData = await Client.getUserProgress(id);
     this.setState({ tasks: taskData });
   }
 
-  static WrappedMemberProgressCard({ id, taskId, taskName, trackNote, trackDate, collapsed, open, close }) {
+  WrappedMemberProgressCard({ id, taskId, taskName, trackNote, trackDate, collapsed, open, close }) {
     return (
-      <UserContext.Consumer>
+      <UserContextConsumer>
         {({ role }) => {
           return (
             <MemberProgressCard
@@ -39,19 +41,19 @@ class MemberProgressPage extends React.Component {
             />
           );
         }}
-      </UserContext.Consumer>
+      </UserContextConsumer>
     );
   }
 
-  static renderProgressCard(id, data) {
-    const WrappedMemberProgressCard = MemberProgressPage.WrappedMemberProgressCard;
+  renderProgressCard(id, data) {
+    const WrappedMemberProgressCard = this.WrappedMemberProgressCard;
     return <WrappedMemberProgressCard id={id} {...data} />;
   }
 
   renderProgress() {
     const { tasks } = this.state;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return MemberProgressPage.renderProgressCard(id, data);
+      return this.renderProgressCard(id, data);
     });
   }
 
@@ -62,7 +64,7 @@ class MemberProgressPage extends React.Component {
     return (
       <>
         <Helmet>{`${anytask.userName || 'Name'}'s progress`}</Helmet>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             return (
               <Header
@@ -72,14 +74,19 @@ class MemberProgressPage extends React.Component {
               />
             );
           }}
-        </UserContext>
-        <ContainerComponent>
-          {tasks ? (
-            <div>{Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}</div>
-          ) : (
-            <Spinner centered />
-          )}
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {tasks ? (
+              <div>
+                {Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}
+              </div>
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

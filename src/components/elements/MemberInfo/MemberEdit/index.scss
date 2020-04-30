@@ -2,6 +2,49 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .edit-member {
+  &.empty {
+    .member-info__header {
+      padding: 10px;
+      padding-right: 40px;
+      .member-info__title {
+        margin-left: 20px;
+      }
+    }
+    .member-info__contacts {
+      padding: 10px 25px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .member-info__additional-info {
+      margin: 0;
+      width: 100%;
+    }
+    .button {
+      margin-right: 0 !important;
+    }
+    hr {
+      width: 100%;
+    }
+  }
+
+  .flex-column > div {
+    display: flex;
+  }
+  .radio-group {
+    display: flex;
+    & > * {
+      margin-right: 5px;
+    }
+  }
+
+  .container > & .address {
+    margin: 0;
+    margin-left: 25px;
+    .form-control {
+      width: calc(100% - 70px);
+    }
+  }
+
   .button {
     margin-top: 40px;
     margin-right: 70px;
@@ -13,6 +56,12 @@
 
   .flex-column {
     width: 45%;
+  }
+
+  .member-info__contacts {
+    .form-control {
+      width: 75%;
+    }
   }
 
   .date-badge {
@@ -65,7 +114,8 @@
   }
 
   .form-control {
-    width: 280px;
+    width: 60%;
+    height: 1.4rem;
     font-size: 1.2rem;
 
     &[name='firstName'],
@@ -78,5 +128,46 @@
     &[name='mathScore'] {
       width: 50px;
     }
+  }
+
+  .address {
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .member-info__additional-info {
+    box-sizing: border-box;
+    display: flex;
+    margin-top: 3%;
+    background: $primary-bg;
+    .date-badge {
+      font-size: 1.4rem;
+    }
+
+    @media screen and (max-width: 1000px) {
+      & {
+        display: flex;
+        flex-direction: column;
+        .flex-column {
+          width: 100%;
+          & > * {
+            margin: 8px auto;
+          }
+        }
+      }
+    }
+
+    @include clearfix;
+  }
+
+  @media screen and (max-width: 1000px) {
+    & {
+      margin-bottom: 20vh;
+    }
+  }
+
+  [class*='icon-'] {
+    fill: $common-text;
   }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
 import Client from './Client';
+import LogOut from './LogOut';
 
 class AuthenticationManager extends Component {
   constructor(props) {
@@ -13,12 +15,19 @@ class AuthenticationManager extends Component {
   }
 
   logIn = async (login, password) => {
-    this.setState({
-      authenticated: (await this.authenticate(login, password)).status === 'success',
-    });
+    const authResponse = await this.authenticate(login, password);
+    this.setState({ authenticated: authResponse.status === 'success' });
+  };
+
+  logOut = () => {
+    const { deleteUserInfo } = this.props;
+    this.setState({ authenticated: null });
+    localStorage.removeItem('authToken');
+    deleteUserInfo();
   };
 
   authenticate = async (login, password) => {
+    const { authorize } = this.props;
     const authToken = localStorage.getItem('authToken');
     if (!authToken || !(await Client.checkToken(authToken))) {
       if (!login || !password) {
@@ -33,20 +42,26 @@ class AuthenticationManager extends Component {
       }
 
       localStorage.setItem('authToken', token);
-      this.props.authorize(role, userId);
+      authorize(role, userId);
     } else {
       const { role, userId } = await Client.getUserInfoByToken(authToken);
-      this.props.authorize(role, userId);
+      authorize(role, userId);
     }
     return { status: 'success', message: 'Login successful' };
   };
 
   render() {
     const { logInFormClass: LogInForm, children } = this.props;
+    const { authenticated } = this.state;
     return (
       <>
-        {this.state.authenticated !== null &&
-          (this.state.authenticated ? children : <LogInForm logIn={this.logIn} show />)}
+        {authenticated !== null && (authenticated ? children : <Redirect to='/login' />)}
+        <Route exact path='/login'>
+          {!authenticated ? <LogInForm logIn={this.logIn} show /> : <Redirect to='/' />}
+        </Route>
+        <Route exact path='/logout'>
+          <LogOut logOut={this.logOut} />
+        </Route>
       </>
     );
   }
@@ -55,7 +70,8 @@ class AuthenticationManager extends Component {
 AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
   logInFormClass: PropTypes.func.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  deleteUserInfo: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthenticationManager;

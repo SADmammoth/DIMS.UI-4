@@ -1,6 +1,5 @@
 import React from 'react';
 
-import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
 import placeInputCursorToEnd from '../../../../helpers/placeInputCursorToEnd';
 import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBeforePlaceholder';
 import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';
@@ -26,17 +25,20 @@ function InvisibleMaskComponent(input, maskArray) {
       value.splice(start, end - start, '');
       event.target.value = value.join('');
       event.preventDefault();
+
+      input.props.onInput(event);
     }
-    if (maskArray[input.props.value.length]) {
-      if (!maskSpecialCharsRegex.test(maskArray[input.props.value.length])) {
-        input.props.onInput(invisibleMaskOnInputValue(input.props.name, input.props.value, maskArray));
-      }
-    }
+  };
+
+  const onInput = (event) => {
+    input.props.onInput(invisibleMaskOnInputValue(input.props.name, event.target.value, maskArray));
+    input.props.onKeyPress(event);
   };
 
   return React.cloneElement(input, {
     onFocus,
     onKeyDown,
+    onInput,
   });
 }
 

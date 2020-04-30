@@ -21,10 +21,13 @@ class Form extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { inputs } = this.props;
+    const { values } = this.state;
+
     if (
-      !compareObjects(prevProps.inputs, this.props.inputs) ||
-      Object.keys(this.state.values).length !== this.props.inputs.length ||
-      !compareObjects(prevState.values, this.state.values)
+      !compareObjects(prevProps.inputs, inputs) ||
+      Object.keys(values).length !== inputs.length ||
+      !compareObjects(prevState.values, values)
     ) {
       this.createValues();
       this.createInputs();
@@ -32,7 +35,8 @@ class Form extends React.Component {
   }
 
   getInput(name) {
-    return this.state.input[name];
+    const { input } = this.state;
+    return input[name];
   }
 
   updateValue = (name, value) => {
@@ -52,8 +56,10 @@ class Form extends React.Component {
   }
 
   createValues() {
+    const { inputs } = this.props;
     const values = {};
-    this.props.inputs.forEach((input) => {
+
+    inputs.forEach((input) => {
       values[input.name] = {
         id: input.name,
         value: input.value,
@@ -78,6 +84,7 @@ class Form extends React.Component {
     byCharValidator,
     required,
     label,
+    placeholder,
     attributes,
     value,
     valueOptions,
@@ -89,6 +96,7 @@ class Form extends React.Component {
   ) {
     return (
       <Input
+        key={id}
         id={id}
         type={type}
         name={name}
@@ -101,6 +109,7 @@ class Form extends React.Component {
         attributes={attributes}
         valueOptions={valueOptions}
         label={label}
+        placeholder={placeholder}
         value={value}
         minSymbols={minSymbols}
         maxSymbols={maxSymbols}
@@ -116,18 +125,20 @@ class Form extends React.Component {
   createInputs() {
     const { values } = this.state;
     const { inputs, onInputsUpdate } = this.props;
+
     if (!Object.keys(values).length) {
       return;
     }
 
     const inputsData = {};
-    inputs.forEach((input, i) => {
+    inputs.forEach((input) => {
       const {
         type,
         name,
         description,
         required,
         label,
+        placeholder,
         attributes,
         byCharValidator,
         validator,
@@ -137,23 +148,36 @@ class Form extends React.Component {
         mask,
         maskType,
         validationMessage,
+        onChange,
+        onInput,
       } = input;
 
       const higlightInputCallback = () => this.highlightInput(name);
+
+      const onChangeHandler = (inputName, value) => {
+        if (onChange) onChange(inputName, value);
+        this.updateValue(inputName, value);
+      };
+
+      const onInputHandler = (inputName, value) => {
+        if (onInput) onInput(inputName, value);
+        this.updateValue(inputName, value);
+      };
 
       inputsData[name] = Form.createInput(
         values[name].id,
         type,
         name,
         description,
-        this.updateValue, // onInput
-        this.updateValue, // onChange
+        onInputHandler, // onInput
+        onChangeHandler, // onChange
         mask,
         maskType,
         validator,
         byCharValidator,
         required,
         label,
+        placeholder,
         attributes,
         values[name].value,
         valueOptions,
@@ -207,8 +231,9 @@ class Form extends React.Component {
     const findInputByName = (name) => {
       return this.props.inputs.find((input) => input.name === name);
     };
+    let input;
     for (let valueName in values) {
-      let input = findInputByName(valueName);
+      input = findInputByName(valueName);
       if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
         this.highlightInput(valueName);
         showMessage(`${input.label || input.description} invalid input`, input.validationMessage);
@@ -233,11 +258,11 @@ class Form extends React.Component {
   };
 
   onSubmit = (event) => {
-    const { onSubmit } = this.props;
-    if (this.checkValidity(this.errorNotification)) {
-      if (onSubmit) {
+    const { onSubmit: onSubmitHandler } = this.props;
+    if (this.checkValidity(errorNotification)) {
+      if (onSubmitHandler) {
         event.preventDefault();
-        onSubmit(this.formatValues())
+        onSubmitHandler(this.formatValues())
           .then(this.onResponseReceived)
           .catch(this.onResponseError);
       }
@@ -248,6 +273,7 @@ class Form extends React.Component {
 
   render() {
     const { method, action, className, style, submitButton, children } = this.props;
+    const { inputs } = this.state;
     return (
       <>
         <form
@@ -257,7 +283,7 @@ class Form extends React.Component {
           style={{ ...style }}
           onSubmit={this.onSubmit}
         >
-          {children || Object.values(this.state.inputs)}
+          {children || Object.values(inputs)}
           {React.cloneElement(submitButton, { type: 'submit' })}
         </form>
       </>
@@ -275,8 +301,6 @@ Form.defaultProps = {
   onInputsUpdate: (inputs) => inputs,
 };
 
-const { onSubmit, onInput, ...inputProps } = Input.propTypes;
-
 Form.propTypes = {
   method: PropTypes.string,
   action: PropTypes.string,
@@ -284,13 +308,13 @@ Form.propTypes = {
   style: PropTypes.objectOf(PropTypes.string),
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
-      ...inputProps,
+      ...Input.publicProps,
       validationMessage: PropTypes.string,
     }),
   ).isRequired,
   onSubmit: PropTypes.func,
   submitButton: PropTypes.element,
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,

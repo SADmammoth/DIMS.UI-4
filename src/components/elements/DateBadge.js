@@ -22,6 +22,7 @@ function DateBadge(props) {
 }
 
 DateBadge.DateTypes = Object.freeze({
+  empty: '',
   startDate: 'startDate',
   endDate: 'endDate',
   trackStart: 'trackStart',

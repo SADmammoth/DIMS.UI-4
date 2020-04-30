@@ -20,8 +20,10 @@ function CollapsedCard(props) {
 }
 
 CollapsedCard.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  cardClass: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  cardClass: PropTypes.string,
+  collapsed: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default CollapsedCard;

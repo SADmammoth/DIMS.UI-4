@@ -3,6 +3,7 @@ import Validator from '../../../../helpers/Validator';
 import InvisibleMaskComponent from './InvisibleMaskComponent';
 import MaskComponent from './MaskComponent';
 import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskEscapedCharsOrEmptyRegex';
+import getValueFromMask from '../../../../helpers/getValueFromMask';
 
 function MaskedInput(input, mask, validate = false, type = 'default') {
   let resultInput = input;
@@ -12,14 +13,24 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
 
   const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => el);
 
-  if (validate && type === 'invisible') {
-    resultInput = React.cloneElement(resultInput, {
-      onKeyPress: (e) => {
-        if (!Validator.maskByChar(e.target.value + e.key, mask)) {
-          e.preventDefault();
-        }
-      },
-    });
+  if (validate) {
+    if (type === 'invisible') {
+      resultInput = React.cloneElement(resultInput, {
+        onKeyPress: (e) => {
+          if (!Validator.maskByChar(e.target.value + e.key, mask)) {
+            e.preventDefault();
+          }
+        },
+      });
+    } else {
+      resultInput = React.cloneElement(resultInput, {
+        onKeyPress: (e) => {
+          if (!Validator.maskByChar(getValueFromMask(e.target.value) + e.key, mask)) {
+            e.preventDefault();
+          }
+        },
+      });
+    }
   }
 
   return type === 'invisible' ? InvisibleMaskComponent(resultInput, maskArray) : MaskComponent(resultInput, maskArray);

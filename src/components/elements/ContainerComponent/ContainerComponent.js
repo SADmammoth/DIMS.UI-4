@@ -9,13 +9,14 @@ function ContainerComponent(props) {
 }
 
 ContainerComponent.defaultProps = {
+  fullwidth: false,
   display: '',
   className: '',
 };
 
 ContainerComponent.propTypes = {
-  fullwidth: PropTypes.bool.isRequired,
-  children: PropTypes.any,
+  fullwidth: PropTypes.bool,
+  children: PropTypes.node.isRequired,
   display: PropTypes.string,
   className: PropTypes.string,
 };

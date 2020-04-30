@@ -76,10 +76,10 @@ class DialogButton extends React.Component {
 }
 
 DialogButton.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([PropTypes.element, PropTypes.string]).isRequired,
   confirmButtonClassMod: PropTypes.string.isRequired,
   confirmButtonContent: PropTypes.string.isRequired,
-  buttonContent: PropTypes.any.isRequired,
+  buttonContent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   buttonClassMod: PropTypes.string.isRequired,
   dialogValue: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,

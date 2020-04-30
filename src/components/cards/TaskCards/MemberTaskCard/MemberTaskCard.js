@@ -8,15 +8,15 @@ import Button from '../../../elements/Button';
 import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg';
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
-import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import ButtonGroup from '../../../elements/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
+import DialogButton from '../../../elements/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
-import DialogButton from '../../../elements/DialogButton/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';
-import Client from '../../../../helpers/Client/Client';
+import Client from '../../../../helpers/Client';
 import Validator from '../../../../helpers/Validator';
 import checkboxValueSeparator from '../../../../helpers/checkboxValueSeparator';
-import ChangeStateButton from '../../../elements/ChangeStateButton/ChangeStateButton';
+import ChangeStateButton from '../../../elements/ChangeStateButton';
 
 function MemberTaskCard(props) {
   const {
@@ -91,7 +91,7 @@ function MemberTaskCard(props) {
                 <h3>Assigned to:</h3>
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
-                    <li>
+                    <li key={user.userID}>
                       <Link to={`/members/${user.userId}/tasks/id${user.memberTaskId}`}>
                         <b>{members[user.userId] ? members[user.userId].firstName : 'First name'}</b>
                         {` ${members[user.userId] ? members[user.userId].lastName : 'Last name'}`}
@@ -133,9 +133,9 @@ function MemberTaskCard(props) {
                 buttonClassMod='secondary'
                 buttonContent='Delete'
                 message={
-                  <p>
+                  <>
                     Are you confident, you want to delete task <b>{taskName}</b>?
-                  </p>
+                  </>
                 }
                 confirmButtonClassMod='error'
                 confirmButtonContent='Delete'
@@ -189,6 +189,7 @@ function MemberTaskCard(props) {
 MemberTaskCard.defaultProps = {
   assignedTo: [],
   members: [],
+  state: null,
 };
 
 MemberTaskCard.propTypes = {
@@ -223,7 +224,7 @@ MemberTaskCard.propTypes = {
 
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
-  state: PropTypes.string.isRequired,
+  state: PropTypes.string,
   taskStart: PropTypes.instanceOf(Date).isRequired,
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
   reload: PropTypes.func.isRequired,

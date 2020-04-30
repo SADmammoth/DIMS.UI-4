@@ -18,7 +18,7 @@ import { deleteMember } from '../../../redux/actions/membersActions';
 import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
 
-class MemberCard extends React.PureComponent {
+class MemberCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = { edit: false };
@@ -72,6 +72,7 @@ class MemberCard extends React.PureComponent {
       close,
     } = this.props;
 
+    const { edit } = this.state;
     const age = calculateAge(birthDate);
 
     return (
@@ -82,8 +83,20 @@ class MemberCard extends React.PureComponent {
               <b>{firstName}</b>
               {` ${lastName}, ${age}`}
             </CollapsableCard.Title>
-            <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
-            <TextBadge>{direction}</TextBadge>
+            <>
+              {window.matchMedia('(max-width: 1000px)').matches || (
+                <>
+                  <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
+                </>
+              )}
+            </>
+            <>
+              {window.matchMedia('(max-width: 400px)').matches || (
+                <>
+                  <TextBadge>{direction}</TextBadge>
+                </>
+              )}
+            </>
           </CollapsableCard.Header>
           <CollapsableCard.Body>
             <Button classMod='primary' link={`/members/${id}/progress`}>
@@ -96,23 +109,27 @@ class MemberCard extends React.PureComponent {
             </Button>
             {role === 'admin' && (
               <>
-                <DialogButton
-                  buttonClassMod='secondary'
-                  buttonContent='Delete'
-                  message={
-                    <p>
-                      Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                    </p>
-                  }
-                  confirmButtonClassMod='error'
-                  confirmButtonContent='Delete'
-                  dialogValue={id}
-                  onSubmit={({ dialogValue }) => {
-                    store.dispatch(deleteMember(dialogValue));
-                    return Client.deleteMember(dialogValue);
-                  }}
-                />
-                <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+                {window.matchMedia('(max-width: 400px)').matches || (
+                  <>
+                    <DialogButton
+                      buttonClassMod='secondary'
+                      buttonContent='Delete'
+                      message={
+                        <>
+                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                        </>
+                      }
+                      confirmButtonClassMod='error'
+                      confirmButtonContent='Delete'
+                      dialogValue={id}
+                      onSubmit={({ dialogValue }) => {
+                        store.dispatch(deleteMember(dialogValue));
+                        return Client.deleteMember(dialogValue);
+                      }}
+                    />
+                    <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
+                  </>
+                )}
               </>
             )}
             <Button content='More info' classMod='ghost' onClick={this.showModal} />
@@ -120,7 +137,7 @@ class MemberCard extends React.PureComponent {
         </CollapsableCard>
         <Modal ref={this.modal} className='member-info' onClose={this.editOff}>
           <MemberInfo
-            edit={this.state.edit}
+            edit={edit}
             setEdit={this.editModal}
             id={id}
             firstName={firstName}

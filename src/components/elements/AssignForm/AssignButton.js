@@ -9,11 +9,11 @@ import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 function AssignButton(props) {
   const { taskId, buttonClassMod, children, reload, buttonContent, ...assignFormProps } = props;
   const modal = React.createRef();
-  const showModal = (event) => {
+  const showModal = () => {
     modal.current.handleShow();
   };
 
-  const closeModal = (event) => {
+  const closeModal = () => {
     modal.current.handleClose();
   };
 

@@ -1,29 +1,20 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Client from '../helpers/Client';
 import MemberCard from '../components/cards/MemberCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
-import { connect } from 'react-redux';
+import Footer from '../components/elements/Footer';
 
 class MembersManagerPage extends React.Component {
-  renderMembers() {
-    const { members } = this.props;
-    if (!Object.keys(members).length) {
-      return [];
-    }
-
-    return Object.entries(members).map(({ 0: id, 1: data }) => {
-      return MembersManagerPage.renderMember(id, data);
-    });
-  }
-
-  static WrappedMemberCard({
+  WrappedMemberCard({
     id,
     firstName,
     lastName,
@@ -44,7 +35,7 @@ class MembersManagerPage extends React.Component {
     reloadMembers,
   }) {
     return (
-      <UserContext.Consumer>
+      <UserContextConsumer>
         {({ role }) => {
           return (
             <MemberCard
@@ -69,13 +60,24 @@ class MembersManagerPage extends React.Component {
             />
           );
         }}
-      </UserContext.Consumer>
+      </UserContextConsumer>
     );
   }
 
-  static renderMember(id, data, reloadMembers) {
-    const WrappedMemberCard = MembersManagerPage.WrappedMemberCard;
-    return <WrappedMemberCard id={id} {...data} reloadMembers={reloadMembers} />;
+  renderMembers() {
+    const { members } = this.props;
+    if (!Object.keys(members).length) {
+      return [];
+    }
+
+    return Object.entries(members).map(({ 0: id, 1: data }) => {
+      return this.renderMember(id, data);
+    });
+  }
+
+  renderMember(id, data) {
+    const WrappedMemberCard = this.WrappedMemberCard;
+    return <WrappedMemberCard id={id} {...data} />;
   }
 
   render() {
@@ -85,20 +87,27 @@ class MembersManagerPage extends React.Component {
         <Helmet>
           <title>Members</title>
         </Helmet>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             return (
               <Header role={role} title='Members' navItems={getNavItems({ role, userId }, this.props.match.path)} />
             );
           }}
-        </UserContext>
-        <ContainerComponent>
-          {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {members ? <CollapsableItemsList items={this.renderMembers()} /> : <Spinner centered />}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }
 }
+
+MembersManagerPage.propTypes = {
+  members: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default withRouter(
   connect((state) => {

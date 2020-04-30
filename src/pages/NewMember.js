@@ -1,16 +1,17 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
+import store from '../redux';
 import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
 import ContainerComponent from '../components/elements/ContainerComponent/ContainerComponent';
-import UserContext from '../helpers/UserContext';
+import UserContextConsumer from '../helpers/UserContextConsumer';
 import Header from '../components/elements/Header/Header';
 import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
 import Validator from '../helpers/Validator';
 import Spinner from '../components/elements/Spinner/Spinner';
 import { addMember } from '../redux/actions/membersActions';
-import store from '../redux';
+import Footer from '../components/elements/Footer';
 
 class NewMember extends React.Component {
   constructor(props) {
@@ -81,12 +82,14 @@ class NewMember extends React.Component {
   };
 
   render() {
+    const { loading } = this.state;
+
     return (
       <>
         <Helmet>
           <title>New member</title>
         </Helmet>
-        <UserContext>
+        <UserContextConsumer>
           {({ role, userId }) => {
             return (
               <Header
@@ -102,10 +105,13 @@ class NewMember extends React.Component {
               />
             );
           }}
-        </UserContext>
-        <ContainerComponent>
-          {!this.state.loading ? <MemberEdit empty onSubmit={this.postMember} /> : <Spinner centered />}
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {!loading ? <MemberEdit empty onSubmit={this.postMember} /> : <Spinner centered />}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }

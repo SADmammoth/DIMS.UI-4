@@ -1,5 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function Spinner(props) {
-  return <div className={`spinner${props.centered ? ' spinner_centered' : ''}`} />;
+function Spinner(props) {
+  const { centered } = props;
+  return <div className={`spinner${centered ? ' spinner_centered' : ''}`} />;
 }
+
+Spinner.defaultProps = {
+  centered: false,
+};
+
+Spinner.propTypes = {
+  centered: PropTypes.bool,
+};
+
+export default Spinner;

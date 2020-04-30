@@ -8,10 +8,11 @@ import addMask from '../../../../helpers/addMask';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
-    if (!input.props.value || input.props.value === '') {
+    if (input.props.value && input.props.value !== '') {
       return input;
     }
   }
+
   function setCursorToEndOfInput(eventTarget) {
     const firstPlaceholder = eventTarget.value.indexOf('_');
     eventTarget.setSelectionRange(firstPlaceholder, firstPlaceholder);

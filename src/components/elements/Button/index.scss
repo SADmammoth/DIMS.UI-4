@@ -11,18 +11,21 @@
     background-color: $highlight-bg;
     width: 150px;
     color: $light-text;
+    fill: $light-text;
     font-size: 1.1rem;
   }
   &_success {
     background-color: $success;
     width: 80px;
     color: $light-text;
+    fill: $light-text;
     font-size: 1.1rem;
   }
   &_error {
     background-color: $error;
     width: 80px;
     color: $light-text;
+    fill: $light-text;
     font-size: 1.1rem;
   }
   &_ghost {
@@ -34,18 +37,21 @@
   &_secondary {
     background: $primary-bg;
     color: $common-text;
+    fill: $common-text;
     font-size: 1.1rem;
     width: 100px;
   }
   &_navItem {
     background-color: transparent;
     color: $common-text;
+    fill: $common-text;
     font-size: 1.2rem;
     padding: 5px 20px;
     font-weight: bold;
     &_active {
       background-color: transparent;
       color: $common-text;
+      fill: $common-text;
       font-size: 1.2rem;
       padding: 5px 20px;
       font-weight: bold;
@@ -54,6 +60,8 @@
   }
   &_invisible {
     background: transparent;
+    fill: $common-text;
+    color: $common-text;
     border: none;
     color: inherit;
     outline: none;

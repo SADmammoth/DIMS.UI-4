@@ -3,14 +3,28 @@
 
 .login {
   width: 100vw;
-  .content {
-    width: 20vw;
+  .logo {
+    width: 40vw;
+    left: 8vw;
     position: absolute;
     bottom: 50%;
-    right: 50%;
-    transform: translate(50%, 50%);
+    transform: translateY(50%);
+    height: auto;
+  }
+  .content {
+    background: $primary-bg;
+    height: 100vh;
+    box-sizing: border-box;
+    text-align: center;
+    left: 50vw;
+    position: absolute;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   &-form {
+    width: 22vw;
     display: flex;
     flex-direction: column;
     .form-control {

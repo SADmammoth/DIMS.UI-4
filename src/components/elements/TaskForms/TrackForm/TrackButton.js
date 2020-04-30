@@ -26,7 +26,7 @@ function TrackButton(props) {
 }
 
 TrackButton.propTypes = {
-  buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   buttonClassMod: PropTypes.string.isRequired,
   ...TrackForm.propTypes,
 };
