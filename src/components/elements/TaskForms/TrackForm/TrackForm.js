@@ -53,6 +53,4 @@ TrackForm.propTypes = {
   trackNote: PropTypes.string,
 };
 
-//TODO Implement adaptivity
-
 export default TrackForm;

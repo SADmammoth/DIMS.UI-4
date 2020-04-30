@@ -2,7 +2,8 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .dialog {
-  width: 22vw;
+  width: 30vw;
+  min-width: 300px;
   min-height: 10vw;
   text-align: center;
   padding-bottom: 10px;

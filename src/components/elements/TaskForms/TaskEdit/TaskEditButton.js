@@ -39,11 +39,8 @@ function TaskEditButton(props) {
       <Button classMod={buttonClassMod} onClick={openModal}>
         {children || buttonContent}
       </Button>
-      <Modal ref={modal} show={show} className='task-edit' onClose={onClose}>
-        <TaskEdit onSubmit={onSubmitHandler} {...otherProps} />
-        <Button classMod='secondary' onClick={handleClose}>
-          Cancel
-        </Button>
+      <Modal ref={modal} show={show} onClose={onClose} className='task-edit-modal'>
+        <TaskEdit onSubmit={onSubmitHandler} {...otherProps} handleClose={handleClose} />
       </Modal>
     </>
   );

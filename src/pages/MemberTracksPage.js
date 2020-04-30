@@ -48,7 +48,6 @@ class MemberTracksPage extends React.Component {
     );
   }
 
-  /* TODO Create HOC for UserContextConsumer */
   render() {
     const { tracks } = this.state;
     return (

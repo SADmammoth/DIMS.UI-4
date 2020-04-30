@@ -30,5 +30,4 @@ const App = () => {
 
 export default App;
 
-// TODO improve adaptivity
 // TODO fix errors

@@ -1,12 +1,17 @@
 @import '../../../assets/styles/scss/vars.scss';
 @import '../../../assets/styles/scss/mixins.scss';
 
+.task-edit-modal {
+  padding: 0 !important;
+}
+
 .task-edit {
-  width: 70vw;
-  height: 70vh;
-  max-height: 600px;
-  padding: 0;
-  overflow-y: auto;
+  &:not(.empty) {
+    width: 70vw;
+    height: 70vh;
+    max-height: 600px;
+    overflow-y: auto;
+  }
 
   &__header {
     background: $primary-bg;
@@ -127,9 +132,23 @@
       }
     }
   }
-  .button[type='submit'] {
+  .button:not([type='submit']) {
     float: right;
     margin-right: 3vw;
+  }
+
+  &.empty {
+    .button[type='submit'] {
+      float: right;
+    }
+  }
+
+  &.empty &__body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  &.empty &__description {
+    margin-right: 2vw;
   }
 
   .form-control {

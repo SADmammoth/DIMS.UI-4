@@ -12,7 +12,7 @@ class TaskEdit extends React.PureComponent {
   }
 
   render() {
-    const { onSubmit, empty } = this.props;
+    const { onSubmit, empty, handleClose } = this.props;
     const { inputs, loading } = this.state;
 
     const onSubmitHandler = (data) => {
@@ -33,6 +33,7 @@ class TaskEdit extends React.PureComponent {
           <Spinner centered />
         ) : (
           <Form
+            className={`task-edit${empty ? ' empty' : ''}`}
             inputs={taskEditInputsAttributes(this.props)}
             onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
             onSubmit={onSubmitHandler}
@@ -49,6 +50,13 @@ class TaskEdit extends React.PureComponent {
               </div>
               <div className='task-edit__members'>{inputs.members}</div>
             </div>
+            <>
+              {empty || (
+                <Button classMod='secondary' onClick={handleClose}>
+                  Cancel
+                </Button>
+              )}
+            </>
           </Form>
         )}
       </>
@@ -59,6 +67,7 @@ class TaskEdit extends React.PureComponent {
 TaskEdit.defaultProps = {
   assignedTo: [],
   members: [],
+  empty: false,
 };
 
 TaskEdit.propTypes = {
@@ -77,8 +86,8 @@ TaskEdit.propTypes = {
   ),
   members: PropTypes.arrayOf(PropTypes.object),
   onSubmit: PropTypes.func.isRequired,
+  empty: PropTypes.bool,
+  handleClose: PropTypes.func.isRequired,
 };
-
-//TODO Implement adaptivity
 
 export default TaskEdit;

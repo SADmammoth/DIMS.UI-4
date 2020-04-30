@@ -12,7 +12,7 @@ export default function taskEditInputsAttributes({
     {
       type: 'text',
       name: 'taskName',
-      description: 'Task name',
+      placeholder: 'Task name',
       value: taskName,
     },
     {
@@ -27,7 +27,7 @@ export default function taskEditInputsAttributes({
       type: 'text',
       name: 'taskStart',
       label: 'Task start',
-      description: '##-##-####',
+      placeholder: '##-##-####',
       value: taskStart && Validator.fromDateToMask(taskStart, 'dd-MM-yyyy'),
       mask: '99-99-9999',
       maskType: 'invisible',
@@ -39,7 +39,7 @@ export default function taskEditInputsAttributes({
       type: 'text',
       name: 'taskDeadline',
       label: 'Task deadline',
-      description: '##-##-####',
+      placeholder: '##-##-####',
       value: taskDeadline && Validator.fromDateToMask(taskDeadline, 'dd-MM-yyyy'),
       mask: '99-99-9999',
       maskType: 'invisible',
