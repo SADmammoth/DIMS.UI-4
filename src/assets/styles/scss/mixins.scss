@@ -1,3 +1,5 @@
+@use 'scrollbar';
+
 @mixin clearfix {
   &:after {
     content: '.';
@@ -42,4 +44,22 @@
 @mixin acrylic-glass-effect {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+}
+
+@mixin scrollbar($track-color, $thumb-color, $thumb-hover-color) {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $thumb-hover-color;
+  }
 }

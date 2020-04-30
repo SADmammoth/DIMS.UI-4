@@ -4,13 +4,21 @@
 .track-create {
   width: 50vw;
   height: 65vh;
-  .task-edit__description {
-    height: 29vh;
+  max-height: 500px;
+  padding: 0;
+  padding-bottom: 20px;
+
+  overflow-y: auto;
+
+  .form-textarea {
+    min-height: 240px !important;
+    height: 10vh !important;
   }
 
   .task-edit__dates {
     margin-bottom: 10px;
   }
+
   .task-edit__header {
     @include clearfix();
   }
@@ -27,7 +35,7 @@
   }
   .button[type='submit'] {
     float: right;
-    margin-right: 6.5%;
+    margin-right: 2vw;
     margin-top: 10px;
   }
 }

@@ -91,7 +91,7 @@ function MemberTaskCard(props) {
                 <h3>Assigned to:</h3>
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
-                    <li key={user.userID}>
+                    <li key={user.userId}>
                       <Link to={`/members/${user.userId}/tasks/id${user.memberTaskId}`}>
                         <b>{members[user.userId] ? members[user.userId].firstName : 'First name'}</b>
                         {` ${members[user.userId] ? members[user.userId].lastName : 'Last name'}`}

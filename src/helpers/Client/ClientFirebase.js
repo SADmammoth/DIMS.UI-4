@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import md5 from 'md5';
 
 //* Firebase configuration
-const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
+const projectId = process.env.REACT_APP_FIREBASE_PROJECTId;
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: `${projectId}.firebaseapsp.com`,

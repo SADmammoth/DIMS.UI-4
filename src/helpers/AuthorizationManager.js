@@ -26,7 +26,7 @@ class AuthorizationManager extends Component {
 
   deleteUserInfo = () => {
     localStorage.removeItem('userInfo');
-    this.setState({ authorizedUser: { role: 'guest', userID: 'guest' } });
+    this.setState({ authorizedUser: { role: 'guest', userId: 'guest' } });
   };
 
   render() {

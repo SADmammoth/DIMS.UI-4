@@ -16,8 +16,8 @@ const App = () => {
           <Preloader>
             <AuthorizationManager>
               <UserContextConsumer>
-                {({ role, userID }) => {
-                  return <Routes role={role} userID={userID} />;
+                {({ role, userId }) => {
+                  return <Routes role={role} userId={userId} />;
                 }}
               </UserContextConsumer>
             </AuthorizationManager>

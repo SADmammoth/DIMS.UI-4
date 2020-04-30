@@ -13,9 +13,10 @@ import NewTask from './pages/NewTask';
 
 function Routes(props) {
   const { role, userId } = props;
-
+  console.log(userId);
   const renderMemberTasksPage = (props) => {
     const { match } = props;
+    console.log(match.params.id, userId);
     return role === 'member' && match.params.id !== userId ? (
       <Redirect to='/404' />
     ) : (
@@ -36,7 +37,7 @@ function Routes(props) {
         <Route path='/404'>
           <Error404Page />
         </Route>
-        <Route exact path='/members/:id/tasks/' render={renderMemberTasksPage} />
+        <Route exact path='/members/:id/tasks' render={renderMemberTasksPage} />
         <Route exact path='/members/:id/tasks/id:open?' render={renderMemberTasksPage} />
         {role === 'admin' && (
           <Route path='/members/new'>

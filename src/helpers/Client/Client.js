@@ -269,7 +269,7 @@ class Client {
   }
 
   static async getUserInfoByToken(token) {
-    return { role: 'admin' };
+    return { role: 'member', userId: '2' };
   }
 }
 
