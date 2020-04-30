@@ -20,11 +20,11 @@ class TaskEdit extends React.PureComponent {
     const onSubmit = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
       if (
         !compareObjects(
-          members,
+          members.split(','),
           assignedTo.map((el) => el.userId),
         )
       ) {
-        await Client.assignTask(taskId, members);
+        await Client.assignTask(taskId, members.split(','));
       }
       return Client.editTask(
         taskId,
