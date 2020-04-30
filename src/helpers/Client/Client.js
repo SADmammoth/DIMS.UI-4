@@ -7,6 +7,7 @@ class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
   static directions = ['Front-end', '.Net'];
+  static states = ['active', 'success', 'fail'];
 
   static createMembersObject(memberResponse) {
     const member = {};
@@ -242,6 +243,15 @@ class Client {
       Description,
       StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
       DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
+    });
+  }
+
+  static setUserTaskState(TaskId, UserId, Status) {
+    const StatusId = (Client.states.indexOf(Status) + 1).toString();
+    return axios.put(path.join(Client.apiPath, 'user', 'task'), {
+      TaskId: TaskId.toString(),
+      UserId: UserId.toString(),
+      StatusId,
     });
   }
 

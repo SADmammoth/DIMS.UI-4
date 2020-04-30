@@ -19,6 +19,17 @@ function Routes(props) {
       </Route>
       <Route
         exact
+        path='/members/:id/tasks/'
+        render={(props) => {
+          return role === 'member' && props.match.params.id !== userId ? (
+            <Redirect to='/404' />
+          ) : (
+            <MemberTasksPage taskSet='user' />
+          );
+        }}
+      />
+      <Route
+        exact
         path='/members/:id/tasks/id:open?'
         render={(props) => {
           return role === 'member' && props.match.params.id !== userId ? (

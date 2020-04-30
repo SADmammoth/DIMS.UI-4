@@ -16,6 +16,7 @@ import compareObjects from '../../../../helpers/compareObjects';
 import Client from '../../../../helpers/Client/Client';
 import Validator from '../../../../helpers/Validator';
 import checkboxValueSeparator from '../../../../helpers/checkboxValueSeparator';
+import ChangeStateButton from '../../../elements/ChangeStateButton/ChangeStateButton';
 
 function MemberTaskCard(props) {
   const {
@@ -37,6 +38,7 @@ function MemberTaskCard(props) {
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
+  const userId = id.slice(taskId.toString().length);
 
   const editTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
     const assignedTo = checkboxValueSeparator(members);
@@ -118,7 +120,7 @@ function MemberTaskCard(props) {
               <span>Assign</span>
             </AssignButton>
           )}
-          {(role === 'admin' || role === 'mentor') && (
+          {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
             <>
               <DialogButton
                 buttonClassMod='secondary'
@@ -149,9 +151,17 @@ function MemberTaskCard(props) {
             </>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
-            <Button classMod='ghost' link={`/tasks/id${taskId}`}>
-              Show in tasks
-            </Button>
+            <>
+              <ChangeStateButton buttonClassMod='success' taskId={taskId} userId={userId} state='success'>
+                Success
+              </ChangeStateButton>
+              <ChangeStateButton buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
+                Fail
+              </ChangeStateButton>
+              <Button classMod='ghost' link={`/tasks/id${taskId}`}>
+                Show in tasks
+              </Button>
+            </>
           )}
         </ButtonGroup>
       </CollapsableCard.Body>
