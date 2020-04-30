@@ -61,17 +61,25 @@ function MemberTaskCard(props) {
         <CollapsableCard.Description>{taskDescription}</CollapsableCard.Description>
         {role === 'admin' && taskSet === 'all' && (
           <>
-            <h3>Assigned to:</h3>
-            <ul className='inline-list'>
-              {assignedTo.map((user) => (
-                <li>
-                  <Link to={`/members/${user.userID}/tasks/${user.memberTaskId}`}>
-                    <b>{members[user.userID] ? members[user.userID].firstName : 'First name'}</b>
-                    {` ${members[user.userID] ? members[user.userID].lastName : 'Last name'}`}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {assignedTo.length ? (
+              <>
+                <h3>Assigned to:</h3>
+                <ul className='inline-list'>
+                  {assignedTo.map((user) => (
+                    <li>
+                      <Link to={`/members/${user.userID}/tasks/${user.memberTaskId}`}>
+                        <b>{members[user.userID] ? members[user.userID].firstName : 'First name'}</b>
+                        {` ${members[user.userID] ? members[user.userID].lastName : 'Last name'}`}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <h3>Task is not assigned yet</h3>
+              </>
+            )}
           </>
         )}
 
@@ -83,7 +91,7 @@ function MemberTaskCard(props) {
             </TrackButton>
           )}
           {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
-            <AssignButton buttonClassMod='primary' assignedTo={assignedToIds} members={members}>
+            <AssignButton buttonClassMod='primary' taskId={taskId} assignedTo={assignedToIds} members={members}>
               <TrackIcon className='icon-tasks' />
               <span>Assign</span>
             </AssignButton>

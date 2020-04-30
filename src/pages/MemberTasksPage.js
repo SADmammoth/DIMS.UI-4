@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Client from '../helpers/Client';
 import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
@@ -10,7 +11,6 @@ import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
 import UserContext from '../helpers/UserContext';
 import getNavItems from '../helpers/getNavItems';
-import { connect } from 'react-redux';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {

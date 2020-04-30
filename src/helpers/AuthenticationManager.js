@@ -1,7 +1,6 @@
-import Client from './Client';
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Client from './Client';
 
 class AuthenticationManager extends Component {
   constructor(props) {

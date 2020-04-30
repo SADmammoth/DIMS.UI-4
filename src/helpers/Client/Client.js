@@ -1,9 +1,6 @@
 import axios from 'axios';
 import path from 'path';
-import md5 from 'md5';
-import firebase from 'firebase';
-import Validator from './Validator';
-firebase.initializeApp(config);
+import Validator from '../Validator';
 
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
@@ -11,23 +8,38 @@ class Client {
   static directions = ['Front-end', '.Net'];
 
   static createMembersObject(memberResponse) {
-    let member = {};
-    const [firstName, lastName] = memberResponse.FullName.split(' ');
+    const member = {};
+    const {
+      FullName,
+      Email,
+      Direction,
+      Sex,
+      Education,
+      Age,
+      UniversityAverageScore,
+      MathScore,
+      Address,
+      MobilePhone,
+      Skype,
+      StartDate,
+    } = memberResponse;
+
+    const [firstName, lastName] = FullName.split(' ');
     member.firstName = firstName;
     member.lastName = lastName;
     const birthDate = new Date();
-    birthDate.setFullYear(new Date().getFullYear() - memberResponse.Age);
+    birthDate.setFullYear(new Date().getFullYear() - Age);
     member.birthDate = birthDate;
-    member.email = memberResponse.Email;
-    member.direction = memberResponse.Direction;
-    member.sex = memberResponse.Sex === 'M' ? 'Male' : 'Female';
-    member.education = memberResponse.Education;
-    member.universityAverageScore = memberResponse.UniversityAverageScore;
-    member.mathScore = memberResponse.MathScore * 10;
-    member.address = memberResponse.Address;
-    member.mobilePhone = Validator.parsePhoneByMask(memberResponse.MobilePhone, '+999 (99) 99-99-99');
-    member.skype = memberResponse.Skype;
-    member.startDate = new Date(memberResponse.StartDate);
+    member.email = Email;
+    member.direction = Direction;
+    member.sex = Sex === 'M' ? 'Male' : 'Female';
+    member.education = Education;
+    member.universityAverageScore = UniversityAverageScore;
+    member.mathScore = MathScore * 10;
+    member.address = Address;
+    member.mobilePhone = Validator.parsePhoneByMask(MobilePhone, '+999 (99) 99-99-99');
+    member.skype = Skype;
+    member.startDate = new Date(StartDate);
     return member;
   }
 
@@ -141,6 +153,54 @@ class Client {
       Skype,
       StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
     });
+  }
+
+  static createTasksObject(tasksResponse) {
+    const { TaskId, Name, Description, StartDate, DeadlineDate } = tasksResponse;
+    const tasks = {};
+    tasks.taskId = TaskId;
+    tasks.taskName = Name;
+    tasks.description = Description;
+    tasks.taskStart = new Date(StartDate);
+    tasks.taskDeadline = new Date(DeadlineDate);
+    return tasks;
+  }
+
+  static async getTasks() {
+    const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'))).data;
+
+    const tasksObject = {};
+    tasks.forEach((task) => {
+      tasksObject[task.TaskId] = Client.createTasksObject(task);
+    });
+    return tasksObject;
+  }
+
+  static createUserTasksObject(userTasksResponse) {
+    const { UserId, TaskId, TaskName, Description, StartDate, DeadlineDate, State } = userTasksResponse;
+    let userTasks = {};
+    userTasks.userId = UserId;
+    userTasks.taskId = TaskId;
+    userTasks.taskName = TaskName;
+    userTasks.taskDescription = Description;
+    userTasks.taskStart = new Date(StartDate);
+    userTasks.taskDeadline = new Date(DeadlineDate);
+    userTasks.status = State;
+    return userTasks;
+  }
+
+  static async getUserTasks(userId) {
+    const userTasks = (await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId))).data;
+    const userTasksObject = {};
+    console.log(userTasks);
+    userTasks.forEach((userTask) => {
+      userTasksObject[userTask.TaskId.toString() + userTask.UserId.toString()] = Client.createUserTasksObject(userTask);
+    });
+    return userTasksObject;
+  }
+
+  static assignTask(taskId, usersIds) {
+    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId), usersIds);
   }
 
   static deleteMember(userId) {

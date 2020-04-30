@@ -1,3 +1,3 @@
-import Client from './ClientFirebase';
+import Client from './Client';
 
 export default Client;
