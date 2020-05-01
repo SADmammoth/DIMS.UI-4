@@ -3,38 +3,74 @@
 
 .login {
   width: 100vw;
+
   .logo {
-    width: 40vw;
-    left: 8vw;
     position: absolute;
     bottom: 50%;
-    transform: translateY(50%);
+    left: 4vw;
+    width: 40vw;
     height: auto;
+
+    transform: translateY(50%);
   }
+
   .content {
-    background: $primary-bg;
-    height: 100vh;
-    box-sizing: border-box;
-    text-align: center;
-    left: 50vw;
-    position: absolute;
-    padding: 50px;
     display: flex;
+    position: absolute;
+    left: 47vw;
+    width: 53vw;
+    height: 100vh;
+    padding: 3vw;
+    background: $primary-bg;
+    text-align: center;
+    box-sizing: border-box;
     flex-direction: column;
     justify-content: center;
   }
+
+  h1 {
+    width: 28vw;
+  }
+
   &-form {
-    width: 22vw;
     display: flex;
+    width: 28vw;
     flex-direction: column;
+
     .form-control {
+      width: 100%;
+      height: 40px;
       margin-top: 10px;
-      height: 35px;
       font-size: 1.2rem;
+      box-sizing: border-box;
     }
+
     .button {
       width: 100%;
       margin: 30px auto;
+    }
+  }
+
+  @media screen and (max-height: 500px), (max-width: 800px), (orientation: portrait) {
+    .logo {
+      display: none;
+    }
+
+    .content {
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      align-items: center;
+    }
+
+    h1 {
+      width: 70vw;
+      max-width: 400px;
+    }
+
+    .login-form {
+      width: 70vw;
+      max-width: 400px;
     }
   }
 }
