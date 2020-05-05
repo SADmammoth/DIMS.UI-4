@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Select(props) {
-  const { valueOptions, name, value: currentValue, placeholder, onChange } = props;
+  const { valueOptions, name, value: currentValue, placeholder, onChange, required } = props;
 
   function renderOption(valueOption) {
     return (
@@ -13,7 +13,13 @@ function Select(props) {
   }
 
   return (
-    <select className='form-select' name={name} value={currentValue.value || null} onChange={onChange}>
+    <select
+      className='form-select'
+      name={name}
+      value={currentValue.value}
+      onChange={onChange}
+      required={required && 'required'}
+    >
       {placeholder && (
         <option disabled selected='selected'>
           {placeholder}
@@ -23,6 +29,10 @@ function Select(props) {
     </select>
   );
 }
+
+Select.defaultProps = {
+  required: false,
+};
 
 Select.propTypes = {
   value: PropTypes.any,

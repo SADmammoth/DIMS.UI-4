@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Button from '../../elements/Button';
 import MemberInfo from '../../elements/MemberInfo';
 import Modal from '../../elements/Modal';
-
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import CollapsableCard from '../CollapsableCard';
@@ -12,11 +11,11 @@ import DateBadge from '../../elements/DateBadge';
 import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
 import Client from '../../../helpers/Client';
-import dispatchAndFetch from '../../../redux/middleware/dispatchAndFetch';
 import store from '../../../redux';
 import { deleteMember } from '../../../redux/actions/membersActions';
 import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
+import dateTypes from '../../../helpers/dateTypes';
 
 class MemberCard extends React.Component {
   constructor(props) {
@@ -86,12 +85,12 @@ class MemberCard extends React.Component {
             <>
               {window.matchMedia('(max-width: 1000px)').matches || (
                 <>
-                  <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
+                  <DateBadge date={startDate} type={dateTypes.startDate} />
                 </>
               )}
             </>
             <>
-              {window.matchMedia('(max-width: 400px)').matches || (
+              {window.matchMedia('(max-width: 550px)').matches || (
                 <>
                   <TextBadge>{direction}</TextBadge>
                 </>
@@ -109,7 +108,7 @@ class MemberCard extends React.Component {
             </Button>
             {role === 'admin' && (
               <>
-                {window.matchMedia('(max-width: 400px)').matches || (
+                {window.matchMedia('(max-width: 550px)').matches || (
                   <>
                     <DialogButton
                       buttonClassMod='secondary'

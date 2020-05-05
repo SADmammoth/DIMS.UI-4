@@ -1,5 +1,5 @@
-import getMaskCharsBeforePlaceholder from '../../helpers/getMaskCharsBeforePlaceholder';
-import maskEscapedCharsOrEmptyRegex from '../../helpers/maskEscapedCharsOrEmptyRegex';
+import getMaskCharsBeforePlaceholder from '../../helpers/maskHelpers/getMaskCharsBeforePlaceholder';
+import maskEscapedCharsOrEmptyRegex from '../../helpers/maskHelpers/maskEscapedCharsOrEmptyRegex';
 
 describe('getMaskCharsBeforePlaceholder', () => {
   test('Trims mask correct', () => {

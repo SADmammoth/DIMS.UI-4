@@ -4,8 +4,10 @@ import Form from '../../Form';
 import Button from '../../Button';
 import taskEditInputsAttributes from './taskEditInputsAttributes';
 import Spinner from '../../Spinner';
+import checkTaskDates from '../../../../helpers/checkTaskDates';
+import errorNotification from '../../../../helpers/errorNotification';
 
-class TaskEdit extends React.PureComponent {
+class TaskEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = { inputs: {}, loading: false };
@@ -14,14 +16,18 @@ class TaskEdit extends React.PureComponent {
   render() {
     const { onSubmit, empty, handleClose } = this.props;
     const { inputs, loading } = this.state;
-
     const onSubmitHandler = (data) => {
+      this.setState({ loading: true });
+      if (!checkTaskDates(data.taskStart, data.taskDeadline)) {
+        errorNotification('Task dates input', 'Deadline date is set before start date');
+        return new Promise((resolve) => resolve());
+      }
       return onSubmit(data)
         .then((res) => {
           this.setState({ loading: false });
           return res;
         })
-        .then((res) => {
+        .catch((res) => {
           this.setState({ loading: false });
           return res;
         });
@@ -71,11 +77,11 @@ TaskEdit.defaultProps = {
 };
 
 TaskEdit.propTypes = {
-  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  taskName: PropTypes.string.isRequired,
-  taskDescription: PropTypes.string.isRequired,
-  taskStart: PropTypes.instanceOf(Date).isRequired,
-  taskDeadline: PropTypes.instanceOf(Date).isRequired,
+  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  taskName: PropTypes.string,
+  taskDescription: PropTypes.string,
+  taskStart: PropTypes.instanceOf(Date),
+  taskDeadline: PropTypes.instanceOf(Date),
   assignedTo: PropTypes.arrayOf(
     PropTypes.shape({
       memberTaskId: PropTypes.string,
@@ -84,10 +90,10 @@ TaskEdit.propTypes = {
       lastName: PropTypes.string,
     }),
   ),
-  members: PropTypes.arrayOf(PropTypes.object),
+  members: PropTypes.objectOf(PropTypes.object),
   onSubmit: PropTypes.func.isRequired,
   empty: PropTypes.bool,
-  handleClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
 };
 
 export default TaskEdit;

@@ -74,7 +74,7 @@ function Input(props) {
 
   const onError = () => {
     highlightInput();
-    errorNotification(description, validationMessage);
+    errorNotification(description || label || name, validationMessage);
   };
 
   function renderInput() {
@@ -96,6 +96,7 @@ function Input(props) {
         />,
       );
     }
+
     if (type === 'select') {
       return renderLabel(
         <Select
@@ -138,7 +139,7 @@ function Input(props) {
           name={name}
           className={`form-control${invalid ? ' invalid' : ''}`}
           placeholder={placeholder}
-          required={required ? 'required' : null}
+          required={required && 'required'}
           onKeyPress={onKeyPressHandler}
           onInput={onInputHandler}
           onChange={onChangeHandler}
@@ -178,7 +179,12 @@ Input.publicProps = {
   placeholder: PropTypes.string,
   attributes: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.any,
-  valueOptions: PropTypes.arrayOf(PropTypes.string),
+  valueOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ),
   minSymbols: PropTypes.number,
   maxSymbols: PropTypes.number,
   mask: PropTypes.string,

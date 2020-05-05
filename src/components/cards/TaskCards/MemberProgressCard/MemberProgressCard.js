@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import CollapsableCard from '../../CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
-import Button from '../../../elements/Button/Button';
+import Button from '../../../elements/Button';
 import compareObjects from '../../../../helpers/compareObjects';
+import dateTypes from '../../../../helpers/dateTypes';
 
 function MemberProgressCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, open, close, role, taskId } = props;
@@ -13,7 +14,7 @@ function MemberProgressCard(props) {
     <CollapsableCard id={id} className='task-progress' cardClass='task' collapsed={collapsed} open={open} close={close}>
       <CollapsableCard.Header>
         <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
-        <DateBadge type={DateBadge.DateTypes.trackStart} date={trackDate} />
+        <DateBadge type={dateTypes.trackStart} date={trackDate} />
       </CollapsableCard.Header>
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>

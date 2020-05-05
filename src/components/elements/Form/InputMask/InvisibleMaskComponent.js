@@ -1,8 +1,9 @@
 import React from 'react';
 
-import placeInputCursorToEnd from '../../../../helpers/placeInputCursorToEnd';
-import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBeforePlaceholder';
-import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';
+import placeInputCursorToEnd from '../../../../helpers/maskHelpers/placeInputCursorToEnd';
+import getMaskCharsBeforePlaceholder from '../../../../helpers/maskHelpers/getMaskCharsBeforePlaceholder';
+import invisibleMaskOnInputValue from '../../../../helpers/maskHelpers/invisibleMaskOnInputValue';
+import replaceSubstring from '../../../../helpers/replaceSubstring';
 
 function InvisibleMaskComponent(input, maskArray) {
   const onFocus = (event) => {
@@ -16,29 +17,33 @@ function InvisibleMaskComponent(input, maskArray) {
     if (event.key.includes('Arrow') || event.key === 'Delete') {
       event.preventDefault();
     }
+
     if (event.key === 'Backspace') {
       const { target } = event;
-      let { value } = event.target;
+      const { value } = event.target;
       const start = target.selectionStart - 1;
       const end = target.selectionEnd;
-      value = value.split('');
-      value.splice(start, end - start, '');
-      event.target.value = value.join('');
-      event.preventDefault();
 
+      event.target.value = replaceSubstring(value, start, end, '');
       input.props.onInput(event);
+      event.preventDefault();
     }
   };
 
-  const onInput = (event) => {
+  const onChange = (event) => {
     input.props.onInput(invisibleMaskOnInputValue(input.props.name, event.target.value, maskArray));
     input.props.onKeyPress(event);
+  };
+
+  const onBlur = (event) => {
+    input.props.onChange(event);
   };
 
   return React.cloneElement(input, {
     onFocus,
     onKeyDown,
-    onInput,
+    onChange,
+    onBlur,
   });
 }
 

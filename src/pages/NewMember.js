@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import store from '../redux';
 import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
 import ContainerComponent from '../components/elements/ContainerComponent/ContainerComponent';
-import UserContextConsumer from '../helpers/UserContextConsumer';
+import UserContextConsumer from '../helpers/components/UserContextConsumer';
 import Header from '../components/elements/Header/Header';
 import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
@@ -12,6 +12,7 @@ import Validator from '../helpers/Validator';
 import Spinner from '../components/elements/Spinner/Spinner';
 import { addMember } from '../redux/actions/membersActions';
 import Footer from '../components/elements/Footer';
+import masks from '../helpers/maskHelpers/masks';
 
 class NewMember extends React.Component {
   constructor(props) {
@@ -35,8 +36,8 @@ class NewMember extends React.Component {
     mathScore,
   }) => {
     this.setState({ loading: true });
-    const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
-    const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
+    const calculatedStartDate = Validator.parseDateByMask(startDate, masks.date);
+    const calculatedBirthDate = Validator.parseDateByMask(birthDate, masks.date);
 
     store.dispatch(
       addMember({

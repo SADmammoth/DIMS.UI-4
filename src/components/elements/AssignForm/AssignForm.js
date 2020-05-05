@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import assignModalInputsAttributes from './assignModalInputsAttributes';
-import Form from '../Form/Form';
-import Button from '../Button/Button';
+import Form from '../Form';
+import Button from '../Button';
+
 function AssignForm(props) {
   const { onSubmit } = props;
-
   return (
     <Form
       className='assign-form'
@@ -19,7 +19,7 @@ function AssignForm(props) {
 AssignForm.propTypes = {
   taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   assignedTo: PropTypes.array.isRequired,
-  members: PropTypes.array.isRequired,
+  members: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

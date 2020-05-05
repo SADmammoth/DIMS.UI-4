@@ -8,6 +8,7 @@ export default function assignModalInputsAttributes({ assignedTo, members }) {
       valueOptions: Object.entries(members).map(([id, member]) => {
         return { label: `${member.firstName} ${member.lastName}`, value: id };
       }),
+      defaultValue: assignedTo,
     },
   ];
 }

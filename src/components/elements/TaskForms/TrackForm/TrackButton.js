@@ -11,12 +11,12 @@ function TrackButton(props) {
     modal.current.handleShow();
   };
 
-  const { buttonContent, buttonClassMod, children, ...trackFromProps } = props;
+  const { buttonContent, buttonClassMod, children, ...trackFormProps } = props;
 
   return (
     <>
       <Modal ref={modal} className='track-create'>
-        <TrackForm {...trackFromProps} />
+        <TrackForm {...trackFormProps} />
       </Modal>
       <Button classMod={buttonClassMod} onClick={showModal}>
         {children || buttonContent}

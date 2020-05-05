@@ -1,5 +1,5 @@
-import maskEscapedCharsOrEmptyRegex from '../../helpers/maskEscapedCharsOrEmptyRegex';
-import addMask from '../../helpers/addMask';
+import maskEscapedCharsOrEmptyRegex from '../../helpers/maskHelpers/maskEscapedCharsOrEmptyRegex';
+import addMask from '../../helpers/maskHelpers/addMask';
 
 describe('addMask', () => {
   test('Adds mask correct', () => {

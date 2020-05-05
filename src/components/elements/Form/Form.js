@@ -4,6 +4,7 @@ import Input from './Input';
 import notify from '../../../helpers/notify';
 import compareObjects from '../../../helpers/compareObjects';
 import errorNotification from '../../../helpers/errorNotification';
+import findInputByName from '../../../helpers/findInputByName';
 
 class Form extends React.Component {
   constructor(props) {
@@ -23,12 +24,13 @@ class Form extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { inputs } = this.props;
     const { values } = this.state;
-
+    console.log(prevProps.inputs, inputs, !compareObjects(prevProps.inputs, inputs));
     if (
       !compareObjects(prevProps.inputs, inputs) ||
       Object.keys(values).length !== inputs.length ||
       !compareObjects(prevState.values, values)
     ) {
+      console.log(0);
       this.createValues();
       this.createInputs();
     }
@@ -63,6 +65,9 @@ class Form extends React.Component {
       values[input.name] = {
         id: input.name,
         value: input.value,
+        defaultValue:
+          this.state.values[input.name] &&
+          (this.state.values[input.name].defaultValue || (input.defaultValue && [...input.defaultValue])),
       };
     });
 
@@ -71,55 +76,8 @@ class Form extends React.Component {
   // * -end- Create values
 
   // * Create inputs
-  static createInput(
-    id,
-    type,
-    name,
-    description,
-    onInput,
-    onChange,
-    mask,
-    maskType,
-    validator,
-    byCharValidator,
-    required,
-    label,
-    placeholder,
-    attributes,
-    value,
-    valueOptions,
-    minSymbols,
-    maxSymbols,
-    invalid,
-    highlightInput,
-    validationMessage,
-  ) {
-    return (
-      <Input
-        key={id}
-        id={id}
-        type={type}
-        name={name}
-        description={description}
-        required={required ? 'required' : null}
-        onChange={onChange}
-        onInput={onInput}
-        validator={validator}
-        byCharValidator={byCharValidator}
-        attributes={attributes}
-        valueOptions={valueOptions}
-        label={label}
-        placeholder={placeholder}
-        value={value}
-        minSymbols={minSymbols}
-        maxSymbols={maxSymbols}
-        mask={mask}
-        maskType={maskType}
-        invalid={invalid}
-        highlightInput={highlightInput}
-        validationMessage={validationMessage}
-      />
-    );
+  createInput(props) {
+    return <Input key={props.id} {...props} />;
   }
 
   createInputs() {
@@ -164,13 +122,13 @@ class Form extends React.Component {
         this.updateValue(inputName, value);
       };
 
-      inputsData[name] = Form.createInput(
-        values[name].id,
+      inputsData[name] = this.createInput({
+        id: values[name].id,
         type,
         name,
         description,
-        onInputHandler, // onInput
-        onChangeHandler, // onChange
+        onInput: onInputHandler,
+        onChange: onChangeHandler,
         mask,
         maskType,
         validator,
@@ -179,37 +137,53 @@ class Form extends React.Component {
         label,
         placeholder,
         attributes,
-        values[name].value,
+        value: values[name].value,
         valueOptions,
         minSymbols,
         maxSymbols,
-        !!values[name].invalid,
-        higlightInputCallback,
+        invalid: !!values[name].invalid,
+        highlightInput: higlightInputCallback,
         validationMessage,
-      );
+      });
+
+      onInputsUpdate(inputsData);
+
+      this.setState({ inputs: inputsData });
     });
-
-    onInputsUpdate(inputsData);
-
-    this.setState({ inputs: inputsData });
   }
   // * -end- Create Inputs
 
   // * Format values to pass to onSubmit
   formatValues() {
     const values = {};
-    Object.entries(this.state.values).forEach(([name, valueItem]) => {
+    const { values: stateValues } = this.state;
+    Object.entries(stateValues).forEach(([name, valueItem]) => {
       values[name] = valueItem.value;
+
+      values[name] = valueItem.value;
+      if (valueItem.defaultValue) {
+        console.log(valueItem);
+        values[`${name}_default`] = valueItem.defaultValue;
+      }
     });
     return values;
   }
 
-  errorNotification(title, message) {
-    notify('error', title, message);
+  successNotification(title, message) {
+    const { showNotifications } = this.props;
+    if (showNotifications === 'all') notify('success', title, message);
   }
 
-  successNotification(title, message) {
-    notify('success', title, message);
+  errorNotification(title, message) {
+    console.trace();
+    const { showNotifications } = this.props;
+    if (showNotifications !== 'hideAll') notify('error', title, message);
+  }
+
+  onValidationFail(input) {
+    this.highlightInput(input.name);
+    errorNotification(input.description || input.label || input.name, input.validationMessage);
+    return false;
   }
 
   highlightInput = (name) => {
@@ -226,18 +200,18 @@ class Form extends React.Component {
     this.setState({ values }, () => this.createInputs());
   };
 
-  checkValidity = (showMessage) => {
+  checkValidity = () => {
     const { values } = this.state;
-    const findInputByName = (name) => {
-      return this.props.inputs.find((input) => input.name === name);
-    };
+    const { inputs } = this.props;
+
     let input;
     for (let valueName in values) {
-      input = findInputByName(valueName);
-      if (!values[valueName].value || (input.validator && !input.validator(values[valueName].value))) {
-        this.highlightInput(valueName);
-        showMessage(`${input.label || input.description} invalid input`, input.validationMessage);
-        return false;
+      input = findInputByName(inputs, valueName);
+      if (values[valueName].required && !values[valueName].value) {
+        this.onValidationFail(input);
+      }
+      if (input.validator && !input.validator(values[valueName].value)) {
+        this.onValidationFail(input);
       }
     }
     return true;
@@ -245,10 +219,14 @@ class Form extends React.Component {
 
   onResponseReceived = (response) => {
     if (response) {
-      if (response.status === 200) {
-        this.successNotification('Success', 'Data sent and accepted by server');
+      if (response.status) {
+        if (response.status === 200) {
+          this.successNotification('Success', 'Data sent and accepted by server');
+        } else {
+          this.errorNotification('Server error', response && response.toString());
+        }
       } else {
-        this.errorNotification('Server error', response ? response.toString() : response);
+        this.errorNotification('Form error', response && response.toString());
       }
     }
   };
@@ -259,15 +237,15 @@ class Form extends React.Component {
 
   onSubmit = (event) => {
     const { onSubmit: onSubmitHandler } = this.props;
-    if (this.checkValidity(errorNotification)) {
+    if (onSubmitHandler) {
+      event.preventDefault();
+    }
+    if (this.checkValidity()) {
       if (onSubmitHandler) {
-        event.preventDefault();
         onSubmitHandler(this.formatValues())
           .then(this.onResponseReceived)
           .catch(this.onResponseError);
       }
-    } else {
-      event.preventDefault();
     }
   };
 
@@ -299,6 +277,7 @@ Form.defaultProps = {
   onSubmit: null,
   submitButton: <button type='submit'>Submit</button>,
   onInputsUpdate: (inputs) => inputs,
+  showNotifications: 'all',
 };
 
 Form.propTypes = {
@@ -318,8 +297,8 @@ Form.propTypes = {
 
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,
+  showNotifications: PropTypes.oneOf(['all', 'errorsOnly', 'hideAll']),
+  defaultValue: PropTypes.array,
 };
 
 export default Form;
-
-// TODO Implement required fields

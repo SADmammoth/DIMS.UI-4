@@ -1,4 +1,4 @@
-import maskEscapedCharsRegex from '../../helpers/maskEscapedCharsRegex';
+import maskEscapedCharsRegex from '../../helpers/maskHelpers/maskEscapedCharsRegex';
 
 describe('maskEscapedCharsRegex', () => {
   test('Must match escaped chars', () => {

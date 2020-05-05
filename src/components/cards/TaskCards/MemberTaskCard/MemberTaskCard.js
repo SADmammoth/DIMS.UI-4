@@ -12,11 +12,12 @@ import ButtonGroup from '../../../elements/ButtonGroup';
 import CollapsableCard from '../../CollapsableCard';
 import DialogButton from '../../../elements/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
-import compareObjects from '../../../../helpers/compareObjects';
 import Client from '../../../../helpers/Client';
-import Validator from '../../../../helpers/Validator';
-import checkboxValueSeparator from '../../../../helpers/checkboxValueSeparator';
 import ChangeStateButton from '../../../elements/ChangeStateButton';
+import compareObjects from '../../../../helpers/compareObjects';
+import editAndAssignTask from '../../../../helpers/editAndAssignTask';
+import getStateMembers from '../../../../helpers/getStateMembers';
+import dateTypes from '../../../../helpers/dateTypes';
 
 function MemberTaskCard(props) {
   const {
@@ -39,25 +40,15 @@ function MemberTaskCard(props) {
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
-  const userId = id.slice(taskId.toString().length);
+  let userId = 0;
 
-  const editTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
-    const assignedTo = checkboxValueSeparator(members);
-    if (
-      !compareObjects(
-        assignedTo,
-        assignedTo.map((el) => el.userId),
-      )
-    ) {
-      await Client.assignTask(taskId, assignedTo);
-    }
-    return Client.editTask(
-      taskId,
-      taskName,
-      taskDescription,
-      Validator.dateByMask(taskStart, 'dd-MM-yyyy'),
-      Validator.dateByMask(taskDeadline, 'dd-MM-yyyy'),
-    );
+  if (taskId) {
+    userId = id.slice(taskId.toString().length);
+  }
+
+  const onEdit = (data) => editAndAssignTask(data, taskId, assignedTo);
+  const onDelete = ({ dialogValue }) => {
+    return Client.deleteTask(dialogValue);
   };
 
   return (
@@ -79,8 +70,8 @@ function MemberTaskCard(props) {
       )}
       <CollapsableCard.Body>
         <div className='task-card__dates'>
-          <DateBadge type={DateBadge.DateTypes.startDate} date={taskStart} />
-          <DateBadge type={DateBadge.DateTypes.endDate} date={taskDeadline} />
+          <DateBadge type={dateTypes.startDate} date={taskStart} />
+          <DateBadge type={dateTypes.endDate} date={taskDeadline} />
         </div>
 
         <CollapsableCard.Description>{taskDescription}</CollapsableCard.Description>
@@ -140,9 +131,7 @@ function MemberTaskCard(props) {
                 confirmButtonClassMod='error'
                 confirmButtonContent='Delete'
                 dialogValue={id}
-                onSubmit={({ dialogValue }) => {
-                  return Client.deleteTask(dialogValue);
-                }}
+                onSubmit={onDelete}
                 reload={reload}
               />
               <TaskEditButton
@@ -155,7 +144,7 @@ function MemberTaskCard(props) {
                 assignedTo={assignedTo}
                 show={edit}
                 members={members}
-                onSubmit={editTask}
+                onSubmit={onEdit}
                 buttonContent='Edit'
                 reload={reload}
               />
@@ -193,13 +182,21 @@ MemberTaskCard.defaultProps = {
 };
 
 MemberTaskCard.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   edit: PropTypes.bool.isRequired,
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   taskSet: PropTypes.oneOf(['all', 'user']).isRequired,
   role: PropTypes.string.isRequired,
+  reload: PropTypes.func.isRequired,
+
+  taskName: PropTypes.string.isRequired,
+  taskDescription: PropTypes.string.isRequired,
+  state: PropTypes.string,
+  taskStart: PropTypes.instanceOf(Date).isRequired,
+  taskDeadline: PropTypes.instanceOf(Date).isRequired,
   assignedTo: PropTypes.arrayOf(
     PropTypes.shape({
       userId: PropTypes.string,
@@ -207,34 +204,13 @@ MemberTaskCard.propTypes = {
       lastName: PropTypes.string,
     }),
   ),
-  members: PropTypes.arrayOf(
+  members: PropTypes.objectOf(
     PropTypes.shape({
       userId: PropTypes.string,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
     }),
   ),
-  members: PropTypes.arrayOf(
-    PropTypes.shape({
-      userId: PropTypes.string,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-    }),
-  ),
-
-  taskName: PropTypes.string.isRequired,
-  taskDescription: PropTypes.string.isRequired,
-  state: PropTypes.string,
-  taskStart: PropTypes.instanceOf(Date).isRequired,
-  taskDeadline: PropTypes.instanceOf(Date).isRequired,
-  reload: PropTypes.func.isRequired,
 };
 
-export default React.memo(
-  connect((state) => {
-    return {
-      members: state.members,
-    };
-  })(MemberTaskCard),
-  compareObjects,
-);
+export default React.memo(connect(getStateMembers)(MemberTaskCard), compareObjects);

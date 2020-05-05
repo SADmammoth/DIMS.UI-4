@@ -9,6 +9,7 @@ function TaskEditButton(props) {
   const modal = React.createRef();
 
   const { onSubmit, buttonContent, buttonClassMod, reload, children, show, ...otherProps } = props;
+
   const openModal = () => {
     props.history.push(`/tasks/id${props.taskId}/edit`);
     modal.current.handleShow();
@@ -46,11 +47,13 @@ function TaskEditButton(props) {
   );
 }
 
+const { handleClose, ...taskEditProps } = TaskEdit.propTypes;
+
 TaskEditButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   buttonClassMod: PropTypes.string.isRequired,
   reload: PropTypes.func.isRequired,
-  ...TaskEdit.propTypes,
+  ...taskEditProps,
 };
 
 export default withRouter(TaskEditButton);

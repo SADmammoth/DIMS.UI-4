@@ -4,59 +4,33 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ContainerComponent from '../components/elements/ContainerComponent';
-import UserContextConsumer from '../helpers/UserContextConsumer';
+import UserContextConsumer from '../helpers/components/UserContextConsumer';
 import Header from '../components/elements/Header';
 import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
 import Validator from '../helpers/Validator';
-import Spinner from '../components/elements/Spinner';
 import TaskEdit from '../components/elements/TaskForms/TaskEdit';
-import compareObjects from '../helpers/compareObjects';
 import checkboxValueSeparator from '../helpers/checkboxValueSeparator';
+import masks from '../helpers/maskHelpers/masks';
+import getStateMembers from '../helpers/getStateMembers';
 
 class NewTask extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { loading: false };
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !compareObjects(nextProps.members, this.props.members);
-  }
-
   postTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
-    this.setState({ loading: true });
-    const calculatedTaskStart = Validator.dateByMask(taskStart, 'dd-MM-yyyy');
-    const calculatedTaskDeadline = Validator.dateByMask(taskDeadline, 'dd-MM-yyyy');
+    const calculatedTaskStart = Validator.parseDateByMask(taskStart, masks.date);
+    const calculatedTaskDeadline = Validator.parseDateByMask(taskDeadline, masks.date);
     const createTask = () => {
       return Client.postTask(taskName, taskDescription, calculatedTaskStart, calculatedTaskDeadline);
     };
 
     if (members.length) {
       await createTask();
-      return Client.assignTask(checkboxValueSeparator(members))
-        .then((response) => {
-          this.setState({ loading: false });
-          return response;
-        })
-        .catch((response) => {
-          this.setState({ loading: false });
-          return response;
-        });
+      return Client.assignTask(checkboxValueSeparator(members));
     }
-    return createTask()
-      .then((response) => {
-        this.setState({ loading: false });
-        return response;
-      })
-      .catch((response) => {
-        this.setState({ loading: false });
-        return response;
-      });
+    return Client.assignTask(checkboxValueSeparator(members));
   };
 
   render() {
-    const { members } = this.props;
+    const { members, match } = this.props;
 
     return (
       <>
@@ -74,18 +48,14 @@ class NewTask extends React.Component {
                     role,
                     userId,
                   },
-                  this.props.match.path,
+                  match.path,
                 )}
               />
             );
           }}
         </UserContextConsumer>
         <ContainerComponent>
-          {!this.state.loading && Object.keys(members).length ? (
-            <TaskEdit empty members={members} onSubmit={this.postTask} />
-          ) : (
-            <Spinner centered />
-          )}
+          <TaskEdit empty members={members} onSubmit={this.postTask} />
         </ContainerComponent>
       </>
     );
@@ -93,11 +63,10 @@ class NewTask extends React.Component {
 }
 
 NewTask.propTypes = {
-  members: PropTypes.arrayOf(PropTypes.object).isRequired,
+  members: PropTypes.objectOf(PropTypes.object).isRequired,
+  match: PropTypes.shape({
+    path: PropTypes.string,
+  }).isRequired,
 };
 
-export default withRouter(
-  connect((state) => {
-    return { members: state.members };
-  })(NewTask),
-);
+export default withRouter(connect(getStateMembers)(NewTask));

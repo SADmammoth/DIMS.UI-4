@@ -38,6 +38,7 @@ class SettingsButton extends React.Component {
               this.setState(inputsData);
             }}
             submitButton={<></>}
+            showNotifications='errorsOnly'
           >
             {inputs.theme}
           </Form>

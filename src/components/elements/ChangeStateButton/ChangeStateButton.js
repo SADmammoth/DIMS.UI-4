@@ -12,11 +12,16 @@ function ChangeStateButton({ taskId, userId, state, reload, buttonClassMod, butt
   };
 
   return (
-    <Button classMod={buttonClassMod} onClick={onClickHandler} content={buttonContent}>
+    <Button classMod={buttonClassMod} onClick={onClickHandler} content={children || buttonContent}>
       {children}
     </Button>
   );
 }
+
+ChangeStateButton.defaultProps = {
+  buttonClassMod: 'primary',
+  buttonContent: 'Change state',
+};
 
 ChangeStateButton.propTypes = {
   taskId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -25,6 +30,7 @@ ChangeStateButton.propTypes = {
   reload: PropTypes.func.isRequired,
   buttonClassMod: PropTypes.string,
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
 
 export default ChangeStateButton;

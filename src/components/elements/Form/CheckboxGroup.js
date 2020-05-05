@@ -4,7 +4,7 @@ import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 
 function CheckboxGroup(props) {
   function renderCheckbox(valueOption, { value: commonValue, id, type, name, onChange, attributes }) {
-    //* 'value' variable is 'value' property of current checkbox
+    //* 'valueOption' variable is 'value' property of current checkbox
     /*
      * 'commonValue' is value of checkbox group by name, means array or string
      * consists of values of checked checkboxes  */
@@ -29,7 +29,7 @@ function CheckboxGroup(props) {
           id={id + valueOption.value}
           name={name}
           type={type}
-          className={`form-${type}`}
+          className={`form-${type}${required ? ' required' : ''}`}
           value={valueOption.value}
           onChange={onChangeHandler}
           {...attributes}
@@ -44,7 +44,7 @@ function CheckboxGroup(props) {
     return props.valueOptions.map((valueOption) => renderCheckbox(valueOption, props));
   }
 
-  const { type, id } = props;
+  const { type, id, required } = props;
 
   return (
     <div id={id + type} className={`${type}-group`}>

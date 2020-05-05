@@ -1,5 +1,7 @@
 import Validator from '../../../../helpers/Validator';
 import Client from '../../../../helpers/Client';
+import masks from '../../../../helpers/maskHelpers/masks';
+import maskSpecialCharsRegex from '../../../../helpers/maskHelpers/maskSpecialCharsRegex';
 
 export default function editMemberInputsAttributes({
   firstName,
@@ -26,6 +28,7 @@ export default function editMemberInputsAttributes({
       byCharValidator: Validator.text,
       validator: Validator.text,
       validationMessage: 'First name may contain only letters',
+      required: true,
     },
     {
       type: 'text',
@@ -35,6 +38,7 @@ export default function editMemberInputsAttributes({
       value: lastName,
       byCharValidator: Validator.text,
       validationMessage: 'Last name may contain only letters',
+      required: true,
     },
     {
       type: 'text',
@@ -44,6 +48,7 @@ export default function editMemberInputsAttributes({
       value: email,
       validator: Validator.email,
       validationMessage: Validator.emailMessage,
+      required: true,
     },
     {
       type: 'text',
@@ -51,15 +56,17 @@ export default function editMemberInputsAttributes({
       description: 'Skype',
       placeholder: 'Skype',
       value: skype,
+      required: true,
     },
     {
       type: 'text',
       name: 'mobilePhone',
       description: 'Mobile phone',
-      placeholder: '+___ (___) ___-____',
+      placeholder: masks.phone.replace(maskSpecialCharsRegex, '_'),
       value: mobilePhone,
-      mask: '+999 (999) 999-9999',
+      mask: masks.phone,
       validationMessage: Validator.mobilePhoneMessage,
+      required: true,
     },
     {
       type: 'text',
@@ -67,6 +74,7 @@ export default function editMemberInputsAttributes({
       description: 'Address',
       placeholder: 'Address',
       value: address,
+      required: true,
     },
     {
       type: 'radio',
@@ -77,30 +85,33 @@ export default function editMemberInputsAttributes({
         { label: 'Male', value: 'Male' },
         { label: 'Female', value: 'Female' },
       ],
+      required: true,
     },
     {
       type: 'text',
       name: 'startDate',
       description: 'Start date',
-      placeholder: '##-##-####',
-      value: startDate && Validator.fromDateToMask(startDate, 'dd-MM-yyyy'),
+      placeholder: 'dd-mm-yyyy',
+      value: startDate && Validator.fromDateToMask(startDate, masks.date),
       mask: '99-99-9999',
       maskType: 'invisible',
-      byCharValidator: (input) => Validator.dateByChar(input, ['dd-MM-yyyy']),
-      validator: (input) => Validator.dateTime(input, ['dd-MM-yyyy']),
+      byCharValidator: (input) => Validator.dateByChar(input, [masks.date]),
+      validator: (input) => Validator.dateTime(input, [masks.date]),
       validationMessage: Validator.dateTimeMessage,
+      required: true,
     },
     {
       type: 'text',
       name: 'birthDate',
       description: 'Birth date',
-      placeholder: '##-##-####',
-      value: birthDate && Validator.fromDateToMask(birthDate, 'dd-MM-yyyy'),
+      placeholder: 'dd-mm-yyyy',
+      value: birthDate && Validator.fromDateToMask(birthDate, masks.date),
       mask: '99-99-9999',
       maskType: 'invisible',
-      byCharValidator: (input) => Validator.dateByChar(input, ['dd-MM-yyyy']),
-      validator: (input) => Validator.dateTime(input, ['dd-MM-yyyy']),
+      byCharValidator: (input) => Validator.dateByChar(input, [masks.date]),
+      validator: (input) => Validator.dateTimeInPast(input, [masks.date]),
       validationMessage: Validator.dateTimeMessage,
+      required: true,
     },
     {
       type: 'select',
@@ -111,6 +122,7 @@ export default function editMemberInputsAttributes({
       valueOptions: Client.directions.map((direction) => {
         return { label: direction, value: direction };
       }),
+      required: true,
     },
     {
       type: 'text',
@@ -118,6 +130,7 @@ export default function editMemberInputsAttributes({
       description: 'Education',
       placeholder: 'Education',
       value: education,
+      required: true,
     },
     {
       type: 'text',
@@ -128,6 +141,7 @@ export default function editMemberInputsAttributes({
       byCharValidator: Validator.numericByChar,
       validator: (input) => Validator.float(input, 5, 10),
       validationMessage: 'University average score must be real number from 5 to 10',
+      required: true,
     },
     {
       type: 'text',
@@ -138,6 +152,7 @@ export default function editMemberInputsAttributes({
       byCharValidator: Validator.numericByChar,
       validator: (input) => Validator.number(input, 20, 100),
       validationMessage: 'CT math score must be integer number from 20 to 100',
+      required: true,
     },
   ];
 }

@@ -1,24 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextBadge from '../TextBadge';
-import DateBadge from '../DateBadge';
-import Button from '../Button';
+
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
-import MemberEdit from './MemberEdit';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
 import { ReactComponent as MobileIcon } from '../../../assets/icons/Mobile.svg';
 import { ReactComponent as AddressIcon } from '../../../assets/icons/Address.svg';
 import { ReactComponent as EnvelopeIcon } from '../../../assets/icons/Envelope.svg';
+
+import TextBadge from '../TextBadge';
+import DateBadge from '../DateBadge';
+import Button from '../Button';
+import MemberEdit from './MemberEdit';
 import ButtonGroup from '../ButtonGroup';
 import FlexColumn from '../FlexColumn';
 import Client from '../../../helpers/Client';
-import DialogButton from '../DialogButton/DialogButton';
+import DialogButton from '../DialogButton';
 import Spinner from '../Spinner';
-import Validator from '../../../helpers/Validator';
-import { deleteMember, editMember } from '../../../redux/actions/membersActions';
+import { deleteMember } from '../../../redux/actions/membersActions';
 import store from '../../../redux';
+import editMemberHelper from '../../../helpers/editMemberHelper';
+import dateTypes from '../../../helpers/dateTypes';
 
 class MemberInfo extends React.Component {
   constructor(props) {
@@ -26,62 +29,12 @@ class MemberInfo extends React.Component {
     this.state = { loading: false };
   }
 
-  editMember = ({
-    firstName,
-    lastName,
-    email,
-    skype,
-    mobilePhone,
-    address,
-    sex,
-    startDate,
-    birthDate,
-    direction,
-    education,
-    universityAverageScore,
-    mathScore,
-  }) => {
+  onEdit = (data) => {
     const { id, handleClose } = this.props;
 
     this.setState({ loading: true });
 
-    const calculatedStartDate = Validator.dateByMask(startDate, 'dd-MM-yyyy');
-    const calculatedBirthDate = Validator.dateByMask(birthDate, 'dd-MM-yyyy');
-
-    store.dispatch(
-      editMember(id, {
-        firstName,
-        lastName,
-        email,
-        skype,
-        mobilePhone,
-        address,
-        sex,
-        startDate: calculatedStartDate,
-        birthDate: calculatedBirthDate,
-        direction,
-        education,
-        universityAverageScore,
-        mathScore,
-      }),
-    );
-
-    return Client.editMember(
-      id,
-      firstName,
-      lastName,
-      email,
-      direction,
-      sex,
-      education,
-      calculatedBirthDate,
-      universityAverageScore,
-      mathScore,
-      address,
-      mobilePhone,
-      skype,
-      calculatedStartDate,
-    )
+    return editMemberHelper(id, data)
       .then((response) => {
         this.setState({ loading: false });
         handleClose();
@@ -91,6 +44,11 @@ class MemberInfo extends React.Component {
         this.setState({ loading: false });
         return response;
       });
+  };
+
+  onDelete = ({ dialogValue }) => {
+    store.dispatch(deleteMember(dialogValue));
+    return Client.deleteMember(dialogValue);
   };
 
   render() {
@@ -124,7 +82,7 @@ class MemberInfo extends React.Component {
         {!loading ? (
           <>
             {edit ? (
-              <MemberEdit onSubmit={this.editMember} {...this.props} />
+              <MemberEdit onSubmit={this.onEdit} {...this.props} />
             ) : (
               <>
                 <div className='member-info__header'>
@@ -137,7 +95,7 @@ class MemberInfo extends React.Component {
                     <b>{firstName}</b>
                     {` ${lastName}`}
                   </p>
-                  <DateBadge date={startDate} type={DateBadge.DateTypes.startDate} />
+                  <DateBadge date={startDate} type={dateTypes.startDate} />
                   <TextBadge>{direction}</TextBadge>
                 </div>
                 <div className='member-info__body'>
@@ -211,10 +169,7 @@ class MemberInfo extends React.Component {
                         confirmButtonClassMod='error'
                         confirmButtonContent='Delete'
                         dialogValue={id}
-                        onSubmit={({ dialogValue }) => {
-                          store.dispatch(deleteMember(dialogValue));
-                          return Client.deleteMember(dialogValue);
-                        }}
+                        onSubmit={this.onDelete}
                       />
                       <Button content='Edit' classMod='secondary' onClick={openEditModal} />
                     </>

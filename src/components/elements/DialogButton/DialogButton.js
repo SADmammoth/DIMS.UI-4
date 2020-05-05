@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button';
-import Modal from '../Modal/Modal';
-import Form from '../Form/Form';
+import Modal from '../Modal';
+import Form from '../Form';
 import ButtonGroup from '../ButtonGroup';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner';
 
 class DialogButton extends React.Component {
   constructor(props) {
@@ -23,11 +23,14 @@ class DialogButton extends React.Component {
   };
 
   onSubmit = (data) => {
+    const { onSubmit: propsOnSubmit, reload } = this.props;
     this.setState({ loading: true });
-    return this.props.onSubmit(data).then((res) => {
+
+    return propsOnSubmit(data).then((response) => {
       this.setState({ loading: false });
+      reload();
       this.modal.current.handleClose();
-      return res;
+      return response;
     });
   };
 
@@ -40,10 +43,15 @@ class DialogButton extends React.Component {
       confirmButtonClassMod,
       confirmButtonContent,
     } = this.props;
+
+    const { loading } = this.state;
+
     return (
       <>
         <Modal ref={this.modal} className='dialog'>
-          {!this.state.loading ? (
+          {loading ? (
+            <Spinner centered />
+          ) : (
             <>
               <p className='dialog__head'>{message}</p>
               <ButtonGroup>
@@ -63,8 +71,6 @@ class DialogButton extends React.Component {
                 </Button>
               </ButtonGroup>
             </>
-          ) : (
-            <Spinner centered />
           )}
         </Modal>
         <Button classMod={buttonClassMod} onClick={this.onClick}>
@@ -75,6 +81,10 @@ class DialogButton extends React.Component {
   }
 }
 
+DialogButton.defaultProps = {
+  reload: () => {},
+};
+
 DialogButton.propTypes = {
   message: PropTypes.oneOfType([PropTypes.element, PropTypes.string]).isRequired,
   confirmButtonClassMod: PropTypes.string.isRequired,
@@ -83,7 +93,7 @@ DialogButton.propTypes = {
   buttonClassMod: PropTypes.string.isRequired,
   dialogValue: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  reload: PropTypes.func.isRequired,
+  reload: PropTypes.func,
 };
 
 export default DialogButton;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import path from 'path';
 import Validator from '../Validator';
-import compareObjects from '../compareObjects';
+import arraysSubtraction from '../arraysSubtraction';
 
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
@@ -30,8 +30,10 @@ class Client {
     const [firstName, lastName] = FullName.split(' ');
     member.firstName = firstName;
     member.lastName = lastName;
+
     const birthDate = new Date();
     birthDate.setFullYear(new Date().getFullYear() - Age);
+
     member.birthDate = birthDate;
     member.email = Email;
     member.direction = Direction;
@@ -43,6 +45,7 @@ class Client {
     member.mobilePhone = Validator.parsePhoneByMask(MobilePhone, '+999 (99) 99-99-99');
     member.skype = Skype;
     member.startDate = new Date(StartDate);
+
     return member;
   }
 
@@ -71,24 +74,6 @@ class Client {
     Skype,
     StartDate,
   ) {
-    if (
-      !Name ||
-      !LastName ||
-      !Email ||
-      !Direction ||
-      !Sex ||
-      !Education ||
-      !BirthDate ||
-      !UniversityAverageScore ||
-      !MathScore ||
-      !Address ||
-      !MobilePhone ||
-      !Skype ||
-      !StartDate
-    ) {
-      return new Promise();
-    }
-
     return axios.post(path.join(Client.apiPath, 'create'), {
       Name,
       LastName,
@@ -122,25 +107,6 @@ class Client {
     Skype,
     StartDate,
   ) {
-    if (
-      !UserId ||
-      !Name ||
-      !LastName ||
-      !Email ||
-      !Direction ||
-      !Sex ||
-      !Education ||
-      !BirthDate ||
-      !UniversityAverageScore ||
-      !MathScore ||
-      !Address ||
-      !MobilePhone ||
-      !Skype ||
-      !StartDate
-    ) {
-      return new Promise();
-    }
-
     return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
       Name,
       LastName,
@@ -186,6 +152,7 @@ class Client {
   static createUserTasksObject(userTasksResponse) {
     const { UserId, TaskId, TaskName, Description, StartDate, DeadlineDate, State } = userTasksResponse;
     const userTasks = {};
+
     userTasks.id = TaskId.toString() + UserId.toString();
     userTasks.userId = UserId;
     userTasks.taskId = TaskId;
@@ -215,6 +182,7 @@ class Client {
     const allUsers = await this.getMembers();
     const assignedTo = [];
     let userTasks;
+
     await Promise.all(
       Object.entries(allUsers).map(async ([userId, user]) => {
         userTasks = await this.getUserTasks(userId);
@@ -239,12 +207,13 @@ class Client {
   }
 
   static postTask(Name, Description, StartDate, DeadlineDate) {
-    return axios.post(path.join(Client.apiPath, 'task', 'create'), {
+    let data = {
       Name,
       Description,
       StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
       DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
-    });
+    };
+    return axios.post(path.join(Client.apiPath, 'task', 'create'), data);
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
@@ -264,12 +233,48 @@ class Client {
     return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
   }
 
+  static async unassignTask(taskId, userIds) {
+    const userTasks = [];
+    const allUsers = Object.keys(await Client.getMembers());
+    let foundTasks;
+    await Promise.all(
+      allUsers.map(async (userId) => {
+        foundTasks = Object.values(await Client.getUserTasks(userId.toString())).filter(
+          ({ taskId: candidateTaskId }) => {
+            return taskId === candidateTaskId;
+          },
+        );
+        if (foundTasks.length) {
+          userTasks.push(...foundTasks);
+        }
+      }),
+    );
+
+    // await Client.deleteTask(taskId.toString());
+    let createdTask = false;
+    console.log(userTasks);
+    await Promise.all(
+      Object.values(userTasks).map(async (userTask) => {
+        console.log(userTask);
+        if (userIds.indexOf(userTask.userId) < 0) {
+          const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
+          if (!createdTask) {
+            createdTask = true;
+            await Client.postTask(taskName, taskDescription, taskStart, taskDeadline);
+          }
+          await Client.setUserTaskState(taskId.toString(), userId.toString(), state);
+        }
+      }),
+    );
+    await Client.assignTask(taskId, arraysSubtraction(allUsers, userIds));
+  }
+
   static async checkToken(token) {
     return true;
   }
 
   static async getUserInfoByToken(token) {
-    return { role: 'admin', userId: '2' };
+    return { role: 'member', userId: '2' };
   }
 }
 

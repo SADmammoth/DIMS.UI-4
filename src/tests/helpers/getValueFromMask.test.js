@@ -1,4 +1,4 @@
-import getValueFromMask from '../../helpers/getValueFromMask';
+import getValueFromMask from '../../helpers/maskHelpers/getValueFromMask';
 
 describe('getValueFromMask', () => {
   test('Trims mask correct', () => {

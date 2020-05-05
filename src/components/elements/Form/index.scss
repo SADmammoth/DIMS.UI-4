@@ -2,40 +2,54 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .form-control {
+  display: inline-block;
   padding: 5px;
+  border: 2px solid $muted-text;
   border-radius: 10px;
-  border: 2px solid $dark-bg;
+  outline: none;
   background: $light-bg;
   color: $common-text;
-  outline: none;
-  display: inline-block;
 }
 
 .form-checkbox {
   appearance: none;
+
   & + label {
     position: relative;
   }
+
   &:checked + label::before {
-    content: '';
-    height: 6px;
+    position: absolute;
+    top: 8px;
+    left: -15.88px;
     width: 6px;
-    box-sizing: border-box;
+    height: 6px;
     border-radius: 1px;
     background: $common-text;
-    position: absolute;
-    left: -15.88px;
-    top: 8px;
+    content: '';
+    box-sizing: border-box;
   }
 
   & + label::after {
-    content: '';
-    height: 8px;
     width: 8px;
-    border-radius: 3px;
-    float: left;
+    height: 8px;
     margin-top: 5px;
-    border: 2px solid $common-text;
+    float: left;
+    border: 2px solid $muted-text;
+    border-radius: 3px;
+    content: '';
+  }
+
+  &.required {
+    & + label::after {
+      width: 8px;
+      height: 8px;
+      margin-top: 5px;
+      float: left;
+      border: 2px solid $common-text;
+      border-radius: 3px;
+      content: '';
+    }
   }
 }
 
@@ -47,20 +61,28 @@
 }
 
 .form-select {
+  display: inline-block;
   padding: 5px;
-  border-radius: 10px;
   border: 2px solid $dark-bg;
+  border-radius: 10px;
+  outline: none;
   background: $light-bg;
   color: $common-text;
-  outline: none;
-  display: inline-block;
 }
 
 .form-label {
-  font-weight: bold;
   margin: 8px;
+  font-weight: bold;
 }
 
-input::placeholder {
+.form-select::placeholder,
+.form-control::placeholder,
+.form-textarea::placeholder {
   color: $muted-text;
+}
+
+.form-select:required,
+.form-control:required,
+.form-textarea:required {
+  border-color: $common-text !important;
 }

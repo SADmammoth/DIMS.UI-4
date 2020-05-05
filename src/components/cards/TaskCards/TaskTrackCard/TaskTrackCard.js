@@ -4,19 +4,23 @@ import { withRouter } from 'react-router-dom';
 
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
-import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
-import CollapsableCard from '../../CollapsableCard/CollapsableCard';
+import ButtonGroup from '../../../elements/ButtonGroup';
+import CollapsableCard from '../../CollapsableCard';
 import DateBadge from '../../../elements/DateBadge';
-import DialogButton from '../../../elements/DialogButton/DialogButton';
+import DialogButton from '../../../elements/DialogButton';
+import compareObjects from '../../../../helpers/compareObjects';
+import dateTypes from '../../../../helpers/dateTypes';
 
 function TaskTrackCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close } = props;
+
+  const userId = props.match.params.id;
 
   return (
     <CollapsableCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
       <CollapsableCard.Header>
         <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
-        <DateBadge type='trackStart' date={trackDate} />
+        <DateBadge type={dateTypes.trackStart} date={trackDate} />
       </CollapsableCard.Header>
       <CollapsableCard.Body>
         <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
@@ -41,11 +45,7 @@ function TaskTrackCard(props) {
             trackNote={trackNote}
             buttonContent='Edit'
           />
-          <Button
-            classMod='ghost'
-            link={`/members/${props.match.params.id}/tasks/id${memberTaskId}`}
-            content='Show in tasks'
-          />
+          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
         </ButtonGroup>
       </CollapsableCard.Body>
     </CollapsableCard>
@@ -62,10 +62,12 @@ TaskTrackCard.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackNote: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date).isRequired,
+
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default withRouter(React.memo(TaskTrackCard, areEqual));
+export default withRouter(React.memo(TaskTrackCard, compareObjects));

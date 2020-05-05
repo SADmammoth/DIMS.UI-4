@@ -1,4 +1,4 @@
-import invisibleMaskOnInputValue from '../../helpers/invisibleMaskOnInputValue';
+import invisibleMaskOnInputValue from '../../helpers/maskHelpers/invisibleMaskOnInputValue';
 
 describe('invisibleMaskOnInputValue', () => {
   test('Return value is object with correct structure', () => {

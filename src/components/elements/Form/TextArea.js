@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import checkCharsCount from '../../../helpers/checkCharsCount';
 
 function TextArea(props) {
   const {
@@ -16,12 +17,8 @@ function TextArea(props) {
     onError,
   } = props;
 
-  function checkCount(input, min, max) {
-    return input.length <= max && input.length >= min;
-  }
-
   const inputHandler = (event) => {
-    if (checkCount(event.target.value, 0, maxSymbols)) {
+    if (checkCharsCount(event.target.value, 0, maxSymbols)) {
       onInput(event);
     } else {
       onError(event);
@@ -29,7 +26,7 @@ function TextArea(props) {
   };
 
   const onChangeHandler = (event) => {
-    if (checkCount(event.target.value, minSymbols, maxSymbols)) {
+    if (checkCharsCount(event.target.value, minSymbols, maxSymbols)) {
       onChange(event);
     } else {
       onError(event);
@@ -41,9 +38,9 @@ function TextArea(props) {
       id={id}
       className='form-textarea'
       name={name}
-      onInput={inputHandler}
-      onChange={onChangeHandler}
-      required={required}
+      onChange={inputHandler}
+      onBlur={onChangeHandler}
+      required={required && 'required'}
       {...attributes}
       value={value}
     >
