@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Button/Button';
+
+import Button from '../Button';
 
 function Nav(props) {
   const { navItems, className } = props;
@@ -21,6 +22,7 @@ function Nav(props) {
     </nav>
   );
 }
+
 Nav.defaultProps = {
   className: '',
 };

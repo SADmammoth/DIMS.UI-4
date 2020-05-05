@@ -7,9 +7,11 @@ import Nav from './Nav';
 import TextBadge from '../TextBadge';
 import SettingsButton from '../SettingsButton';
 import MobileNav from './MobileNav';
+import matchMaxWidth from '../../../helpers/matchMaxWidth';
 
 function Header(props) {
   const { title, navItems, role } = props;
+
   return (
     <header className='header fixed-top'>
       <ContainerComponent display='flex'>
@@ -21,14 +23,20 @@ function Header(props) {
             {title && (
               <h1 className='page-title'>
                 {title}
-                {window.matchMedia('(max-width: 600px)').matches || <TextBadge>{role}</TextBadge>}
+                {matchMaxWidth('600px') || <TextBadge>{role}</TextBadge>}
               </h1>
             )}
-            {!window.matchMedia('(max-width: 1000px)').matches ? (
-              <>{navItems && navItems.length && <Nav className='header__nav' navItems={navItems} />}</>
-            ) : (
-              <>{navItems && navItems.length && <MobileNav className='header__nav' navItems={navItems} />}</>
-            )}
+            <>
+              {navItems && navItems.length && (
+                <>
+                  {matchMaxWidth('1000px') ? (
+                    <MobileNav className='header__nav' navItems={navItems} />
+                  ) : (
+                    <Nav className='header__nav' navItems={navItems} />
+                  )}
+                </>
+              )}
+            </>
             <SettingsButton />
           </ContainerComponent>
         </div>

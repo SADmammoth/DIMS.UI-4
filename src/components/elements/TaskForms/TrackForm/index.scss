@@ -11,31 +11,36 @@
   overflow-y: auto;
 
   .form-textarea {
-    min-height: 240px !important;
     height: 10vh !important;
+    min-height: 240px !important;
   }
 
-  .task-edit__dates {
-    margin-bottom: 10px;
+  .task-edit {
+    &__dates {
+      margin-bottom: 10px;
+    }
+
+    &__header {
+      @include clearfix();
+    }
+
+    &__title {
+      float: left;
+    }
   }
 
-  .task-edit__header {
-    @include clearfix();
-  }
-  .task-edit__title {
-    float: left;
-  }
   .text-badge {
-    float: right;
     margin-right: 5%;
+    float: right;
   }
 
   .form-label {
     font-weight: bold;
   }
+
   .button[type='submit'] {
-    float: right;
-    margin-right: 2vw;
     margin-top: 10px;
+    margin-right: 2vw;
+    float: right;
   }
 }

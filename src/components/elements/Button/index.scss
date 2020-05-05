@@ -2,68 +2,86 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .button {
+  padding: 10px;
   border: none;
   outline: none;
-  padding: 10px;
   cursor: pointer;
 
   &_primary {
-    background-color: $highlight-bg;
     width: 150px;
+    background-color: $highlight-bg;
     color: $light-text;
-    fill: $light-text;
     font-size: 1.1rem;
+    fill: $light-text;
   }
+
   &_success {
+    width: 80px;
     background-color: $success;
-    width: 80px;
     color: $light-text;
-    fill: $light-text;
     font-size: 1.1rem;
+    fill: $light-text;
   }
+
   &_error {
-    background-color: $error;
     width: 80px;
+    background-color: $error;
     color: $light-text;
-    fill: $light-text;
     font-size: 1.1rem;
+    fill: $light-text;
   }
+
   &_ghost {
     background: none;
     color: $common-text;
     font-size: 1.1rem;
     text-decoration: underline;
   }
+
   &_secondary {
+    width: 100px;
     background: $primary-bg;
     color: $common-text;
-    fill: $common-text;
     font-size: 1.1rem;
-    width: 100px;
+    fill: $common-text;
   }
+
   &_navItem {
+    padding: 5px 20px;
     background-color: transparent;
     color: $common-text;
-    fill: $common-text;
     font-size: 1.2rem;
-    padding: 5px 20px;
     font-weight: bold;
+    fill: $common-text;
+
     &_active {
-      background-color: transparent;
-      color: $common-text;
-      fill: $common-text;
-      font-size: 1.2rem;
       padding: 5px 20px;
-      font-weight: bold;
+      background-color: transparent;
       background-color: $light-bg;
+      color: $common-text;
+      font-size: 1.2rem;
+      font-weight: bold;
+      fill: $common-text;
     }
   }
+
   &_invisible {
-    background: transparent;
-    fill: $common-text;
-    color: $common-text;
     border: none;
-    color: inherit;
     outline: none;
+    background: transparent;
+    color: $common-text;
+    color: inherit;
+    fill: $common-text;
+  }
+
+  &_interactive {
+    margin: 0;
+    padding: 3px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $common-text;
+    color: inherit;
+    fill: $common-text;
   }
 }

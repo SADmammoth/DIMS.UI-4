@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Button/Button';
-import Modal from '../Modal';
+
 import { ReactComponent as MenuIcon } from '../../../assets/icons/menu.svg';
+
+import Button from '../Button';
+import Modal from '../Modal';
 
 function Nav(props) {
   const { navItems, className } = props;

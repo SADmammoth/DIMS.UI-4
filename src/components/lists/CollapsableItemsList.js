@@ -12,6 +12,7 @@ class CollapsableItemsList extends Component {
     const { items: stateItems } = state;
     if (Object.values(stateItems).length !== items.length) {
       const itemsData = {};
+
       items.forEach((child) => {
         itemsData[child.props.id] = { collapsed: true };
       });

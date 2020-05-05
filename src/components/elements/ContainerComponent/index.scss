@@ -2,13 +2,13 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .container:not(.fullwidth) {
-  max-width: 90vw;
   width: 1000px;
+  max-width: 90vw;
   margin: 0 auto;
 }
 
 .container.fullwidth {
-  max-width: 90vw;
   width: calc(1000px + (100vw - 1000px) / 2);
+  max-width: 90vw;
   float: right;
 }

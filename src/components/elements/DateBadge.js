@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as FlagIcon } from '../../assets/icons/flag.svg';
 import { ReactComponent as TaskDateIcon } from '../../assets/icons/TaskDate.svg';
+import dateTypes from '../../helpers/dateTypes';
 
 function DateBadge(props) {
   const { date, type } = props;
+
   const DateTypes = {
     startDate: <FlagIcon title='Start date' className='icon-flag common-text-color' />,
     endDate: <FlagIcon title='End date' className='icon-flag error-color' />,
@@ -21,22 +23,13 @@ function DateBadge(props) {
   );
 }
 
-DateBadge.DateTypes = Object.freeze({
-  empty: '',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  trackStart: 'trackStart',
-  trackSuccess: 'trackSuccess',
-  trackFail: 'trackFail',
-});
-
 DateBadge.defaultProps = {
   type: '',
 };
 
 DateBadge.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
-  type: PropTypes.oneOf(Object.values(DateBadge.DateTypes)),
+  type: PropTypes.oneOf(Object.values(dateTypes)),
 };
 
 export default DateBadge;

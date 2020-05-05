@@ -18,6 +18,7 @@ function Button(props) {
 
 Button.defaultProps = {
   type: 'button',
+  classMod: 'primary',
 };
 
 Button.propTypes = {
@@ -26,7 +27,7 @@ Button.propTypes = {
   history: PropTypes.any.isRequired,
   classMod: PropTypes.string,
   link: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   onClick: PropTypes.func,
 };
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '../../elements/Button';
 
 function CollapsableCardTitle(props) {
   const { cardClass, onClick, children } = props;
   return (
-    <p role='menu' className={`interactive ${cardClass}-card__header__title`} onClick={onClick}>
+    <Button classMod={`interactive ${cardClass}-card__header__title`} onClick={onClick}>
       {children}
-    </p>
+    </Button>
   );
 }
 

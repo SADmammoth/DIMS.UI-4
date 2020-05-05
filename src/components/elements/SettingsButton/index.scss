@@ -2,23 +2,26 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .settings {
+  width: 30vw;
+  padding-bottom: 50px;
+
   h2 {
     text-align: center;
   }
+
   .about {
-    background: $primary-bg;
     position: absolute;
-    left: 0;
     right: 0;
     bottom: 0;
-    font-size: 0.8rem;
+    left: 0;
     padding: 5px 0;
+    background: $primary-bg;
+    font-size: 0.8rem;
     text-align: center;
   }
+
   .button_secondary {
-    margin: 20px auto 0;
     display: block;
+    margin: 20px auto 0;
   }
-  padding-bottom: 50px;
-  width: 30vw;
 }

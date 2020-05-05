@@ -6,7 +6,7 @@ function Toast(props) {
   return (
     <article className={`toast toast_${type}`}>
       <div className='toast__header'>{title}</div>
-      <div className='toast__body'>{message}</div>
+      {message && <div className='toast__body'>{message}</div>}
     </article>
   );
 }
@@ -14,6 +14,6 @@ function Toast(props) {
 Toast.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 export default Toast;

@@ -2,80 +2,88 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .task-card {
-  &_active > &__header {
-    position: relative;
-    @include task-card_border(white);
-  }
-  &_fail > &__header {
-    position: relative;
-    @include task-card_border($error);
-  }
-  &_success > &__header {
-    position: relative;
-    @include task-card_border($success);
-  }
-  &__header {
-    background: $primary-bg;
-    padding: 10px 35px;
+  margin-bottom: 5px;
 
-    &__title {
-      font-size: 1.2rem;
-      border-bottom: 1px solid $dark-bg;
-      float: left;
+  @each $type, $color in ('active': white, 'fail': $error, 'success': $success) {
+    &_#{$type} > &__header {
+      position: relative;
+      @include task-card_border($color);
     }
+  }
+
+  &__header {
+    padding: 20px 35px;
+    background: $primary-bg;
 
     @include clearfix;
+
+    &__title {
+      float: left;
+      border-bottom: 1px solid $dark-bg;
+      font-size: 1.2rem;
+    }
   }
-  margin-bottom: 5px;
+
   &.open > &__header {
     background: $highlight-bg;
   }
 
   .state {
-    background: $highlight-bg;
     padding-top: 5px;
     padding-bottom: 5px;
+    background: $highlight-bg;
     font-size: 1.1rem;
+
     span {
+      display: inline-block;
+      width: 60px;
       padding: 5px;
       padding-left: 50px;
-      width: 60px;
-      display: inline-block;
-      text-align: center;
       background: $primary-bg;
+      text-align: center;
     }
   }
 
   &__header {
     .date-badge {
-      float: right;
       margin-top: 15px;
+      float: right;
       font-size: 1.3rem;
     }
   }
 
   &__body {
-    border: 3px solid $highlight-bg;
     padding: 20px;
+    border: 3px solid $highlight-bg;
+
     @include clearfix();
+
+    .button {
+      min-width: 100px;
+    }
+
     .date-badge {
       margin-right: 20px;
-      float: left;
       margin-bottom: 0;
+      float: left;
       font-size: 1.1rem;
     }
   }
 
   &__description {
-    margin-bottom: 35px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border: 2px solid $primary-bg;
+    padding: 5px;
   }
 
   .button-block {
     .button:not(.button_primary) {
-      float: right;
       margin-left: 10px;
+      float: right;
     }
   }
+
   &__dates {
     @include clearfix;
   }

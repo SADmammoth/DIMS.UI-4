@@ -41,10 +41,10 @@ class CollapsableCard extends React.PureComponent {
               if (child.type === CollapsableCard.Body || child.type === CollapsableCard.Description) {
                 return React.cloneElement(child, { cardClass });
               }
-              if (child.type !== CollapsableCard.Header) {
-                return child;
+              if (child.type === CollapsableCard.Header) {
+                return null;
               }
-              return null;
+              return child;
             })}
         </article>
       </>

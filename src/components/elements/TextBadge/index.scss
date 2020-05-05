@@ -2,11 +2,11 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .text-badge {
-  background-color: $dark-bg;
-  font-size: 1.2rem;
   width: 100px;
-  color: $light-text;
-  text-align: center;
   padding: 5px;
   border-radius: 20px;
+  background-color: $dark-bg;
+  color: $light-text;
+  font-size: 1.2rem;
+  text-align: center;
 }

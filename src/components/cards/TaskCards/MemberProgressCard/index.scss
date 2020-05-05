@@ -3,11 +3,12 @@
 
 .task-progress {
   .task-card__header {
+    @include clearfix();
+
     &__title {
-      float: left;
       padding: 3px;
+      float: left;
       border-bottom: 1px solid $dark-bg;
     }
-    @include clearfix();
   }
 }

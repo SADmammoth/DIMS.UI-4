@@ -2,13 +2,13 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 footer {
-  background: $header-bg;
-  border: 2px solid $light-bg;
-  height: 7vh;
-  text-align: center;
   position: fixed;
   bottom: 0px;
   width: 100vw;
+  height: 7vh;
+  border: 2px solid $light-bg;
+  background: $header-bg;
+  text-align: center;
 
   @include acrylic-glass-effect;
 }
