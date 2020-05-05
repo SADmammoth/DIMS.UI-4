@@ -1,13 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
+
 import Client from '../helpers/Client';
 import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
 import CollapsableItemsList from '../components/lists/CollapsableItemsList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
-import UserContextConsumer from '../helpers/UserContextConsumer';
+import UserContextConsumer from '../helpers/components/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
 import Footer from '../components/elements/Footer';
 
@@ -18,7 +20,8 @@ class MemberTracksPage extends React.Component {
   }
 
   async componentDidMount() {
-    const tracksData = await Client.getTracks(this.props.match.params.id);
+    const { match } = this.props;
+    const tracksData = await Client.getTracks(match.params.id);
     this.setState({
       tracks: tracksData,
     });
@@ -50,6 +53,7 @@ class MemberTracksPage extends React.Component {
 
   render() {
     const { tracks } = this.state;
+    const { match } = this.props;
     return (
       <>
         <Helmet>
@@ -57,9 +61,7 @@ class MemberTracksPage extends React.Component {
         </Helmet>
         <UserContextConsumer>
           {({ role, userId }) => {
-            return (
-              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userId }, this.props.match.path)} />
-            );
+            return <Header role={role} title='Task tracks' navItems={getNavItems({ role, userId }, match.path)} />;
           }}
         </UserContextConsumer>
         <main>
@@ -78,5 +80,14 @@ class MemberTracksPage extends React.Component {
     );
   }
 }
+
+MemberTracksPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    path: PropTypes.string,
+  }).isRequired,
+};
 
 export default withRouter(MemberTracksPage);

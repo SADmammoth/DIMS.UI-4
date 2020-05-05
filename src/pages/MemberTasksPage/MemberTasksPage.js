@@ -3,15 +3,15 @@ import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Client from '../helpers/Client';
-import MemberTaskCard from '../components/cards/TaskCards/MemberTaskCard';
-import CollapsableItemsList from '../components/lists/CollapsableItemsList';
-import ContainerComponent from '../components/elements/ContainerComponent';
-import Header from '../components/elements/Header';
-import Spinner from '../components/elements/Spinner/Spinner';
-import UserContextConsumer from '../helpers/UserContextConsumer';
-import getNavItems from '../helpers/getNavItems';
-import Footer from '../components/elements/Footer';
+import Client from '../../helpers/Client';
+import CollapsableItemsList from '../../components/lists/CollapsableItemsList';
+import ContainerComponent from '../../components/elements/ContainerComponent';
+import Header from '../../components/elements/Header';
+import Spinner from '../../components/elements/Spinner/Spinner';
+import UserContextConsumer from '../../helpers/components/UserContextConsumer';
+import getNavItems from '../../helpers/getNavItems';
+import Footer from '../../components/elements/Footer';
+import WrappedMemberTask from './WrappedMemberTask';
 
 class MemberTasksPage extends React.Component {
   constructor(props) {
@@ -24,7 +24,9 @@ class MemberTasksPage extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.taskSet !== this.props.taskSet) {
+    const { taskSet } = this.state;
+    const { taskSet: propsTaskSet } = this.props;
+    if (taskSet !== propsTaskSet) {
       this.update();
     }
   }
@@ -38,7 +40,8 @@ class MemberTasksPage extends React.Component {
 
   async update() {
     let taskData;
-    const userId = this.props.match.params.id;
+    const { match } = this.props;
+    const userId = match.params.id;
 
     const { taskSet } = this.props;
 
@@ -50,54 +53,29 @@ class MemberTasksPage extends React.Component {
 
     this.setState({
       tasks: taskData,
-      taskSet: this.props.taskSet,
+      taskSet,
     });
   }
 
-  wrappedMemberTask = ({ collapsed, id, taskSet, edit, open, close, ...data }) => {
-    const { taskId, taskName, taskDescription, state, taskStart, taskDeadline, assignedTo } = data;
-    return (
-      <UserContextConsumer>
-        {({ role }) => {
-          return (
-            <MemberTaskCard
-              id={id}
-              edit={edit}
-              taskId={taskId}
-              taskName={taskName}
-              taskDescription={taskDescription}
-              state={state}
-              taskStart={taskStart}
-              taskDeadline={taskDeadline}
-              taskSet={taskSet}
-              role={role}
-              open={open}
-              close={close}
-              collapsed={collapsed}
-              assignedTo={assignedTo}
-              reload={() => this.update()}
-            />
-          );
-        }}
-      </UserContextConsumer>
-    );
-  };
-
   renderTask(id, data, taskSet, edit) {
-    const WrappedMemberTask = this.wrappedMemberTask;
-    return <WrappedMemberTask id={id} taskSet={taskSet} edit={edit} {...data} />;
+    const updateCallback = () => {
+      this.update();
+    };
+    return <WrappedMemberTask id={id} taskSet={taskSet} edit={edit} update={updateCallback} {...data} />;
   }
 
   renderTasks() {
     const { tasks } = this.state;
+    const { taskSet, edit } = this.props;
     return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return this.renderTask(id, data, this.props.taskSet, this.props.edit);
+      return this.renderTask(id, data, taskSet, edit);
     });
   }
 
   render() {
     const { tasks } = this.state;
-    const { taskSet, name } = this.props;
+    const { taskSet, name, match } = this.props;
+
     return (
       <>
         <UserContextConsumer>
@@ -108,7 +86,7 @@ class MemberTasksPage extends React.Component {
                 <Helmet>
                   <title>{title}</title>
                 </Helmet>
-                <Header role={role} title={title} navItems={getNavItems({ role, userId }, this.props.match.path)} />
+                <Header role={role} title={title} navItems={getNavItems({ role, userId }, match.path)} />
               </>
             );
           }}
@@ -118,7 +96,7 @@ class MemberTasksPage extends React.Component {
             {tasks ? (
               <div>
                 {Object.keys(tasks).length ? (
-                  <CollapsableItemsList open={this.props.match.params.open} items={this.renderTasks()} />
+                  <CollapsableItemsList open={match.params.open} items={this.renderTasks()} />
                 ) : (
                   'No tasks'
                 )}
@@ -144,6 +122,13 @@ MemberTasksPage.propTypes = {
   taskSet: PropTypes.string,
   edit: PropTypes.bool,
   name: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      open: PropTypes.string,
+      id: PropTypes.string,
+    }),
+    path: PropTypes.string,
+  }).isRequired,
 };
 
 export default withRouter(
