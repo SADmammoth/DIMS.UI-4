@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
@@ -7,68 +7,65 @@ import Spinner from '../../Spinner';
 import checkTaskDates from '../../../../helpers/checkTaskDates';
 import errorNotification from '../../../../helpers/errorNotification';
 
-class TaskEdit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { inputs: {}, loading: false };
-  }
+const TaskEdit = (props) => {
+  const { onSubmit, empty, handleClose } = props;
+  const [inputs, setInputs] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  render() {
-    const { onSubmit, empty, handleClose } = this.props;
-    const { inputs, loading } = this.state;
-    const onSubmitHandler = (data) => {
-      this.setState({ loading: true });
-      if (!checkTaskDates(data.taskStart, data.taskDeadline)) {
-        errorNotification('Task dates input', 'Deadline date is set before start date');
-        return new Promise((resolve) => resolve());
-      }
-      return onSubmit(data)
-        .then((res) => {
-          this.setState({ loading: false });
-          return res;
-        })
-        .catch((res) => {
-          this.setState({ loading: false });
-          return res;
-        });
-    };
+  const onSubmitHandler = (data) => {
+    setLoading(true);
 
-    return (
-      <>
-        {loading ? (
-          <Spinner centered />
-        ) : (
-          <Form
-            className={`task-edit${empty ? ' empty' : ''}`}
-            inputs={taskEditInputsAttributes(this.props)}
-            onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
-            onSubmit={onSubmitHandler}
-            submitButton={<Button content='Confirm' classMod='secondary' />}
-          >
-            <div className='task-edit__header'>
-              <p className='task-edit__title'>{inputs.taskName}</p>
+    if (!checkTaskDates(data.taskStart, data.taskDeadline)) {
+      errorNotification('Task dates input', 'Deadline date is set before start date');
+      return new Promise((resolve) => resolve());
+    }
+
+    return onSubmit(data)
+      .then((response) => {
+        setLoading(false);
+        return response;
+      })
+      .catch((response) => {
+        setLoading(false);
+        return response;
+      });
+  };
+
+  return (
+    <>
+      {loading ? (
+        <Spinner centered />
+      ) : (
+        <Form
+          className={`task-edit${empty ? ' empty' : ''}`}
+          inputs={taskEditInputsAttributes(props)}
+          onInputsUpdate={setInputs}
+          onSubmit={onSubmitHandler}
+          submitButton={<Button content='Confirm' classMod='secondary' />}
+        >
+          <div className='task-edit__header'>
+            <p className='task-edit__title'>{inputs.taskName}</p>
+          </div>
+          <div className='task-edit__body'>
+            <div className='task-edit__description'>{inputs.taskDescription}</div>
+            <div className='task-edit__dates'>
+              {inputs.taskStart}
+              {inputs.taskDeadline}
             </div>
-            <div className='task-edit__body'>
-              <div className='task-edit__description'>{inputs.taskDescription}</div>
-              <div className='task-edit__dates'>
-                {inputs.taskStart}
-                {inputs.taskDeadline}
-              </div>
-              <div className='task-edit__members'>{inputs.members}</div>
-            </div>
-            <>
-              {empty || (
-                <Button classMod='secondary' onClick={handleClose}>
-                  Cancel
-                </Button>
-              )}
-            </>
-          </Form>
-        )}
-      </>
-    );
-  }
-}
+            <div className='task-edit__members'>{inputs.members}</div>
+          </div>
+          <>
+            {empty || (
+              <Button classMod='secondary' onClick={handleClose}>
+                Cancel
+              </Button>
+            )}
+          </>
+        </Form>
+      )}
+    </>
+  );
+};
 
 TaskEdit.defaultProps = {
   assignedTo: [],

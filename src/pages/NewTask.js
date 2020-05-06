@@ -13,54 +13,53 @@ import TaskEdit from '../components/elements/TaskForms/TaskEdit';
 import checkboxValueSeparator from '../helpers/checkboxValueSeparator';
 import masks from '../helpers/maskHelpers/masks';
 import getStateMembers from '../helpers/getStateMembers';
+import setUsersForTask from '../helpers/setUsersForTask';
 
-class NewTask extends React.Component {
-  postTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members }) => {
+const NewTask = ({ members, match }) => {
+  const postTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members, members_default }) => {
     const calculatedTaskStart = Validator.parseDateByMask(taskStart, masks.date);
     const calculatedTaskDeadline = Validator.parseDateByMask(taskDeadline, masks.date);
+
     const createTask = () => {
       return Client.postTask(taskName, taskDescription, calculatedTaskStart, calculatedTaskDeadline);
     };
 
     if (members.length) {
-      await createTask();
-      return Client.assignTask(checkboxValueSeparator(members));
+      const taskId = (await createTask()).TaskId;
+      return setUsersForTask(taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
     }
-    return Client.assignTask(checkboxValueSeparator(members));
+
+    return createTask();
   };
 
-  render() {
-    const { members, match } = this.props;
-
-    return (
-      <>
-        <Helmet>
-          <title>New task</title>
-        </Helmet>
-        <UserContextConsumer>
-          {({ role, userId }) => {
-            return (
-              <Header
-                role={role}
-                title='New Task'
-                navItems={getNavItems(
-                  {
-                    role,
-                    userId,
-                  },
-                  match.path,
-                )}
-              />
-            );
-          }}
-        </UserContextConsumer>
-        <ContainerComponent>
-          <TaskEdit empty members={members} onSubmit={this.postTask} />
-        </ContainerComponent>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Helmet>
+        <title>New task</title>
+      </Helmet>
+      <UserContextConsumer>
+        {({ role, userId }) => {
+          return (
+            <Header
+              role={role}
+              title='New Task'
+              navItems={getNavItems(
+                {
+                  role,
+                  userId,
+                },
+                match.path,
+              )}
+            />
+          );
+        }}
+      </UserContextConsumer>
+      <ContainerComponent>
+        <TaskEdit empty members={members} onSubmit={postTask} />
+      </ContainerComponent>
+    </>
+  );
+};
 
 NewTask.propTypes = {
   members: PropTypes.objectOf(PropTypes.object).isRequired,

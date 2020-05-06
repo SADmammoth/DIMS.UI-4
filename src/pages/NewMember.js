@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 import store from '../redux';
@@ -14,13 +14,10 @@ import { addMember } from '../redux/actions/membersActions';
 import Footer from '../components/elements/Footer';
 import masks from '../helpers/maskHelpers/masks';
 
-class NewMember extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { loading: false };
-  }
+const NewMember = (props) => {
+  const [loading, setLoading] = useState(false);
 
-  postMember = ({
+  const postMember = ({
     firstName,
     lastName,
     email,
@@ -35,7 +32,7 @@ class NewMember extends React.Component {
     universityAverageScore,
     mathScore,
   }) => {
-    this.setState({ loading: true });
+    setLoading(true);
     const calculatedStartDate = Validator.parseDateByMask(startDate, masks.date);
     const calculatedBirthDate = Validator.parseDateByMask(birthDate, masks.date);
 
@@ -73,48 +70,44 @@ class NewMember extends React.Component {
       calculatedStartDate,
     )
       .then((response) => {
-        this.setState({ loading: false });
+        setLoading(false);
         return response;
       })
       .catch((response) => {
-        this.setState({ loading: false });
+        setLoading(false);
         return response;
       });
   };
 
-  render() {
-    const { loading } = this.state;
-
-    return (
-      <>
-        <Helmet>
-          <title>New member</title>
-        </Helmet>
-        <UserContextConsumer>
-          {({ role, userId }) => {
-            return (
-              <Header
-                role={role}
-                title='New member'
-                navItems={getNavItems(
-                  {
-                    role,
-                    userId,
-                  },
-                  this.props.match.path,
-                )}
-              />
-            );
-          }}
-        </UserContextConsumer>
-        <main>
-          <ContainerComponent>
-            {!loading ? <MemberEdit empty onSubmit={this.postMember} /> : <Spinner centered />}
-          </ContainerComponent>
-        </main>
-        <Footer />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Helmet>
+        <title>New member</title>
+      </Helmet>
+      <UserContextConsumer>
+        {({ role, userId }) => {
+          return (
+            <Header
+              role={role}
+              title='New member'
+              navItems={getNavItems(
+                {
+                  role,
+                  userId,
+                },
+                props.match.path,
+              )}
+            />
+          );
+        }}
+      </UserContextConsumer>
+      <main>
+        <ContainerComponent>
+          {!loading ? <MemberEdit empty onSubmit={postMember} /> : <Spinner centered />}
+        </ContainerComponent>
+      </main>
+      <Footer />
+    </>
+  );
+};
 export default withRouter(NewMember);

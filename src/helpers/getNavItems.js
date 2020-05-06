@@ -11,7 +11,7 @@ const NavItems = {
     { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   member: [
-    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks/id:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks' },
     { id: 'Tracks', content: 'Tracks', link: '/members/:id/tracks' },
   ],
 };

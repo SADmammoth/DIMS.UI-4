@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../Button';
 import Form from '../../Form';
@@ -12,94 +12,82 @@ import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
 import TextBadge from '../../TextBadge/TextBadge';
 
-class MemberEdit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { inputs: {} };
-  }
+const MemberEdit = (props) => {
+  const { handleClose, empty, onSubmit } = props;
+  const [inputs, setInputs] = useState({});
 
-  onInputsUpdate = (inputsComponents) => {
-    this.setState({ inputs: inputsComponents });
-  };
-
-  render() {
-    const { handleClose, empty, onSubmit } = this.props;
-
-    const { inputs } = this.state;
-
-    return (
-      <Form
-        className={`edit-member${empty ? ' empty' : ''}`}
-        inputs={editMemberInputsAttributes(this.props)}
-        onSubmit={onSubmit}
-        onInputsUpdate={this.onInputsUpdate}
-        submitButton={<Button content='Confirm' classMod='secondary' />}
-      >
-        <div className='member-info__header'>
-          <p className='member-info__title'>
-            <b>{inputs.firstName}</b>
-            {inputs.lastName}
-          </p>
-          <div className='date-badge'>
-            <FlagIcon className='icon-flag common-text-color' />
-            {inputs.startDate}
-          </div>
-          <TextBadge>{inputs.direction}</TextBadge>
+  return (
+    <Form
+      className={`edit-member${empty ? ' empty' : ''}`}
+      inputs={editMemberInputsAttributes(props)}
+      onSubmit={onSubmit}
+      onInputsUpdate={setInputs}
+      submitButton={<Button content='Confirm' classMod='secondary' />}
+    >
+      <div className='member-info__header'>
+        <p className='member-info__title'>
+          <b>{inputs.firstName}</b>
+          {inputs.lastName}
+        </p>
+        <div className='date-badge'>
+          <FlagIcon className='icon-flag common-text-color' />
+          {inputs.startDate}
         </div>
-        <div className='member-info__body'>
-          <div className='member-info__contacts'>
-            <span>
-              <EnvelopeIcon className='icon-envelope' />
-              <span>{inputs.email}</span>
-            </span>
-            <span>
-              <SkypeIcon className='icon-skype' />
-              {inputs.skype}
-            </span>
-            <span>
-              <MobileIcon className='icon-mobile' />
-              <span>{inputs.mobilePhone}</span>
-            </span>
+        <TextBadge>{inputs.direction}</TextBadge>
+      </div>
+      <div className='member-info__body'>
+        <div className='member-info__contacts'>
+          <span>
+            <EnvelopeIcon className='icon-envelope' />
+            <span>{inputs.email}</span>
+          </span>
+          <span>
+            <SkypeIcon className='icon-skype' />
+            {inputs.skype}
+          </span>
+          <span>
+            <MobileIcon className='icon-mobile' />
+            <span>{inputs.mobilePhone}</span>
+          </span>
+        </div>
+        <div>
+          <p className='address'>
+            <AddressIcon className='icon-address' />
+            {inputs.address}
+          </p>
+          <hr />
+        </div>
+      </div>
+      <div className='member-info__additional-info'>
+        <FlexColumn>
+          <div>
+            <span className='list-key'>Sex:</span>
+            <span>{inputs.sex}</span>
           </div>
           <div>
-            <p className='address'>
-              <AddressIcon className='icon-address' />
-              {inputs.address}
-            </p>
-            <hr />
+            <span className='list-key'>Birth date:</span>
+            {inputs.birthDate}
           </div>
-        </div>
-        <div className='member-info__additional-info'>
-          <FlexColumn>
-            <div>
-              <span className='list-key'>Sex:</span>
-              <span>{inputs.sex}</span>
-            </div>
-            <div>
-              <span className='list-key'>Birth date:</span>
-              {inputs.birthDate}
-            </div>
-          </FlexColumn>
-          <FlexColumn>
-            <div>
-              <span className='list-key'>Education:</span>
-              {inputs.education}
-            </div>
-            <div>
-              <span className='list-key'>University average score:</span>
-              {inputs.universityAverageScore}
-            </div>
-            <div>
-              <span className='list-key'>CT math score:</span>
-              {inputs.mathScore}
-            </div>
-          </FlexColumn>
-        </div>
-        <>{empty || <Button content='Cancel' classMod='secondary' onClick={handleClose} />}</>
-      </Form>
-    );
-  }
-}
+        </FlexColumn>
+        <FlexColumn>
+          <div>
+            <span className='list-key'>Education:</span>
+            {inputs.education}
+          </div>
+          <div>
+            <span className='list-key'>University average score:</span>
+            {inputs.universityAverageScore}
+          </div>
+          <div>
+            <span className='list-key'>CT math score:</span>
+            {inputs.mathScore}
+          </div>
+        </FlexColumn>
+      </div>
+      <>{empty || <Button content='Cancel' classMod='secondary' onClick={handleClose} />}</>
+    </Form>
+  );
+};
 
 MemberEdit.defaultProps = {
   id: null,

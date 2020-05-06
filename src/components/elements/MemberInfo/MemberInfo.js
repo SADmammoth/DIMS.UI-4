@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
@@ -23,168 +23,158 @@ import store from '../../../redux';
 import editMemberHelper from '../../../helpers/editMemberHelper';
 import dateTypes from '../../../helpers/dateTypes';
 
-class MemberInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { loading: false };
-  }
+const MemberInfo = (props) => {
+  const {
+    id,
+    edit,
+    setEdit,
+    handleClose,
+    role,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+  } = props;
+  const [loading, setLoading] = useState(false);
 
-  onEdit = (data) => {
-    const { id, handleClose } = this.props;
-
-    this.setState({ loading: true });
+  const onEdit = (data) => {
+    setLoading(true);
 
     return editMemberHelper(id, data)
       .then((response) => {
-        this.setState({ loading: false });
+        setLoading(false);
         handleClose();
         return response;
       })
       .catch((response) => {
-        this.setState({ loading: false });
+        setLoading(false);
         return response;
       });
   };
 
-  onDelete = ({ dialogValue }) => {
+  const onDelete = ({ dialogValue }) => {
     store.dispatch(deleteMember(dialogValue));
     return Client.deleteMember(dialogValue);
   };
 
-  render() {
-    const {
-      id,
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-      edit,
-      setEdit,
-      handleClose,
-      role,
-    } = this.props;
+  const openEditModal = () => setEdit(true);
 
-    const { loading } = this.state;
-
-    const openEditModal = () => setEdit(true);
-
-    return (
-      <>
-        {!loading ? (
-          <>
-            {edit ? (
-              <MemberEdit onSubmit={this.onEdit} {...this.props} />
-            ) : (
-              <>
-                <div className='member-info__header'>
-                  {handleClose && (
-                    <Button onClick={handleClose}>
-                      <BackIcon className='icon-back common-text-color' />
-                    </Button>
-                  )}
-                  <p className='member-info__title'>
-                    <b>{firstName}</b>
-                    {` ${lastName}`}
+  return (
+    <>
+      {!loading ? (
+        <>
+          {edit ? (
+            <MemberEdit onSubmit={onEdit} {...props} />
+          ) : (
+            <>
+              <div className='member-info__header'>
+                {handleClose && (
+                  <Button onClick={handleClose}>
+                    <BackIcon className='icon-back common-text-color' />
+                  </Button>
+                )}
+                <p className='member-info__title'>
+                  <b>{firstName}</b>
+                  {` ${lastName}`}
+                </p>
+                <DateBadge date={startDate} type={dateTypes.startDate} />
+                <TextBadge>{direction}</TextBadge>
+              </div>
+              <div className='member-info__body'>
+                <div className='member-info__contacts'>
+                  <a href={`mailto:${email}`}>
+                    <EnvelopeIcon className='icon-envelope' />
+                    <span>{email}</span>
+                  </a>
+                  <a href={`skype:${skype}`}>
+                    <SkypeIcon className='icon-skype' />
+                    {skype}
+                  </a>
+                  <a href={`tel:${mobilePhone.replace(/[\s()+]/, '')}`}>
+                    <MobileIcon className='icon-mobile' />
+                    <span>{mobilePhone}</span>
+                  </a>
+                </div>
+                <div className='address'>
+                  <p>
+                    <AddressIcon className='icon-address' />
+                    {address}
                   </p>
-                  <DateBadge date={startDate} type={dateTypes.startDate} />
-                  <TextBadge>{direction}</TextBadge>
                 </div>
-                <div className='member-info__body'>
-                  <div className='member-info__contacts'>
-                    <a href={`mailto:${email}`}>
-                      <EnvelopeIcon className='icon-envelope' />
-                      <span>{email}</span>
-                    </a>
-                    <a href={`skype:${skype}`}>
-                      <SkypeIcon className='icon-skype' />
-                      {skype}
-                    </a>
-                    <a href={`tel:${mobilePhone.replace(/[\s()+]/, '')}`}>
-                      <MobileIcon className='icon-mobile' />
-                      <span>{mobilePhone}</span>
-                    </a>
+                <hr />
+              </div>
+              <div className='member-info__additional-info'>
+                <FlexColumn>
+                  <div>
+                    <span className='list-key'>Sex:</span>
+                    <span>{sex}</span>
                   </div>
-                  <div className='address'>
-                    <p>
-                      <AddressIcon className='icon-address' />
-                      {address}
-                    </p>
+                  <div>
+                    <span className='list-key'>Birth date:</span>
+                    <DateBadge date={birthDate} />
                   </div>
-                  <hr />
-                </div>
-                <div className='member-info__additional-info'>
-                  <FlexColumn>
-                    <div>
-                      <span className='list-key'>Sex:</span>
-                      <span>{sex}</span>
-                    </div>
-                    <div>
-                      <span className='list-key'>Birth date:</span>
-                      <DateBadge date={birthDate} />
-                    </div>
-                  </FlexColumn>
-                  <FlexColumn>
-                    <div>
-                      <span className='list-key'>Education:</span>
-                      <span>{education}</span>
-                    </div>
-                    <div>
-                      <span className='list-key'>University average score:</span>
-                      <span>{universityAverageScore}</span>
-                    </div>
-                    <div>
-                      <span className='list-key'>CT math score:</span>
-                      <span>{mathScore}</span>
-                    </div>
-                  </FlexColumn>
-                </div>
-                <ButtonGroup>
-                  <Button classMod='primary' link={`/members/${id}/progress`}>
-                    <ProgressIcon className='icon-progress' />
-                    <span>Progress</span>
-                  </Button>
-                  <Button classMod='primary' link={`/members/${id}/tasks`}>
-                    <TasksIcon className='icon-tasks' />
-                    <span>Tasks</span>
-                  </Button>
-                  {role === 'admin' && (
-                    <>
-                      <DialogButton
-                        buttonClassMod='secondary'
-                        buttonContent='Delete'
-                        message={
-                          <>
-                            Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                          </>
-                        }
-                        confirmButtonClassMod='error'
-                        confirmButtonContent='Delete'
-                        dialogValue={id}
-                        onSubmit={this.onDelete}
-                      />
-                      <Button content='Edit' classMod='secondary' onClick={openEditModal} />
-                    </>
-                  )}
-                </ButtonGroup>
-              </>
-            )}
-          </>
-        ) : (
-          <Spinner centered />
-        )}
-      </>
-    );
-  }
-}
+                </FlexColumn>
+                <FlexColumn>
+                  <div>
+                    <span className='list-key'>Education:</span>
+                    <span>{education}</span>
+                  </div>
+                  <div>
+                    <span className='list-key'>University average score:</span>
+                    <span>{universityAverageScore}</span>
+                  </div>
+                  <div>
+                    <span className='list-key'>CT math score:</span>
+                    <span>{mathScore}</span>
+                  </div>
+                </FlexColumn>
+              </div>
+              <ButtonGroup>
+                <Button classMod='primary' link={`/members/${id}/progress`}>
+                  <ProgressIcon className='icon-progress' />
+                  <span>Progress</span>
+                </Button>
+                <Button classMod='primary' link={`/members/${id}/tasks`}>
+                  <TasksIcon className='icon-tasks' />
+                  <span>Tasks</span>
+                </Button>
+                {role === 'admin' && (
+                  <>
+                    <DialogButton
+                      buttonClassMod='secondary'
+                      buttonContent='Delete'
+                      message={
+                        <>
+                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                        </>
+                      }
+                      confirmButtonClassMod='error'
+                      confirmButtonContent='Delete'
+                      dialogValue={id}
+                      onSubmit={onDelete}
+                    />
+                    <Button content='Edit' classMod='secondary' onClick={openEditModal} />
+                  </>
+                )}
+              </ButtonGroup>
+            </>
+          )}
+        </>
+      ) : (
+        <Spinner centered />
+      )}
+    </>
+  );
+};
 
 MemberInfo.defaultProps = {
   edit: false,

@@ -10,6 +10,8 @@ class Client {
 
   static states = ['active', 'success', 'fail'];
 
+  static defaultHeaders = {};
+
   static createMembersObject(memberResponse) {
     const member = {};
     const {
@@ -50,7 +52,7 @@ class Client {
   }
 
   static async getMembers() {
-    const members = (await axios.get(path.join(Client.apiPath, 'profiles'))).data;
+    const members = (await axios.get(path.join(Client.apiPath, 'profiles'), { headers: Client.defaultHeaders })).data;
 
     const membersObject = {};
     members.forEach((member) => {
@@ -75,19 +77,22 @@ class Client {
     StartDate,
   ) {
     return axios.post(path.join(Client.apiPath, 'create'), {
-      Name,
-      LastName,
-      Email,
-      DirectionId: Client.directions.indexOf(Direction) + 1,
-      Sex: Sex === 'Male' ? 'M' : 'F',
-      Education,
-      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
-      UniversityAverageScore: parseFloat(UniversityAverageScore),
-      MathScore: MathScore / 10.0,
-      Address,
-      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
-      Skype,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+      headers: Client.defaultHeaders,
+      body: {
+        Name,
+        LastName,
+        Email,
+        DirectionId: Client.directions.indexOf(Direction) + 1,
+        Sex: Sex === 'Male' ? 'M' : 'F',
+        Education,
+        BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
+        UniversityAverageScore: parseFloat(UniversityAverageScore),
+        MathScore: MathScore / 10.0,
+        Address,
+        MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
+        Skype,
+        StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+      },
     });
   }
 
@@ -107,21 +112,24 @@ class Client {
     Skype,
     StartDate,
   ) {
-    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
-      Name,
-      LastName,
-      Email,
-      DirectionId: Client.directions.indexOf(Direction) + 1,
-      Sex: Sex === 'Male' ? 'M' : 'F',
-      Education,
-      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
-      UniversityAverageScore: parseFloat(UniversityAverageScore),
-      MathScore: MathScore / 10.0,
-      Address,
-      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
-      Skype,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
-    });
+    return axios.put(
+      path.join(Client.apiPath, 'profile', 'edit', { headers: Client.defaultHeaders, body: UserId.toString() }),
+      {
+        Name,
+        LastName,
+        Email,
+        DirectionId: Client.directions.indexOf(Direction) + 1,
+        Sex: Sex === 'Male' ? 'M' : 'F',
+        Education,
+        BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
+        UniversityAverageScore: parseFloat(UniversityAverageScore),
+        MathScore: MathScore / 10.0,
+        Address,
+        MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
+        Skype,
+        StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+      },
+    );
   }
 
   static createTasksObject(tasksResponse) {
@@ -137,7 +145,7 @@ class Client {
   }
 
   static async getTasks() {
-    const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'))).data;
+    const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'), { headers: Client.defaultHeaders })).data;
 
     const tasksObject = {};
     await Promise.all(
@@ -165,7 +173,9 @@ class Client {
   }
 
   static async getUserTasks(userId) {
-    const userTasks = (await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId))).data;
+    const userTasks = (
+      await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId), { headers: Client.defaultHeaders })
+    ).data;
     const userTasksObject = {};
 
     userTasks.forEach((userTask) => {
@@ -175,7 +185,10 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
+    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), {
+      headers: Client.defaultHeaders,
+      body: usersIds,
+    });
   }
 
   static async getAssigned(taskId) {
@@ -213,7 +226,7 @@ class Client {
       StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
       DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
     };
-    return axios.post(path.join(Client.apiPath, 'task', 'create'), data);
+    return axios.post(path.join(Client.apiPath, 'task', 'create'), { headers: Client.defaultHeaders, body: data }).data;
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
@@ -226,11 +239,11 @@ class Client {
   }
 
   static deleteMember(userId) {
-    return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
+    return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId), { headers: Client.defaultHeaders });
   }
 
   static deleteTask(taskId) {
-    return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
+    return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId), { headers: Client.defaultHeaders });
   }
 
   static async unassignTask(taskId, userIds) {
@@ -274,7 +287,7 @@ class Client {
   }
 
   static async getUserInfoByToken(token) {
-    return { role: 'member', userId: '2' };
+    return { role: 'admin', userId: '0' };
   }
 }
 

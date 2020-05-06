@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '../../elements/Button';
@@ -16,150 +16,141 @@ import { deleteMember } from '../../../redux/actions/membersActions';
 import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
 import dateTypes from '../../../helpers/dateTypes';
+import matchMaxWidth from '../../../helpers/matchMaxWidth';
 
-class MemberCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { edit: false };
+const MemberCard = (props) => {
+  const {
+    id,
+    firstName,
+    lastName,
+    email,
+    startDate,
+    direction,
+    mobilePhone,
+    skype,
+    address,
+    sex,
+    birthDate,
+    education,
+    universityAverageScore,
+    mathScore,
+    role,
+    collapsed,
+    open,
+    close,
+    edit: editDefault,
+  } = props;
 
-    this.modal = React.createRef();
-  }
+  const age = calculateAge(birthDate);
+  const modal = useRef({});
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !compareObjects(this.props, nextProps) || !compareObjects(this.state, nextState);
-  }
+  const [edit, setEdit] = useState(editDefault);
 
-  editOff = () => {
-    this.setState({ edit: false });
+  const editOff = () => {
+    setEdit(false);
   };
 
-  closeEditModal = () => {
-    this.setState({ edit: false });
-    this.modal.current.handleClose();
+  const closeEditModal = () => {
+    setEdit(false);
+    modal.current.handleClose();
   };
 
-  showEditModal = () => {
-    this.modal.current.handleShow();
-    this.setState({ edit: true });
+  const showEditModal = () => {
+    modal.current.handleShow();
+    setEdit(true);
   };
 
-  showModal = () => {
-    this.modal.current.handleShow();
+  const showModal = () => {
+    modal.current.handleShow();
   };
 
-  editModal = (bool) => this.setState({ edit: !!bool });
+  const onDelete = ({ dialogValue }) => {
+    store.dispatch(deleteMember(dialogValue));
+    return Client.deleteMember(dialogValue);
+  };
 
-  render() {
-    const {
-      id,
-      firstName,
-      lastName,
-      email,
-      startDate,
-      direction,
-      mobilePhone,
-      skype,
-      address,
-      sex,
-      birthDate,
-      education,
-      universityAverageScore,
-      mathScore,
-      role,
-      collapsed,
-      open,
-      close,
-    } = this.props;
-
-    const { edit } = this.state;
-    const age = calculateAge(birthDate);
-
-    return (
-      <>
-        <CollapsableCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
-          <CollapsableCard.Header>
-            <CollapsableCard.Title>
-              <b>{firstName}</b>
-              {` ${lastName}, ${age}`}
-            </CollapsableCard.Title>
-            <>
-              {window.matchMedia('(max-width: 1000px)').matches || (
-                <>
-                  <DateBadge date={startDate} type={dateTypes.startDate} />
-                </>
-              )}
-            </>
-            <>
-              {window.matchMedia('(max-width: 550px)').matches || (
-                <>
-                  <TextBadge>{direction}</TextBadge>
-                </>
-              )}
-            </>
-          </CollapsableCard.Header>
-          <CollapsableCard.Body>
-            <Button classMod='primary' link={`/members/${id}/progress`}>
-              <ProgressIcon className='icon-progress' />
-              <span>Progress</span>
-            </Button>
-            <Button classMod='primary' link={`/members/${id}/tasks`}>
-              <TasksIcon className='icon-tasks' />
-              <span>Tasks</span>
-            </Button>
-            {role === 'admin' && (
+  return (
+    <>
+      <CollapsableCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
+        <CollapsableCard.Header>
+          <CollapsableCard.Title>
+            <b>{firstName}</b>
+            {` ${lastName}, ${age}`}
+          </CollapsableCard.Title>
+          <>
+            {matchMaxWidth('1000px') || (
               <>
-                {window.matchMedia('(max-width: 550px)').matches || (
-                  <>
-                    <DialogButton
-                      buttonClassMod='secondary'
-                      buttonContent='Delete'
-                      message={
-                        <>
-                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                        </>
-                      }
-                      confirmButtonClassMod='error'
-                      confirmButtonContent='Delete'
-                      dialogValue={id}
-                      onSubmit={({ dialogValue }) => {
-                        store.dispatch(deleteMember(dialogValue));
-                        return Client.deleteMember(dialogValue);
-                      }}
-                    />
-                    <Button content='Edit' classMod='secondary' onClick={this.showEditModal} />
-                  </>
-                )}
+                <DateBadge date={startDate} type={dateTypes.startDate} />
               </>
             )}
-            <Button content='More info' classMod='ghost' onClick={this.showModal} />
-          </CollapsableCard.Body>
-        </CollapsableCard>
-        <Modal ref={this.modal} className='member-info' onClose={this.editOff}>
-          <MemberInfo
-            edit={edit}
-            setEdit={this.editModal}
-            id={id}
-            firstName={firstName}
-            lastName={lastName}
-            birthDate={birthDate}
-            direction={direction}
-            startDate={startDate}
-            email={email}
-            mobilePhone={mobilePhone}
-            skype={skype}
-            address={address}
-            sex={sex}
-            education={education}
-            universityAverageScore={universityAverageScore}
-            mathScore={mathScore}
-            handleClose={this.closeEditModal}
-            role={role}
-          />
-        </Modal>
-      </>
-    );
-  }
-}
+          </>
+          <>
+            {matchMaxWidth('550px') || (
+              <>
+                <TextBadge>{direction}</TextBadge>
+              </>
+            )}
+          </>
+        </CollapsableCard.Header>
+        <CollapsableCard.Body>
+          <Button classMod='primary' link={`/members/${id}/progress`}>
+            <ProgressIcon className='icon-progress' />
+            <span>Progress</span>
+          </Button>
+          <Button classMod='primary' link={`/members/${id}/tasks`}>
+            <TasksIcon className='icon-tasks' />
+            <span>Tasks</span>
+          </Button>
+          {role === 'admin' && (
+            <>
+              {matchMaxWidth('550px') || (
+                <>
+                  <DialogButton
+                    buttonClassMod='secondary'
+                    buttonContent='Delete'
+                    message={
+                      <>
+                        Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                      </>
+                    }
+                    confirmButtonClassMod='error'
+                    confirmButtonContent='Delete'
+                    dialogValue={id}
+                    onSubmit={onDelete}
+                  />
+                  <Button content='Edit' classMod='secondary' onClick={showEditModal} />
+                </>
+              )}
+            </>
+          )}
+          <Button content='More info' classMod='ghost' onClick={showModal} />
+        </CollapsableCard.Body>
+      </CollapsableCard>
+      <Modal ref={modal} className='member-info' onClose={editOff}>
+        <MemberInfo
+          edit={edit}
+          setEdit={showEditModal}
+          id={id}
+          firstName={firstName}
+          lastName={lastName}
+          birthDate={birthDate}
+          direction={direction}
+          startDate={startDate}
+          email={email}
+          mobilePhone={mobilePhone}
+          skype={skype}
+          address={address}
+          sex={sex}
+          education={education}
+          universityAverageScore={universityAverageScore}
+          mathScore={mathScore}
+          handleClose={closeEditModal}
+          role={role}
+        />
+      </Modal>
+    </>
+  );
+};
 
 const { handleClose, edit, setEdit, ...memberInfoPTypes } = MemberInfo.propTypes;
 
@@ -170,4 +161,4 @@ MemberCard.propTypes = {
   ...memberInfoPTypes,
 };
 
-export default MemberCard;
+export default React.memo(MemberCard, compareObjects);
