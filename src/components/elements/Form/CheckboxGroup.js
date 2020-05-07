@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
+import compareObjects from '../../../helpers/compareObjects';
 
 function CheckboxGroup(props) {
   function renderCheckbox(valueOption, { value: commonValue, id, type, name, onChange, attributes }) {
@@ -13,15 +14,12 @@ function CheckboxGroup(props) {
     const onChangeHandler = (event) => {
       if (type === 'checkbox') {
         const { checked, value } = event.target;
-        console.log(values, value);
         if (checked) {
           values.push(value);
         } else {
           values.splice(values.indexOf(value), 1);
         }
-        console.log(values);
         event.target.value = values;
-        console.log(event.target.value);
       }
       onChange(event);
     };
@@ -44,7 +42,6 @@ function CheckboxGroup(props) {
   }
 
   function renderCheckboxes() {
-    console.log(props.valueOptions);
     return props.valueOptions.map((valueOption) => renderCheckbox(valueOption, props));
   }
 
@@ -79,4 +76,4 @@ CheckboxGroup.propTypes = {
   attributes: PropTypes.objectOf(PropTypes.string),
 };
 
-export default CheckboxGroup;
+export default React.memo(CheckboxGroup, compareObjects);

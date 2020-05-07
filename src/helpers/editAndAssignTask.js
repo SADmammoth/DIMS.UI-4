@@ -3,6 +3,7 @@ import compareObjects from './compareObjects';
 import checkboxValueSeparator from './checkboxValueSeparator';
 import Validator from './Validator';
 import masks from './maskHelpers/masks';
+import setUsersForTask from './setUsersForTask';
 
 export default async function editAndAssignTask(
   { taskName, taskDescription, taskStart, taskDeadline, members },
@@ -17,7 +18,7 @@ export default async function editAndAssignTask(
       prevAssigned.map((el) => el.userId),
     )
   ) {
-    await Client.assignTask(taskId, assignedTo);
+    await setUsersForTask(taskId, assignedTo, prevAssigned);
   }
 
   return Client.editTask(

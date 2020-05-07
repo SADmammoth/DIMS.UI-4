@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import compareObjects from '../../../helpers/compareObjects';
 
 function Select(props) {
   const { valueOptions, name, value: currentValue, placeholder, onChange, required } = props;
@@ -48,4 +49,4 @@ Select.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default Select;
+export default React.memo(Select, compareObjects);

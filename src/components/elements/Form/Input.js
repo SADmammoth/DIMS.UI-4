@@ -5,6 +5,7 @@ import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
 import errorNotification from '../../../helpers/errorNotification';
+import compareObjects from '../../../helpers/compareObjects';
 
 function Input(props) {
   const {
@@ -199,4 +200,4 @@ Input.propTypes = {
   ...Input.publicProps,
 };
 
-export default Input;
+export default React.memo(Input, compareObjects);
