@@ -21,18 +21,21 @@
   &:checked + label::before {
     position: absolute;
     top: 8px;
-    left: -15.88px;
+    left: -16px;
     width: 6px;
     height: 6px;
     border-radius: 1px;
     background: $common-text;
     content: '';
     box-sizing: border-box;
+    border-radius: 2px;
   }
 
   & + label::after {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
+    box-sizing: content-box;
+    padding: 1px;
     margin-top: 5px;
     float: left;
     border: 2px solid $muted-text;

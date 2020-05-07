@@ -10,6 +10,8 @@
   transform: translate(-50%, -50%);
   background: $light-bg;
   z-index: 101;
+  min-height: 50vh;
+  min-width: 50vw;
 
   &.show {
     display: block;

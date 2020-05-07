@@ -74,15 +74,13 @@
     top: 40px;
     right: 0;
     left: auto;
-    width: 170px;
-    height: 110px;
     padding: 0;
     transform: none;
-    background: $primary-bg;
-    box-shadow: -2px 2px 6px $dark-bg;
-    z-index: 1000;
+    z-index: 99;
 
     ul {
+      background: $primary-bg;
+      box-shadow: -2px 2px 6px $dark-bg;
       display: flex;
       width: 170px;
       text-align: center;

@@ -7,7 +7,8 @@
 
 .task-edit {
   &:not(.empty) {
-    width: 70vw;
+    width: 800px;
+    max-width: 70vw;
     height: 70vh;
     max-height: 600px;
     overflow-y: auto;
@@ -15,10 +16,14 @@
 
   &__header {
     margin: 0;
-    padding: 2vh;
-    padding-left: 2vw;
+    padding: 2vh 2vw;
     background: $primary-bg;
     font-size: 1.5rem;
+
+    & .form-control {
+      width: 100%;
+      box-sizing: border-box;
+    }
 
     @media screen and (max-width: 500px) {
       & {
@@ -143,7 +148,7 @@
   }
 
   .button:not([type='submit']) {
-    margin-right: 3vw;
+    margin-right: 2.5vw;
     float: right;
   }
 
