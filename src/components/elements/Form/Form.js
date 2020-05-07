@@ -15,7 +15,7 @@ class Form extends React.Component {
       inputs: {}, // Store inputs components (for external use)
     };
   }
-
+  //TODO When one checkbox checked
   componentDidMount() {
     this.createValues();
     this.createInputs();

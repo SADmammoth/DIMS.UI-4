@@ -3,6 +3,7 @@ import path from 'path';
 import Validator from '../Validator';
 import arraysSubtraction from '../arraysSubtraction';
 
+//TODO Rplace path.join with url.resolve
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 

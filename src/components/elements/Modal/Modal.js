@@ -35,7 +35,7 @@ class Modal extends React.PureComponent {
       this.handleShow();
     }
   }
-
+  //TODO Looking bad when loading
   render() {
     const { show } = this.state;
     const { children, backface, className } = this.props;
