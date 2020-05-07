@@ -1,4 +1,5 @@
 import axios from 'axios';
+import url from 'url';
 import path from 'path';
 import Validator from '../Validator';
 
@@ -6,143 +7,156 @@ import Validator from '../Validator';
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
-  static directions = ['React', '.Net', 'Angular', 'Java'];
+  static directions = {};
 
   static states = ['active', 'success', 'fail'];
+
+  static async getDirections() {
+    (await axios.get(url.resolve(Client.apiPath, 'directions'))).data.forEach((direction) => {
+      Client.directions[direction._id] = direction.name;
+    });
+  }
+
+  static getDirectionId(directionName) {
+    return Object.keys(Client.directions).find((directionId) => {
+      return Client.directions[directionId] === directionName;
+    });
+  }
 
   static createMembersObject(memberResponse) {
     const member = {};
     const {
-      FullName,
-      Email,
-      Direction,
-      Sex,
-      Education,
-      Age,
-      UniversityAverageScore,
-      MathScore,
-      Address,
-      MobilePhone,
-      Skype,
-      StartDate,
+      _id,
+      firstName,
+      lastName,
+      birthDate,
+      email,
+      directionId,
+      sex,
+      education,
+      universityAverageScore,
+      mathScore,
+      address,
+      mobilePhone,
+      skype,
+      startDate,
     } = memberResponse;
 
-    const [firstName, lastName] = FullName.split(' ');
     member.firstName = firstName;
     member.lastName = lastName;
-
-    const birthDate = new Date();
-    birthDate.setFullYear(new Date().getFullYear() - Age);
-
-    member.birthDate = birthDate;
-    member.email = Email;
-    member.direction = Direction;
-    member.sex = Sex === 'M' ? 'Male' : 'Female';
-    member.education = Education;
-    member.universityAverageScore = UniversityAverageScore;
-    member.mathScore = MathScore * 10;
-    member.address = Address;
-    member.mobilePhone = Validator.parsePhoneByMask(MobilePhone, '+999 (99) 99-99-99');
-    member.skype = Skype;
-    member.startDate = new Date(StartDate);
+    member.birthDate = new Date(birthDate);
+    member.email = email;
+    member.direction = Client.directions[directionId];
+    member.sex = sex;
+    member.education = education;
+    member.universityAverageScore = universityAverageScore;
+    member.mathScore = mathScore;
+    member.address = address;
+    member.mobilePhone = Validator.parsePhoneByMask(mobilePhone, '+999 (99) 999-99-99');
+    member.skype = skype;
+    member.startDate = new Date(startDate);
 
     return member;
   }
 
   static async getMembers() {
-    const members = (await axios.get(path.join(Client.apiPath, 'profiles'))).data;
+    const members = (await axios.get(url.resolve(Client.apiPath, 'members'))).data;
 
     const membersObject = {};
     members.forEach((member) => {
-      membersObject[member.UserId] = Client.createMembersObject(member);
+      membersObject[member._id] = Client.createMembersObject(member);
     });
     return membersObject;
   }
 
   static postMember(
-    Name,
-    LastName,
-    Email,
-    Direction,
-    Sex,
-    Education,
-    BirthDate,
-    UniversityAverageScore,
-    MathScore,
-    Address,
-    MobilePhone,
-    Skype,
-    StartDate,
+    name,
+    lastName,
+    email,
+    direction,
+    sex,
+    education,
+    birthDate,
+    universityAverageScore,
+    mathScore,
+    address,
+    mobilePhone,
+    skype,
+    startDate,
   ) {
-    return axios.post(path.join(Client.apiPath, 'create'), {
-      Name,
-      LastName,
-      Email,
-      DirectionId: Client.directions.indexOf(Direction) + 1,
-      Sex: Sex === 'Male' ? 'M' : 'F',
-      Education,
-      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
-      UniversityAverageScore: parseFloat(UniversityAverageScore),
-      MathScore: MathScore / 10.0,
-      Address,
-      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
-      Skype,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+    return axios.post(url.resolve(Client.apiPath, 'members'), {
+      headers: Client.defaultHeaders,
+      body: {
+        name,
+        lastName,
+        email,
+        directionId: Client.getDirectionId(direction),
+        sex,
+        education,
+        birthDate: birthDate.toISOString(),
+        UniversityAverageScore: parseFloat(universityAverageScore),
+        MathScore: parseInt(mathScore, 10),
+        address,
+        mobilePhone: mobilePhone.replace(/[^0-9()+]/g, ''),
+        skype,
+        startDate: startDate.toISOString(),
+      },
     });
   }
 
   static editMember(
-    UserId,
-    Name,
-    LastName,
-    Email,
-    Direction,
-    Sex,
-    Education,
-    BirthDate,
-    UniversityAverageScore,
-    MathScore,
-    Address,
-    MobilePhone,
-    Skype,
-    StartDate,
+    userId,
+    firstName,
+    lastName,
+    email,
+    direction,
+    sex,
+    education,
+    birthDate,
+    universityAverageScore,
+    mathScore,
+    address,
+    mobilePhone,
+    skype,
+    startDate,
   ) {
-    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
-      Name,
-      LastName,
-      Email,
-      DirectionId: Client.directions.indexOf(Direction) + 1,
-      Sex: Sex === 'Male' ? 'M' : 'F',
-      Education,
-      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
-      UniversityAverageScore: parseFloat(UniversityAverageScore),
-      MathScore: MathScore / 10.0,
-      Address,
-      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
-      Skype,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+    return axios.put(url.resolve(Client.apiPath, path.join('members', userId.toString())), {
+      firstName,
+      lastName,
+      email,
+      directionId: Client.getDirectionId(direction),
+      sex,
+      education,
+      birthDate: birthDate.toISOString(),
+      universityAverageScore: parseFloat(universityAverageScore),
+      mathScore,
+      address,
+      mobilePhone: mobilePhone.replace(/[^0-9+]/g, ''),
+      skype,
+      startDate: startDate.toISOString(),
     });
   }
 
   static createTasksObject(tasksResponse) {
-    const { TaskId, Name, Description, StartDate, DeadlineDate } = tasksResponse;
+    const { _id: taskId, taskName, taskDescription, startDate, deadlineDate } = tasksResponse;
     const tasks = {};
-    tasks.id = TaskId.toString();
-    tasks.taskId = TaskId;
-    tasks.taskName = Name;
-    tasks.taskDescription = Description;
-    tasks.taskStart = new Date(StartDate);
-    tasks.taskDeadline = new Date(DeadlineDate);
+    tasks.id = taskId.toString();
+    tasks.taskId = taskId;
+    tasks.taskName = taskName;
+    tasks.taskDescription = taskDescription;
+    tasks.taskStart = new Date(startDate);
+    tasks.taskDeadline = new Date(deadlineDate);
     return tasks;
   }
 
   static async getTasks() {
-    const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'))).data;
+    const tasks = (await axios.get(url.resolve(Client.apiPath, 'tasks'), { headers: Client.defaultHeaders })).data;
 
     const tasksObject = {};
     await Promise.all(
       tasks.map(async (task) => {
-        tasksObject[task.TaskId] = Client.createTasksObject(task);
+        tasksObject[task.taskId] = Client.createTasksObject(task);
+        // tasksObject[task.taskId].assignedTo = await this.getAssigned(task.TaskId);
       }),
     );
     return tasksObject;
@@ -164,7 +178,11 @@ class Client {
   }
 
   static async getUserTasks(userId) {
-    const userTasks = (await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId))).data;
+    const userTasks = (
+      await axios.get(url.resolve(Client.apiPath, 'user', path.join('tasks', userId)), {
+        headers: Client.defaultHeaders,
+      })
+    ).data;
     const userTasksObject = {};
 
     userTasks.forEach((userTask) => {
@@ -174,35 +192,10 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
-  }
-
-  static async getUsersMemberTasks(taskId, usersIds) {
-    await axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
-    let allUserTasks;
-    let userTasks;
-
-    const resultArray = await Promise.all(
-      usersIds.map(async (userId) => {
-        allUserTasks = await this.getUserTasks(userId);
-
-        userTasks = Object.keys(allUserTasks).find((memberTaskId) => {
-          return allUserTasks[memberTaskId].taskId.toString() === taskId.toString();
-        });
-
-        if (!userTasks || !userTasks.length) {
-          return null;
-        }
-        return {
-          userId,
-          taskId,
-          memberTaskId: userTasks,
-        };
-      }),
-    );
-    return resultArray.filter((element) => {
-      return !!element;
-    });
+    // return axios.post(url.resolve(Client.apiPath, 'user', 'task', 'add', taskId.toString()), {
+    //   headers: Client.defaultHeaders,
+    //   body: usersIds,
+    // });
   }
 
   static async getAssigned(members, taskId) {
@@ -223,28 +216,30 @@ class Client {
     return assignedTo;
   }
 
-  static editTask(TaskId, Name, Description, StartDate, DeadlineDate) {
-    return axios.put(path.join(Client.apiPath, 'task', 'edit'), {
-      TaskId,
-      Name,
-      Description,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
-      DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
+  static editTask(taskId, taskName, taskDescription, startDate, deadlineDate) {
+    return axios.put(url.resolve(Client.apiPath, path.join('tasks', taskId.toString())), {
+      taskId,
+      taskName,
+      taskDescription,
+      startDate: startDate.toISOString(),
+      deadlineDate: deadlineDate.toISOString(),
     });
   }
 
-  static postTask(Name, Description, StartDate, DeadlineDate) {
-    return axios.post(path.join(Client.apiPath, 'task', 'create'), {
-      Name,
-      Description,
-      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
-      DeadlineDate: Validator.fromDateToMask(DeadlineDate, 'yyyy-MM-dd'),
-    }).data;
+  static postTask(taskName, taskDescription, startDate, deadlineDate) {
+    const data = {
+      taskName,
+      taskDescription,
+      startDate: startDate.toISOString(),
+      deadlineDate: deadlineDate.toISOString(),
+    };
+
+    return axios.post(url.resolve(Client.apiPath, 'tasks'), { headers: Client.defaultHeaders, body: data }).data;
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
     const StatusId = (Client.states.indexOf(Status) + 1).toString();
-    return axios.put(path.join(Client.apiPath, 'user', 'task'), {
+    return axios.put(url.resolve(Client.apiPath, 'user', 'task'), {
       TaskId: TaskId.toString(),
       UserId: UserId.toString(),
       StatusId,
@@ -252,11 +247,11 @@ class Client {
   }
 
   static deleteMember(userId) {
-    return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
+    return axios.delete(url.resolve(Client.apiPath, 'profile', 'delete', userId), { headers: Client.defaultHeaders });
   }
 
   static deleteTask(taskId) {
-    return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
+    return axios.delete(url.resolve(Client.apiPath, 'task', 'delete', taskId), { headers: Client.defaultHeaders });
   }
 
   static getUserProgress(userId) {

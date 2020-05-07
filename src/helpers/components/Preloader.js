@@ -13,6 +13,7 @@ const Preloader = ({ children, members }) => {
   preloadTheme();
   useEffect(() => {
     async function fetchMembers() {
+      await Client.getDirections();
       const fetchedMembers = await Client.getMembers();
       store.dispatch(membersActions.setMembers(fetchedMembers));
     }
