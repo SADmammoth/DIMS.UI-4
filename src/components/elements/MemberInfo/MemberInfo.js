@@ -65,7 +65,7 @@ const MemberInfo = (props) => {
     store.dispatch(deleteMember(dialogValue));
     return Client.deleteMember(dialogValue);
   };
-
+  // TODO Think about making smaller
   const openEditModal = () => setEdit(true);
 
   return (

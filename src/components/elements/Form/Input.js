@@ -52,9 +52,6 @@ function Input(props) {
   }
 
   const onChangeHandler = (e) => {
-    if (!e.target.value) {
-      return;
-    }
     if (!validator(e.target.value)) {
       highlightInput();
       errorNotification(description, validationMessage);

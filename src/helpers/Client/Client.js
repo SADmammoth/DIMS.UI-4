@@ -113,24 +113,21 @@ class Client {
     Skype,
     StartDate,
   ) {
-    return axios.put(
-      path.join(Client.apiPath, 'profile', 'edit', { headers: Client.defaultHeaders, body: UserId.toString() }),
-      {
-        Name,
-        LastName,
-        Email,
-        DirectionId: Client.directions.indexOf(Direction) + 1,
-        Sex: Sex === 'Male' ? 'M' : 'F',
-        Education,
-        BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
-        UniversityAverageScore: parseFloat(UniversityAverageScore),
-        MathScore: MathScore / 10.0,
-        Address,
-        MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
-        Skype,
-        StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
-      },
-    );
+    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
+      Name,
+      LastName,
+      Email,
+      DirectionId: Client.directions.indexOf(Direction) + 1,
+      Sex: Sex === 'Male' ? 'M' : 'F',
+      Education,
+      BirthDate: Validator.fromDateToMask(BirthDate, 'yyyy-MM-dd'),
+      UniversityAverageScore: parseFloat(UniversityAverageScore),
+      MathScore: MathScore / 10.0,
+      Address,
+      MobilePhone: MobilePhone.replace(/[^0-9+]/g, ''),
+      Skype,
+      StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
+    });
   }
 
   static createTasksObject(tasksResponse) {
@@ -266,10 +263,8 @@ class Client {
 
     // await Client.deleteTask(taskId.toString());
     let createdTask = false;
-    console.log(userTasks);
     await Promise.all(
       Object.values(userTasks).map(async (userTask) => {
-        console.log(userTask);
         if (userIds.indexOf(userTask.userId) < 0) {
           const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
           if (!createdTask) {

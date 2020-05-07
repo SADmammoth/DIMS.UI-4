@@ -9,11 +9,21 @@ describe('checkboxValueSeparator', () => {
 
     expect(actual).toStrictEqual(expectedOutput);
   });
-  test("Returns input if it's array", () => {
+
+  test('Returns input if input is array', () => {
     const inputArray = ['value1', 'value2', 'value3', 'value4'];
 
     const actual = checkboxValueSeparator(inputArray);
     const expectedOutput = inputArray;
+
+    expect(actual).toStrictEqual(expectedOutput);
+  });
+
+  test('Returns empty array if input is empty string', () => {
+    const inputArray = '';
+
+    const actual = checkboxValueSeparator(inputArray);
+    const expectedOutput = [];
 
     expect(actual).toStrictEqual(expectedOutput);
   });

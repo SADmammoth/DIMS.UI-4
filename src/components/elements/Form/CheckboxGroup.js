@@ -13,14 +13,17 @@ function CheckboxGroup(props) {
     const onChangeHandler = (event) => {
       if (type === 'checkbox') {
         const { checked, value } = event.target;
+        console.log(values, value);
         if (checked) {
           values.push(value);
         } else {
           values.splice(values.indexOf(value), 1);
         }
+        console.log(values);
         event.target.value = values;
-        onChange(event);
+        console.log(event.target.value);
       }
+      onChange(event);
     };
 
     return (
@@ -41,6 +44,7 @@ function CheckboxGroup(props) {
   }
 
   function renderCheckboxes() {
+    console.log(props.valueOptions);
     return props.valueOptions.map((valueOption) => renderCheckbox(valueOption, props));
   }
 

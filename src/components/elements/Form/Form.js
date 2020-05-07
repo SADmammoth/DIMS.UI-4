@@ -15,7 +15,7 @@ class Form extends React.Component {
       inputs: {}, // Store inputs components (for external use)
     };
   }
-  //TODO When one checkbox checked
+  // TODO Email validator
   componentDidMount() {
     this.createValues();
     this.createInputs();
@@ -24,13 +24,12 @@ class Form extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { inputs } = this.props;
     const { values } = this.state;
-    console.log(prevProps.inputs, inputs, !compareObjects(prevProps.inputs, inputs));
+
     if (
       !compareObjects(prevProps.inputs, inputs) ||
       Object.keys(values).length !== inputs.length ||
       !compareObjects(prevState.values, values)
     ) {
-      console.log(0);
       this.createValues();
       this.createInputs();
     }
@@ -162,7 +161,6 @@ class Form extends React.Component {
 
       values[name] = valueItem.value;
       if (valueItem.defaultValue) {
-        console.log(valueItem);
         values[`${name}_default`] = valueItem.defaultValue;
       }
     });
@@ -177,6 +175,7 @@ class Form extends React.Component {
   errorNotification(title, message) {
     console.trace();
     const { showNotifications } = this.props;
+
     if (showNotifications !== 'hideAll') notify('error', title, message);
   }
 
@@ -242,9 +241,7 @@ class Form extends React.Component {
     }
     if (this.checkValidity()) {
       if (onSubmitHandler) {
-        onSubmitHandler(this.formatValues())
-          .then(this.onResponseReceived)
-          .catch(this.onResponseError);
+        onSubmitHandler(this.formatValues()).then(this.onResponseReceived).catch(this.onResponseError);
       }
     }
   };
