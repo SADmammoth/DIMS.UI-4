@@ -1,0 +1,54 @@
+@import '../../assets/styles/scss/vars.scss';
+@import '../../assets/styles/scss/mixins.scss';
+
+.bgMain {
+  position: absolute;
+  bottom: 50%;
+  left: 10vw;
+  transform: translateY(50%);
+  height: 85%;
+  width: auto;
+  margin: 0;
+  z-index: 10;
+
+  @media screen and (max-width: 900px) {
+    & {
+      display: none;
+    }
+  }
+}
+
+.homepage-text__background {
+  position: absolute;
+  top: 14%;
+  bottom: 0;
+  margin: 0;
+  right: 0;
+  padding: 0;
+  padding-left: 13%;
+  width: 73%;
+  height: 70%;
+  box-sizing: border-box;
+  background: $header-bg;
+}
+
+.homepage-text {
+  padding: 0 5%;
+  margin: 0;
+  font-size: 120%;
+  box-sizing: border-box;
+  width: 68%;
+  opacity: 1;
+  text-indent: 20px;
+  text-align: justify;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+}
+
+ul {
+  padding-left: 0;
+}

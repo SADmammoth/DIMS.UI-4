@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AuthenticationManager from './AuthenticationManager';
-import LoginForm from '../../components/elements/LoginForm';
 import { UserContext } from './UserContextConsumer';
 
 class AuthorizationManager extends Component {
@@ -35,11 +34,7 @@ class AuthorizationManager extends Component {
     return (
       <>
         <UserContext.Provider value={authorizedUser}>
-          <AuthenticationManager
-            logInFormClass={LoginForm}
-            authorize={this.authorize}
-            deleteUserInfo={this.deleteUserInfo}
-          >
+          <AuthenticationManager authorize={this.authorize} deleteUserInfo={this.deleteUserInfo}>
             {children}
           </AuthenticationManager>
         </UserContext.Provider>

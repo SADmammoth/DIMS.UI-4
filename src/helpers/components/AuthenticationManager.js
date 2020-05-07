@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import Client from '../Client';
 import LogOut from './LogOut';
+import GuestRoutes from '../../Routes/GuestRoutes';
 
 class AuthenticationManager extends Component {
   constructor(props) {
@@ -51,17 +52,14 @@ class AuthenticationManager extends Component {
   };
 
   render() {
-    const { logInFormClass: LogInForm, children } = this.props;
+    const { children } = this.props;
     const { authenticated } = this.state;
 
     return (
       <>
-        {authenticated !== null && (authenticated ? children : <Redirect to='/login' />)}
-        <Route exact path='/login'>
-          {!authenticated ? <LogInForm logIn={this.logIn} show /> : <Redirect to='/' />}
-        </Route>
+        {authenticated !== null && (authenticated ? children : <GuestRoutes logIn={this.logIn} />)}
         <Route exact path='/logout'>
-          <LogOut logOut={this.logOut} />
+          {authenticated ? <LogOut logOut={this.logOut} /> : <Redirect to='/404' />}
         </Route>
       </>
     );
@@ -70,7 +68,6 @@ class AuthenticationManager extends Component {
 
 AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
-  logInFormClass: PropTypes.func.isRequired,
   deleteUserInfo: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };

@@ -273,6 +273,10 @@ class Client {
     return true;
   }
 
+  static signIn() {
+    return 'token';
+  }
+
   static async getUserInfoByToken(token) {
     return { role: 'member', userId: '2' };
   }
