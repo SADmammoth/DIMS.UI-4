@@ -23,7 +23,7 @@ function Header(props) {
             {title && (
               <h1 className='page-title'>
                 {title}
-                {matchMaxWidth('600px') || <TextBadge>{role}</TextBadge>}
+                {matchMaxWidth('600px') || (role && <TextBadge>{role}</TextBadge>)}
               </h1>
             )}
             <>
@@ -37,7 +37,7 @@ function Header(props) {
                 </>
               )}
             </>
-            <SettingsButton />
+            {role && <SettingsButton />}
           </ContainerComponent>
         </div>
       </ContainerComponent>
@@ -48,7 +48,7 @@ function Header(props) {
 Header.propTypes = {
   title: PropTypes.string.isRequired,
   navItems: Nav.propTypes.navItems,
-  role: PropTypes.string.isRequired,
+  role: PropTypes.string,
 };
 
 export default Header;

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import MentorRoutes from './MentorRoutes';
 import AdminRoutes from './AdminRoutes';
 import MemberRoutes from './MemberRoutes';
+import GuestRoutes from './GuestRoutes';
 
 function Routes(props) {
   const { role, userId } = props;

@@ -14,6 +14,7 @@ const NavItems = {
     { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks' },
     { id: 'Tracks', content: 'Tracks', link: '/members/:id/tracks' },
   ],
+  guest: [{ id: 'Login', content: 'Log In', link: '/login' }],
 };
 
 export default function getNavItems({ role, userId }, currentRoute) {
