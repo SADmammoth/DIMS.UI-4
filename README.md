@@ -11,12 +11,10 @@
   </a>
 </p>
 
-  <p>
-    Welcome to the &quot;Dev Incubator Management System&quot; or&nbsp;more&nbsp;briefly
-    <strong> DIMSUI</strong>.
-  </p>
+<img width="220" height="220" src="../media/devinc.png?raw=true" alt="DEVincubator"  align="right" />
 
-## What is the DIMSUI?
+Welcome to the "Dev Incubator Management System" or more briefly
+**DIMSUI**!
 
 > DIMSUI is a system for getting tasks and &#34;tracking&#34; time.
 
