@@ -11,9 +11,20 @@
   </a>
 </p>
 
+  <p>
+    Welcome to the &quot;Dev Incubator Management System&quot; or&nbsp;more&nbsp;briefly
+    <strong> DIMSUI</strong>.
+  </p>
+
+## What is the DIMSUI?
+
 > DIMSUI is a system for getting tasks and &#34;tracking&#34; time.
 
-### 🏠 [Homepage](https://github.com/SADmammoth/DIMS.UI-4#readme)
+System is useful for you if you:
+
+- **Admin**, to manage and create new members.
+- **Mentor**, to create and assign tasks, see member's progress.
+- **Member**, to see own tasks and manage subtasks.
 
 ## Prerequisites
 
