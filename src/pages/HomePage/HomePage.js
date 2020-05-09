@@ -16,7 +16,7 @@ function HomePage({ match }) {
       </Helmet>
       <Header title='Home' navItems={getNavItems({ role: 'guest', userId: '' }, match.path)} />
       <main>
-        <ContainerComponent>
+        <ContainerComponent className='main-container' display='flex'>
           <img className='bgMain' width='886' height='924' src={background} alt='DIMSUI' title='DIMSUI' />
           <div className='homepage-text__background'>
             <div className='homepage-text'>
