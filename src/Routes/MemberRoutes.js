@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import renderTracksPage from './renderTracksPage';
 import renderMemberTasksPage from './renderMemberTasksPage';
-import Error404Page from '../pages/Error404Page';
+import { Error404Page } from '../pages/ErrorPages';
 
 function MemberRoutes({ userId }) {
   return (
@@ -31,14 +31,6 @@ function MemberRoutes({ userId }) {
           return renderMemberTasksPage(props, 'member', userId);
         }}
       />
-
-      <Route exact path='/404'>
-        <Error404Page />
-      </Route>
-
-      <Route path='*'>
-        <Redirect to='/404' />
-      </Route>
     </Switch>
   );
 }

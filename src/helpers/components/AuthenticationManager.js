@@ -77,7 +77,9 @@ AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
   deleteUserInfo: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  history: PropTypes.array.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default withRouter(AuthenticationManager);

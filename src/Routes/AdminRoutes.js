@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import renderMemberTasksPage from './renderMemberTasksPage';
-import Error404Page from '../pages/Error404Page';
+import { Error404Page } from '../pages/ErrorPages';
 import MembersManagerPage from '../pages/MembersManagerPage';
 import MemberTasksPage from '../pages/MemberTasksPage';
 import MemberProgressPage from '../pages/MemberProgressPage';
@@ -32,11 +32,11 @@ function AdminRoutes({ userId }) {
           return renderMemberTasksPage(props, 'admin', userId);
         }}
       />
-      <Route path='/members/:id/progress'>
+      <Route exact path='/members/:id/progress'>
         <MemberProgressPage />
       </Route>
 
-      <Route path='/members/new'>
+      <Route exact path='/members/new'>
         <NewMember />
       </Route>
 
@@ -56,8 +56,9 @@ function AdminRoutes({ userId }) {
       <Route exact path='/404'>
         <Error404Page />
       </Route>
+
       <Route>
-        <Error404Page />
+        <Redirect to='/404' />
       </Route>
     </Switch>
   );

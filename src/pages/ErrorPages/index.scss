@@ -1,7 +1,7 @@
 @import '../../assets/styles/scss/vars.scss';
 @import '../../assets/styles/scss/mixins.scss';
 
-.bg404 {
+.error-image {
   position: absolute;
   bottom: 50%;
   left: 10vw;
@@ -19,7 +19,7 @@
   }
 }
 
-.title404 {
+.error-title {
   & h1 {
     font-size: 6vw;
     position: absolute;

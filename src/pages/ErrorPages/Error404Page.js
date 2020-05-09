@@ -10,13 +10,20 @@ const Error404Page = () => {
       <Helmet>
         <title>404</title>
       </Helmet>
-      <div className='title404'>
+      <div className='error-title'>
         <h1>Page not found</h1>
         <Button classMod='primary' link='/'>
           Go home page
         </Button>
       </div>
-      <img className='bg404' width='886' height='924' src={background} alt='404: not found' title='404: not found' />
+      <img
+        className='error-image'
+        width='886'
+        height='924'
+        src={background}
+        alt='404: not found'
+        title='404: not found'
+      />
     </>
   );
 };

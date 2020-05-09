@@ -29,7 +29,7 @@ function Header(props) {
             <>
               {navItems && navItems.length && (
                 <>
-                  {matchMaxWidth('1000px') ? (
+                  {matchMaxWidth('1200px') ? (
                     <MobileNav className='header__nav' navItems={navItems} />
                   ) : (
                     <Nav className='header__nav' navItems={navItems} />
