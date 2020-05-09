@@ -1,5 +1,5 @@
 {
-  "name": "dims-3",
+  "name": "dimsui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -53,6 +53,25 @@
     "husky": "^4.2.3",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
+    "readme-md-generator": "^1.0.0",
     "redux-devtools": "^3.5.0"
+  },
+  "description": "DIMSUI is a system for getting tasks and \"tracking\" time.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SADmammoth/DIMS.UI-4.git"
+  },
+  "author": "Maxim Logvinenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SADmammoth/DIMS.UI-4/issues"
+  },
+  "engines": {
+    "yarn": ">=1.22.4",
+    "node": ">=12.14.0"
   }
 }
