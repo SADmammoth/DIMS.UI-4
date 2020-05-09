@@ -10,3 +10,19 @@ $muted-text: var(--muted-text);
 $success: #00ff26;
 $error: #dd8e8e;
 $info: #249cff;
+
+:root {
+  @media screen and (max-width: 2000px) {
+    --container-width: 1600px;
+  }
+
+  @media screen and (max-width: 1500px) {
+    --container-width: 1400px;
+  }
+
+  @media screen and (min-width: 1500px) {
+    --container-width: 1200px;
+  }
+}
+
+$container-width: var(--container-width);

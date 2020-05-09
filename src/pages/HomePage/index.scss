@@ -1,15 +1,32 @@
 @import '../../assets/styles/scss/vars.scss';
 @import '../../assets/styles/scss/mixins.scss';
 
-.bgMain {
+.main-container {
+  position: relative;
+  height: 50vh;
+  justify-content: flex-start;
+  align-items: center;
+  background: $header-bg;
+
   position: absolute;
+
   bottom: 50%;
-  left: 10vw;
-  transform: translateY(50%);
-  height: 85%;
-  width: auto;
+  right: 50%;
+  transform: translate(50%, 50%);
+
+  @media screen and (max-height: 700px) {
+    & {
+      height: 90vh;
+    }
+  }
+}
+
+.bgMain {
+  width: 50%;
+  height: auto;
   margin: 0;
   z-index: 10;
+  filter: drop-shadow(0 0 6px $highlight-bg);
 
   @media screen and (max-width: 900px) {
     & {
@@ -19,28 +36,22 @@
 }
 
 .homepage-text__background {
-  position: absolute;
-  top: 14%;
-  bottom: 0;
+  left: auto;
   margin: 0;
-  right: 0;
-  padding: 0;
-  padding-left: 13%;
-  width: 73%;
-  height: 70%;
+  padding: 5% 2%;
   box-sizing: border-box;
-  background: $header-bg;
-}
 
-.homepage-text {
-  padding: 0 5%;
-  margin: 0;
-  font-size: 120%;
-  box-sizing: border-box;
-  width: 68%;
-  opacity: 1;
-  text-indent: 20px;
-  text-align: justify;
+  display: flex;
+  direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media screen and (max-width: 900px) {
+    & {
+      justify-self: center;
+      padding: 8%;
+    }
+  }
 }
 
 h2 {

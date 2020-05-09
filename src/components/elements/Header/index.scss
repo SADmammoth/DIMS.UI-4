@@ -44,7 +44,7 @@
   .content {
     height: 80px;
     padding: 0 20px;
-    padding-right: calc((100vw - 1000px) / 2);
+    padding-right: calc((100vw - #{$container-width}) / 2);
     background: $primary-bg;
     box-sizing: border-box;
   }
