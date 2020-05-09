@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import Client from '../Client';
 import LogOut from './LogOut';
 import GuestRoutes from '../../Routes/GuestRoutes';
@@ -27,6 +27,10 @@ class AuthenticationManager extends Component {
     deleteUserInfo();
   };
 
+  redirectHome = () => {
+    this.props.history.push('/');
+  };
+
   authenticate = async (login, password) => {
     const { authorize } = this.props;
     const authToken = localStorage.getItem('authToken');
@@ -48,6 +52,9 @@ class AuthenticationManager extends Component {
       const { role, userId } = await Client.getUserInfoByToken(authToken);
       authorize(role, userId);
     }
+
+    this.redirectHome();
+
     return { status: 'success', message: 'Login successful' };
   };
 
@@ -70,6 +77,7 @@ AuthenticationManager.propTypes = {
   authorize: PropTypes.func.isRequired,
   deleteUserInfo: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  history: PropTypes.array.isRequired,
 };
 
-export default AuthenticationManager;
+export default withRouter(AuthenticationManager);

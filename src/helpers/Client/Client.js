@@ -288,7 +288,7 @@ class Client {
   }
 
   static signIn() {
-    return 'token';
+    return { status: 'success', found: true, token: 'token', role: 'admin', userID: '0' };
   }
 
   static async getUserInfoByToken(token) {

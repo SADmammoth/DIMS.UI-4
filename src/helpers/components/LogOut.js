@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 function LogOut({ logOut }) {
   logOut();
-  return <Redirect to='/login' />;
+  return <Redirect to='/' />;
 }
 
 LogOut.propTypes = {
