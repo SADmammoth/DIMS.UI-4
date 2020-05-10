@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import Client from '../helpers/Client';
 import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
-import CollapsableItemsList from '../components/lists/CollapsableItemsList';
+import CollapsableItemsConditionalList from '../components/lists/CollapsableItemsConditionalList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
 import Spinner from '../components/elements/Spinner/Spinner';
@@ -67,9 +67,7 @@ class MemberTracksPage extends React.Component {
         <main>
           <ContainerComponent>
             {tracks ? (
-              <div>
-                {Object.keys(tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
-              </div>
+              <CollapsableItemsConditionalList itemsPluralName='tracks' items={this.renderTasks()} />
             ) : (
               <Spinner centered />
             )}

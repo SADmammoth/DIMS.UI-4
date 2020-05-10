@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 
 import Client from '../../helpers/Client';
-import CollapsableItemsList from '../../components/lists/CollapsableItemsList';
+import CollapsableItemsConditionalList from '../../components/lists/CollapsableItemsConditionalList';
 import ContainerComponent from '../../components/elements/ContainerComponent';
 import Header from '../../components/elements/Header';
 import Spinner from '../../components/elements/Spinner';
@@ -59,9 +59,7 @@ class MemberProgressPage extends React.Component {
         <main>
           <ContainerComponent>
             {tasks ? (
-              <div>
-                {Object.keys(tasks).length ? <CollapsableItemsList items={this.renderProgress()} /> : 'No tasks'}
-              </div>
+              <CollapsableItemsConditionalList itemsPluralName='progress' items={this.renderProgress()} />
             ) : (
               <Spinner centered />
             )}
