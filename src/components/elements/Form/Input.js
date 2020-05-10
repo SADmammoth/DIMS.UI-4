@@ -108,6 +108,7 @@ function Input(props) {
           attributes={attributes}
           value={value}
           valueOptions={valueOptions}
+          placeholder={placeholder}
         />,
       );
     }
@@ -139,8 +140,8 @@ function Input(props) {
           placeholder={placeholder}
           required={required && 'required'}
           onKeyPress={onKeyPressHandler}
-          onInput={onInputHandler}
-          onChange={onChangeHandler}
+          onChange={onInputHandler}
+          onBlur={onChangeHandler}
           {...attributes}
           value={value}
         />,

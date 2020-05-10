@@ -9,8 +9,8 @@ import Spinner from '../Spinner';
 const DialogButton = (props) => {
   const { buttonContent, buttonClassMod, dialogValue, message, confirmButtonClassMod, confirmButtonContent } = props;
 
-  const modal = useRef({});
   const [loading, setLoading] = useState(false);
+  const modal = useRef({});
 
   const onClick = () => {
     modal.current.handleShow();
@@ -21,13 +21,12 @@ const DialogButton = (props) => {
   };
 
   const onSubmit = (data) => {
-    const { onSubmit: propsOnSubmit, reload } = this.props;
+    const { onSubmit: propsOnSubmit, reload } = props;
     setLoading(true);
 
     return propsOnSubmit(data).then((response) => {
       setLoading(false);
       reload();
-      modal.current.handleClose();
       return response;
     });
   };

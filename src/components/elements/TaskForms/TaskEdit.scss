@@ -3,14 +3,17 @@
 
 .task-edit-modal {
   padding: 0 !important;
+
+  min-width: 20vw;
+  min-height: 30vh;
 }
 
 .task-edit {
   &:not(.empty) {
     width: 800px;
     max-width: 70vw;
-    height: 70vh;
-    max-height: 600px;
+    height: 63vh;
+    max-height: 700px;
     overflow-y: auto;
   }
 

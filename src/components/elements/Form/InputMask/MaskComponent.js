@@ -35,7 +35,7 @@ function MaskComponent(input, maskArray) {
     event.target.value = replaceAll(value, start, end, charsToDeleteRegex, '_');
     event.target.setSelectionRange(start, start);
 
-    input.props.onInput(event);
+    input.props.onChange(event);
   };
 
   const onClick = (event) => {
@@ -53,7 +53,7 @@ function MaskComponent(input, maskArray) {
 
     if (Validator.maskByChar(getValueFromMask(event.target.value) + event.key, maskArray.join(''))) {
       event.target.value = addMask(getValueFromMask(event.target.value) + event.key, maskArray);
-      input.props.onInput(event);
+      input.props.onChange(event);
       placeInputCursorToEnd(event.target, maskArray);
     }
 

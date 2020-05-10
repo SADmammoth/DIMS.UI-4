@@ -3,6 +3,7 @@
 
 .member-info {
   width: 80vw;
+  min-height: 20vh;
   max-height: 90vh;
   padding: 0 0 30px !important;
   overflow-y: auto;
@@ -32,7 +33,7 @@
   &__header {
     position: relative;
     padding: 25px 0;
-    padding-right: 2vw;
+    padding-right: 50px;
     background-color: $primary-bg;
     @include clearfix;
 
@@ -201,5 +202,9 @@
     & > div {
       margin-bottom: 20px;
     }
+  }
+
+  [class*='icon-'] {
+    fill: $common-text;
   }
 }

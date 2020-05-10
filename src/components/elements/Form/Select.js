@@ -17,12 +17,12 @@ function Select(props) {
     <select
       className='form-select'
       name={name}
-      value={currentValue.value}
+      value={currentValue}
       onChange={onChange}
       required={required && 'required'}
     >
       {placeholder && (
-        <option disabled selected='selected'>
+        <option disabled value=''>
           {placeholder}
         </option>
       )}

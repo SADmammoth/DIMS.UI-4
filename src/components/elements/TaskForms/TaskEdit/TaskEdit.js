@@ -16,6 +16,7 @@ const TaskEdit = (props) => {
     setLoading(true);
 
     if (!checkTaskDates(data.taskStart, data.taskDeadline)) {
+      setLoading(false);
       errorNotification('Task dates input', 'Deadline date is set before start date');
       return new Promise((resolve) => resolve());
     }

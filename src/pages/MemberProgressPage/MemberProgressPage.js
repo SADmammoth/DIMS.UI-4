@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Client from '../../helpers/Client';
 import CollapsableItemsConditionalList from '../../components/lists/CollapsableItemsConditionalList';
@@ -39,20 +40,15 @@ class MemberProgressPage extends React.Component {
 
   render() {
     const { tasks } = this.state;
-    const { match } = this.props;
-    const anytask = (tasks && Object.values(tasks)[0]) || {};
+    const { match, name } = this.props;
 
     return (
       <>
-        <Helmet>{`${anytask.userName || 'Name'}'s progress`}</Helmet>
+        <Helmet>{`${name}'s progress`}</Helmet>
         <UserContextConsumer>
           {({ role, userId }) => {
             return (
-              <Header
-                role={role}
-                title={`${anytask.userName || 'Name'}'s progress`}
-                navItems={getNavItems({ role, userId }, match.path)}
-              />
+              <Header role={role} title={`${name}'s progress`} navItems={getNavItems({ role, userId }, match.path)} />
             );
           }}
         </UserContextConsumer>
@@ -71,7 +67,12 @@ class MemberProgressPage extends React.Component {
   }
 }
 
+MemberProgressPage.defaultProps = {
+  name: 'Name',
+};
+
 MemberProgressPage.propTypes = {
+  name: PropTypes.string,
   match: PropTypes.shape({
     path: PropTypes.string,
     params: PropTypes.shape({
@@ -80,4 +81,9 @@ MemberProgressPage.propTypes = {
   }).isRequired,
 };
 
-export default withRouter(MemberProgressPage);
+export default withRouter(
+  connect(({ members }, ownProps) => {
+    const member = members[ownProps.match.params.id];
+    return { name: member ? member.firstName : 'Name' };
+  })(MemberProgressPage),
+);

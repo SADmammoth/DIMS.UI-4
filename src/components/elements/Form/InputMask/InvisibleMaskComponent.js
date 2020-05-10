@@ -25,18 +25,18 @@ function InvisibleMaskComponent(input, maskArray) {
       const end = target.selectionEnd;
 
       event.target.value = replaceSubstring(value, start, end, '');
-      input.props.onInput(event);
+      input.props.onChange(event);
       event.preventDefault();
     }
   };
 
   const onChange = (event) => {
-    input.props.onInput(invisibleMaskOnInputValue(input.props.name, event.target.value, maskArray));
+    input.props.onChange(invisibleMaskOnInputValue(input.props.name, event.target.value, maskArray));
     input.props.onKeyPress(event);
   };
 
   const onBlur = (event) => {
-    input.props.onChange(event);
+    input.props.onBlur(event);
   };
 
   return React.cloneElement(input, {

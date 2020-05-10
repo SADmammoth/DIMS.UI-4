@@ -10,11 +10,16 @@ import DateBadge from '../../../elements/DateBadge';
 import DialogButton from '../../../elements/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';
 import dateTypes from '../../../../helpers/dateTypes';
+import Client from '../../../../helpers/Client';
 
 function TaskTrackCard(props) {
   const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close } = props;
 
   const userId = props.match.params.id;
+
+  const onDelete = ({ dialogValue }) => {
+    return Client.deleteTrack(dialogValue);
+  };
 
   return (
     <CollapsableCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
@@ -36,7 +41,7 @@ function TaskTrackCard(props) {
             confirmButtonClassMod='error'
             confirmButtonContent='Delete'
             dialogValue={id}
-            onSubmit={({ dialogValue }) => console.log(dialogValue)}
+            onSubmit={onDelete}
           />
           <TrackButton
             buttonClassMod='secondary'

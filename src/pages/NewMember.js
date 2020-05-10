@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import store from '../redux';
 import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
 import ContainerComponent from '../components/elements/ContainerComponent/ContainerComponent';
@@ -13,11 +16,14 @@ import Spinner from '../components/elements/Spinner/Spinner';
 import { addMember } from '../redux/actions/membersActions';
 import Footer from '../components/elements/Footer';
 import masks from '../helpers/maskHelpers/masks';
+import removeArrayItems from '../helpers/removeArrayItems';
+import getStateMembers from '../helpers/getStateMembers';
+import compareObjects from '../helpers/compareObjects';
 
-const NewMember = (props) => {
+const NewMember = ({ members, match }) => {
   const [loading, setLoading] = useState(false);
 
-  const postMember = ({
+  const postMember = async ({
     firstName,
     lastName,
     email,
@@ -36,25 +42,7 @@ const NewMember = (props) => {
     const calculatedStartDate = Validator.parseDateByMask(startDate, masks.date);
     const calculatedBirthDate = Validator.parseDateByMask(birthDate, masks.date);
 
-    store.dispatch(
-      addMember({
-        firstName,
-        lastName,
-        email,
-        skype,
-        mobilePhone,
-        address,
-        sex,
-        calculatedStartDate,
-        calculatedBirthDate,
-        direction,
-        education,
-        universityAverageScore,
-        mathScore,
-      }),
-    );
-
-    return Client.postMember(
+    await Client.postMember(
       firstName,
       lastName,
       email,
@@ -77,6 +65,31 @@ const NewMember = (props) => {
         setLoading(false);
         return response;
       });
+
+    const addedMemberId = removeArrayItems(
+      Object.keys(await Client.getMembers()),
+      Object.keys(members),
+      compareObjects,
+    )[0];
+
+    store.dispatch(
+      addMember({
+        id: addedMemberId,
+        firstName,
+        lastName,
+        email,
+        skype,
+        mobilePhone,
+        address,
+        sex,
+        startDate: calculatedStartDate,
+        birthDate: calculatedBirthDate,
+        direction,
+        education,
+        universityAverageScore,
+        mathScore,
+      }),
+    );
   };
 
   return (
@@ -95,7 +108,7 @@ const NewMember = (props) => {
                   role,
                   userId,
                 },
-                props.match.path,
+                match.path,
               )}
             />
           );
@@ -110,4 +123,12 @@ const NewMember = (props) => {
     </>
   );
 };
-export default withRouter(NewMember);
+
+NewMember.propTypes = {
+  members: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    path: PropTypes.string,
+  }).isRequired,
+};
+
+export default withRouter(connect(getStateMembers)(NewMember));

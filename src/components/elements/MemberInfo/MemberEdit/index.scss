@@ -62,11 +62,11 @@
 
   .button {
     margin-top: 40px;
-    margin-right: 70px;
+    margin-right: 25px;
     float: right;
 
     &:last-child {
-      margin-right: 20px;
+      margin-right: 10px;
     }
   }
 
@@ -180,9 +180,5 @@
     .date-badge {
       font-size: 1.4rem;
     }
-  }
-
-  [class*='icon-'] {
-    fill: $common-text;
   }
 }

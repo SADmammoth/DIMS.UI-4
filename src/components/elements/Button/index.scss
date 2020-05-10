@@ -18,17 +18,17 @@
   &_success {
     width: 80px;
     background-color: $success;
-    color: $light-text;
+    color: white;
     font-size: 1.1rem;
-    fill: $light-text;
+    fill: white;
   }
 
   &_error {
     width: 80px;
     background-color: $error;
-    color: $light-text;
+    color: white;
     font-size: 1.1rem;
-    fill: $light-text;
+    fill: white;
   }
 
   &_ghost {

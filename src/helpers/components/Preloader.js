@@ -28,7 +28,6 @@ const Preloader = ({ children, members }) => {
 
         await Promise.all(
           taskIds.map(async (taskId) => {
-            console.log(members);
             const userIds = (await Client.getAssigned(members, taskId)).map(({ userId }) => {
               return userId;
             });

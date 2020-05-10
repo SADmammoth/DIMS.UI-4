@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button';
@@ -203,7 +202,7 @@ MemberTaskCard.propTypes = {
       memberTaskId: PropTypes.string,
     }),
   ),
-  members: PropTypes.arrayOf(
+  members: PropTypes.objectOf(
     PropTypes.shape({
       userId: PropTypes.string,
       firstName: PropTypes.string,

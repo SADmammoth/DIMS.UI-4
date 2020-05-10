@@ -18,11 +18,11 @@ export default function members(state = initialState, action) {
   }
 }
 
-function setMembers(state, members) {
+function setMembers(state, membersData) {
   if (state && Object.keys(state).length) {
     return state;
   }
-  return { ...members };
+  return { ...membersData };
 }
 
 function addMember(state, data) {

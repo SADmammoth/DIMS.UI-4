@@ -67,7 +67,7 @@ class MemberTracksPage extends React.Component {
         <main>
           <ContainerComponent>
             {tracks ? (
-              <CollapsableItemsConditionalList itemsPluralName='tracks' items={this.renderTasks()} />
+              <CollapsableItemsConditionalList itemsPluralName='tracks' items={this.renderTracks()} />
             ) : (
               <Spinner centered />
             )}

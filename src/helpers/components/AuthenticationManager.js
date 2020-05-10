@@ -48,12 +48,12 @@ class AuthenticationManager extends Component {
 
       localStorage.setItem('authToken', token);
       authorize(role, userId);
+
+      this.redirectHome();
     } else {
       const { role, userId } = await Client.getUserInfoByToken(authToken);
       authorize(role, userId);
     }
-
-    this.redirectHome();
 
     return { status: 'success', message: 'Login successful' };
   };
