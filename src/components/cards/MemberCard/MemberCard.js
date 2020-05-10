@@ -152,13 +152,31 @@ const MemberCard = (props) => {
   );
 };
 
-const { handleClose, edit, setEdit, ...memberInfoPTypes } = MemberInfo.propTypes;
+MemberCard.defaultProps = {
+  edit: false,
+};
 
 MemberCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  startDate: PropTypes.instanceOf(Date).isRequired,
+  direction: PropTypes.string.isRequired,
+  mobilePhone: PropTypes.string.isRequired,
+  skype: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+  sex: PropTypes.string.isRequired,
+  birthDate: PropTypes.instanceOf(Date).isRequired,
+  education: PropTypes.string.isRequired,
+  universityAverageScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  mathScore: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  role: PropTypes.string.isRequired,
+  edit: PropTypes.bool,
+
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  ...memberInfoPTypes,
 };
 
 export default React.memo(MemberCard, compareObjects);

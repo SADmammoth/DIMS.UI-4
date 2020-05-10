@@ -40,15 +40,13 @@ function AssignButton(props) {
   );
 }
 
-const { members, assignedTo } = AssignForm.propTypes;
-
 AssignButton.propTypes = {
   taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   buttonClassMod: PropTypes.string,
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   reload: PropTypes.func.isRequired,
-  members,
-  assignedTo,
+  assignedTo: PropTypes.array.isRequired,
+  members: PropTypes.object.isRequired,
 };
 
 export default AssignButton;

@@ -64,7 +64,7 @@ class AuthenticationManager extends Component {
 
     return (
       <>
-        {authenticated !== null && (authenticated ? children : <GuestRoutes logIn={this.logIn} />)}
+        {authenticated ? children : <GuestRoutes logIn={this.logIn} />}
         <Route exact path='/logout'>
           {authenticated ? <LogOut logOut={this.logOut} /> : <Redirect to='/404' />}
         </Route>

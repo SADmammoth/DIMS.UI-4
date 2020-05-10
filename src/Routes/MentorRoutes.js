@@ -47,6 +47,14 @@ function MentorRoutes({ userId }) {
       <Route path='/tasks/id:open/edit'>
         <MemberTasksPage edit />
       </Route>
+
+      <Route exact path='/404'>
+        <Error404Page />
+      </Route>
+
+      <Route>
+        <Redirect to='/404' />
+      </Route>
     </Switch>
   );
 }

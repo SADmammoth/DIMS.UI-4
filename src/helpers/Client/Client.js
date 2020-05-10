@@ -1,7 +1,6 @@
 import axios from 'axios';
 import path from 'path';
 import Validator from '../Validator';
-import arraysSubtraction from '../arraysSubtraction';
 
 //TODO Rplace path.join with url.resolve
 class Client {
@@ -233,50 +232,81 @@ class Client {
     return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
   }
 
-  static async unassignTask(taskId, userIds) {
-    const userTasks = [];
-    const allUsers = Object.keys(await Client.getMembers());
-    let foundTasks;
-    await Promise.all(
-      allUsers.map(async (userId) => {
-        foundTasks = Object.values(await Client.getUserTasks(userId.toString())).filter(
-          ({ taskId: candidateTaskId }) => {
-            return taskId === candidateTaskId;
-          },
-        );
-        if (foundTasks.length) {
-          userTasks.push(...foundTasks);
-        }
-      }),
-    );
+  static getUserProgress(userId) {
+    // TODO Redo after API update
+    return {};
+  }
 
+  static getTracks(userId) {
+    // TODO Redo after API update
+    return {};
+  }
+
+  static createTrack(userId) {
+    // TODO Redo after API update
+    return {};
+  }
+
+  static editTrack(userId) {
+    // TODO Redo after API update
+    return {};
+  }
+
+  static async unassignTask(taskId, userIds) {
+    // TODO Restore after API bug fix
+    // const userTasks = [];
+    // const allUsers = Object.keys(await Client.getMembers());
+    // let foundTasks;
+    // await Promise.all(
+    //   allUsers.map(async (userId) => {
+    //     foundTasks = Object.values(await Client.getUserTasks(userId.toString())).filter(
+    //       ({ taskId: candidateTaskId }) => {
+    //         return taskId === candidateTaskId;
+    //       },
+    //     );
+    //     if (foundTasks.length) {
+    //       userTasks.push(...foundTasks);
+    //     }
+    //   }),
+    // );
     // await Client.deleteTask(taskId.toString());
-    let createdTask = false;
-    await Promise.all(
-      Object.values(userTasks).map(async (userTask) => {
-        if (userIds.indexOf(userTask.userId) < 0) {
-          const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
-          if (!createdTask) {
-            createdTask = true;
-            await Client.postTask(taskName, taskDescription, taskStart, taskDeadline);
-          }
-          await Client.setUserTaskState(taskId.toString(), userId.toString(), state);
-        }
-      }),
-    );
-    await Client.assignTask(taskId, arraysSubtraction(allUsers, userIds));
+    // let createdTask = false;
+    // await Promise.all(
+    //   Object.values(userTasks).map(async (userTask) => {
+    //     if (userIds.indexOf(userTask.userId) < 0) {
+    //       const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
+    //       if (!createdTask) {
+    //         createdTask = true;
+    //         await Client.postTask(taskName, taskDescription, taskStart, taskDeadline);
+    //       }
+    //       await Client.setUserTaskState(taskId.toString(), userId.toString(), state);
+    //     }
+    //   }),
+    // );
+    // await Client.assignTask(taskId, arraysSubtraction(allUsers, userIds));
   }
 
   static async checkToken(token) {
+    // TODO Redo after API update
     return true;
   }
 
-  static signIn() {
-    return { status: 'success', found: true, token: 'token', role: 'admin', userID: '0' };
+  static signIn(login, password) {
+    // TODO Redo after API update
+    let role = 'admin';
+    if (login === 'member') {
+      role = 'member';
+    }
+    return { status: 'success', found: true, token: `${role}token`, role, userId: '2' };
   }
 
   static async getUserInfoByToken(token) {
-    return { role: 'admin', userId: '0' };
+    // TODO Redo after API update
+    let role = 'admin';
+    if (token === 'membertoken') {
+      role = 'member';
+    }
+    return { role, userId: '2' };
   }
 }
 

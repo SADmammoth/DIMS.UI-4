@@ -47,13 +47,26 @@ function TaskEditButton(props) {
   );
 }
 
-const { handleClose, ...taskEditProps } = TaskEdit.propTypes;
-
 TaskEditButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   buttonClassMod: PropTypes.string.isRequired,
   reload: PropTypes.func.isRequired,
-  ...taskEditProps,
+  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  taskName: PropTypes.string,
+  taskDescription: PropTypes.string,
+  taskStart: PropTypes.instanceOf(Date),
+  taskDeadline: PropTypes.instanceOf(Date),
+  assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({
+      memberTaskId: PropTypes.string,
+      userId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
+  ),
+  members: PropTypes.objectOf(PropTypes.object),
+  onSubmit: PropTypes.func.isRequired,
+  empty: PropTypes.bool,
 };
 
 export default withRouter(TaskEditButton);

@@ -31,6 +31,14 @@ function MemberRoutes({ userId }) {
           return renderMemberTasksPage(props, 'member', userId);
         }}
       />
+
+      <Route exact path='/404'>
+        <Error404Page />
+      </Route>
+
+      <Route>
+        <Redirect to='/404' />
+      </Route>
     </Switch>
   );
 }
