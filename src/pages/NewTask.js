@@ -14,6 +14,7 @@ import checkboxValueSeparator from '../helpers/checkboxValueSeparator';
 import masks from '../helpers/maskHelpers/masks';
 import getStateMembers from '../helpers/getStateMembers';
 import setUsersForTask from '../helpers/setUsersForTask';
+import store from '../redux';
 
 const NewTask = ({ members, match }) => {
   const postTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members, members_default }) => {
@@ -26,7 +27,7 @@ const NewTask = ({ members, match }) => {
 
     if (members.length) {
       const taskId = (await createTask()).TaskId;
-      return setUsersForTask(taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
+      return setUsersForTask(store, taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
     }
 
     return createTask();

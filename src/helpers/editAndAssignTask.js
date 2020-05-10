@@ -6,6 +6,7 @@ import masks from './maskHelpers/masks';
 import setUsersForTask from './setUsersForTask';
 
 export default async function editAndAssignTask(
+  store,
   { taskName, taskDescription, taskStart, taskDeadline, members },
   taskId,
   prevAssigned = [],

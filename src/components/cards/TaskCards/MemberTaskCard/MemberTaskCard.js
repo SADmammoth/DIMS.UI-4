@@ -16,8 +16,8 @@ import Client from '../../../../helpers/Client';
 import ChangeStateButton from '../../../elements/ChangeStateButton';
 import compareObjects from '../../../../helpers/compareObjects';
 import editAndAssignTask from '../../../../helpers/editAndAssignTask';
-import getStateMembers from '../../../../helpers/getStateMembers';
 import dateTypes from '../../../../helpers/dateTypes';
+import store from '../../../../redux';
 
 function MemberTaskCard(props) {
   const {
@@ -46,7 +46,7 @@ function MemberTaskCard(props) {
     userId = id.slice(taskId.toString().length);
   }
 
-  const onEdit = (data) => editAndAssignTask(data, taskId, assignedTo);
+  const onEdit = (data) => editAndAssignTask(store, data, taskId, assignedTo);
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTask(dialogValue);
   };
@@ -200,11 +200,10 @@ MemberTaskCard.propTypes = {
   assignedTo: PropTypes.arrayOf(
     PropTypes.shape({
       userId: PropTypes.string,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
+      memberTaskId: PropTypes.string,
     }),
   ),
-  members: PropTypes.objectOf(
+  members: PropTypes.arrayOf(
     PropTypes.shape({
       userId: PropTypes.string,
       firstName: PropTypes.string,
@@ -213,4 +212,4 @@ MemberTaskCard.propTypes = {
   ),
 };
 
-export default React.memo(connect(getStateMembers)(MemberTaskCard), compareObjects);
+export default React.memo(MemberTaskCard, compareObjects);

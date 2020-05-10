@@ -57,18 +57,28 @@ class MemberTasksPage extends React.Component {
     });
   }
 
-  renderTask(id, data, taskSet, edit) {
+  renderTask(id, data, taskSet, edit, members, assignedTo) {
     const updateCallback = () => {
       this.update();
     };
-    return <WrappedMemberTask id={id} taskSet={taskSet} edit={edit} update={updateCallback} {...data} />;
+    return (
+      <WrappedMemberTask
+        id={id}
+        taskSet={taskSet}
+        members={members}
+        assignedTo={assignedTo}
+        edit={edit}
+        update={updateCallback}
+        {...data}
+      />
+    );
   }
 
   renderTasks() {
     const { tasks } = this.state;
-    const { taskSet, edit } = this.props;
-    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
-      return this.renderTask(id, data, taskSet, edit);
+    const { taskSet, edit, assignedTasks, members } = this.props;
+    return Object.entries(tasks).map(([id, data]) => {
+      return this.renderTask(id, data, taskSet, edit, members, assignedTasks[id]);
     });
   }
 
@@ -130,8 +140,8 @@ MemberTasksPage.propTypes = {
 };
 
 export default withRouter(
-  connect((state, ownProps) => {
-    const member = state.members[ownProps.match.params.id];
-    return { name: member ? member.firstName : 'Name' };
+  connect(({ members, assignedTasks }, ownProps) => {
+    const member = members[ownProps.match.params.id];
+    return { name: member ? member.firstName : 'Name', members, assignedTasks };
   })(MemberTasksPage),
 );

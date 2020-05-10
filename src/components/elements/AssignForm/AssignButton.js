@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
 import AssignForm from './AssignForm';
 import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
 import setUsersForTask from '../../../helpers/setUsersForTask';
+import store from '../../../redux';
 
 function AssignButton(props) {
   const { taskId, buttonClassMod, children, reload, buttonContent, members, assignedTo } = props;
-  const modal = React.createRef();
+  const modal = useRef({});
 
   const showModal = () => {
     modal.current.handleShow();
@@ -18,14 +19,17 @@ function AssignButton(props) {
     modal.current.handleClose();
   };
 
-  const assignUsers = ({ members, members_default }) => {
-    return setUsersForTask(taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default)).then(
-      (res) => {
-        closeModal();
-        reload();
-        return res;
-      },
-    );
+  const assignUsers = ({ members: assignedMembers, members_default }) => {
+    return setUsersForTask(
+      store,
+      taskId,
+      checkboxValueSeparator(assignedMembers),
+      checkboxValueSeparator(members_default),
+    ).then((res) => {
+      closeModal();
+      reload();
+      return res;
+    });
   };
 
   return (
@@ -47,6 +51,7 @@ AssignButton.propTypes = {
   reload: PropTypes.func.isRequired,
   assignedTo: PropTypes.array.isRequired,
   members: PropTypes.object.isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
 
 export default AssignButton;

@@ -143,7 +143,6 @@ class Client {
     await Promise.all(
       tasks.map(async (task) => {
         tasksObject[task.TaskId] = Client.createTasksObject(task);
-        tasksObject[task.TaskId].assignedTo = await this.getAssigned(task.TaskId);
       }),
     );
     return tasksObject;
@@ -178,8 +177,36 @@ class Client {
     return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
   }
 
-  static async getAssigned(taskId) {
-    const allUsers = await this.getMembers();
+  static async getUsersMemberTasks(taskId, usersIds) {
+    await axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
+    let allUserTasks;
+    let userTasks;
+
+    const resultArray = await Promise.all(
+      usersIds.map(async (userId) => {
+        allUserTasks = await this.getUserTasks(userId);
+
+        userTasks = Object.keys(allUserTasks).find((memberTaskId) => {
+          return allUserTasks[memberTaskId].taskId.toString() === taskId.toString();
+        });
+
+        if (!userTasks || !userTasks.length) {
+          return null;
+        }
+        return {
+          userId,
+          taskId,
+          memberTaskId: userTasks,
+        };
+      }),
+    );
+    return resultArray.filter((element) => {
+      return !!element;
+    });
+  }
+
+  static async getAssigned(members, taskId) {
+    const allUsers = { ...members };
     const assignedTo = [];
     let userTasks;
 
@@ -187,7 +214,7 @@ class Client {
       Object.entries(allUsers).map(async ([userId, user]) => {
         userTasks = await this.getUserTasks(userId);
         Object.values(userTasks).forEach((userTask) => {
-          if (userTask.taskId === taskId) {
+          if (userTask.taskId.toString() === taskId.toString()) {
             assignedTo.push({ userId, firstName: user.firstName, lastName: user.lastName, memberTaskId: userTask.id });
           }
         });
