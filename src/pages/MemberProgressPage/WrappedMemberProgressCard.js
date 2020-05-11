@@ -4,7 +4,7 @@ import UserContextConsumer from '../../helpers/components/UserContextConsumer';
 
 export default function WrappedMemberProgressCard({
   id,
-  taskId,
+  memberTaskId,
   taskName,
   trackNote,
   trackDate,
@@ -14,11 +14,12 @@ export default function WrappedMemberProgressCard({
 }) {
   return (
     <UserContextConsumer>
-      {({ role }) => {
+      {({ userId, role }) => {
         return (
           <MemberProgressCard
             id={id}
-            taskId={taskId}
+            userId={userId}
+            memberTaskId={memberTaskId}
             taskName={taskName}
             trackNote={trackNote}
             trackDate={trackDate}

@@ -269,6 +269,11 @@ class Client {
     return {};
   }
 
+  static deleteTrack(trackId) {
+    // TODO Redo after API update
+    return {};
+  }
+
   static createTrack(userId) {
     // TODO Redo after API update
     return {};
