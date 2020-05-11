@@ -21,6 +21,7 @@ import store from '../../../../redux';
 function MemberTaskCard(props) {
   const {
     taskName,
+    userId,
     taskId,
     taskDescription,
     state,
@@ -39,15 +40,15 @@ function MemberTaskCard(props) {
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
-  let userId = 0;
 
-  if (taskId) {
-    userId = id.slice(taskId.toString().length);
-  }
-
-  const onEdit = (data) => editAndAssignTask(store, data, taskId);
+  const onEdit = (data) => {
+    return editAndAssignTask(store, data, taskId);
+  };
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTask(dialogValue);
+  };
+  const onTrack = ({ trackDate, trackNote }) => {
+    return Client.createTrack(userId, id, trackDate, trackNote);
   };
 
   return (
@@ -100,7 +101,7 @@ function MemberTaskCard(props) {
 
         <ButtonGroup>
           {role === 'member' && (
-            <TrackButton reload={reload} taskName={taskName} buttonClassMod='primary'>
+            <TrackButton reload={reload} taskName={taskName} onSubmit={onTrack} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
             </TrackButton>
@@ -209,6 +210,7 @@ MemberTaskCard.propTypes = {
       lastName: PropTypes.string,
     }),
   ),
+  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default React.memo(MemberTaskCard, compareObjects);

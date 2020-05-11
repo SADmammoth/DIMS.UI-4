@@ -13,12 +13,22 @@ import dateTypes from '../../../../helpers/dateTypes';
 import Client from '../../../../helpers/Client';
 
 function TaskTrackCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close } = props;
+  const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close, reload, match } = props;
 
-  const userId = props.match.params.id;
+  const userId = match.params.id;
 
   const onDelete = ({ dialogValue }) => {
-    return Client.deleteTrack(dialogValue);
+    return Client.deleteTrack(dialogValue).then((response) => {
+      reload();
+      return response;
+    });
+  };
+
+  const onEdit = ({ trackDate, trackNote }) => {
+    return Client.editTrack(id, trackDate, trackNote).then((response) => {
+      reload();
+      return response;
+    });
   };
 
   return (
@@ -49,6 +59,7 @@ function TaskTrackCard(props) {
             trackDate={trackDate}
             trackNote={trackNote}
             buttonContent='Edit'
+            onSubmit={onEdit}
           />
           <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
         </ButtonGroup>
@@ -73,6 +84,7 @@ TaskTrackCard.propTypes = {
       id: PropTypes.string,
     }),
   }).isRequired,
+  reload: PropTypes.func.isRequired,
 };
 
 export default withRouter(React.memo(TaskTrackCard, compareObjects));

@@ -4,34 +4,54 @@ import Form from '../../Form';
 import Button from '../../Button';
 import TextBadge from '../../TextBadge';
 import trackFormInputsAttributes from './trackFormInputsAttributes';
+import Spinner from '../../Spinner';
 
 const TrackForm = (props) => {
-  const { taskName } = props;
+  const { taskName, onSubmit } = props;
   const [inputs, setInputs] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const onSubmitHandler = (data) => {
+    setLoading(true);
+    return onSubmit(data)
+      .then((response) => {
+        setLoading(false);
+        return response;
+      })
+      .catch((response) => {
+        setLoading(false);
+        return response;
+      });
+  };
 
   return (
     <>
-      <Form
-        inputs={trackFormInputsAttributes(props)}
-        onInputsUpdate={setInputs}
-        submitButton={<Button content='Confirm' classMod='secondary' />}
-      >
-        <div className='task-edit__header'>
-          <p className='task-edit__title'>{taskName}</p>
-          <TextBadge>Track</TextBadge>
-        </div>
-        <div className='task-edit__body'>
-          <div className='task-edit__dates'>{inputs.trackDate}</div>
-          <div
-            className='task-edit__description'
-            style={{
-              width: '100%',
-            }}
-          >
-            {inputs.trackNote}
+      {!loading ? (
+        <Form
+          inputs={trackFormInputsAttributes(props)}
+          onInputsUpdate={setInputs}
+          submitButton={<Button content='Confirm' classMod='secondary' />}
+          onSubmit={onSubmitHandler}
+        >
+          <div className='task-edit__header'>
+            <p className='task-edit__title'>{taskName}</p>
+            <TextBadge>Track</TextBadge>
           </div>
-        </div>
-      </Form>
+          <div className='task-edit__body'>
+            <div className='task-edit__dates'>{inputs.trackDate}</div>
+            <div
+              className='task-edit__description'
+              style={{
+                width: '100%',
+              }}
+            >
+              {inputs.trackNote}
+            </div>
+          </div>
+        </Form>
+      ) : (
+        <Spinner centered />
+      )}
     </>
   );
 };
@@ -44,6 +64,7 @@ TrackForm.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date),
   trackNote: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default TrackForm;

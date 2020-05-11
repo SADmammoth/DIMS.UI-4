@@ -21,11 +21,12 @@ export default function wrappedMemberTask({
 }) {
   return (
     <UserContextConsumer>
-      {({ role }) => {
+      {({ userId, role }) => {
         return (
           <MemberTaskCard
             id={id}
             edit={edit}
+            userId={userId}
             taskId={taskId}
             taskName={taskName}
             members={members}

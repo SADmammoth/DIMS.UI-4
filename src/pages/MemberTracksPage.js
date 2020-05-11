@@ -19,7 +19,11 @@ class MemberTracksPage extends React.Component {
     this.state = { tracks: null };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.update();
+  }
+
+  async update() {
     const { match } = this.props;
     const tracksData = await Client.getTracks(match.params.id);
     this.setState({
@@ -40,6 +44,9 @@ class MemberTracksPage extends React.Component {
 
   renderTaskTrack(id, data) {
     const { memberTaskId, taskName, trackNote, trackDate } = data;
+    const reload = () => {
+      this.update();
+    };
     return (
       <TaskTrackCard
         id={id}
@@ -47,6 +54,7 @@ class MemberTracksPage extends React.Component {
         taskName={taskName}
         trackNote={trackNote}
         trackDate={trackDate}
+        reload={reload}
       />
     );
   }

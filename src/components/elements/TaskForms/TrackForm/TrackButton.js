@@ -6,17 +6,31 @@ import TrackForm from './TrackForm';
 
 function TrackButton(props) {
   const modal = React.createRef();
+  const { buttonContent, buttonClassMod, children, onSubmit, ...trackFormProps } = props;
 
   const showModal = () => {
     modal.current.handleShow();
   };
 
-  const { buttonContent, buttonClassMod, children, ...trackFormProps } = props;
+  const handleClose = () => {
+    modal.current.handleClose();
+  };
+
+  const onSubmitHandler = (data) => {
+    return onSubmit(data)
+      .then((res) => {
+        handleClose();
+        return res;
+      })
+      .then((res) => {
+        return res;
+      });
+  };
 
   return (
     <>
       <Modal ref={modal} className='track-create'>
-        <TrackForm {...trackFormProps} />
+        <TrackForm {...trackFormProps} onSubmit={onSubmitHandler} />
       </Modal>
       <Button classMod={buttonClassMod} onClick={showModal}>
         {children || buttonContent}
@@ -29,6 +43,7 @@ TrackButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   buttonClassMod: PropTypes.string.isRequired,
   ...TrackForm.propTypes,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default TrackButton;
