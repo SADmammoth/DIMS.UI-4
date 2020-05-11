@@ -240,28 +240,53 @@ class Client {
     return axios.delete(concatPath(Client.apiPath, 'tasks', taskId));
   }
 
-  static getUserProgress(userId) {
-    // TODO Redo after API update
-    return {};
+  static createUserProgressObject({ _id, taskId, userId, memberTaskId, taskName, trackNote, trackDate }) {
+    return { id: _id, taskId, userId, memberTaskId, taskName, trackNote, trackDate: new Date(trackDate) };
   }
 
-  static getTracks(userId) {
-    // TODO Redo after API update
-    return {};
+  static async getUserProgress(userId) {
+    const progress = (await axios.get(concatPath(Client.apiPath, 'member', userId, 'progress'))).data;
+    const progressObject = {};
+    progress.forEach((progressItem) => {
+      progressObject[progressItem._id] = Client.createTracksObject(progressItem);
+    });
+    return progressObject;
   }
 
-  static createTrack(userId) {
-    // TODO Redo after API update
-    return {};
+  static createTracksObject({ taskName, memberTaskId, trackDate, trackNote }) {
+    return { taskName, memberTaskId, trackNote, trackDate: new Date(trackDate) };
   }
 
-  static editTrack(userId) {
-    // TODO Redo after API update
-    return {};
+  static async getTracks(userId) {
+    const tracks = (await axios.get(concatPath(Client.apiPath, 'member', userId, 'tracks'))).data;
+    const tracksObject = {};
+    tracks.forEach((track) => {
+      console.log(track);
+      tracksObject[track._id] = Client.createTracksObject(track);
+    });
+    return tracksObject;
+  }
+
+  static createTrack(userId, memberTaskId, trackDate, trackNote) {
+    return axios.post(concatPath(Client.apiPath, 'member', userId, 'tasks', memberTaskId, 'track'), {
+      trackDate,
+      trackNote,
+    });
+  }
+
+  static editTrack(trackId, trackDate, trackNote) {
+    return axios.put(concatPath(Client.apiPath, 'tracks', trackId), {
+      trackDate,
+      trackNote,
+    });
   }
 
   static async unassignTask(taskId, userIds) {
     return axios.put(concatPath(Client.apiPath, 'members', 'tasks', taskId), userIds);
+  }
+
+  static deleteTrack(trackId) {
+    return axios.delete(concatPath(Client.apiPath, 'tracks', trackId));
   }
 
   static async checkToken(token) {
@@ -275,7 +300,7 @@ class Client {
     if (login === 'member') {
       role = 'member';
     }
-    return { status: 'success', found: true, token: `${role}token`, role, userId: '2' };
+    return { status: 'success', found: true, token: `${role}token`, role, userId: '5eb4247fefce44ad0c2ffabb' };
   }
 
   static async getUserInfoByToken(token) {
@@ -284,7 +309,7 @@ class Client {
     if (token === 'membertoken') {
       role = 'member';
     }
-    return { role, userId: '2' };
+    return { role, userId: '5eb4247fefce44ad0c2ffabb' };
   }
 }
 
