@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class CollapsableItemsList extends Component {
   constructor(props) {
     super(props);
-    this.state = { items: {}, open: undefined };
+    this.state = { items: {}, open: null };
   }
 
   static getDerivedStateFromProps(props, state) {

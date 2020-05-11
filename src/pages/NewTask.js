@@ -26,7 +26,7 @@ const NewTask = ({ members, match }) => {
     };
 
     if (members.length) {
-      const taskId = (await createTask()).TaskId;
+      const { _id: taskId } = (await createTask()).data;
       await setUsersForTask(store, taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
     } else {
       await createTask();

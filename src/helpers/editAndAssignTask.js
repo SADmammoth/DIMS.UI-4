@@ -7,20 +7,11 @@ import setUsersForTask from './setUsersForTask';
 
 export default async function editAndAssignTask(
   store,
-  { taskName, taskDescription, taskStart, taskDeadline, members },
+  { taskName, taskDescription, taskStart, taskDeadline, members, members_default },
   taskId,
-  prevAssigned = [],
 ) {
-  const assignedTo = checkboxValueSeparator(members);
-  if (
-    !prevAssigned.length ||
-    !compareObjects(
-      assignedTo,
-      prevAssigned.map((el) => el.userId),
-    )
-  ) {
-    await setUsersForTask(taskId, assignedTo, prevAssigned);
-  }
+  console.log(members_default);
+  await setUsersForTask(store, taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
 
   return Client.editTask(
     taskId,

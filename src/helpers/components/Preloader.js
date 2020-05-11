@@ -26,17 +26,12 @@ const Preloader = ({ children, members }) => {
       if (members && Object.keys(members).length) {
         const taskIds = Object.keys(await Client.getTasks());
         const assigned = {};
-
+        console.log(taskIds);
         await Promise.all(
           taskIds.map(async (taskId) => {
-            const userIds = (await Client.getAssigned(members, taskId)).map(({ userId }) => {
-              return userId;
+            const assignedArray = (await Client.getAssigned(taskId)).data.map(({ _id: userId, memberTaskId }) => {
+              return { userId, memberTaskId };
             });
-            const assignedArray = (await Client.getUsersMemberTasks(taskId, userIds)).map(
-              ({ userId, memberTaskId }) => {
-                return { userId, memberTaskId };
-              },
-            );
 
             assigned[taskId] = assignedArray;
           }),

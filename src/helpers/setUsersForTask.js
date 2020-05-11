@@ -9,30 +9,21 @@ export default async function setUsersForTask(store, taskId, assigned, prevAssig
   }
 
   if (!Object.keys(prevAssigned).length) {
-    await Client.assignTask(taskId, assigned);
-    const assignedArray = (await Client.getUsersMemberTasks(taskId, assigned)).map(({ userId, memberTaskId }) => {
-      return { userId, memberTaskId };
-    });
+    const assignedArray = await Client.assignTask(taskId, assigned);
     store.dispatch(actions.assignTask(taskId, assignedArray));
+    return;
   }
 
   const newMembers = arraysSubtraction(assigned, prevAssigned);
+  console.log(newMembers);
   if (newMembers.length) {
-    await Client.assignTask(taskId, newMembers);
-    const assignedArray = (await Client.getUsersMemberTasks(taskId, newMembers)).map(({ userId, memberTaskId }) => {
-      return { userId, memberTaskId };
-    });
+    const assignedArray = (await Client.assignTask(taskId, newMembers)).data;
     store.dispatch(actions.assignTask(taskId, assignedArray));
   }
-
   const deletedMembers = arraysSubtraction(prevAssigned, assigned);
+  console.log(deletedMembers);
   if (deletedMembers.length) {
-    const unassignedArray = (await Client.getUsersMemberTasks(taskId, deletedMembers)).map(
-      ({ userId, memberTaskId }) => {
-        return { userId, memberTaskId };
-      },
-    );
-    await Client.unassignTask(taskId, deletedMembers);
+    const unassignedArray = (await Client.unassignTask(taskId, deletedMembers)).data;
     store.dispatch(actions.unassignTask(taskId, unassignedArray));
   }
 }

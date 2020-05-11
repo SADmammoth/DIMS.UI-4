@@ -2,8 +2,9 @@ import axios from 'axios';
 import url from 'url';
 import path from 'path';
 import Validator from '../Validator';
+import concatPath from '../concatPath';
 
-//TODO Rplace path.join with url.resolve
+//TODO Rplace path.join with concatPath
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
@@ -12,7 +13,7 @@ class Client {
   static states = ['active', 'success', 'fail'];
 
   static async getDirections() {
-    (await axios.get(url.resolve(Client.apiPath, 'directions'))).data.forEach((direction) => {
+    (await axios.get(concatPath(Client.apiPath, 'directions'))).data.forEach((direction) => {
       Client.directions[direction._id] = direction.name;
     });
   }
@@ -60,7 +61,7 @@ class Client {
   }
 
   static async getMembers() {
-    const members = (await axios.get(url.resolve(Client.apiPath, 'members'))).data;
+    const members = (await axios.get(concatPath(Client.apiPath, 'members', 'profile'))).data;
 
     const membersObject = {};
     members.forEach((member) => {
@@ -70,7 +71,7 @@ class Client {
   }
 
   static postMember(
-    name,
+    firstName,
     lastName,
     email,
     direction,
@@ -84,23 +85,20 @@ class Client {
     skype,
     startDate,
   ) {
-    return axios.post(url.resolve(Client.apiPath, 'members'), {
-      headers: Client.defaultHeaders,
-      body: {
-        name,
-        lastName,
-        email,
-        directionId: Client.getDirectionId(direction),
-        sex,
-        education,
-        birthDate: birthDate.toISOString(),
-        UniversityAverageScore: parseFloat(universityAverageScore),
-        MathScore: parseInt(mathScore, 10),
-        address,
-        mobilePhone: mobilePhone.replace(/[^0-9()+]/g, ''),
-        skype,
-        startDate: startDate.toISOString(),
-      },
+    return axios.post(concatPath(Client.apiPath, 'members', 'profile'), {
+      firstName,
+      lastName,
+      email,
+      directionId: direction,
+      sex,
+      education,
+      birthDate: birthDate.toISOString(),
+      universityAverageScore: parseFloat(universityAverageScore),
+      mathScore: parseInt(mathScore, 10),
+      address,
+      mobilePhone: mobilePhone.replace(/[^0-9()+]/g, ''),
+      skype,
+      startDate: startDate.toISOString(),
     });
   }
 
@@ -120,7 +118,7 @@ class Client {
     skype,
     startDate,
   ) {
-    return axios.put(url.resolve(Client.apiPath, path.join('members', userId.toString())), {
+    return axios.put(concatPath(Client.apiPath, path.join('members', userId.toString(), 'profile')), {
       firstName,
       lastName,
       email,
@@ -138,86 +136,74 @@ class Client {
   }
 
   static createTasksObject(tasksResponse) {
-    const { _id: taskId, taskName, taskDescription, startDate, deadlineDate } = tasksResponse;
+    const { _id: taskId, taskName, taskDescription, startDate, deadlineDate, assignedTo } = tasksResponse;
     const tasks = {};
     tasks.id = taskId.toString();
-    tasks.taskId = taskId;
+    tasks.taskId = taskId.toString();
     tasks.taskName = taskName;
     tasks.taskDescription = taskDescription;
     tasks.taskStart = new Date(startDate);
     tasks.taskDeadline = new Date(deadlineDate);
+    tasks.assignedTo = assignedTo.map(({ _id: userId, memberTaskId }) => {
+      return {
+        userId,
+        memberTaskId,
+      };
+    });
     return tasks;
   }
 
   static async getTasks() {
-    const tasks = (await axios.get(url.resolve(Client.apiPath, 'tasks'), { headers: Client.defaultHeaders })).data;
+    const tasks = (await axios.get(concatPath(Client.apiPath, 'tasks'), { params: { includeAssigned: true } })).data;
 
     const tasksObject = {};
     await Promise.all(
       tasks.map(async (task) => {
-        tasksObject[task.taskId] = Client.createTasksObject(task);
-        // tasksObject[task.taskId].assignedTo = await this.getAssigned(task.TaskId);
+        tasksObject[task._id] = Client.createTasksObject(task);
       }),
     );
     return tasksObject;
   }
 
   static createUserTasksObject(userTasksResponse) {
-    const { UserId, TaskId, TaskName, Description, StartDate, DeadlineDate, State } = userTasksResponse;
+    const { _id, userId, taskId, taskName, taskDescription, startDate, deadlineDate, state } = userTasksResponse;
     const userTasks = {};
 
-    userTasks.id = TaskId.toString() + UserId.toString();
-    userTasks.userId = UserId;
-    userTasks.taskId = TaskId;
-    userTasks.taskName = TaskName;
-    userTasks.taskDescription = Description;
-    userTasks.taskStart = new Date(StartDate);
-    userTasks.taskDeadline = new Date(DeadlineDate);
-    userTasks.state = State;
+    userTasks.id = _id;
+    userTasks.userId = userId;
+    userTasks.taskId = taskId;
+    userTasks.taskName = taskName;
+    userTasks.taskDescription = taskDescription;
+    userTasks.taskStart = new Date(startDate);
+    userTasks.taskDeadline = new Date(deadlineDate);
+    userTasks.state = state;
     return userTasks;
   }
 
   static async getUserTasks(userId) {
     const userTasks = (
-      await axios.get(url.resolve(Client.apiPath, 'user', path.join('tasks', userId)), {
+      await axios.get(concatPath(Client.apiPath, 'members', userId.toString(), 'tasks'), {
         headers: Client.defaultHeaders,
       })
     ).data;
     const userTasksObject = {};
 
     userTasks.forEach((userTask) => {
-      userTasksObject[userTask.TaskId.toString() + userTask.UserId.toString()] = Client.createUserTasksObject(userTask);
+      userTasksObject[userTask._id] = Client.createUserTasksObject(userTask);
     });
     return userTasksObject;
   }
 
   static assignTask(taskId, usersIds) {
-    // return axios.post(url.resolve(Client.apiPath, 'user', 'task', 'add', taskId.toString()), {
-    //   headers: Client.defaultHeaders,
-    //   body: usersIds,
-    // });
+    return axios.post(concatPath(Client.apiPath, 'tasks', taskId.toString()), usersIds);
   }
 
-  static async getAssigned(members, taskId) {
-    const allUsers = { ...members };
-    const assignedTo = [];
-    let userTasks;
-
-    await Promise.all(
-      Object.entries(allUsers).map(async ([userId, user]) => {
-        userTasks = await this.getUserTasks(userId);
-        Object.values(userTasks).forEach((userTask) => {
-          if (userTask.taskId.toString() === taskId.toString()) {
-            assignedTo.push({ userId, firstName: user.firstName, lastName: user.lastName, memberTaskId: userTask.id });
-          }
-        });
-      }),
-    );
-    return assignedTo;
+  static getAssigned(taskId) {
+    return axios.get(concatPath(Client.apiPath, 'tasks', taskId.toString(), 'assigned'));
   }
 
   static editTask(taskId, taskName, taskDescription, startDate, deadlineDate) {
-    return axios.put(url.resolve(Client.apiPath, path.join('tasks', taskId.toString())), {
+    return axios.put(concatPath(Client.apiPath, path.join('tasks', taskId.toString())), {
       taskId,
       taskName,
       taskDescription,
@@ -234,12 +220,12 @@ class Client {
       deadlineDate: deadlineDate.toISOString(),
     };
 
-    return axios.post(url.resolve(Client.apiPath, 'tasks'), { headers: Client.defaultHeaders, body: data }).data;
+    return axios.post(concatPath(Client.apiPath, 'tasks'), data);
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
     const StatusId = (Client.states.indexOf(Status) + 1).toString();
-    return axios.put(url.resolve(Client.apiPath, 'user', 'task'), {
+    return axios.put(concatPath(Client.apiPath, 'user', 'task'), {
       TaskId: TaskId.toString(),
       UserId: UserId.toString(),
       StatusId,
@@ -247,11 +233,11 @@ class Client {
   }
 
   static deleteMember(userId) {
-    return axios.delete(url.resolve(Client.apiPath, 'profile', 'delete', userId), { headers: Client.defaultHeaders });
+    return axios.delete(concatPath(Client.apiPath, 'members', userId));
   }
 
   static deleteTask(taskId) {
-    return axios.delete(url.resolve(Client.apiPath, 'task', 'delete', taskId), { headers: Client.defaultHeaders });
+    return axios.delete(concatPath(Client.apiPath, 'tasks', taskId));
   }
 
   static getUserProgress(userId) {
@@ -275,37 +261,7 @@ class Client {
   }
 
   static async unassignTask(taskId, userIds) {
-    // TODO Restore after API bug fix
-    // const userTasks = [];
-    // const allUsers = Object.keys(await Client.getMembers());
-    // let foundTasks;
-    // await Promise.all(
-    //   allUsers.map(async (userId) => {
-    //     foundTasks = Object.values(await Client.getUserTasks(userId.toString())).filter(
-    //       ({ taskId: candidateTaskId }) => {
-    //         return taskId === candidateTaskId;
-    //       },
-    //     );
-    //     if (foundTasks.length) {
-    //       userTasks.push(...foundTasks);
-    //     }
-    //   }),
-    // );
-    // await Client.deleteTask(taskId.toString());
-    // let createdTask = false;
-    // await Promise.all(
-    //   Object.values(userTasks).map(async (userTask) => {
-    //     if (userIds.indexOf(userTask.userId) < 0) {
-    //       const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
-    //       if (!createdTask) {
-    //         createdTask = true;
-    //         await Client.postTask(taskName, taskDescription, taskStart, taskDeadline);
-    //       }
-    //       await Client.setUserTaskState(taskId.toString(), userId.toString(), state);
-    //     }
-    //   }),
-    // );
-    // await Client.assignTask(taskId, arraysSubtraction(allUsers, userIds));
+    return axios.put(concatPath(Client.apiPath, 'members', 'tasks', taskId), userIds);
   }
 
   static async checkToken(token) {

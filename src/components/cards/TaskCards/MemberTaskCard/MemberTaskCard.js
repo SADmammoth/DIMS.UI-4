@@ -45,7 +45,7 @@ function MemberTaskCard(props) {
     userId = id.slice(taskId.toString().length);
   }
 
-  const onEdit = (data) => editAndAssignTask(store, data, taskId, assignedTo);
+  const onEdit = (data) => editAndAssignTask(store, data, taskId);
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTask(dialogValue);
   };
