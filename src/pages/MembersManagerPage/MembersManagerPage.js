@@ -11,17 +11,40 @@ import getNavItems from '../../helpers/getNavItems';
 import Footer from '../../components/elements/Footer';
 import UserContextConsumer from '../../helpers/components/UserContextConsumer';
 import WrappedMemberCard from './WrappedMemberCard';
+import filterMembers from '../../helpers/filterMembers';
 
 class MembersManagerPage extends React.Component {
-  renderMembers() {
-    const { members } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = { filterString: null };
+  }
+
+  setFilterString = (filterString) => {
+    this.setState({ filterString });
+  };
+
+  renderMembers(filterString) {
+    let { members } = this.props;
+
     if (!Object.keys(members).length) {
       return [];
     }
 
-    return Object.entries(members).map(({ 0: id, 1: data }) => {
+    let membersArray;
+    if (filterString) {
+      membersArray = Object.entries(members).filter(([id, data]) => {
+        console.log(data);
+        return filterMembers(data, filterString) ? [id, data] : null;
+      });
+    } else {
+      membersArray = Object.entries(members);
+    }
+
+    const membersList = membersArray.map(([id, data]) => {
       return this.renderMember(id, data);
     });
+
+    return membersList;
   }
 
   renderMember(id, data) {
@@ -30,6 +53,8 @@ class MembersManagerPage extends React.Component {
 
   render() {
     const { members } = this.props;
+    const { filterString } = this.state;
+
     return (
       <>
         <Helmet>
@@ -38,14 +63,19 @@ class MembersManagerPage extends React.Component {
         <UserContextConsumer>
           {({ role, userId }) => {
             return (
-              <Header role={role} title='Members' navItems={getNavItems({ role, userId }, this.props.match.path)} />
+              <Header
+                role={role}
+                title='Members'
+                filterFunction={this.setFilterString}
+                navItems={getNavItems({ role, userId }, this.props.match.path)}
+              />
             );
           }}
         </UserContextConsumer>
         <main>
           <ContainerComponent>
             {members ? (
-              <CollapsableItemsConditionalList itemsPluralName='members' items={this.renderMembers()} />
+              <CollapsableItemsConditionalList itemsPluralName='members' items={this.renderMembers(filterString)} />
             ) : (
               <Spinner centered />
             )}

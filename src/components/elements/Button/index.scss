@@ -13,6 +13,9 @@
     color: $light-text;
     font-size: 1.1rem;
     fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
   }
 
   &_success {
@@ -20,7 +23,10 @@
     background-color: $success;
     color: white;
     font-size: 1.1rem;
-    fill: white;
+    fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
   }
 
   &_error {
@@ -28,7 +34,10 @@
     background-color: $error;
     color: white;
     font-size: 1.1rem;
-    fill: white;
+    fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
   }
 
   &_ghost {
@@ -44,6 +53,9 @@
     color: $common-text;
     font-size: 1.1rem;
     fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
   }
 
   &_navItem {
@@ -53,6 +65,9 @@
     font-size: 1.2rem;
     font-weight: bold;
     fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
 
     &_active {
       padding: 5px 20px;
@@ -62,6 +77,9 @@
       font-size: 1.2rem;
       font-weight: bold;
       fill: $common-text;
+      & > svg[class*='icon-'] {
+        fill: $common-text;
+      }
     }
   }
 
@@ -72,6 +90,9 @@
     color: $common-text;
     color: inherit;
     fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
   }
 
   &_interactive {
@@ -83,5 +104,8 @@
     color: $common-text;
     color: inherit;
     fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
   }
 }
