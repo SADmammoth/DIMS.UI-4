@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect, withRouter } from 'react-router-dom';
+import cookie from 'react-cookies';
 import Client from '../Client';
 import LogOut from './LogOut';
 import GuestRoutes from '../../Routes/GuestRoutes';
@@ -23,7 +24,7 @@ class AuthenticationManager extends Component {
   logOut = () => {
     const { deleteUserInfo } = this.props;
     this.setState({ authenticated: null });
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     deleteUserInfo();
   };
 
@@ -33,11 +34,13 @@ class AuthenticationManager extends Component {
 
   authenticate = async (login, password) => {
     const { authorize } = this.props;
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken || !(await Client.checkToken(authToken))) {
+    const authToken = localStorage.getItem('token');
+
+    if (!authToken) {
       if (!login || !password) {
         return { status: 'fail' };
       }
+
       const { status, found, token, role, userId } = await Client.signIn(login, password);
       if (status === 'fail' && found) {
         return { status, message: 'Incorrect password' };
@@ -46,12 +49,14 @@ class AuthenticationManager extends Component {
         return { status, message: 'Incorrect userName' };
       }
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('token', token);
       authorize(role, userId);
 
       this.redirectHome();
     } else {
-      const { role, userId } = await Client.getUserInfoByToken(authToken);
+      Client.setToken(authToken);
+      const { role, userId } = await Client.confirmUser();
+      console.log(role);
       authorize(role, userId);
     }
 

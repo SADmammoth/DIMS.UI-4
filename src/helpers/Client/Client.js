@@ -8,14 +8,24 @@ import concatPath from '../concatPath';
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
+  static authPath = process.env.REACT_APP_AUTHAPIPATH;
+
   static directions = {};
 
   static states = ['active', 'success', 'fail'];
 
+  static token = null;
+
+  static defaultHeader = {};
+
+  static role = 'guest';
+
   static async getDirections() {
-    (await axios.get(concatPath(Client.apiPath, 'directions'))).data.forEach((direction) => {
-      Client.directions[direction._id] = direction.name;
-    });
+    (await axios.get(concatPath(Client.apiPath, 'directions'), { headers: Client.defaultHeader })).data.forEach(
+      (direction) => {
+        Client.directions[direction._id] = direction.name;
+      },
+    );
   }
 
   static getDirectionId(directionName) {
@@ -61,7 +71,11 @@ class Client {
   }
 
   static async getMembers() {
-    const members = (await axios.get(concatPath(Client.apiPath, 'members', 'profile'))).data;
+    const members = (
+      await axios.get(concatPath(Client.apiPath, 'members', 'profile'), {
+        headers: Client.defaultHeader,
+      })
+    ).data;
 
     const membersObject = {};
     members.forEach((member) => {
@@ -85,21 +99,25 @@ class Client {
     skype,
     startDate,
   ) {
-    return axios.post(concatPath(Client.apiPath, 'members', 'profile'), {
-      firstName,
-      lastName,
-      email,
-      directionId: direction,
-      sex,
-      education,
-      birthDate: birthDate.toISOString(),
-      universityAverageScore: parseFloat(universityAverageScore),
-      mathScore: parseInt(mathScore, 10),
-      address,
-      mobilePhone: mobilePhone.replace(/[^0-9()+]/g, ''),
-      skype,
-      startDate: startDate.toISOString(),
-    });
+    return axios.post(
+      concatPath(Client.apiPath, 'members', 'profile'),
+      {
+        firstName,
+        lastName,
+        email,
+        directionId: direction,
+        sex,
+        education,
+        birthDate: birthDate.toISOString(),
+        universityAverageScore: parseFloat(universityAverageScore),
+        mathScore: parseInt(mathScore, 10),
+        address,
+        mobilePhone: mobilePhone.replace(/[^0-9()+]/g, ''),
+        skype,
+        startDate: startDate.toISOString(),
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static editMember(
@@ -118,21 +136,25 @@ class Client {
     skype,
     startDate,
   ) {
-    return axios.put(concatPath(Client.apiPath, path.join('members', userId.toString(), 'profile')), {
-      firstName,
-      lastName,
-      email,
-      directionId: Client.getDirectionId(direction),
-      sex,
-      education,
-      birthDate: birthDate.toISOString(),
-      universityAverageScore: parseFloat(universityAverageScore),
-      mathScore,
-      address,
-      mobilePhone: mobilePhone.replace(/[^0-9+]/g, ''),
-      skype,
-      startDate: startDate.toISOString(),
-    });
+    return axios.put(
+      concatPath(Client.apiPath, path.join('members', userId.toString(), 'profile')),
+      {
+        firstName,
+        lastName,
+        email,
+        directionId: Client.getDirectionId(direction),
+        sex,
+        education,
+        birthDate: birthDate.toISOString(),
+        universityAverageScore: parseFloat(universityAverageScore),
+        mathScore,
+        address,
+        mobilePhone: mobilePhone.replace(/[^0-9+]/g, ''),
+        skype,
+        startDate: startDate.toISOString(),
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static createTasksObject(tasksResponse) {
@@ -154,7 +176,12 @@ class Client {
   }
 
   static async getTasks() {
-    const tasks = (await axios.get(concatPath(Client.apiPath, 'tasks'), { params: { includeAssigned: true } })).data;
+    const tasks = (
+      await axios.get(concatPath(Client.apiPath, 'tasks'), {
+        params: { includeAssigned: true },
+        headers: Client.defaultHeader,
+      })
+    ).data;
 
     const tasksObject = {};
     await Promise.all(
@@ -183,7 +210,7 @@ class Client {
   static async getUserTasks(userId) {
     const userTasks = (
       await axios.get(concatPath(Client.apiPath, 'members', userId.toString(), 'tasks'), {
-        headers: Client.defaultHeaders,
+        headers: Client.defaultHeader,
       })
     ).data;
     const userTasksObject = {};
@@ -195,21 +222,29 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(concatPath(Client.apiPath, 'tasks', taskId.toString()), usersIds);
+    return axios.post(concatPath(Client.apiPath, 'tasks', taskId.toString()), usersIds, {
+      headers: Client.defaultHeader,
+    });
   }
 
   static getAssigned(taskId) {
-    return axios.get(concatPath(Client.apiPath, 'tasks', taskId.toString(), 'assigned'));
+    return axios.get(concatPath(Client.apiPath, 'tasks', taskId.toString(), 'assigned'), {
+      headers: Client.defaultHeader,
+    });
   }
 
   static editTask(taskId, taskName, taskDescription, startDate, deadlineDate) {
-    return axios.put(concatPath(Client.apiPath, path.join('tasks', taskId.toString())), {
-      taskId,
-      taskName,
-      taskDescription,
-      startDate: startDate.toISOString(),
-      deadlineDate: deadlineDate.toISOString(),
-    });
+    return axios.put(
+      concatPath(Client.apiPath, path.join('tasks', taskId.toString())),
+      {
+        taskId,
+        taskName,
+        taskDescription,
+        startDate: startDate.toISOString(),
+        deadlineDate: deadlineDate.toISOString(),
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static postTask(taskName, taskDescription, startDate, deadlineDate) {
@@ -220,24 +255,28 @@ class Client {
       deadlineDate: deadlineDate.toISOString(),
     };
 
-    return axios.post(concatPath(Client.apiPath, 'tasks'), data);
+    return axios.post(concatPath(Client.apiPath, 'tasks'), data, { headers: Client.defaultHeader });
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
     const StatusId = (Client.states.indexOf(Status) + 1).toString();
-    return axios.put(concatPath(Client.apiPath, 'user', 'task'), {
-      TaskId: TaskId.toString(),
-      UserId: UserId.toString(),
-      StatusId,
-    });
+    return axios.put(
+      concatPath(Client.apiPath, 'user', 'task'),
+      {
+        TaskId: TaskId.toString(),
+        UserId: UserId.toString(),
+        StatusId,
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static deleteMember(userId) {
-    return axios.delete(concatPath(Client.apiPath, 'members', userId));
+    return axios.delete(concatPath(Client.apiPath, 'members', userId), { headers: Client.defaultHeader });
   }
 
   static deleteTask(taskId) {
-    return axios.delete(concatPath(Client.apiPath, 'tasks', taskId));
+    return axios.delete(concatPath(Client.apiPath, 'tasks', taskId), { headers: Client.defaultHeader });
   }
 
   static createUserProgressObject({ _id, taskId, userId, memberTaskId, taskName, trackNote, trackDate }) {
@@ -245,7 +284,9 @@ class Client {
   }
 
   static async getUserProgress(userId) {
-    const progress = (await axios.get(concatPath(Client.apiPath, 'member', userId, 'progress'))).data;
+    const progress = (
+      await axios.get(concatPath(Client.apiPath, 'member', userId, 'progress'), { headers: Client.defaultHeader })
+    ).data;
     const progressObject = {};
     progress.forEach((progressItem) => {
       progressObject[progressItem._id] = Client.createTracksObject(progressItem);
@@ -258,7 +299,9 @@ class Client {
   }
 
   static async getTracks(userId) {
-    const tracks = (await axios.get(concatPath(Client.apiPath, 'member', userId, 'tracks'))).data;
+    const tracks = (
+      await axios.get(concatPath(Client.apiPath, 'member', userId, 'tracks'), { headers: Client.defaultHeader })
+    ).data;
     const tracksObject = {};
     tracks.forEach((track) => {
       console.log(track);
@@ -268,48 +311,70 @@ class Client {
   }
 
   static createTrack(userId, memberTaskId, trackDate, trackNote) {
-    return axios.post(concatPath(Client.apiPath, 'member', userId, 'tasks', memberTaskId, 'track'), {
-      trackDate,
-      trackNote,
-    });
+    return axios.post(
+      concatPath(Client.apiPath, 'member', userId, 'tasks', memberTaskId, 'track'),
+      {
+        trackDate,
+        trackNote,
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static editTrack(trackId, trackDate, trackNote) {
-    return axios.put(concatPath(Client.apiPath, 'tracks', trackId), {
-      trackDate,
-      trackNote,
-    });
+    return axios.put(
+      concatPath(Client.apiPath, 'tracks', trackId),
+      {
+        trackDate,
+        trackNote,
+      },
+      { headers: Client.defaultHeader },
+    );
   }
 
   static async unassignTask(taskId, userIds) {
-    return axios.put(concatPath(Client.apiPath, 'members', 'tasks', taskId), userIds);
+    return axios.put(concatPath(Client.apiPath, 'members', 'tasks', taskId), userIds, {
+      headers: Client.defaultHeader,
+    });
   }
 
   static deleteTrack(trackId) {
-    return axios.delete(concatPath(Client.apiPath, 'tracks', trackId));
+    return axios.delete(concatPath(Client.apiPath, 'tracks', trackId), { headers: Client.defaultHeader });
   }
 
-  static async checkToken(token) {
-    // TODO Redo after API update
-    return true;
+  static setToken(token) {
+    Client.token = token;
+    console.log(0);
+    Client.defaultHeader = { Authorization: `bearer ${Client.token}` };
   }
 
-  static signIn(login, password) {
-    // TODO Redo after API update
-    let role = 'admin';
-    if (login === 'member') {
-      role = 'member';
+  static async signIn(login, password) {
+    const response = await axios.post(
+      concatPath(Client.authPath, 'users', 'login'),
+      {
+        login,
+        password,
+      },
+      { headers: Client.defaultHeader },
+    );
+    const { token: jwtToken, userId, role, login: authorizedLogin } = response.data;
+    if (login !== authorizedLogin) {
+      return null;
     }
-    return { status: 'success', found: true, token: `${role}token`, role, userId: '5eb4247fefce44ad0c2ffabb' };
+    const token = jwtToken.replace('JWT ', '');
+
+    return { token, userId, role, login, status: 'success' };
   }
 
-  static async getUserInfoByToken(token) {
-    // TODO Redo after API update
-    let role = 'admin';
-    if (token === 'membertoken') {
-      role = 'member';
+  static async confirmUser() {
+    const { role, userId } = (
+      await axios.get(concatPath(Client.authPath, 'echo'), { headers: Client.defaultHeader })
+    ).data;
+
+    if (!userId) {
+      return { role, userId: '0' };
     }
-    return { role, userId: '5eb4247fefce44ad0c2ffabb' };
+    return { role, userId };
   }
 }
 

@@ -9,7 +9,7 @@ import * as assignedTasksActions from '../../redux/actions/assignedTasksActions'
 import preloadTheme from '../preloadTheme';
 import getStateMembers from '../getStateMembers';
 
-const Preloader = ({ children, members }) => {
+const Preloader = ({ children, members, role }) => {
   preloadTheme();
   useEffect(() => {
     async function fetchMembers() {
@@ -18,8 +18,10 @@ const Preloader = ({ children, members }) => {
       store.dispatch(membersActions.setMembers(fetchedMembers));
     }
 
-    fetchMembers();
-  }, []);
+    if (role !== 'member') {
+      fetchMembers();
+    }
+  }, [role]);
 
   useEffect(() => {
     async function fetchAssignedTasks() {
@@ -39,9 +41,10 @@ const Preloader = ({ children, members }) => {
         store.dispatch(assignedTasksActions.setAssignedToTasks(assigned));
       }
     }
-
-    fetchAssignedTasks();
-  }, [members]);
+    if (role !== 'member') {
+      fetchAssignedTasks();
+    }
+  }, [members, role]);
 
   return <>{children}</>;
 };
@@ -49,6 +52,7 @@ const Preloader = ({ children, members }) => {
 Preloader.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   members: PropTypes.objectOf(PropTypes.object).isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 export default connect(getStateMembers)(Preloader);

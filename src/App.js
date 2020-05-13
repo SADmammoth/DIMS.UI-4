@@ -11,18 +11,20 @@ import ScrollToTop from './helpers/components/ScrollToTop';
 const App = () => {
   return (
     <Provider store={store}>
-      <Preloader>
-        <Router>
-          <ScrollToTop />
-          <AuthorizationManager>
-            <UserContextConsumer>
-              {({ role, userId }) => {
-                return <Routes role={role} userId={userId} />;
-              }}
-            </UserContextConsumer>
-          </AuthorizationManager>
-        </Router>
-      </Preloader>
+      <Router>
+        <ScrollToTop />
+        <AuthorizationManager>
+          <UserContextConsumer>
+            {({ role, userId }) => {
+              return (
+                <Preloader role={role}>
+                  <Routes role={role} userId={userId} />
+                </Preloader>
+              );
+            }}
+          </UserContextConsumer>
+        </AuthorizationManager>
+      </Router>
     </Provider>
   );
 };

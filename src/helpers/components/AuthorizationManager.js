@@ -14,17 +14,13 @@ class AuthorizationManager extends Component {
 
   authorize = (role, userId) => {
     const { roles } = this.state;
-    if (!role || !userId) {
-      this.setState({ authorizedUser: JSON.parse(localStorage.getItem('userInfo')) });
-    }
+
     if (roles.includes(role)) {
-      localStorage.setItem('userInfo', JSON.stringify({ role, userId }));
       this.setState({ authorizedUser: { role, userId } });
     }
   };
 
   deleteUserInfo = () => {
-    localStorage.removeItem('userInfo');
     this.setState({ authorizedUser: { role: 'guest', userId: 'guest' } });
   };
 
