@@ -42,7 +42,7 @@
   }
 
   &.extended + * {
-    top: 135px;
+    top: 145px;
   }
 
   & > .container {
@@ -117,6 +117,7 @@
 
     display: flex;
     justify-content: center;
+
     .form {
       display: flex;
       justify-content: center;
@@ -130,7 +131,6 @@
     transform: translateX(-50%);
     height: 20px;
     width: 500px;
-    margin: 5px auto;
     font-size: 1.2rem;
     margin-right: 200px;
   }

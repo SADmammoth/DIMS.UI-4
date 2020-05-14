@@ -33,7 +33,6 @@ class MembersManagerPage extends React.Component {
     let membersArray;
     if (filterString) {
       membersArray = Object.entries(members).filter(([id, data]) => {
-        console.log(data);
         return filterMembers(data, filterString) ? [id, data] : null;
       });
     } else {

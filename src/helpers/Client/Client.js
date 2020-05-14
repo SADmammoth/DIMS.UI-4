@@ -1,8 +1,7 @@
 import axios from 'axios';
-import path from 'path';
 import Validator from '../Validator';
+import concatPath from '../concatPath';
 
-//TODO Rplace path.join with url.resolve
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 
@@ -50,7 +49,7 @@ class Client {
   }
 
   static async getMembers() {
-    const members = (await axios.get(path.join(Client.apiPath, 'profiles'))).data;
+    const members = (await axios.get(concatPath(Client.apiPath, 'profiles'))).data;
 
     const membersObject = {};
     members.forEach((member) => {
@@ -74,7 +73,7 @@ class Client {
     Skype,
     StartDate,
   ) {
-    return axios.post(path.join(Client.apiPath, 'create'), {
+    return axios.post(concatPath(Client.apiPath, 'create'), {
       Name,
       LastName,
       Email,
@@ -107,7 +106,7 @@ class Client {
     Skype,
     StartDate,
   ) {
-    return axios.put(path.join(Client.apiPath, 'profile', 'edit', UserId.toString()), {
+    return axios.put(concatPath(Client.apiPath, 'profile', 'edit', UserId.toString()), {
       Name,
       LastName,
       Email,
@@ -137,7 +136,7 @@ class Client {
   }
 
   static async getTasks() {
-    const tasks = (await axios.get(path.join(Client.apiPath, 'tasks'))).data;
+    const tasks = (await axios.get(concatPath(Client.apiPath, 'tasks'))).data;
 
     const tasksObject = {};
     await Promise.all(
@@ -164,7 +163,7 @@ class Client {
   }
 
   static async getUserTasks(userId) {
-    const userTasks = (await axios.get(path.join(Client.apiPath, 'user', 'tasks', userId))).data;
+    const userTasks = (await axios.get(concatPath(Client.apiPath, 'user', 'tasks', userId))).data;
     const userTasksObject = {};
 
     userTasks.forEach((userTask) => {
@@ -174,11 +173,11 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
+    return axios.post(concatPath(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
   }
 
   static async getUsersMemberTasks(taskId, usersIds) {
-    await axios.post(path.join(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
+    await axios.post(concatPath(Client.apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
     let allUserTasks;
     let userTasks;
 
@@ -224,7 +223,7 @@ class Client {
   }
 
   static editTask(TaskId, Name, Description, StartDate, DeadlineDate) {
-    return axios.put(path.join(Client.apiPath, 'task', 'edit'), {
+    return axios.put(concatPath(Client.apiPath, 'task', 'edit'), {
       TaskId,
       Name,
       Description,
@@ -234,7 +233,7 @@ class Client {
   }
 
   static postTask(Name, Description, StartDate, DeadlineDate) {
-    return axios.post(path.join(Client.apiPath, 'task', 'create'), {
+    return axios.post(concatPath(Client.apiPath, 'task', 'create'), {
       Name,
       Description,
       StartDate: Validator.fromDateToMask(StartDate, 'yyyy-MM-dd'),
@@ -244,7 +243,7 @@ class Client {
 
   static setUserTaskState(TaskId, UserId, Status) {
     const StatusId = (Client.states.indexOf(Status) + 1).toString();
-    return axios.put(path.join(Client.apiPath, 'user', 'task'), {
+    return axios.put(concatPath(Client.apiPath, 'user', 'task'), {
       TaskId: TaskId.toString(),
       UserId: UserId.toString(),
       StatusId,
@@ -252,11 +251,11 @@ class Client {
   }
 
   static deleteMember(userId) {
-    return axios.delete(path.join(Client.apiPath, 'profile', 'delete', userId));
+    return axios.delete(concatPath(Client.apiPath, 'profile', 'delete', userId));
   }
 
   static deleteTask(taskId) {
-    return axios.delete(path.join(Client.apiPath, 'task', 'delete', taskId));
+    return axios.delete(concatPath(Client.apiPath, 'task', 'delete', taskId));
   }
 
   static getUserProgress(userId) {

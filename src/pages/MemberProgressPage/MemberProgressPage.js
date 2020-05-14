@@ -33,7 +33,7 @@ class MemberProgressPage extends React.Component {
 
   renderProgress() {
     const { tasks } = this.state;
-    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
+    return Object.entries(tasks).map(([id, data]) => {
       return this.renderProgressCard(id, data);
     });
   }

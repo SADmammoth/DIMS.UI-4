@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -12,14 +12,15 @@ import Form from '../Form';
 import regexpEscape from '../../../helpers/Validator/regexpEscape';
 import Button from '../Button';
 import Modal from '../Modal/Modal';
+import { ReactComponent as SearchIcon } from '../../../assets/icons/Search.svg';
 
 function Header(props) {
   const { title, navItems, role, filterFunction } = props;
   const [filterRegexpMode, setFilterRegexpMode] = useState(false);
-  const modal = useRef({});
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
 
   return (
-    <header className={`header fixed-top${filterFunction ? ' extended' : ''}`}>
+    <header className={`header fixed-top${showFilterPanel ? ' extended' : ''}`}>
       <ContainerComponent display='flex'>
         <p className='site-title'>
           <Link to='/'>DIMSUI</Link>
@@ -43,18 +44,19 @@ function Header(props) {
                 </>
               )}
             </>
-            {role && <SettingsButton />}
             {filterFunction && (
               <Button
+                classMod='invisible'
                 onClick={() => {
-                  modal.current.toggle();
+                  setShowFilterPanel(!showFilterPanel);
                 }}
               >
-                Search
+                <SearchIcon className='icon-search' />
               </Button>
             )}
+            {role && <SettingsButton />}
           </ContainerComponent>
-          <Modal ref={modal} className='input-panel' backface={false}>
+          <Modal show={showFilterPanel} className='input-panel' backface={false}>
             {filterFunction && (
               <Form
                 inputs={[
@@ -69,7 +71,6 @@ function Header(props) {
                       if (filterRegexpMode) {
                         try {
                           filterString = new RegExp(input, 'i');
-                          console.log(new RegExp(input, 'i'));
                         } catch (err) {
                           filterFunction();
                         }
@@ -78,7 +79,7 @@ function Header(props) {
                       } else {
                         filterString = regexpEscape(input);
                       }
-                      console.log(filterString);
+
                       filterFunction(filterString);
                     },
                   },
@@ -89,7 +90,6 @@ function Header(props) {
                     description: 'Regexp mode',
                     onChange: (name, input) => {
                       setFilterRegexpMode(input.includes('on'));
-                      console.log(filterRegexpMode);
                     },
                     valueOptions: [{ label: 'Regexp mode', value: 'on' }],
                   },
