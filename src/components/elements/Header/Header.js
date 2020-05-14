@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,10 +10,13 @@ import MobileNav from './MobileNav';
 import matchMaxWidth from '../../../helpers/matchMaxWidth';
 import Form from '../Form';
 import regexpEscape from '../../../helpers/Validator/regexpEscape';
+import Button from '../Button';
+import Modal from '../Modal/Modal';
 
 function Header(props) {
   const { title, navItems, role, filterFunction } = props;
   const [filterRegexpMode, setFilterRegexpMode] = useState(false);
+  const modal = useRef({});
 
   return (
     <header className={`header fixed-top${filterFunction ? ' extended' : ''}`}>
@@ -41,8 +44,17 @@ function Header(props) {
               )}
             </>
             {role && <SettingsButton />}
+            {filterFunction && (
+              <Button
+                onClick={() => {
+                  modal.current.toggle();
+                }}
+              >
+                Search
+              </Button>
+            )}
           </ContainerComponent>
-          <div className='input-panel'>
+          <Modal ref={modal} className='input-panel' backface={false}>
             {filterFunction && (
               <Form
                 inputs={[
@@ -86,7 +98,7 @@ function Header(props) {
                 showNotifications='hideAll'
               />
             )}
-          </div>
+          </Modal>
         </div>
       </ContainerComponent>
     </header>
