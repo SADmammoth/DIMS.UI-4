@@ -8,7 +8,7 @@ class Modal extends React.PureComponent {
   }
 
   static getDerivedStateFromProps(prevProps, state) {
-    if (prevProps.show !== undefined) {
+    if (prevProps.show !== null) {
       return { show: prevProps.show };
     }
 
@@ -61,7 +61,7 @@ class Modal extends React.PureComponent {
 }
 
 Modal.defaultProps = {
-  show: false,
+  show: null,
   backface: true,
   onClose: () => {},
 };

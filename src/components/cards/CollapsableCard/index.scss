@@ -1,0 +1,8 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.card {
+  & > [class*='__body'] {
+    background: $card-bg;
+  }
+}

@@ -13,6 +13,7 @@ import regexpEscape from '../../../helpers/Validator/regexpEscape';
 import Button from '../Button';
 import Modal from '../Modal/Modal';
 import { ReactComponent as SearchIcon } from '../../../assets/icons/Search.svg';
+import { ReactComponent as LogoIcon } from '../../../assets/images/devinc.svg';
 
 function Header(props) {
   const { title, navItems, role, filterFunction } = props;
@@ -23,7 +24,9 @@ function Header(props) {
     <header className={`header fixed-top${showFilterPanel ? ' extended' : ''}`}>
       <ContainerComponent display='flex'>
         <p className='site-title'>
-          <Link to='/'>DIMSUI</Link>
+          <Link to='/'>
+            <LogoIcon className='icon-logo' title='Dev Incubator' />
+          </Link>
         </p>
         <div className='content'>
           <ContainerComponent display='flex'>

@@ -17,9 +17,14 @@
   }
 
   .site-title {
-    width: 10vw;
+    & > * {
+      fill: $common-text;
+      margin-left: 20px;
+    }
+
     min-width: 100px;
-    padding-right: 5vw;
+    height: 55px;
+    margin-top: 8px;
     box-sizing: border-box;
   }
 

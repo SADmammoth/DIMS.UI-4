@@ -24,7 +24,7 @@ class CollapsableCard extends React.PureComponent {
 
     return (
       <>
-        <article id={id} className={`${className || ''} ${cardClass}-card${!collapsed ? ' open' : ''}`}>
+        <article id={id} className={`card ${className || ''} ${cardClass}-card${!collapsed ? ' open' : ''}`}>
           {React.Children.map(children, (child) => {
             if (!child) {
               return child;
