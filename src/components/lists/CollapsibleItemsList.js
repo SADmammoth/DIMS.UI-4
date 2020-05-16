@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class CollapsableItemsList extends Component {
+class CollapsibleItemsList extends Component {
   constructor(props) {
     super(props);
     this.state = { items: {}, open: undefined };
@@ -90,7 +90,7 @@ class CollapsableItemsList extends Component {
     const { items: stateItems } = this.state;
 
     return (
-      <ul className='list_no-type collapsable-items-list'>
+      <ul className='list_no-type collapsible-items-list'>
         {items.map((item) => (
           <li key={item.props.id}>
             {React.cloneElement(item, {
@@ -105,13 +105,13 @@ class CollapsableItemsList extends Component {
   }
 }
 
-CollapsableItemsList.defaultProps = {
+CollapsibleItemsList.defaultProps = {
   open: null,
 };
 
-CollapsableItemsList.propTypes = {
+CollapsibleItemsList.propTypes = {
   open: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
-export default CollapsableItemsList;
+export default CollapsibleItemsList;

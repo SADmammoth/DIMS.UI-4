@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CollapsableItemsConditionalList from '../../components/lists/CollapsableItemsConditionalList';
+import CollapsibleItemsConditionalList from '../../components/lists/CollapsibleItemsConditionalList';
 import ContainerComponent from '../../components/elements/ContainerComponent';
 import Header from '../../components/elements/Header';
 import Spinner from '../../components/elements/Spinner';
@@ -74,7 +74,7 @@ class MembersManagerPage extends React.Component {
         <main>
           <ContainerComponent>
             {members ? (
-              <CollapsableItemsConditionalList itemsPluralName='members' items={this.renderMembers(filterString)} />
+              <CollapsibleItemsConditionalList itemsPluralName='members' items={this.renderMembers(filterString)} />
             ) : (
               <Spinner centered />
             )}

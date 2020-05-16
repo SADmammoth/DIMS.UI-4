@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function CollapsableCardDescription(props) {
+function CollapsibleCardDescription(props) {
   const { children, cardClass } = props;
   return <div className={`${cardClass}-card__description`}>{children}</div>;
 }
 
-CollapsableCardDescription.propTypes = {
+CollapsibleCardDescription.propTypes = {
   cardClass: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
-export default CollapsableCardDescription;
+export default CollapsibleCardDescription;

@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ListPlaceholder from './ListPlaceholder';
-import CollapsableItemsList from '../CollapsableItemsList';
+import CollapsibleItemsList from '../CollapsibleItemsList';
 
-function CollapsableItemsConditionalList(props) {
+function CollapsibleItemsConditionalList(props) {
   const { itemsPluralName, open, items } = props;
   const itemsLength = items.length || Object.keys(items).length;
   return (
     <div>
       {itemsLength ? (
-        <CollapsableItemsList open={open} items={items} />
+        <CollapsibleItemsList open={open} items={items} />
       ) : (
         <ListPlaceholder>{`No ${itemsPluralName}`}</ListPlaceholder>
       )}
@@ -17,14 +17,14 @@ function CollapsableItemsConditionalList(props) {
   );
 }
 
-CollapsableItemsConditionalList.defaultProps = {
+CollapsibleItemsConditionalList.defaultProps = {
   itemsPluralName: 'items',
 };
 
-CollapsableItemsConditionalList.propTypes = {
+CollapsibleItemsConditionalList.propTypes = {
   open: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.element).isRequired,
   itemsPluralName: PropTypes.string,
 };
 
-export default CollapsableItemsConditionalList;
+export default CollapsibleItemsConditionalList;
