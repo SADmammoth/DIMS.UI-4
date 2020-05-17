@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CollapsedCard from './CollapsedCard';
-import CollapsableCardBody from './CollapsableCardBody';
-import CollapsableCardTitle from './CollapsableCardTitle';
-import CollapsableCardDescription from './CollapsableCardDescription';
+import CollapsibleCardBody from './CollapsibleCardBody';
+import CollapsibleCardTitle from './CollapsibleCardTitle';
+import CollapsibleCardDescription from './CollapsibleCardDescription';
 
-class CollapsableCard extends React.PureComponent {
+class CollapsibleCard extends React.PureComponent {
   static Header = CollapsedCard;
 
-  static Body = CollapsableCardBody;
+  static Body = CollapsibleCardBody;
 
-  static Title = CollapsableCardTitle;
+  static Title = CollapsibleCardTitle;
 
-  static Description = CollapsableCardDescription;
+  static Description = CollapsibleCardDescription;
 
   render() {
     const { id, collapsed, open, close, cardClass, children, className } = this.props;
@@ -24,12 +24,12 @@ class CollapsableCard extends React.PureComponent {
 
     return (
       <>
-        <article id={id} className={`${className || ''} ${cardClass}-card${!collapsed ? ' open' : ''}`}>
+        <article id={id} className={`card ${className || ''} ${cardClass}-card${!collapsed ? ' open' : ''}`}>
           {React.Children.map(children, (child) => {
             if (!child) {
               return child;
             }
-            return child.type === CollapsableCard.Header
+            return child.type === CollapsibleCard.Header
               ? React.cloneElement(child, { onClick, collapsed, cardClass })
               : null;
           })}
@@ -38,10 +38,10 @@ class CollapsableCard extends React.PureComponent {
               if (!child) {
                 return child;
               }
-              if (child.type === CollapsableCard.Body || child.type === CollapsableCard.Description) {
+              if (child.type === CollapsibleCard.Body || child.type === CollapsibleCard.Description) {
                 return React.cloneElement(child, { cardClass });
               }
-              if (child.type === CollapsableCard.Header) {
+              if (child.type === CollapsibleCard.Header) {
                 return null;
               }
               return child;
@@ -52,12 +52,12 @@ class CollapsableCard extends React.PureComponent {
   }
 }
 
-CollapsableCard.defaultProps = {
+CollapsibleCard.defaultProps = {
   cardClass: 'card',
   className: 'card',
 };
 
-CollapsableCard.propTypes = {
+CollapsibleCard.propTypes = {
   id: PropTypes.string.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
@@ -67,4 +67,4 @@ CollapsableCard.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
-export default CollapsableCard;
+export default CollapsibleCard;

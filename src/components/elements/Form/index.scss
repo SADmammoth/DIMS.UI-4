@@ -9,6 +9,7 @@
   outline: none;
   background: $light-bg;
   color: $common-text;
+  background: $card-bg;
 }
 
 .form-checkbox {
@@ -63,14 +64,29 @@
   animation: 1s invalidBounce;
 }
 
+.form-textarea {
+  background: $card-bg;
+}
+
 .form-select {
   display: inline-block;
   padding: 5px;
   border: 2px solid $dark-bg;
   border-radius: 10px;
   outline: none;
-  background: $light-bg;
   color: $common-text;
+  background: $card-bg;
+
+  option {
+    background-color: $card-bg;
+    border: none;
+  }
+
+  option:disabled {
+    color: $muted-text;
+    background-color: $card-bg;
+    border: none;
+  }
 }
 
 .form-label {

@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Client from '../../helpers/Client';
-import CollapsableItemsConditionalList from '../../components/lists/CollapsableItemsConditionalList';
+import CollapsibleItemsConditionalList from '../../components/lists/CollapsibleItemsConditionalList';
 import ContainerComponent from '../../components/elements/ContainerComponent';
 import Header from '../../components/elements/Header';
 import Spinner from '../../components/elements/Spinner/Spinner';
@@ -104,7 +104,7 @@ class MemberTasksPage extends React.Component {
         <main>
           <ContainerComponent>
             {tasks ? (
-              <CollapsableItemsConditionalList
+              <CollapsibleItemsConditionalList
                 itemsPluralName='tasks'
                 open={match.params.open}
                 items={this.renderTasks()}

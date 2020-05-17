@@ -7,10 +7,10 @@ function Nav(props) {
   const { navItems, className } = props;
 
   function renderNavItems() {
-    return navItems.map((el) => (
-      <li className='nav-item' key={el.id}>
-        <Button link={el.link} classMod={`navItem${el.active ? '_active' : ''}`}>
-          {el.content}
+    return navItems.map((navItem) => (
+      <li className='nav-item' key={navItem.id}>
+        <Button link={navItem.link} classMod={`navItem${navItem.active ? '_active' : ''}`}>
+          {navItem.content}
         </Button>
       </li>
     ));

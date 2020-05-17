@@ -1,10 +1,7 @@
 import axios from 'axios';
-import url from 'url';
-import path from 'path';
 import Validator from '../Validator';
 import concatPath from '../concatPath';
 
-//TODO Rplace path.join with concatPath
 class Client {
   static apiPath = process.env.REACT_APP_APIPATH;
 

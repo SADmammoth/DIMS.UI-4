@@ -6,7 +6,7 @@ import MemberInfo from '../../elements/MemberInfo';
 import Modal from '../../elements/Modal';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
-import CollapsableCard from '../CollapsableCard';
+import CollapsibleCard from '../CollapsibleCard';
 import DateBadge from '../../elements/DateBadge';
 import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
@@ -71,12 +71,12 @@ const MemberCard = (props) => {
 
   return (
     <>
-      <CollapsableCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
-        <CollapsableCard.Header>
-          <CollapsableCard.Title>
+      <CollapsibleCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
+        <CollapsibleCard.Header>
+          <CollapsibleCard.Title>
             <b>{firstName}</b>
             {` ${lastName}, ${age}`}
-          </CollapsableCard.Title>
+          </CollapsibleCard.Title>
           <>
             {matchMaxWidth('1000px') || (
               <>
@@ -91,8 +91,8 @@ const MemberCard = (props) => {
               </>
             )}
           </>
-        </CollapsableCard.Header>
-        <CollapsableCard.Body>
+        </CollapsibleCard.Header>
+        <CollapsibleCard.Body>
           <Button classMod='primary' link={`/members/${id}/progress`}>
             <ProgressIcon className='icon-progress' />
             <span>Progress</span>
@@ -124,8 +124,8 @@ const MemberCard = (props) => {
             </>
           )}
           <Button content='More info' classMod='ghost' onClick={showModal} />
-        </CollapsableCard.Body>
-      </CollapsableCard>
+        </CollapsibleCard.Body>
+      </CollapsibleCard>
       <Modal ref={modal} className='member-info' onClose={editOff}>
         <MemberInfo
           edit={edit}

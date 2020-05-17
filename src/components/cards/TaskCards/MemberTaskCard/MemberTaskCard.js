@@ -8,7 +8,7 @@ import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg'
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsableCard from '../../CollapsableCard';
+import CollapsibleCard from '../../CollapsibleCard';
 import DialogButton from '../../../elements/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
 import Client from '../../../../helpers/Client';
@@ -52,7 +52,7 @@ function MemberTaskCard(props) {
   };
 
   return (
-    <CollapsableCard
+    <CollapsibleCard
       id={id}
       cardClass='task'
       className={state ? `task-card_${state.toLowerCase()}` : null}
@@ -60,21 +60,21 @@ function MemberTaskCard(props) {
       open={open}
       close={close}
     >
-      <CollapsableCard.Header>
-        <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
-      </CollapsableCard.Header>
+      <CollapsibleCard.Header>
+        <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
+      </CollapsibleCard.Header>
       {state && (
         <div className='state'>
           <span>{state}</span>
         </div>
       )}
-      <CollapsableCard.Body>
+      <CollapsibleCard.Body>
         <div className='task-card__dates'>
           <DateBadge type={dateTypes.startDate} date={taskStart} />
           <DateBadge type={dateTypes.endDate} date={taskDeadline} />
         </div>
 
-        <CollapsableCard.Description>{taskDescription}</CollapsableCard.Description>
+        <CollapsibleCard.Description>{taskDescription}</CollapsibleCard.Description>
         {role === 'admin' && taskSet === 'all' && (
           <>
             {assignedTo.length ? (
@@ -170,8 +170,8 @@ function MemberTaskCard(props) {
             </>
           )}
         </ButtonGroup>
-      </CollapsableCard.Body>
-    </CollapsableCard>
+      </CollapsibleCard.Body>
+    </CollapsibleCard>
   );
 }
 

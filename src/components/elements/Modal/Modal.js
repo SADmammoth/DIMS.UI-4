@@ -7,6 +7,14 @@ class Modal extends React.PureComponent {
     this.state = { show: false };
   }
 
+  static getDerivedStateFromProps(prevProps, state) {
+    if (prevProps.show !== null) {
+      return { show: prevProps.show };
+    }
+
+    return state;
+  }
+
   componentDidMount() {
     const { show } = this.props;
     return this.setState({ show });
@@ -53,7 +61,7 @@ class Modal extends React.PureComponent {
 }
 
 Modal.defaultProps = {
-  show: false,
+  show: null,
   backface: true,
   onClose: () => {},
 };

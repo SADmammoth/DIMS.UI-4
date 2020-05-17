@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Client from '../../helpers/Client';
-import CollapsableItemsConditionalList from '../../components/lists/CollapsableItemsConditionalList';
+import CollapsibleItemsConditionalList from '../../components/lists/CollapsibleItemsConditionalList';
 import ContainerComponent from '../../components/elements/ContainerComponent';
 import Header from '../../components/elements/Header';
 import Spinner from '../../components/elements/Spinner';
@@ -33,7 +33,7 @@ class MemberProgressPage extends React.Component {
 
   renderProgress() {
     const { tasks } = this.state;
-    return Object.entries(tasks).map(({ 0: id, 1: data }) => {
+    return Object.entries(tasks).map(([id, data]) => {
       return this.renderProgressCard(id, data);
     });
   }
@@ -55,7 +55,7 @@ class MemberProgressPage extends React.Component {
         <main>
           <ContainerComponent>
             {tasks ? (
-              <CollapsableItemsConditionalList itemsPluralName='progress' items={this.renderProgress()} />
+              <CollapsibleItemsConditionalList itemsPluralName='progress' items={this.renderProgress()} />
             ) : (
               <Spinner centered />
             )}

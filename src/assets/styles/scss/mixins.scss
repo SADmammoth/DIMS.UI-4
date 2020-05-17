@@ -1,5 +1,3 @@
-@use 'scrollbar';
-
 @mixin clearfix {
   &:after {
     content: '.';

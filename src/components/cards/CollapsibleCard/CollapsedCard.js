@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CollapsableCardTitle from './CollapsableCardTitle';
+import CollapsibleCardTitle from './CollapsibleCardTitle';
 
 function CollapsedCard(props) {
   const { children, cardClass, onClick, collapsed } = props;
@@ -10,7 +10,7 @@ function CollapsedCard(props) {
         if (!child) {
           return child;
         }
-        if (child.type === CollapsableCardTitle) {
+        if (child.type === CollapsibleCardTitle) {
           return React.cloneElement(child, { onClick: () => onClick(collapsed), cardClass });
         }
         return child;

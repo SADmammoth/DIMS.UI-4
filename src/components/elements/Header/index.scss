@@ -12,10 +12,19 @@
 
   @include acrylic-glass-effect;
 
+  &.extended {
+    height: 138px;
+  }
+
   .site-title {
-    width: 10vw;
+    & > * {
+      fill: $common-text;
+      margin-left: 20px;
+    }
+
     min-width: 100px;
-    padding-right: 5vw;
+    height: 55px;
+    margin-top: 8px;
     box-sizing: border-box;
   }
 
@@ -35,6 +44,10 @@
     position: relative;
     top: 100px;
     height: calc(100vh - 100px);
+  }
+
+  &.extended + * {
+    top: 145px;
   }
 
   & > .container {
@@ -96,5 +109,34 @@
         border: 2px solid $light-bg;
       }
     }
+  }
+
+  .input-panel {
+    width: 100vw;
+    position: fixed;
+    transform: none;
+    right: auto;
+    top: auto;
+    left: 0;
+    background: none;
+
+    display: flex;
+    justify-content: center;
+
+    .form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  #filter {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 20px;
+    width: 500px;
+    font-size: 1.2rem;
+    margin-right: 200px;
   }
 }

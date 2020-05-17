@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsableCard from '../../CollapsableCard';
+import CollapsibleCard from '../../CollapsibleCard';
 import DateBadge from '../../../elements/DateBadge';
 import DialogButton from '../../../elements/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';
@@ -32,13 +32,13 @@ function TaskTrackCard(props) {
   };
 
   return (
-    <CollapsableCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
-      <CollapsableCard.Header>
-        <CollapsableCard.Title>{taskName}</CollapsableCard.Title>
+    <CollapsibleCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
+      <CollapsibleCard.Header>
+        <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
         <DateBadge type={dateTypes.trackStart} date={trackDate} />
-      </CollapsableCard.Header>
-      <CollapsableCard.Body>
-        <CollapsableCard.Description>{trackNote}</CollapsableCard.Description>
+      </CollapsibleCard.Header>
+      <CollapsibleCard.Body>
+        <CollapsibleCard.Description>{trackNote}</CollapsibleCard.Description>
         <ButtonGroup>
           <DialogButton
             buttonClassMod='secondary'
@@ -63,8 +63,8 @@ function TaskTrackCard(props) {
           />
           <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
         </ButtonGroup>
-      </CollapsableCard.Body>
-    </CollapsableCard>
+      </CollapsibleCard.Body>
+    </CollapsibleCard>
   );
 }
 
