@@ -59,8 +59,8 @@ function Header(props) {
             )}
             {role && <SettingsButton />}
           </ContainerComponent>
-          <Modal show={showFilterPanel} className='input-panel' backface={false}>
-            {filterFunction && (
+          {filterFunction && (
+            <Modal show={showFilterPanel} className='input-panel' backface={false}>
               <Form
                 inputs={[
                   {
@@ -100,8 +100,8 @@ function Header(props) {
                 submitButton={<></>}
                 showNotifications='hideAll'
               />
-            )}
-          </Modal>
+            </Modal>
+          )}
         </div>
       </ContainerComponent>
     </header>
