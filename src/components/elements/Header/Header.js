@@ -99,6 +99,7 @@ function Header(props) {
                 ]}
                 submitButton={<></>}
                 showNotifications='hideAll'
+                onSubmit={null}
               />
             </Modal>
           )}

@@ -236,12 +236,18 @@ class Form extends React.Component {
 
   onSubmit = (event) => {
     const { onSubmit: onSubmitHandler } = this.props;
+    if (onSubmitHandler === null) {
+      event.preventDefault();
+      return;
+    }
     if (onSubmitHandler) {
       event.preventDefault();
     }
     if (this.checkValidity()) {
       if (onSubmitHandler) {
-        onSubmitHandler(this.formatValues()).then(this.onResponseReceived).catch(this.onResponseError);
+        onSubmitHandler(this.formatValues())
+          .then(this.onResponseReceived)
+          .catch(this.onResponseError);
       }
     }
   };
@@ -271,7 +277,6 @@ Form.defaultProps = {
   action: '/',
   className: '',
   style: {},
-  onSubmit: null,
   submitButton: <button type='submit'>Submit</button>,
   onInputsUpdate: (inputs) => inputs,
   showNotifications: 'all',
