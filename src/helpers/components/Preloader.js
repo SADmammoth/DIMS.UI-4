@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 
 import Client from '../Client';
-import store from '../../redux';
 import * as membersActions from '../../redux/actions/membersActions';
 import * as assignedTasksActions from '../../redux/actions/assignedTasksActions';
 import preloadTheme from '../preloadTheme';

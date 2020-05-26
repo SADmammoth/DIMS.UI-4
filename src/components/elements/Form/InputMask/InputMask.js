@@ -11,7 +11,7 @@ function InputMask(input, mask, validate = false, type = 'default') {
     return input;
   }
 
-  const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => el);
+  const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => !!el);
 
   if (validate) {
     resultInput = React.cloneElement(resultInput, {
