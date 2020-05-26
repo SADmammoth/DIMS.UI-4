@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
 import TextBadge from '../../TextBadge';
 import trackFormInputsAttributes from './trackFormInputsAttributes';
 import Spinner from '../../Spinner';
+import inputsReducer, { updateAction } from '../../../../helpers/formHelpers/inputsReducer';
 
 const TrackForm = (props) => {
   const { taskName, onSubmit } = props;
-  const [inputs, setInputs] = useState({});
+  const [inputs, dispatch] = useReducer(inputsReducer, {});
+  const setInputs = (data) => {
+    dispatch(updateAction(data));
+  };
+
   const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = (data) => {

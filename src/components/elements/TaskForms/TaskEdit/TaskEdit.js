@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
@@ -6,10 +6,15 @@ import taskEditInputsAttributes from './taskEditInputsAttributes';
 import Spinner from '../../Spinner';
 import checkTaskDates from '../../../../helpers/checkTaskDates';
 import errorNotification from '../../../../helpers/formHelpers/errorNotification';
+import inputsReducer, { updateAction } from '../../../../helpers/formHelpers/inputsReducer';
 
 const TaskEdit = (props) => {
   const { onSubmit, empty, handleClose } = props;
-  const [inputs, setInputs] = useState({});
+  const [inputs, dispatch] = useReducer(inputsReducer, {});
+  const setInputs = (data) => {
+    dispatch(updateAction(data));
+  };
+
   const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = (data) => {
