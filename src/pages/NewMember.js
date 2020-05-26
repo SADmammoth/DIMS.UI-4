@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import store from '../redux';
 import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
@@ -22,6 +22,8 @@ import compareObjects from '../helpers/compareObjects';
 
 const NewMember = ({ members, match }) => {
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const postMember = async ({
     firstName,
@@ -72,7 +74,7 @@ const NewMember = ({ members, match }) => {
       compareObjects,
     )[0];
 
-    store.dispatch(
+    dispatch(
       addMember({
         id: addedMemberId,
         firstName,

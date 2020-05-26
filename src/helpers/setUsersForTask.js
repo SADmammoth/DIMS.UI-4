@@ -3,7 +3,7 @@ import compareObjects from './compareObjects';
 import arraysSubtraction from './arraysSubtraction';
 import * as actions from '../redux/actions/assignedTasksActions';
 
-export default async function setUsersForTask(store, taskId, assigned, prevAssigned = {}) {
+export default async function setUsersForTask(dispatch, taskId, assigned, prevAssigned = {}) {
   if (compareObjects(assigned, prevAssigned)) {
     return;
   }
@@ -13,7 +13,7 @@ export default async function setUsersForTask(store, taskId, assigned, prevAssig
     const assignedArray = (await Client.getUsersMemberTasks(taskId, assigned)).map(({ userId, memberTaskId }) => {
       return { userId, memberTaskId };
     });
-    store.dispatch(actions.assignTask(taskId, assignedArray));
+    dispatch(actions.assignTask(taskId, assignedArray));
   }
 
   const newMembers = arraysSubtraction(assigned, prevAssigned);
@@ -22,7 +22,7 @@ export default async function setUsersForTask(store, taskId, assigned, prevAssig
     const assignedArray = (await Client.getUsersMemberTasks(taskId, newMembers)).map(({ userId, memberTaskId }) => {
       return { userId, memberTaskId };
     });
-    store.dispatch(actions.assignTask(taskId, assignedArray));
+    dispatch(actions.assignTask(taskId, assignedArray));
   }
 
   const deletedMembers = arraysSubtraction(prevAssigned, assigned);
@@ -33,6 +33,6 @@ export default async function setUsersForTask(store, taskId, assigned, prevAssig
       },
     );
     await Client.unassignTask(taskId, deletedMembers);
-    store.dispatch(actions.unassignTask(taskId, unassignedArray));
+    dispatch(actions.unassignTask(taskId, unassignedArray));
   }
 }

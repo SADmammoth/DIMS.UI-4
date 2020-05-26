@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 import Button from '../../elements/Button';
 import MemberInfo from '../../elements/MemberInfo';
@@ -11,7 +12,6 @@ import DateBadge from '../../elements/DateBadge';
 import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
 import Client from '../../../helpers/Client';
-import store from '../../../redux';
 import { deleteMember } from '../../../redux/actions/membersActions';
 import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
@@ -41,6 +41,8 @@ const MemberCard = (props) => {
     edit: editDefault,
   } = props;
 
+  const { dispatch } = useDispatch();
+
   const age = calculateAge(birthDate);
   const modal = useRef({});
 
@@ -65,7 +67,7 @@ const MemberCard = (props) => {
   };
 
   const onDelete = ({ dialogValue }) => {
-    store.dispatch(deleteMember(dialogValue));
+    dispatch(deleteMember(dialogValue));
     return Client.deleteMember(dialogValue);
   };
 

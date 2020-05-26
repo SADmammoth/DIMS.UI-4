@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import UserContextConsumer from '../helpers/components/UserContextConsumer';
@@ -14,9 +14,10 @@ import checkboxValueSeparator from '../helpers/formHelpers/checkboxValueSeparato
 import masks from '../helpers/maskHelpers/masks';
 import getStateMembers from '../helpers/getStateMembers';
 import setUsersForTask from '../helpers/setUsersForTask';
-import store from '../redux';
 
 const NewTask = ({ members, match }) => {
+  const dispatch = useDispatch();
+
   const postTask = async ({ taskName, taskDescription, taskStart, taskDeadline, members, members_default }) => {
     const calculatedTaskStart = Validator.parseDateByMask(taskStart, masks.date);
     const calculatedTaskDeadline = Validator.parseDateByMask(taskDeadline, masks.date);
@@ -27,7 +28,7 @@ const NewTask = ({ members, match }) => {
 
     if (members.length) {
       const taskId = (await createTask()).TaskId;
-      await setUsersForTask(store, taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
+      await setUsersForTask(dispatch, taskId, checkboxValueSeparator(members), checkboxValueSeparator(members_default));
     } else {
       await createTask();
     }

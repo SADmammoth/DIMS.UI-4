@@ -1,8 +1,7 @@
 import DateMask from './Validator/DateMask';
 import masks from './maskHelpers/masks';
-import store from '../redux';
 import { editMember } from '../redux/actions/membersActions';
-import Client from './Client/Client';
+import Client from './Client';
 
 export default function editMemberHelper(
   id,
@@ -21,11 +20,12 @@ export default function editMemberHelper(
     universityAverageScore,
     mathScore,
   },
+  dispatch,
 ) {
   const calculatedStartDate = DateMask.parseDateByMask(startDate, masks.date);
   const calculatedBirthDate = DateMask.parseDateByMask(birthDate, masks.date);
 
-  store.dispatch(
+  dispatch(
     editMember(id, {
       firstName,
       lastName,
