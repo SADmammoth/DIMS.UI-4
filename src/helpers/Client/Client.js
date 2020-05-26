@@ -176,7 +176,6 @@ class Client {
   }
 
   static async getUsersMemberTasks(taskId, usersIds) {
-    await axios.post(concatPath(apiPath, 'user', 'task', 'add', taskId.toString()), usersIds);
     let allUserTasks;
     let userTasks;
 

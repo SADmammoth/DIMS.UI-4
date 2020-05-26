@@ -47,11 +47,39 @@ class Client {
           .doc(doc.data().taskID)
           .get();
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
+        tasksObject[doc.id].taskId = doc.data().taskID;
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
       }),
     );
     return tasksObject;
+  }
+
+  static async getUsersMemberTasks(taskId, usersIds) {
+    let allUserTasks;
+    let userTasks;
+
+    const resultArray = await Promise.all(
+      usersIds.map(async (userId) => {
+        allUserTasks = await this.getUserTasks(userId);
+
+        userTasks = Object.keys(allUserTasks).find((memberTaskId) => {
+          return allUserTasks[memberTaskId].taskId.toString() === taskId.toString();
+        });
+
+        if (!userTasks || !userTasks.length) {
+          return null;
+        }
+        return {
+          userId,
+          taskId,
+          memberTaskId: userTasks,
+        };
+      }),
+    );
+    return resultArray.filter((element) => {
+      return !!element;
+    });
   }
 
   static async getMember(userId) {
@@ -122,6 +150,24 @@ class Client {
     });
   }
 
+  static async getAssigned(members, taskId) {
+    const allUsers = { ...members };
+    const assignedTo = [];
+    let userTasks;
+
+    await Promise.all(
+      Object.entries(allUsers).map(async ([userId, user]) => {
+        userTasks = await this.getUserTasks(userId);
+        Object.values(userTasks).forEach((userTask) => {
+          if (userTask.taskId.toString() === taskId.toString()) {
+            assignedTo.push({ userId, firstName: user.firstName, lastName: user.lastName, memberTaskId: userTask.id });
+          }
+        });
+      }),
+    );
+    return assignedTo;
+  }
+
   static async getTracks(userID) {
     const memberTasks = await Client.getUserTasks(userID);
     const tracks = await Client.db
@@ -168,11 +214,12 @@ class Client {
   }
 
   static async getUserInfoByToken(token) {
-    // const user = await Client.db
-    //   .collection('users')
-    //   .where('token', '==', token)
-    //   .get();
-    return { role: 'admin' };
+    const user = await Client.db
+      .collection('users')
+      .where('token', '==', token)
+      .get();
+    const { role, id } = user;
+    return { role, userId: id };
   }
 }
 
