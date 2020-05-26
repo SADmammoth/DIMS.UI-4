@@ -5,7 +5,7 @@ import Button from '../../Button';
 import taskEditInputsAttributes from './taskEditInputsAttributes';
 import Spinner from '../../Spinner';
 import checkTaskDates from '../../../../helpers/checkTaskDates';
-import errorNotification from '../../../../helpers/errorNotification';
+import errorNotification from '../../../../helpers/formHelpers/errorNotification';
 
 const TaskEdit = (props) => {
   const { onSubmit, empty, handleClose } = props;

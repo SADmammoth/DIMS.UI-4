@@ -1,4 +1,4 @@
-import replaceAll from '../../helpers/replaceAll';
+import replaceAll from '../../helpers/formHelpers/replaceAll';
 
 describe('replaceAll', () => {
   test('Must replace chars in given range with provided string', () => {

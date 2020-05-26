@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import Client from '../Client';
 import LogOut from './LogOut';
 import GuestRoutes from '../../Routes/GuestRoutes';

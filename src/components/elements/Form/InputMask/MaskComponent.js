@@ -7,7 +7,7 @@ import placeInputCursorToEnd from '../../../../helpers/maskHelpers/placeInputCur
 import maskNotSpecialCharsRegex from '../../../../helpers/maskHelpers/maskNotSpecialCharsRegex';
 import getUniqueItems from '../../../../helpers/getUniqueItems';
 import regexpEscape from '../../../../helpers/Validator/regexpEscape';
-import replaceAll from '../../../../helpers/replaceAll';
+import replaceAll from '../../../../helpers/formHelpers/replaceAll';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {

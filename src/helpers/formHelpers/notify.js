@@ -1,6 +1,6 @@
 import React from 'react';
 import toast from 'toasted-notes';
-import Toast from '../components/elements/Toast';
+import Toast from '../../components/elements/Toast';
 
 export default function notify(type, title, message) {
   toast.notify(() => <Toast type={type} title={title} message={message} />, {

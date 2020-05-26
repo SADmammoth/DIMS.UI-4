@@ -4,7 +4,7 @@ import CheckboxGroup from './CheckboxGroup';
 import Select from './Select';
 import TextArea from './TextArea';
 import InputMask from './InputMask';
-import errorNotification from '../../../helpers/errorNotification';
+import errorNotification from '../../../helpers/formHelpers/errorNotification';
 import compareObjects from '../../../helpers/compareObjects';
 
 function Input(props) {

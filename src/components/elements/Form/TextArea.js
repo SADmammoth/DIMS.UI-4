@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import checkCharsCount from '../../../helpers/checkCharsCount';
+import checkCharsCount from '../../../helpers/formHelpers/checkCharsCount';
 import compareObjects from '../../../helpers/compareObjects';
 
 function TextArea(props) {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
 import AssignForm from './AssignForm';
-import checkboxValueSeparator from '../../../helpers/checkboxValueSeparator';
+import checkboxValueSeparator from '../../../helpers/formHelpers/checkboxValueSeparator';
 import setUsersForTask from '../../../helpers/setUsersForTask';
 import store from '../../../redux';
 

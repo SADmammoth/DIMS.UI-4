@@ -10,7 +10,7 @@ import getNavItems from '../helpers/getNavItems';
 import Client from '../helpers/Client';
 import Validator from '../helpers/Validator';
 import TaskEdit from '../components/elements/TaskForms/TaskEdit';
-import checkboxValueSeparator from '../helpers/checkboxValueSeparator';
+import checkboxValueSeparator from '../helpers/formHelpers/checkboxValueSeparator';
 import masks from '../helpers/maskHelpers/masks';
 import getStateMembers from '../helpers/getStateMembers';
 import setUsersForTask from '../helpers/setUsersForTask';

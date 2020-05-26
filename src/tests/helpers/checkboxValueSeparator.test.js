@@ -1,4 +1,4 @@
-import checkboxValueSeparator from '../../helpers/checkboxValueSeparator';
+import checkboxValueSeparator from '../../helpers/formHelpers/checkboxValueSeparator';
 
 describe('checkboxValueSeparator', () => {
   test('Returns correct array for string input', () => {
