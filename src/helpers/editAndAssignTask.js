@@ -1,6 +1,6 @@
 import Client from './Client';
 import compareObjects from './compareObjects';
-import checkboxValueSeparator from './checkboxValueSeparator';
+import checkboxValueSeparator from './formHelpers/checkboxValueSeparator';
 import Validator from './Validator';
 import masks from './maskHelpers/masks';
 import setUsersForTask from './setUsersForTask';

@@ -6,7 +6,9 @@ import Button from '../Button';
 import logo from '../../../assets/images/devinc.gif';
 
 const LoginForm = (props) => {
-  const onSubmit = (data) => props.logIn(data.userName, data.password);
+  const onSubmit = ({ userName, password }) => {
+    props.logIn(userName, password);
+  };
 
   return (
     <>

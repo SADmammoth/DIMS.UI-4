@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
@@ -19,7 +20,6 @@ import Client from '../../../helpers/Client';
 import DialogButton from '../DialogButton';
 import Spinner from '../Spinner';
 import { deleteMember } from '../../../redux/actions/membersActions';
-import store from '../../../redux';
 import editMemberHelper from '../../../helpers/editMemberHelper';
 import dateTypes from '../../../helpers/dateTypes';
 
@@ -44,12 +44,13 @@ const MemberInfo = (props) => {
     universityAverageScore,
     mathScore,
   } = props;
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const onEdit = (data) => {
     setLoading(true);
 
-    return editMemberHelper(id, data)
+    return editMemberHelper(id, data, dispatch)
       .then((response) => {
         setLoading(false);
         handleClose();
@@ -62,7 +63,7 @@ const MemberInfo = (props) => {
   };
 
   const onDelete = ({ dialogValue }) => {
-    store.dispatch(deleteMember(dialogValue));
+    dispatch(deleteMember(dialogValue));
     return Client.deleteMember(dialogValue);
   };
 

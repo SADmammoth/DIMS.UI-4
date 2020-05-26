@@ -6,11 +6,11 @@ import Routes from './Routes';
 import store from './redux';
 import Preloader from './helpers/components/Preloader';
 import UserContextConsumer from './helpers/components/UserContextConsumer';
-import ScrollToTop from './helpers/components/ScrollToTop';
 
 const App = () => {
   return (
     <Provider store={store}>
+<<<<<<< HEAD
       <Router>
         <ScrollToTop />
         <AuthorizationManager>
@@ -25,6 +25,19 @@ const App = () => {
           </UserContextConsumer>
         </AuthorizationManager>
       </Router>
+=======
+      <Preloader>
+        <Router>
+          <AuthorizationManager>
+            <UserContextConsumer>
+              {({ role, userId }) => {
+                return <Routes role={role} userId={userId} />;
+              }}
+            </UserContextConsumer>
+          </AuthorizationManager>
+        </Router>
+      </Preloader>
+>>>>>>> api-integration
     </Provider>
   );
 };

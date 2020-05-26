@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../Button';
 import Form from '../../Form';
@@ -11,10 +11,14 @@ import { ReactComponent as EnvelopeIcon } from '../../../../assets/icons/Envelop
 import editMemberInputsAttributes from './editMemberInputsAttributes';
 import FlexColumn from '../../FlexColumn';
 import TextBadge from '../../TextBadge/TextBadge';
+import inputsReducer, { updateAction } from '../../../../helpers/formHelpers/inputsReducer';
 
 const MemberEdit = (props) => {
   const { handleClose, empty, onSubmit } = props;
-  const [inputs, setInputs] = useState({});
+  const [inputs, dispatch] = useReducer(inputsReducer, {});
+  const setInputs = (data) => {
+    dispatch(updateAction(data));
+  };
 
   return (
     <Form

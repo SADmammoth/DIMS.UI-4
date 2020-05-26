@@ -1,0 +1,25 @@
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scale {
+  @for $i from 0 through 100 {
+    @if $i % 2 == 0 {
+      #{$i/2}% {
+        --i: #{360deg * $i / 100 * 0.5};
+      }
+    }
+  }
+  @for $i from 2 through 100 {
+    @if $i % 2 == 0 {
+      #{$i/2 + 50}% {
+        --i: #{360deg * (100 - $i) / 100 * 0.5};
+      }
+    }
+  }
+}

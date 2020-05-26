@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect, withRouter } from 'react-router-dom';
-import cookie from 'react-cookies';
+import { Route, withRouter } from 'react-router-dom';
 import Client from '../Client';
 import LogOut from './LogOut';
 import GuestRoutes from '../../Routes/GuestRoutes';
+import Spinner from '../../components/elements/Spinner/Spinner';
 
 class AuthenticationManager extends Component {
   constructor(props) {
@@ -35,17 +35,18 @@ class AuthenticationManager extends Component {
   authenticate = async (login, password) => {
     const { authorize } = this.props;
     const authToken = localStorage.getItem('token');
+    const fail = 'fail';
 
     if (!authToken) {
       if (!login || !password) {
-        return { status: 'fail' };
+        return { status: fail };
       }
 
       const { status, found, token, role, userId } = await Client.signIn(login, password);
-      if (status === 'fail' && found) {
+      if (status === fail && found) {
         return { status, message: 'Incorrect password' };
       }
-      if (status === 'fail' && !found) {
+      if (status === fail && !found) {
         return { status, message: 'Incorrect userName' };
       }
 
@@ -69,10 +70,18 @@ class AuthenticationManager extends Component {
 
     return (
       <>
-        {authenticated ? children : <GuestRoutes logIn={this.logIn} />}
-        <Route exact path='/logout'>
-          {authenticated ? <LogOut logOut={this.logOut} /> : <Redirect to='/404' />}
-        </Route>
+        {authenticated !== null ? (
+          <>
+            {authenticated ? children : <GuestRoutes logIn={this.logIn} />}
+            {authenticated && (
+              <Route exact path='/logout'>
+                <LogOut logOut={this.logOut} />
+              </Route>
+            )}
+          </>
+        ) : (
+          <Spinner centered />
+        )}
       </>
     );
   }

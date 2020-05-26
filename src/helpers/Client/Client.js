@@ -2,11 +2,11 @@ import axios from 'axios';
 import Validator from '../Validator';
 import concatPath from '../concatPath';
 
+const apiPath = process.env.REACT_APP_APIPATH;
+
+const authPath = process.env.REACT_APP_AUTHAPIPATH;
+
 class Client {
-  static apiPath = process.env.REACT_APP_APIPATH;
-
-  static authPath = process.env.REACT_APP_AUTHAPIPATH;
-
   static directions = {};
 
   static states = ['active', 'success', 'fail'];
@@ -18,7 +18,7 @@ class Client {
   static role = 'guest';
 
   static async getDirections() {
-    (await axios.get(concatPath(Client.apiPath, 'directions'), { headers: Client.defaultHeader })).data.forEach(
+    (await axios.get(concatPath(apiPath, 'directions'), { headers: Client.defaultHeader })).data.forEach(
       (direction) => {
         Client.directions[direction._id] = direction.name;
       },
@@ -69,7 +69,7 @@ class Client {
 
   static async getMembers() {
     const members = (
-      await axios.get(concatPath(Client.apiPath, 'members', 'profile'), {
+      await axios.get(concatPath(apiPath, 'members', 'profile'), {
         headers: Client.defaultHeader,
       })
     ).data;
@@ -97,7 +97,7 @@ class Client {
     startDate,
   ) {
     return axios.post(
-      concatPath(Client.apiPath, 'members', 'profile'),
+      concatPath(apiPath, 'members', 'profile'),
       {
         firstName,
         lastName,
@@ -134,7 +134,7 @@ class Client {
     startDate,
   ) {
     return axios.put(
-      concatPath(Client.apiPath, path.join('members', userId.toString(), 'profile')),
+      concatPath(apiPath, path.join('members', userId.toString(), 'profile')),
       {
         firstName,
         lastName,
@@ -174,7 +174,7 @@ class Client {
 
   static async getTasks() {
     const tasks = (
-      await axios.get(concatPath(Client.apiPath, 'tasks'), {
+      await axios.get(concatPath(apiPath, 'tasks'), {
         params: { includeAssigned: true },
         headers: Client.defaultHeader,
       })
@@ -206,7 +206,7 @@ class Client {
 
   static async getUserTasks(userId) {
     const userTasks = (
-      await axios.get(concatPath(Client.apiPath, 'members', userId.toString(), 'tasks'), {
+      await axios.get(concatPath(apiPath, 'members', userId.toString(), 'tasks'), {
         headers: Client.defaultHeader,
       })
     ).data;
@@ -219,20 +219,20 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(concatPath(Client.apiPath, 'tasks', taskId.toString()), usersIds, {
+    return axios.post(concatPath(apiPath, 'tasks', taskId.toString()), usersIds, {
       headers: Client.defaultHeader,
     });
   }
 
   static getAssigned(taskId) {
-    return axios.get(concatPath(Client.apiPath, 'tasks', taskId.toString(), 'assigned'), {
+    return axios.get(concatPath(apiPath, 'tasks', taskId.toString(), 'assigned'), {
       headers: Client.defaultHeader,
     });
   }
 
   static editTask(taskId, taskName, taskDescription, startDate, deadlineDate) {
     return axios.put(
-      concatPath(Client.apiPath, path.join('tasks', taskId.toString())),
+      concatPath(apiPath, path.join('tasks', taskId.toString())),
       {
         taskId,
         taskName,
@@ -252,13 +252,13 @@ class Client {
       deadlineDate: deadlineDate.toISOString(),
     };
 
-    return axios.post(concatPath(Client.apiPath, 'tasks'), data, { headers: Client.defaultHeader });
+    return axios.post(concatPath(apiPath, 'tasks'), data, { headers: Client.defaultHeader });
   }
 
   static setUserTaskState(TaskId, UserId, Status) {
     const StatusId = (Client.states.indexOf(Status) + 1).toString();
     return axios.put(
-      concatPath(Client.apiPath, 'user', 'task'),
+      concatPath(apiPath, 'user', 'task'),
       {
         TaskId: TaskId.toString(),
         UserId: UserId.toString(),
@@ -269,11 +269,11 @@ class Client {
   }
 
   static deleteMember(userId) {
-    return axios.delete(concatPath(Client.apiPath, 'members', userId), { headers: Client.defaultHeader });
+    return axios.delete(concatPath(apiPath, 'members', userId), { headers: Client.defaultHeader });
   }
 
   static deleteTask(taskId) {
-    return axios.delete(concatPath(Client.apiPath, 'tasks', taskId), { headers: Client.defaultHeader });
+    return axios.delete(concatPath(apiPath, 'tasks', taskId), { headers: Client.defaultHeader });
   }
 
   static createUserProgressObject({ _id, taskId, userId, memberTaskId, taskName, trackNote, trackDate }) {
@@ -282,7 +282,7 @@ class Client {
 
   static async getUserProgress(userId) {
     const progress = (
-      await axios.get(concatPath(Client.apiPath, 'member', userId, 'progress'), { headers: Client.defaultHeader })
+      await axios.get(concatPath(apiPath, 'member', userId, 'progress'), { headers: Client.defaultHeader })
     ).data;
     const progressObject = {};
     progress.forEach((progressItem) => {
@@ -296,9 +296,8 @@ class Client {
   }
 
   static async getTracks(userId) {
-    const tracks = (
-      await axios.get(concatPath(Client.apiPath, 'member', userId, 'tracks'), { headers: Client.defaultHeader })
-    ).data;
+    const tracks = (await axios.get(concatPath(apiPath, 'member', userId, 'tracks'), { headers: Client.defaultHeader }))
+      .data;
     const tracksObject = {};
     tracks.forEach((track) => {
       console.log(track);
@@ -309,7 +308,7 @@ class Client {
 
   static createTrack(userId, memberTaskId, trackDate, trackNote) {
     return axios.post(
-      concatPath(Client.apiPath, 'member', userId, 'tasks', memberTaskId, 'track'),
+      concatPath(apiPath, 'member', userId, 'tasks', memberTaskId, 'track'),
       {
         trackDate,
         trackNote,
@@ -320,7 +319,7 @@ class Client {
 
   static editTrack(trackId, trackDate, trackNote) {
     return axios.put(
-      concatPath(Client.apiPath, 'tracks', trackId),
+      concatPath(apiPath, 'tracks', trackId),
       {
         trackDate,
         trackNote,
@@ -330,13 +329,13 @@ class Client {
   }
 
   static async unassignTask(taskId, userIds) {
-    return axios.put(concatPath(Client.apiPath, 'members', 'tasks', taskId), userIds, {
+    return axios.put(concatPath(apiPath, 'members', 'tasks', taskId), userIds, {
       headers: Client.defaultHeader,
     });
   }
 
   static deleteTrack(trackId) {
-    return axios.delete(concatPath(Client.apiPath, 'tracks', trackId), { headers: Client.defaultHeader });
+    return axios.delete(concatPath(apiPath, 'tracks', trackId), { headers: Client.defaultHeader });
   }
 
   static setToken(token) {
@@ -347,7 +346,7 @@ class Client {
 
   static async signIn(login, password) {
     const response = await axios.post(
-      concatPath(Client.authPath, 'users', 'login'),
+      concatPath(authPath, 'users', 'login'),
       {
         login,
         password,
@@ -364,9 +363,7 @@ class Client {
   }
 
   static async confirmUser() {
-    const { role, userId } = (
-      await axios.get(concatPath(Client.authPath, 'echo'), { headers: Client.defaultHeader })
-    ).data;
+    const { role, userId } = (await axios.get(concatPath(authPath, 'echo'), { headers: Client.defaultHeader })).data;
 
     if (!userId) {
       return { role, userId: '0' };

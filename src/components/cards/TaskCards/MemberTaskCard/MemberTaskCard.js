@@ -51,6 +51,10 @@ function MemberTaskCard(props) {
     return Client.createTrack(userId, id, trackDate, trackNote);
   };
 
+  const isAdmin = role === 'admin';
+  const isMentor = role === 'mentor';
+  const isAdminOrMentor = role === 'admin' || role === 'mentor';
+
   return (
     <CollapsibleCard
       id={id}
@@ -75,7 +79,7 @@ function MemberTaskCard(props) {
         </div>
 
         <CollapsibleCard.Description>{taskDescription}</CollapsibleCard.Description>
-        {role === 'admin' && taskSet === 'all' && (
+        {isAdmin && taskSet === 'all' && (
           <>
             {assignedTo.length ? (
               <>
@@ -92,21 +96,19 @@ function MemberTaskCard(props) {
                 </ul>
               </>
             ) : (
-              <>
-                <h3>Task is not assigned yet</h3>
-              </>
+              <h3>Task is not assigned yet</h3>
             )}
           </>
         )}
 
         <ButtonGroup>
-          {role === 'member' && (
+          {isMentor && (
             <TrackButton reload={reload} taskName={taskName} onSubmit={onTrack} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
             </TrackButton>
           )}
-          {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
+          {isAdminOrMentor && taskSet === 'all' && (
             <AssignButton
               reload={reload}
               buttonClassMod='primary'
@@ -118,7 +120,7 @@ function MemberTaskCard(props) {
               <span>Assign</span>
             </AssignButton>
           )}
-          {(role === 'admin' || role === 'mentor') && taskSet === 'all' && (
+          {isAdminOrMentor && taskSet === 'all' && (
             <>
               <DialogButton
                 buttonClassMod='secondary'
@@ -150,7 +152,7 @@ function MemberTaskCard(props) {
               />
             </>
           )}
-          {(role === 'admin' || role === 'mentor') && taskSet === 'user' && (
+          {isAdminOrMentor && taskSet === 'user' && (
             <>
               <ChangeStateButton
                 reload={reload}

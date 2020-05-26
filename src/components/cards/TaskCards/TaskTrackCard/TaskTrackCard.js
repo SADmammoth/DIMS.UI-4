@@ -13,9 +13,20 @@ import dateTypes from '../../../../helpers/dateTypes';
 import Client from '../../../../helpers/Client';
 
 function TaskTrackCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, memberTaskId, open, close, reload, match } = props;
-
-  const userId = match.params.id;
+  const {
+    match: {
+      params: { id: userId },
+    },
+    taskName,
+    trackNote,
+    trackDate,
+    collapsed,
+    id,
+    memberTaskId,
+    open,
+    close,
+    reload,
+  } = props;
 
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTrack(dialogValue).then((response) => {

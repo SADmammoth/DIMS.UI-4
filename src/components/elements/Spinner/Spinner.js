@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Spinner(props) {
-  const { centered } = props;
+function Spinner({ centered }) {
   return <div className={`spinner${centered ? ' spinner_centered' : ''}`} />;
 }
 

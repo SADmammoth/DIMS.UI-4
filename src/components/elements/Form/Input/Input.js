@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CheckboxGroup from './CheckboxGroup';
-import Select from './Select';
-import TextArea from './TextArea';
-import InputMask from './InputMask';
-import errorNotification from '../../../helpers/errorNotification';
-import compareObjects from '../../../helpers/compareObjects';
+import CheckboxGroup from './CustomInputs/CheckboxGroup';
+import Select from './CustomInputs/Select';
+import TextArea from './CustomInputs/TextArea';
+import errorNotification from '../../../../helpers/formHelpers/errorNotification';
+import compareObjects from '../../../../helpers/compareObjects';
+import MaskedInput from './MaskedInput';
+import LabeledInput from './LabeledInput';
 
 function Input(props) {
   const {
@@ -32,41 +33,21 @@ function Input(props) {
     validationMessage,
   } = props;
 
-  function renderLabel(input) {
-    return label ? (
-      <div className='form-group'>
-        <label className='form-label' htmlFor={id}>
-          {label}
-        </label>
-        {input}
-      </div>
-    ) : (
-      input
-    );
-  }
-
-  function renderMask(input) {
-    if (mask && mask !== '') {
-      return InputMask(input, mask, !byCharValidator, maskType);
-    }
-    return input;
-  }
-
-  const onChangeHandler = (e) => {
-    if (!validator(e.target.value)) {
+  const onChangeHandler = ({ target: { name, value } }) => {
+    if (!validator(value)) {
       highlightInput();
       errorNotification(description, validationMessage);
     }
-    onChange(e.target.name, e.target.value);
+    onChange(name, value);
   };
 
-  const onInputHandler = (e) => {
-    onInput(e.target.name, e.target.value);
+  const onInputHandler = ({ target: { name, value } }) => {
+    onInput(name, value);
   };
 
-  const onKeyPressHandler = (e) => {
-    if (!byCharValidator(e.target.value + e.key)) {
-      e.preventDefault();
+  const onKeyPressHandler = ({ target: { value }, key, preventDefault }) => {
+    if (!byCharValidator(value + key)) {
+      preventDefault();
     }
   };
 
@@ -77,7 +58,9 @@ function Input(props) {
 
   function renderInput() {
     if (type === 'checkbox' || type === 'radio') {
-      return renderLabel(
+      return LabeledInput(
+        label,
+        id,
         <CheckboxGroup
           id={id}
           type={type}
@@ -96,7 +79,9 @@ function Input(props) {
     }
 
     if (type === 'select') {
-      return renderLabel(
+      return LabeledInput(
+        label,
+        id,
         <Select
           id={id}
           type={type}
@@ -113,7 +98,9 @@ function Input(props) {
       );
     }
     if (type === 'textarea') {
-      return renderLabel(
+      return LabeledInput(
+        label,
+        id,
         <TextArea
           id={id}
           name={name}
@@ -130,8 +117,13 @@ function Input(props) {
       );
     }
 
-    return renderLabel(
-      renderMask(
+    return LabeledInput(
+      label,
+      id,
+      MaskedInput(
+        mask,
+        byCharValidator,
+        maskType,
         <input
           id={id}
           type={type}

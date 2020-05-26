@@ -1,13 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useReducer } from 'react';
 import Button from '../Button';
 import { ReactComponent as SettingsIcon } from '../../../assets/icons/settings.svg';
 import Modal from '../Modal';
 import changeColorScheme, { themes } from '../../../helpers/changeColorScheme';
 import Form from '../Form';
 import getSettingsFormInputsProps from './getSettingsFormInputsProps';
+import inputsReducer, { updateAction } from '../../../helpers/formHelpers/inputsReducer';
 
 const SettingsButton = () => {
-  const [inputs, setInputs] = useState({});
+  const [inputs, dispatch] = useReducer(inputsReducer, {});
+  const setInputs = (data) => {
+    dispatch(updateAction(data));
+  };
+
   const modal = useRef({});
   const toggleModal = () => {
     modal.current.toggle();
@@ -27,7 +32,6 @@ const SettingsButton = () => {
             themeOnChange: changeTheme,
           })}
           onInputsUpdate={setInputs}
-          submitButton={<></>}
           showNotifications='errorsOnly'
         >
           {inputs.theme}

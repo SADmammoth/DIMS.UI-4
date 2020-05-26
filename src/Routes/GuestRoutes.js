@@ -1,9 +1,11 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import HomePage from '../pages/HomePage';
 import LoginForm from '../components/elements/LoginForm';
+import Error404Page from '../pages/ErrorPages/Error404Page';
 
-export default function GuestRoutes({ logIn }) {
+function GuestRoutes({ logIn }) {
   return (
     <Switch>
       <Route exact path='/'>
@@ -12,6 +14,18 @@ export default function GuestRoutes({ logIn }) {
       <Route path='/login'>
         <LoginForm logIn={logIn} show />
       </Route>
+      <Route exact path='/404'>
+        <Error404Page />
+      </Route>
+
+      <Route>
+        <Redirect to='/404' />
+      </Route>
     </Switch>
   );
 }
+GuestRoutes.propTypes = {
+  logIn: PropTypes.func.isRequired,
+};
+
+export default GuestRoutes;

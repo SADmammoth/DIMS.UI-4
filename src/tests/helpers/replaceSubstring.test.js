@@ -1,4 +1,4 @@
-import replaceSubstring from '../../helpers/replaceSubstring';
+import replaceSubstring from '../../helpers/formHelpers/replaceSubstring';
 
 describe('replaceSubstring', () => {
   test('Must replace substring between indexes with provided new substring', () => {

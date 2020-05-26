@@ -1,8 +1,9 @@
-import replaceAll from '../../helpers/replaceAll';
+import replaceAll from '../../helpers/formHelpers/replaceAll';
 
-describe('replaceSubstring', () => {
-  test('Must replace char in given range with provided string', () => {
+describe('replaceAll', () => {
+  test('Must replace chars in given range with provided string', () => {
     const inputString = 't9xtW1thNumb9rs n12o312Nu32m3be3r1323sH33e342re12';
+    // Remove all numbers beginning from 16 index
     const actual = replaceAll(inputString, 16, inputString.length, /[0-9]/g, '');
     const expected = 't9xtW1thNumb9rs noNumbersHere';
 

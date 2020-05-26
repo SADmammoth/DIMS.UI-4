@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from './Input';
-import notify from '../../../helpers/notify';
+import notify from '../../../helpers/formHelpers/notify';
 import compareObjects from '../../../helpers/compareObjects';
-import errorNotification from '../../../helpers/errorNotification';
-import findInputByName from '../../../helpers/findInputByName';
+import errorNotification from '../../../helpers/formHelpers/errorNotification';
+import formatFormValues from '../../../helpers/formHelpers/formatFormValues';
+import validateForm from '../../../helpers/formHelpers/validateForm';
+import setFormDefaultValue from '../../../helpers/formHelpers/setFormDefaultValue';
+import createInput from './createInput';
 
 class Form extends React.Component {
   constructor(props) {
@@ -15,10 +18,9 @@ class Form extends React.Component {
       inputs: {}, // Store inputs components (for external use)
     };
   }
-  // TODO Email validator
+
   componentDidMount() {
-    this.createValues();
-    this.createInputs();
+    this.update();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,9 +32,13 @@ class Form extends React.Component {
       Object.keys(values).length !== inputs.length ||
       !compareObjects(prevState.values, values)
     ) {
-      this.createValues();
-      this.createInputs();
+      this.update();
     }
+  }
+
+  update() {
+    this.createValues();
+    this.createInputs();
   }
 
   getInput(name) {
@@ -48,7 +54,6 @@ class Form extends React.Component {
     this.createInputs();
   };
 
-  //* Create values
   createValue(id, type, name) {
     this.setState((state) => ({
       ...state,
@@ -58,25 +63,18 @@ class Form extends React.Component {
 
   createValues() {
     const { inputs } = this.props;
-    const values = {};
+    const { values } = this.state;
+    const valuesData = {};
 
     inputs.forEach((input) => {
-      values[input.name] = {
+      valuesData[input.name] = {
         id: input.name,
         value: input.value,
-        defaultValue:
-          this.state.values[input.name] &&
-          (this.state.values[input.name].defaultValue || (input.defaultValue && [...input.defaultValue])),
+        defaultValue: setFormDefaultValue(values, input),
       };
     });
 
-    this.setState({ values });
-  }
-  // * -end- Create values
-
-  // * Create inputs
-  createInput(props) {
-    return <Input key={props.id} {...props} />;
+    this.setState({ values: valuesData });
   }
 
   createInputs() {
@@ -88,8 +86,8 @@ class Form extends React.Component {
     }
 
     const inputsData = {};
-    inputs.forEach((input) => {
-      const {
+    inputs.forEach(
+      ({
         type,
         name,
         description,
@@ -107,76 +105,69 @@ class Form extends React.Component {
         validationMessage,
         onChange,
         onInput,
-      } = input;
+      }) => {
+        const higlightInputCallback = () => this.highlightInput(name);
 
-      const higlightInputCallback = () => this.highlightInput(name);
+        const onChangeHandler = (inputName, value) => {
+          if (onChange) {
+            onChange(inputName, value);
+          }
+          this.updateValue(inputName, value);
+        };
 
-      const onChangeHandler = (inputName, value) => {
-        if (onChange) onChange(inputName, value);
-        this.updateValue(inputName, value);
-      };
+        const onInputHandler = (inputName, value) => {
+          if (onInput) {
+            onInput(inputName, value);
+          }
+          this.updateValue(inputName, value);
+        };
 
-      const onInputHandler = (inputName, value) => {
-        if (onInput) onInput(inputName, value);
-        this.updateValue(inputName, value);
-      };
+        inputsData[name] = createInput({
+          id: values[name].id,
+          type,
+          name,
+          description,
+          onInput: onInputHandler,
+          onChange: onChangeHandler,
+          mask,
+          maskType,
+          validator,
+          byCharValidator,
+          required,
+          label,
+          placeholder,
+          attributes,
+          value: values[name].value,
+          valueOptions,
+          minSymbols,
+          maxSymbols,
+          invalid: !!values[name].invalid,
+          highlightInput: higlightInputCallback,
+          validationMessage,
+        });
 
-      inputsData[name] = this.createInput({
-        id: values[name].id,
-        type,
-        name,
-        description,
-        onInput: onInputHandler,
-        onChange: onChangeHandler,
-        mask,
-        maskType,
-        validator,
-        byCharValidator,
-        required,
-        label,
-        placeholder,
-        attributes,
-        value: values[name].value,
-        valueOptions,
-        minSymbols,
-        maxSymbols,
-        invalid: !!values[name].invalid,
-        highlightInput: higlightInputCallback,
-        validationMessage,
-      });
+        onInputsUpdate(inputsData);
 
-      onInputsUpdate(inputsData);
-
-      this.setState({ inputs: inputsData });
-    });
+        this.setState({ inputs: inputsData });
+      },
+    );
   }
   // * -end- Create Inputs
 
-  // * Format values to pass to onSubmit
-  formatValues() {
-    const values = {};
-    const { values: stateValues } = this.state;
-    Object.entries(stateValues).forEach(([name, valueItem]) => {
-      values[name] = valueItem.value;
-
-      values[name] = valueItem.value;
-      if (valueItem.defaultValue) {
-        values[`${name}_default`] = valueItem.defaultValue;
-      }
-    });
-    return values;
-  }
-
   successNotification(title, message) {
     const { showNotifications } = this.props;
-    if (showNotifications === 'all') notify('success', title, message);
+    if (showNotifications === 'all') {
+      notify('success', title, message);
+    }
   }
 
   errorNotification(title, message) {
     console.trace();
     const { showNotifications } = this.props;
 
-    if (showNotifications !== 'hideAll') notify('error', title, message);
+    if (showNotifications !== 'hideAll') {
+      notify('error', title, message);
+    }
   }
 
   onValidationFail(input) {
@@ -199,35 +190,18 @@ class Form extends React.Component {
     this.setState({ values }, () => this.createInputs());
   };
 
-  checkValidity = () => {
-    const { values } = this.state;
-    const { inputs } = this.props;
-
-    let input;
-    for (let valueName in values) {
-      input = findInputByName(inputs, valueName);
-      if (values[valueName].required && !values[valueName].value) {
-        this.onValidationFail(input);
-      }
-      if (input.validator && !input.validator(values[valueName].value)) {
-        this.onValidationFail(input);
-      }
-    }
-    return true;
-  };
-
   onResponseReceived = (response) => {
     if (response) {
-      if (response.status) {
-        if (response.status === 200) {
-          this.successNotification('Success', 'Data sent and accepted by server');
-        } else {
-          this.errorNotification('Server error', response && response.toString());
-        }
-      } else {
-        this.errorNotification('Form error', response && response.toString());
+      if (response.status === 200) {
+        this.successNotification('Success', 'Data sent and accepted by server');
+        return;
       }
+
+      this.errorNotification('Server error', response && response.toString());
+      return;
     }
+
+    this.errorNotification('Form error', response && response.toString());
   };
 
   onResponseError = (error) => {
@@ -235,13 +209,22 @@ class Form extends React.Component {
   };
 
   onSubmit = (event) => {
-    const { onSubmit: onSubmitHandler } = this.props;
+    const { values } = this.state;
+    const { onSubmit: onSubmitHandler, inputs } = this.props;
+    if (onSubmitHandler === null) {
+      event.preventDefault();
+      return;
+    }
+
     if (onSubmitHandler) {
       event.preventDefault();
     }
-    if (this.checkValidity()) {
+
+    if (validateForm(values, inputs, this.onValidationFail)) {
       if (onSubmitHandler) {
-        onSubmitHandler(this.formatValues()).then(this.onResponseReceived).catch(this.onResponseError);
+        onSubmitHandler(formatFormValues(values))
+          .then(this.onResponseReceived)
+          .catch(this.onResponseError);
       }
     }
   };
@@ -271,8 +254,7 @@ Form.defaultProps = {
   action: '/',
   className: '',
   style: {},
-  onSubmit: null,
-  submitButton: <button type='submit'>Submit</button>,
+  submitButton: <></>,
   onInputsUpdate: (inputs) => inputs,
   showNotifications: 'all',
 };

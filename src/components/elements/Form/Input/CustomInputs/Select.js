@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import compareObjects from '../../../helpers/compareObjects';
+import compareObjects from '../../../../../helpers/compareObjects';
 
 function Select(props) {
   const { valueOptions, name, value: currentValue, placeholder, onChange, required } = props;

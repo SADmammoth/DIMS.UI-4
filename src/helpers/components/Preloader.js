@@ -1,27 +1,27 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import Client from '../Client';
-import store from '../../redux';
 import * as membersActions from '../../redux/actions/membersActions';
 import * as assignedTasksActions from '../../redux/actions/assignedTasksActions';
 import preloadTheme from '../preloadTheme';
 import getStateMembers from '../getStateMembers';
 
 const Preloader = ({ children, members, role }) => {
+  const dispatch = useDispatch();
   preloadTheme();
   useEffect(() => {
     async function fetchMembers() {
       await Client.getDirections();
       const fetchedMembers = await Client.getMembers();
-      store.dispatch(membersActions.setMembers(fetchedMembers));
+      dispatch(membersActions.setMembers(fetchedMembers));
     }
 
     if (role !== 'member') {
       fetchMembers();
     }
-  }, [role]);
+  }, [role, dispatch]);
 
   useEffect(() => {
     async function fetchAssignedTasks() {
@@ -38,13 +38,13 @@ const Preloader = ({ children, members, role }) => {
             assigned[taskId] = assignedArray;
           }),
         );
-        store.dispatch(assignedTasksActions.setAssignedToTasks(assigned));
+        dispatch(assignedTasksActions.setAssignedToTasks(assigned));
       }
     }
     if (role !== 'member') {
       fetchAssignedTasks();
     }
-  }, [members, role]);
+  }, [members, role, dispatch]);
 
   return <>{children}</>;
 };
