@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import MentorRoutes from './MentorRoutes';
 import AdminRoutes from './AdminRoutes';
 import MemberRoutes from './MemberRoutes';
+import useScrollToTop from '../helpers/hooks/useScrollToTop';
 
 function Routes(props) {
-  const { role, userId } = props;
+  const { role, userId, location } = props;
+
+  useScrollToTop({ location });
 
   return (
     <>
@@ -22,6 +26,7 @@ function Routes(props) {
 Routes.propTypes = {
   role: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
-export default Routes;
+export default withRouter(Routes);

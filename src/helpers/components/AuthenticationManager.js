@@ -35,15 +35,17 @@ class AuthenticationManager extends Component {
   authenticate = async (login, password) => {
     const { authorize } = this.props;
     const authToken = localStorage.getItem('authToken');
+    const fail = 'fail';
+
     if (!authToken || !(await Client.checkToken(authToken))) {
       if (!login || !password) {
-        return { status: 'fail' };
+        return { status: fail };
       }
       const { status, found, token, role, userId } = await Client.signIn(login, password);
-      if (status === 'fail' && found) {
+      if (status === fail && found) {
         return { status, message: 'Incorrect password' };
       }
-      if (status === 'fail' && !found) {
+      if (status === fail && !found) {
         return { status, message: 'Incorrect userName' };
       }
 

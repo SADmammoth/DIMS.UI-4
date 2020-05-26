@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 
-import store from '../redux';
 import MemberEdit from '../components/elements/MemberInfo/MemberEdit';
 import ContainerComponent from '../components/elements/ContainerComponent/ContainerComponent';
 import UserContextConsumer from '../helpers/components/UserContextConsumer';

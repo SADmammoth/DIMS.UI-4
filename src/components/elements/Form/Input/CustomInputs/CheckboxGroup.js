@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import checkboxValueSeparator from '../../../helpers/formHelpers/checkboxValueSeparator';
-import compareObjects from '../../../helpers/compareObjects';
+import checkboxValueSeparator from '../../../../../helpers/formHelpers/checkboxValueSeparator';
+import compareObjects from '../../../../../helpers/compareObjects';
 
 function CheckboxGroup(props) {
   function renderCheckbox(valueOption, { value: commonValue, id, type, name, onChange, attributes }) {

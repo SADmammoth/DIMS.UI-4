@@ -6,14 +6,12 @@ import Routes from './Routes';
 import store from './redux';
 import Preloader from './helpers/components/Preloader';
 import UserContextConsumer from './helpers/components/UserContextConsumer';
-import ScrollToTop from './helpers/components/ScrollToTop';
 
 const App = () => {
   return (
     <Provider store={store}>
       <Preloader>
         <Router>
-          <ScrollToTop />
           <AuthorizationManager>
             <UserContextConsumer>
               {({ role, userId }) => {

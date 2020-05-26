@@ -222,7 +222,7 @@ class Form extends React.Component {
 
     if (validateForm(values, inputs, this.onValidationFail)) {
       if (onSubmitHandler) {
-        onSubmitHandler(formatFormValues())
+        onSubmitHandler(formatFormValues(values))
           .then(this.onResponseReceived)
           .catch(this.onResponseError);
       }
