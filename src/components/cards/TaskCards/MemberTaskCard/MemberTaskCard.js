@@ -120,57 +120,59 @@ function MemberTaskCard(props) {
               <span>Assign</span>
             </AssignButton>
           )}
-          {isAdminOrMentor && taskSet === 'all' && (
-            <>
-              <DialogButton
-                buttonClassMod='secondary'
-                buttonContent='Delete'
-                message={
-                  <>
-                    Are you confident, you want to delete task <b>{taskName}</b>?
-                  </>
-                }
-                confirmButtonClassMod='error'
-                confirmButtonContent='Delete'
-                dialogValue={id}
-                onSubmit={onDelete}
-                reload={reload}
-              />
-              <TaskEditButton
-                buttonClassMod='secondary'
-                taskId={taskId}
-                taskName={taskName}
-                taskDescription={taskDescription}
-                taskStart={taskStart}
-                taskDeadline={taskDeadline}
-                assignedTo={assignedTo}
-                show={edit}
-                members={members}
-                onSubmit={onEdit}
-                buttonContent='Edit'
-                reload={reload}
-              />
-            </>
-          )}
-          {isAdminOrMentor && taskSet === 'user' && (
-            <>
-              <ChangeStateButton
-                reload={reload}
-                buttonClassMod='success'
-                taskId={taskId}
-                userId={userId}
-                state='success'
-              >
-                Success
-              </ChangeStateButton>
-              <ChangeStateButton reload={reload} buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
-                Fail
-              </ChangeStateButton>
-              <Button classMod='ghost' link={`/tasks/id${taskId}`}>
-                Show in tasks
-              </Button>
-            </>
-          )}
+          <ButtonGroup>
+            {isAdminOrMentor && taskSet === 'user' && (
+              <>
+                <ChangeStateButton
+                  reload={reload}
+                  buttonClassMod='success'
+                  taskId={taskId}
+                  userId={userId}
+                  state='success'
+                >
+                  Success
+                </ChangeStateButton>
+                <ChangeStateButton reload={reload} buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
+                  Fail
+                </ChangeStateButton>
+                <Button classMod='ghost' link={`/tasks/id${taskId}`}>
+                  Show in tasks
+                </Button>
+              </>
+            )}
+            {isAdminOrMentor && taskSet === 'all' && (
+              <>
+                <DialogButton
+                  buttonClassMod='secondary'
+                  buttonContent='Delete'
+                  message={
+                    <>
+                      Are you confident, you want to delete task <b>{taskName}</b>?
+                    </>
+                  }
+                  confirmButtonClassMod='error'
+                  confirmButtonContent='Delete'
+                  dialogValue={id}
+                  onSubmit={onDelete}
+                  reload={reload}
+                />
+                <TaskEditButton
+                  buttonClassMod='secondary'
+                  taskId={taskId}
+                  taskName={taskName}
+                  taskDescription={taskDescription}
+                  taskStart={taskStart}
+                  taskDeadline={taskDeadline}
+                  assignedTo={assignedTo}
+                  show={edit}
+                  members={members}
+                  onSubmit={onEdit}
+                  buttonContent='Edit'
+                  reload={reload}
+                />
+              </>
+            )}
+          </ButtonGroup>
         </ButtonGroup>
       </CollapsibleCard.Body>
     </CollapsibleCard>

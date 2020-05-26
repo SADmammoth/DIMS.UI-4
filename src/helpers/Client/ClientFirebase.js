@@ -33,19 +33,13 @@ class Client {
   }
 
   static async getUserTasks(userID) {
-    const tasks = await Client.db
-      .collection('memberTasks')
-      .where('userID', '==', userID)
-      .get();
+    const tasks = await Client.db.collection('memberTasks').where('userID', '==', userID).get();
 
     const tasksObject = {};
     let taskData = {};
     await Promise.all(
       tasks.docs.map(async (doc) => {
-        taskData = await Client.db
-          .collection('tasks')
-          .doc(doc.data().taskID)
-          .get();
+        taskData = await Client.db.collection('tasks').doc(doc.data().taskID).get();
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
@@ -55,10 +49,7 @@ class Client {
   }
 
   static async getMember(userId) {
-    const member = await Client.db
-      .collection('members')
-      .doc(userId)
-      .get();
+    const member = await Client.db.collection('members').doc(userId).get();
 
     return member.data();
   }
@@ -77,10 +68,7 @@ class Client {
       Object.entries(track).map(async ([id, data]) => {
         const { memberTaskId, ...progressData } = data;
         progressObject[id] = progressData;
-        userData = await Client.db
-          .collection('members')
-          .doc(userID)
-          .get();
+        userData = await Client.db.collection('members').doc(userID).get();
         progressObject[id].userName = userData.data().firstName;
       }),
     );
@@ -99,7 +87,7 @@ class Client {
         tasksObject[doc.id] = doc.data();
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
-        users = await Client.getAssignedTo(doc.id);
+        users = await Client.getAssigned(doc.id);
         tasksObject[doc.id].assignedTo = await Promise.all(
           users.map(async ({ memberTaskID, userID }) => {
             user = await Client.getMember(userID);
@@ -112,11 +100,8 @@ class Client {
     return tasksObject;
   }
 
-  static async getAssignedTo(taskID) {
-    const memberTasks = await Client.db
-      .collection('memberTasks')
-      .where('taskID', '==', taskID)
-      .get();
+  static async getAssigned(taskID) {
+    const memberTasks = await Client.db.collection('memberTasks').where('taskID', '==', taskID).get();
     return memberTasks.docs.map((doc) => {
       return { userID: doc.data().userID, memberTaskID: doc.id };
     });
@@ -124,10 +109,7 @@ class Client {
 
   static async getTracks(userID) {
     const memberTasks = await Client.getUserTasks(userID);
-    const tracks = await Client.db
-      .collection('track')
-      .where('memberTaskID', 'in', Object.keys(memberTasks))
-      .get();
+    const tracks = await Client.db.collection('track').where('memberTaskID', 'in', Object.keys(memberTasks)).get();
 
     const tracksObject = {};
     tracks.docs.map(async (doc) => {
@@ -140,10 +122,7 @@ class Client {
   }
 
   static async signIn(login, password) {
-    const user = await Client.db
-      .collection('users')
-      .where('login', '==', login)
-      .get();
+    const user = await Client.db.collection('users').where('login', '==', login).get();
     if (user) {
       if (user.docs[0].data().password === md5(password)) {
         return {
@@ -160,19 +139,15 @@ class Client {
   }
 
   static async checkToken(token) {
-    const user = await Client.db
-      .collection('users')
-      .where('token', '==', token)
-      .get();
+    const user = await Client.db.collection('users').where('token', '==', token).get();
     return !!user.docs.length;
   }
 
   static async getUserInfoByToken(token) {
-    // const user = await Client.db
-    //   .collection('users')
-    //   .where('token', '==', token)
-    //   .get();
-    return { role: 'admin' };
+    const user = await Client.db.collection('users').where('token', '==', token).get();
+    const { role, userID: userId } = user.docs[0].data();
+
+    return { role, userId };
   }
 }
 

@@ -12,7 +12,7 @@
   &:not(.empty) {
     width: 800px;
     max-width: 70vw;
-    height: 63vh;
+    height: 65vh;
     max-height: 700px;
     overflow-y: auto;
   }
@@ -150,9 +150,13 @@
     }
   }
 
-  .button:not([type='submit']) {
-    margin-right: 2.5vw;
+  .button {
     float: right;
+    margin-left: 10px;
+  }
+
+  .button:not(:last-child) {
+    margin-right: 2.5vw;
   }
 
   &.empty {

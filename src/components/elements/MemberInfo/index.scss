@@ -2,11 +2,12 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .member-info {
-  width: 60vw;
+  width: 65vw;
   min-height: 20vh;
   max-height: 90vh;
   padding: 0 0 30px !important;
   overflow-y: auto;
+  overflow-x: hidden;
 
   @media screen and (max-width: 1000px) {
     .address {
@@ -32,10 +33,18 @@
 
   &__header {
     position: relative;
+    display: flex;
     padding: 25px 0;
     padding-right: 50px;
     background-color: $primary-bg;
-    @include clearfix;
+
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      align-items: center;
+    }
 
     @media screen and (max-width: 1100px) {
       & {
@@ -53,7 +62,6 @@
       .text-badge,
       .date-badge {
         margin: 10px 20px;
-        float: none;
       }
     }
 
@@ -70,13 +78,11 @@
 
     .date-badge {
       margin-left: 50px;
-      float: right;
       transform: scale(1.2);
     }
 
     .text-badge {
       margin-top: 7px;
-      float: right;
       transform: scale(1.2);
     }
   }
@@ -84,7 +90,6 @@
   &__title {
     margin: 0;
     margin-left: 3vw;
-    float: left;
     font-size: 2.2rem;
   }
 
@@ -150,7 +155,6 @@
 
   .flex-column {
     width: 40%;
-    float: left;
     font-size: 1.2rem;
     box-sizing: border-box;
 
@@ -164,12 +168,13 @@
   }
 
   &__additional-info {
+    display: flex;
+    justify-content: flex-start;
     margin: 0 2vw;
     margin-top: 3%;
     padding: 2% 5%;
     background: $primary-bg;
     box-sizing: border-box;
-    @include clearfix;
 
     .date-badge {
       display: inline-block;
@@ -178,19 +183,18 @@
     }
   }
 
-  .button-block {
-    width: calc(100% - 4vw);
-    margin: 2% 2vw;
-    @include clearfix();
+  & > .button-block {
+    width: calc(100% - 4vw + 10px);
+    margin: 2% calc(2vw - 5px);
 
-    .button:not(.button_primary) {
-      margin-left: 20px;
-      float: right;
-    }
+    display: flex;
+    justify-content: space-between;
 
-    .button_primary {
-      margin-right: 20px;
-      float: left;
+    .button-block {
+      display: flex;
+      & > * {
+        margin: 0 5px;
+      }
     }
   }
 
