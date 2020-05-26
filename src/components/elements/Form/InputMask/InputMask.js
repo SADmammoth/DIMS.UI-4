@@ -15,14 +15,14 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
 
   if (validate) {
     resultInput = React.cloneElement(resultInput, {
-      onKeyPress: (e) => {
-        let value = getValueFromMask(e.target.value) + e.key;
+      onKeyPress: ({ target: { value }, key, preventDefault }) => {
+        let newValue = getValueFromMask(value) + key;
         if (type === 'invisible') {
-          value = e.target.value + e.key;
+          newValue = value + key;
         }
 
-        if (!Validator.maskByChar(value, mask)) {
-          e.preventDefault();
+        if (!Validator.maskByChar(newValue, mask)) {
+          preventDefault();
         }
       },
     });

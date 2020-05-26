@@ -5,13 +5,15 @@
 .icon-flag {
   width: 18px;
   height: 18px;
-  margin-bottom: -3px;
+  position: relative;
+  bottom: -3px;
 }
 
 .icon-taskdate {
   width: 23px;
   height: 23px;
-  margin-bottom: -3px;
+  position: relative;
+  bottom: -3px;
 }
 
 .interactive {
@@ -21,79 +23,90 @@
 .icon-track {
   width: 18px;
   height: 18px;
-  margin-bottom: -1px;
+  position: relative;
+  bottom: -1px;
 }
 
 .icon-progress {
   width: 15px;
   height: 15px;
-  margin-bottom: -1px;
+  position: relative;
+  bottom: -1px;
 }
 
 .icon-tasks {
   width: 20px;
   height: 20px;
-  margin-bottom: -3px;
+  position: relative;
+  bottom: -3px;
 }
 
 .icon-back {
   width: 20px;
   height: 20px;
-  margin-right: -15px;
+  position: relative;
+  right: -15px;
 }
 
 .icon-skype {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -5px;
+  position: relative;
+  bottom: -5px;
+  right: -5px;
 }
 
 .icon-mobile {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -10px;
+  position: relative;
+  bottom: -5px;
+  right: -10px;
 }
 
 .icon-address {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -5px;
+  position: relative;
+  bottom: -5px;
+  right: -5px;
 }
 
 .icon-envelope {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -5px;
+  position: relative;
+  bottom: -5px;
+  right: -5px;
 }
 
 .icon-settings {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -5px;
+  position: relative;
+  bottom: -5px;
+  right: -5px;
 }
 
 .icon-menu {
   height: 25px;
   width: 25px;
   padding: 0;
-  margin-bottom: -5px;
+  position: relative;
+  bottom: -5px;
 }
 
 .icon-search {
   height: 25px;
   width: 25px;
-  margin-bottom: -5px;
-  margin-right: -5px;
+  position: relative;
+  bottom: -5px;
+  right: -5px;
 }
 
 .icon-logo {
   height: 55px;
   width: 55px;
-  margin-bottom: 10px;
-  margin-right: -5px;
+  position: relative;
+  right: -5px;
 }

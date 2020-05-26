@@ -36,17 +36,15 @@ function Header(props) {
                 {matchMaxWidth('600px') || (role && <TextBadge>{role}</TextBadge>)}
               </h1>
             )}
-            <>
-              {navItems && navItems.length && (
-                <>
-                  {matchMaxWidth('1200px') ? (
-                    <MobileNav className='header__nav' navItems={navItems} />
-                  ) : (
-                    <Nav className='header__nav' navItems={navItems} />
-                  )}
-                </>
-              )}
-            </>
+            {navItems && navItems.length && (
+              <>
+                {matchMaxWidth('1200px') ? (
+                  <MobileNav className='header__nav' navItems={navItems} />
+                ) : (
+                  <Nav className='header__nav' navItems={navItems} />
+                )}
+              </>
+            )}
             {filterFunction && (
               <Button
                 classMod='invisible'
@@ -97,7 +95,6 @@ function Header(props) {
                     valueOptions: [{ label: 'Regexp mode', value: 'on' }],
                   },
                 ]}
-                submitButton={<></>}
                 showNotifications='hideAll'
                 onSubmit={null}
               />

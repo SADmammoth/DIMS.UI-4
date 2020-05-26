@@ -27,7 +27,6 @@ const SettingsButton = () => {
             themeOnChange: changeTheme,
           })}
           onInputsUpdate={setInputs}
-          submitButton={<></>}
           showNotifications='errorsOnly'
         >
           {inputs.theme}

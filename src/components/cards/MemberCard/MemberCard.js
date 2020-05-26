@@ -77,20 +77,8 @@ const MemberCard = (props) => {
             <b>{firstName}</b>
             {` ${lastName}, ${age}`}
           </CollapsibleCard.Title>
-          <>
-            {matchMaxWidth('1000px') || (
-              <>
-                <DateBadge date={startDate} type={dateTypes.startDate} />
-              </>
-            )}
-          </>
-          <>
-            {matchMaxWidth('550px') || (
-              <>
-                <TextBadge>{direction}</TextBadge>
-              </>
-            )}
-          </>
+          {matchMaxWidth('1000px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
+          {matchMaxWidth('550px') || <TextBadge>{direction}</TextBadge>}
         </CollapsibleCard.Header>
         <CollapsibleCard.Body>
           <Button classMod='primary' link={`/members/${id}/progress`}>

@@ -1,3 +1,5 @@
+import { matchPath } from 'react-router-dom';
+
 const NavItems = {
   admin: [
     { id: 'Members', content: 'Members', link: '/members' },
@@ -11,18 +13,17 @@ const NavItems = {
     { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   member: [
-    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks' },
-    { id: 'Tracks', content: 'Tracks', link: '/members/:id/tracks' },
+    { id: 'Tasks', content: 'Tasks', link: '/members/:userId/tasks' },
+    { id: 'Tracks', content: 'Tracks', link: '/members/:userId/tracks' },
   ],
   guest: [{ id: 'Login', content: 'Log In', link: '/login' }],
 };
 
-export default function getNavItems({ role, userId }, currentRoute) {
+export default function getNavItems({ role, userId }, currentPath) {
   return NavItems[role].map((item) => {
     const itemCopy = { ...item };
-    itemCopy.active = itemCopy.link === currentRoute;
-    itemCopy.link = itemCopy.link.replace(':id', userId);
-    itemCopy.link = itemCopy.link.replace(/\/[^/]*:[^/]*\?/g, '');
+    itemCopy.active = !!matchPath(currentPath, itemCopy.link);
+    itemCopy.link = itemCopy.link.replace(':userId', userId);
     return itemCopy;
   });
 }

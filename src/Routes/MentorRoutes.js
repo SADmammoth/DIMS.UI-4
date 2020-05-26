@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import renderMemberTasksPage from './renderMemberTasksPage';
 import { Error404Page } from '../pages/ErrorPages';
 import MembersManagerPage from '../pages/MembersManagerPage';
 import MemberTasksPage from '../pages/MemberTasksPage';
@@ -17,24 +16,15 @@ function MentorRoutes({ userId }) {
       <Route exact path='/members'>
         <MembersManagerPage />
       </Route>
-      <Route
-        exact
-        path='/members/:id/tasks'
-        render={(props) => {
-          return renderMemberTasksPage(props, 'mentor', userId);
-        }}
-      />
-      <Route
-        exact
-        path='/members/:id/tasks/id:open?'
-        render={(props) => {
-          return renderMemberTasksPage(props, 'mentor', userId);
-        }}
-      />
+      <Route exact path='/members/:id/tasks'>
+        <MemberTasksPage />
+      </Route>
+      <Route exact path='/members/:id/tasks/id:open?'>
+        <MemberTasksPage />
+      </Route>
       <Route path='/members/:id/progress'>
         <MemberProgressPage />
       </Route>
-
       <Route exact path='/tasks/'>
         <MemberTasksPage />
       </Route>

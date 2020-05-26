@@ -10,11 +10,11 @@ function Routes(props) {
 
   return (
     <>
+      {role === 'member' && <MemberRoutes userId={userId} />}
+
       {role === 'mentor' && <MentorRoutes userId={userId} />}
 
       {role === 'admin' && <AdminRoutes userId={userId} />}
-
-      {role === 'member' && <MemberRoutes userId={userId} />}
     </>
   );
 }

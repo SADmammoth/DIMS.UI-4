@@ -15,10 +15,9 @@ class Form extends React.Component {
       inputs: {}, // Store inputs components (for external use)
     };
   }
-  // TODO Email validator
+
   componentDidMount() {
-    this.createValues();
-    this.createInputs();
+    this.update();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,9 +29,13 @@ class Form extends React.Component {
       Object.keys(values).length !== inputs.length ||
       !compareObjects(prevState.values, values)
     ) {
-      this.createValues();
-      this.createInputs();
+      this.update();
     }
+  }
+
+  update() {
+    this.createValues();
+    this.createInputs();
   }
 
   getInput(name) {
@@ -112,12 +115,16 @@ class Form extends React.Component {
       const higlightInputCallback = () => this.highlightInput(name);
 
       const onChangeHandler = (inputName, value) => {
-        if (onChange) onChange(inputName, value);
+        if (onChange) {
+          onChange(inputName, value);
+        }
         this.updateValue(inputName, value);
       };
 
       const onInputHandler = (inputName, value) => {
-        if (onInput) onInput(inputName, value);
+        if (onInput) {
+          onInput(inputName, value);
+        }
         this.updateValue(inputName, value);
       };
 
@@ -169,14 +176,18 @@ class Form extends React.Component {
 
   successNotification(title, message) {
     const { showNotifications } = this.props;
-    if (showNotifications === 'all') notify('success', title, message);
+    if (showNotifications === 'all') {
+      notify('success', title, message);
+    }
   }
 
   errorNotification(title, message) {
     console.trace();
     const { showNotifications } = this.props;
 
-    if (showNotifications !== 'hideAll') notify('error', title, message);
+    if (showNotifications !== 'hideAll') {
+      notify('error', title, message);
+    }
   }
 
   onValidationFail(input) {
@@ -277,7 +288,7 @@ Form.defaultProps = {
   action: '/',
   className: '',
   style: {},
-  submitButton: <button type='submit'>Submit</button>,
+  submitButton: <></>,
   onInputsUpdate: (inputs) => inputs,
   showNotifications: 'all',
 };

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function FlexColumn(props) {
-  const { children } = props;
+function FlexColumn({ children }) {
   return <div className='flex-column'>{children}</div>;
 }
 

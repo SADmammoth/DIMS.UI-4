@@ -40,7 +40,6 @@
 }
 
 @mixin acrylic-glass-effect {
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -59,5 +58,19 @@
 
   &::-webkit-scrollbar-thumb:hover {
     background: $thumb-hover-color;
+  }
+}
+
+@mixin toast-header {
+  @each $type, $color in ('success': $success, 'error': $error, 'info': $info) {
+    // Paint toast header according toast type in class
+    .toast_#{$type} {
+      border: 2px solid $color;
+      color: $color;
+      box-shadow: 0px 0px 3px 3px transparentize($color, 0.7);
+      .toast__header {
+        background: transparentize($color, 0.7);
+      }
+    }
   }
 }

@@ -4,6 +4,7 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import Client from '../Client';
 import LogOut from './LogOut';
 import GuestRoutes from '../../Routes/GuestRoutes';
+import Spinner from '../../components/elements/Spinner/Spinner';
 
 class AuthenticationManager extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class AuthenticationManager extends Component {
 
   logOut = () => {
     const { deleteUserInfo } = this.props;
-    this.setState({ authenticated: null });
+    this.setState({ authenticated: false });
     localStorage.removeItem('authToken');
     deleteUserInfo();
   };
@@ -64,10 +65,18 @@ class AuthenticationManager extends Component {
 
     return (
       <>
-        {authenticated ? children : <GuestRoutes logIn={this.logIn} />}
-        <Route exact path='/logout'>
-          {authenticated ? <LogOut logOut={this.logOut} /> : <Redirect to='/404' />}
-        </Route>
+        {authenticated !== null ? (
+          <>
+            {authenticated ? children : <GuestRoutes logIn={this.logIn} />}
+            {authenticated && (
+              <Route exact path='/logout'>
+                <LogOut logOut={this.logOut} />
+              </Route>
+            )}
+          </>
+        ) : (
+          <Spinner centered />
+        )}
       </>
     );
   }

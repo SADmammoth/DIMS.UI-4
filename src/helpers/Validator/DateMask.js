@@ -1,5 +1,22 @@
 import regexpEscape from './regexpEscape';
 
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
+
 const DateMask = {
   /* *
    * Mask template:
@@ -25,24 +42,9 @@ const DateMask = {
 
   dateTimeMessage: 'Invalid date format',
 
+  // Constructs regexp from mask
+  // Regexp contains groups, representing month number, day number and so on
   dateTimeRegexpString: (masks) => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
-
     if (Object.keys(DateMask.dateTimeLastMasks).length >= 10) {
       DateMask.dateTimeLastMasks = {};
     }
@@ -99,25 +101,10 @@ const DateMask = {
     return Regexp;
   },
 
+  // Parsing from date string to Date by mask
   parseDateByMask: (input, mask) => {
     const Regexp = new RegExp(DateMask.dateTimeRegexpString([mask]));
     const matchedInput = Regexp.exec(input).groups;
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
 
     let monthNum = parseInt(matchedInput.monthNumber, 10) - 1;
 
@@ -155,23 +142,8 @@ const DateMask = {
     return new Date(...date);
   },
 
+  // Stringifies given date according mask
   fromDateToMask: (date, mask) => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    const monthsShort = months.map((month) => [...month].slice(0, 3).join(''));
     return regexpEscape(mask)
       .replace(/(^|[^M])M($|[^M])/g, `$1${date.getMonth() + 1}$2`)
       .replace(
@@ -198,13 +170,15 @@ const DateMask = {
       .replace(/(^|[^a])a($|[^a])/g, `$1${date.getHours > 12 ? 'PM' : 'AM'}$2`);
   },
 
-  dateTime: (date, masks = ['MM-dd-yyyy hh:mm:ss']) => {
+  // Checks if date string follows mask
+  dateTime: (dateString, masks = ['MM-dd-yyyy hh:mm:ss']) => {
     const dateTimeRegex = new RegExp(DateMask.dateTimeRegexpString(masks));
-    return dateTimeRegex.test(date);
+    return dateTimeRegex.test(dateString);
   },
 
   dateTimeLastMasks: {},
 
+  // Checks is date valid using Date constructor
   dateTimeJS: (date) => {
     try {
       Date(date);
@@ -214,6 +188,7 @@ const DateMask = {
     return true;
   },
 
+  // Checks if date string follows mask and represents date in past
   dateTimeInPast: (input, mask) => {
     if (!DateMask.dateTime(input, [mask])) {
       return false;
@@ -222,6 +197,7 @@ const DateMask = {
     return date < new Date();
   },
 
+  // Checks if current date input follows the mask
   dateByChar: (input, masks = ['MM-dd-yyyy hh:mm:ss']) => {
     const Regexp = RegExp(
       `(^${masks

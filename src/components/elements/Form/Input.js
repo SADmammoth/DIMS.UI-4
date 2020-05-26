@@ -52,21 +52,21 @@ function Input(props) {
     return input;
   }
 
-  const onChangeHandler = (e) => {
-    if (!validator(e.target.value)) {
+  const onChangeHandler = ({ target: { name, value } }) => {
+    if (!validator(value)) {
       highlightInput();
       errorNotification(description, validationMessage);
     }
-    onChange(e.target.name, e.target.value);
+    onChange(name, value);
   };
 
-  const onInputHandler = (e) => {
-    onInput(e.target.name, e.target.value);
+  const onInputHandler = ({ target: { name, value } }) => {
+    onInput(name, value);
   };
 
-  const onKeyPressHandler = (e) => {
-    if (!byCharValidator(e.target.value + e.key)) {
-      e.preventDefault();
+  const onKeyPressHandler = ({ target: { value }, key, preventDefault }) => {
+    if (!byCharValidator(value + key)) {
+      preventDefault();
     }
   };
 

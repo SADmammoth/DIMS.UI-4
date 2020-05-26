@@ -32,13 +32,11 @@ class AuthorizationManager extends Component {
     const { children } = this.props;
     const { authorizedUser } = this.state;
     return (
-      <>
-        <UserContext.Provider value={authorizedUser}>
-          <AuthenticationManager authorize={this.authorize} deleteUserInfo={this.deleteUserInfo}>
-            {children}
-          </AuthenticationManager>
-        </UserContext.Provider>
-      </>
+      <UserContext.Provider value={authorizedUser}>
+        <AuthenticationManager authorize={this.authorize} deleteUserInfo={this.deleteUserInfo}>
+          {children}
+        </AuthenticationManager>
+      </UserContext.Provider>
     );
   }
 }
