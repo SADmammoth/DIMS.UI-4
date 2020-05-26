@@ -8,21 +8,40 @@ import Modal from '../../Modal';
 function TaskEditButton(props) {
   const modal = React.createRef();
 
-  const openModal = (event) => {
-    props.history.push(`/tasks/${props.taskID}/edit`);
+  const { onSubmit, buttonContent, buttonClassMod, reload, children, show, ...otherProps } = props;
+
+  const openModal = () => {
+    props.history.push(`/tasks/id${props.taskId}/edit`);
     modal.current.handleShow();
   };
 
   const onClose = () => {
     props.history.goBack();
   };
+
+  const handleClose = () => {
+    modal.current.handleClose();
+  };
+
+  const onSubmitHandler = (data) => {
+    return onSubmit(data)
+      .then((res) => {
+        handleClose();
+        reload();
+        return res;
+      })
+      .then((res) => {
+        return res;
+      });
+  };
+
   return (
     <>
-      <Button classMod={props.buttonClassMod} onClick={openModal}>
-        {props.children || props.buttonContent}
+      <Button classMod={buttonClassMod} onClick={openModal}>
+        {children || buttonContent}
       </Button>
-      <Modal ref={modal} show={props.show} className='task-edit' onClose={onClose}>
-        <TaskEdit {...props} />
+      <Modal ref={modal} show={show} onClose={onClose} className='task-edit-modal'>
+        <TaskEdit onSubmit={onSubmitHandler} {...otherProps} handleClose={handleClose} />
       </Modal>
     </>
   );
@@ -31,7 +50,23 @@ function TaskEditButton(props) {
 TaskEditButton.propTypes = {
   buttonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   buttonClassMod: PropTypes.string.isRequired,
-  ...TaskEdit.propTypes,
+  reload: PropTypes.func.isRequired,
+  taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  taskName: PropTypes.string,
+  taskDescription: PropTypes.string,
+  taskStart: PropTypes.instanceOf(Date),
+  taskDeadline: PropTypes.instanceOf(Date),
+  assignedTo: PropTypes.arrayOf(
+    PropTypes.shape({
+      memberTaskId: PropTypes.string,
+      userId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
+  ),
+  members: PropTypes.objectOf(PropTypes.object),
+  onSubmit: PropTypes.func.isRequired,
+  empty: PropTypes.bool,
 };
 
 export default withRouter(TaskEditButton);

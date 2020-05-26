@@ -1,32 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CollapsedMemberProgressCard from './CollapsedMemberProgressCard';
-import Button from '../../../elements/Button/Button';
+import CollapsibleCard from '../../CollapsibleCard';
+import DateBadge from '../../../elements/DateBadge';
 import compareObjects from '../../../../helpers/compareObjects';
+import dateTypes from '../../../../helpers/dateTypes';
 
 function MemberProgressCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, taskID, role, open, close } = props;
-  function onClick(collapsed) {
-    collapsed ? open(id) : close(id);
-  }
+  const { taskName, trackNote, trackDate, collapsed, id, open, close } = props;
 
   return (
-    <article className={`task-progress task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedMemberProgressCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
-      {!collapsed && (
-        <>
-          <div className='task-card__body'>
-            <p className='task-card__description'>{trackNote}</p>{' '}
-            {(role === 'admin' || role === 'mentor') && (
-              <Button classMod='ghost' link={`/tasks/${taskID}`}>
-                Show in tasks
-              </Button>
-            )}
-          </div>
-        </>
-      )}
-    </article>
+    <CollapsibleCard id={id} className='task-progress' cardClass='task' collapsed={collapsed} open={open} close={close}>
+      <CollapsibleCard.Header>
+        <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
+        <DateBadge type={dateTypes.trackStart} date={trackDate} />
+      </CollapsibleCard.Header>
+      <CollapsibleCard.Body>
+        <CollapsibleCard.Description>{trackNote}</CollapsibleCard.Description>
+      </CollapsibleCard.Body>
+    </CollapsibleCard>
   );
 }
 
@@ -39,6 +31,8 @@ MemberProgressCard.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackNote: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date).isRequired,
+  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  memberTaskId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 
 export default React.memo(MemberProgressCard, compareObjects);

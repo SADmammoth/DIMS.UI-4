@@ -1,10 +1,29 @@
-$primary-bg: #c6ddff;
-$highlight-bg: #91bdff;
-$dark-bg: #447ace;
-$light-bg: white;
-$header-bg: #c6ddff96;
-$common-text: #0046af;
-$light-text: white;
-$success: #39ff57;
-$error: #ff6f6f;
+$primary-bg: var(--primary-bg);
+$highlight-bg: var(--highlight-bg);
+$card-bg: var(--card-bg);
+$dark-bg: var(--dark-bg);
+$light-bg: var(--light-bg);
+$header-bg: var(--header-bg);
+$common-text: var(--common-text);
+$light-text: var(--light-text);
+$muted-text: var(--muted-text);
+
+$success: #00ff26;
+$error: #dd8e8e;
 $info: #249cff;
+
+:root {
+  @media screen and (max-width: 2000px) {
+    --container-width: 1600px;
+  }
+
+  @media screen and (max-width: 1500px) {
+    --container-width: 1000px;
+  }
+
+  @media screen and (min-width: 1500px) {
+    --container-width: 1000px;
+  }
+}
+
+$container-width: var(--container-width);

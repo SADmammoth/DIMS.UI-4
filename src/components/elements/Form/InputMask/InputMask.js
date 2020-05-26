@@ -2,21 +2,27 @@ import React from 'react';
 import Validator from '../../../../helpers/Validator';
 import InvisibleMaskComponent from './InvisibleMaskComponent';
 import MaskComponent from './MaskComponent';
-import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskEscapedCharsOrEmptyRegex';
+import maskEscapedCharsOrEmptyRegex from '../../../../helpers/maskHelpers/maskEscapedCharsOrEmptyRegex';
+import getValueFromMask from '../../../../helpers/maskHelpers/getValueFromMask';
 
-function MaskedInput(input, mask, validate = false, type = 'default') {
+function InputMask(input, mask, validate = false, type = 'default') {
   let resultInput = input;
   if (input.props.type === 'textarea' || input.props.type === 'select') {
     return input;
   }
 
-  const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => el);
+  const maskArray = mask.split(maskEscapedCharsOrEmptyRegex).filter((el) => !!el);
 
-  if (validate && type === 'invisible') {
+  if (validate) {
     resultInput = React.cloneElement(resultInput, {
-      onKeyPress: (e) => {
-        if (!Validator.maskByChar(e.target.value + e.key, mask)) {
-          e.preventDefault();
+      onKeyPress: ({ target: { value }, key, preventDefault }) => {
+        let newValue = getValueFromMask(value) + key;
+        if (type === 'invisible') {
+          newValue = value + key;
+        }
+
+        if (!Validator.maskByChar(newValue, mask)) {
+          preventDefault();
         }
       },
     });
@@ -25,4 +31,4 @@ function MaskedInput(input, mask, validate = false, type = 'default') {
   return type === 'invisible' ? InvisibleMaskComponent(resultInput, maskArray) : MaskComponent(resultInput, maskArray);
 }
 
-export default MaskedInput;
+export default InputMask;

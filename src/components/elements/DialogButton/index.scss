@@ -1,0 +1,24 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.dialog {
+  width: 30vw;
+  min-width: 300px;
+  min-height: 5vw;
+  padding-bottom: 10px;
+  text-align: center;
+
+  .button-block {
+    display: flex;
+    justify-content: center;
+    display: flex;
+  }
+
+  &__head {
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: $primary-bg;
+    font-size: 1.1rem;
+  }
+}

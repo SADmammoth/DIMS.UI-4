@@ -2,27 +2,91 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .edit-member {
+  @media screen and (max-width: 1000px) {
+    & {
+      margin-bottom: 20vh;
+    }
+  }
+
+  &.empty {
+    .member-info {
+      &__header {
+        padding: 10px;
+        padding-right: 40px;
+      }
+
+      &__title {
+        margin-left: 20px;
+      }
+
+      &__contacts {
+        margin-right: 0;
+        margin-left: 0;
+        padding: 10px 25px;
+      }
+
+      &__additional-info {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    .button {
+      margin-right: 0 !important;
+    }
+
+    hr {
+      width: 100%;
+    }
+  }
+
+  .flex-column > div {
+    display: flex;
+  }
+
+  .radio-group {
+    display: flex;
+    & > * {
+      margin-right: 5px;
+    }
+  }
+
+  .container > & .address {
+    margin: 0;
+    margin-left: 25px;
+
+    .form-control {
+      width: calc(100% - 70px);
+    }
+  }
+
   .button {
     margin-top: 40px;
-    margin-right: 70px;
-    &:last-child {
-      margin-right: 20px;
-    }
+    margin-right: 2vw;
     float: right;
+
+    &:last-child {
+      margin-right: 10px;
+    }
   }
 
   .flex-column {
     width: 45%;
   }
 
+  .member-info__contacts {
+    .form-control {
+      width: 75%;
+    }
+  }
+
   .date-badge {
     .form-control {
-      font-size: 1rem !important;
       width: 100px;
-      text-align: center;
       margin: 0;
-
       margin-top: 10px;
+      font-size: 1rem !important;
+      text-align: center;
     }
   }
 
@@ -33,50 +97,92 @@
   }
 
   .form-radio {
-    appearance: none;
     margin-left: 0;
+    appearance: none;
+
     & + label::before {
-      content: '';
-      height: 18px;
-      width: 18px;
-      border: 2px solid $common-text;
-      background: $light-bg;
       display: inline-block;
-      border-radius: 20px;
+      width: 18px;
+      height: 18px;
       margin-right: 5px;
+      border: 2px solid $common-text;
+      border-radius: 20px;
+      background: $light-bg;
+      content: '';
       box-sizing: border-box;
     }
+
     &:checked + label::before {
       background: radial-gradient(circle, $common-text 0%, $common-text 50%, $light-bg 50%, $light-bg 100%);
     }
   }
 
-  .direction-badge {
+  .text-badge {
     width: 150px;
   }
 
   .form-select {
-    padding: 5px;
-    font-size: 1.1rem;
     width: 150px;
-    border-radius: 20px;
+    padding: 5px;
     border: none;
+    border-radius: 20px;
     outline: none;
+    font-size: 1.1rem;
   }
 
   .form-control {
-    width: 280px;
+    width: 80%;
+    height: 1.4rem;
     font-size: 1.2rem;
 
     &[name='firstName'],
     &[name='lastName'] {
       width: 200px;
-      font-size: 1.4rem;
       margin-right: 10px;
+      font-size: 1.4rem;
     }
+
     &[name='universityAverageScore'],
     &[name='mathScore'] {
       width: 50px;
     }
+  }
+
+  .address {
+    width: 96%;
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .member-info__additional-info {
+    margin-top: 3%;
+    background: $primary-bg;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 1000px) {
+      & {
+        display: flex;
+        flex-direction: column;
+
+        .flex-column {
+          width: 100%;
+
+          & > * {
+            margin: 8px auto;
+          }
+        }
+      }
+    }
+
+    @include clearfix;
+
+    .date-badge {
+      font-size: 1.4rem;
+    }
+  }
+
+  [class*='icon-'] {
+    fill: $common-text;
   }
 }

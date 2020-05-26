@@ -2,72 +2,144 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .member-info {
-  width: 80vw;
-  height: 90vh;
+  width: 65vw;
+  min-height: 20vh;
+  max-height: 90vh;
+  padding: 0 0 30px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @media screen and (max-width: 1000px) {
+    .address {
+      margin-left: 0;
+      text-align: center;
+    }
+
+    .button-block {
+      display: flex;
+      width: auto;
+      max-width: 80vw;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      & > .button {
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-left: 0 !important;
+      }
+    }
+  }
 
   &__header {
-    background-color: $primary-bg;
     position: relative;
+    display: flex;
+    padding: 25px 0;
+    padding-right: 50px;
+    background-color: $primary-bg;
+
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      align-items: center;
+    }
+
+    @media screen and (max-width: 1100px) {
+      & {
+        display: flex;
+        padding: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .button {
+        display: none;
+      }
+
+      .text-badge,
+      .date-badge {
+        margin: 10px 20px;
+      }
+    }
 
     .button {
       position: absolute;
-      height: 100%;
       top: 0;
-      width: 50px;
+      width: 1.5vw;
+      height: 100%;
+      padding-left: 0;
       background-color: $highlight-bg;
       color: $common-text;
       font-size: 1.5rem;
-      padding-left: 0;
     }
 
     .date-badge {
-      float: right;
       margin-left: 50px;
       transform: scale(1.2);
     }
 
     .text-badge {
-      float: right;
-      transform: scale(1.2);
-
       margin-top: 7px;
+      transform: scale(1.2);
     }
-
-    padding: 25px 0;
-    padding-right: 70px;
-    @include clearfix;
   }
 
   &__title {
-    float: left;
-    font-size: 2rem;
     margin: 0;
-    margin-left: 80px;
+    margin-left: 3vw;
+    font-size: 2.2rem;
+  }
+
+  hr {
+    width: calc(100% - 4vw);
+    margin: 0 2vw;
   }
 
   &__contacts {
-    font-size: 1.4rem;
-    margin: 3% 70px;
     display: flex;
-    justify-content: center;
-    text-align: center;
-    background: $primary-bg;
+    margin: 3% 2vw;
     padding: 20px 20px;
+    background: $primary-bg;
+    font-size: 1.2rem;
+    text-align: center;
+    justify-content: center;
+
+    @media screen and (max-width: 950px) {
+      flex-wrap: wrap;
+      & > * {
+        width: auto !important;
+        margin: 2%;
+      }
+    }
 
     a {
-      text-decoration: none;
       color: inherit;
+      text-decoration: none;
     }
 
     & > * {
-      width: 50%;
+      &:nth-child(1) {
+        width: 50%;
+      }
+
+      &:nth-child(2) {
+        width: 30%;
+      }
+
+      &:nth-child(3) {
+        width: 35%;
+      }
+
       &:first-child {
-        justify-self: flex-start;
         text-align: left;
+        justify-self: flex-start;
       }
       &:last-child {
-        justify-self: flex-end;
         text-align: right;
+        justify-self: flex-end;
       }
     }
 
@@ -77,56 +149,66 @@
   }
 
   .address {
-    margin: 2%;
-    margin-left: 90px;
-    font-size: 1.4rem;
+    margin-left: 3vw;
+    font-size: 1.2rem;
   }
 
   .flex-column {
-    float: left;
-    width: 35%;
+    width: 40%;
+    font-size: 1.2rem;
     box-sizing: border-box;
+
+    & > * {
+      margin-bottom: 20px;
+    }
+
     &:first-child {
       margin-right: 5%;
     }
-    font-size: 1.4rem;
   }
+
   &__additional-info {
-    margin: 0 auto;
-    width: calc(100% - 140px);
-    box-sizing: border-box;
-    padding: 2% 5%;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 2vw;
     margin-top: 3%;
+    padding: 2% 5%;
     background: $primary-bg;
-    .date-badge {
-      font-size: 1.4rem;
-    }
+    box-sizing: border-box;
 
-    @include clearfix;
+    .date-badge {
+      display: inline-block;
+      margin: 0;
+      font-size: 1.2rem;
+    }
   }
 
-  .button-block {
-    position: absolute;
-    bottom: 50px;
-    right: 70px;
-    width: calc(100% - 140px);
-    .button:not(.button_primary) {
-      margin-left: 20px;
-      float: right;
-    }
+  & > .button-block {
+    width: calc(100% - 4vw + 10px);
+    margin: 2% calc(2vw - 5px);
 
-    .button_primary {
-      float: left;
-      margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .button-block {
+      display: flex;
+      & > * {
+        margin: 0 5px;
+      }
     }
   }
 
   .flex-column {
     display: flex;
-    flex-direction: column;
     width: 45%;
+    flex-direction: column;
+
     & > div {
       margin-bottom: 20px;
     }
+  }
+
+  [class*='icon-'] {
+    fill: $common-text;
   }
 }

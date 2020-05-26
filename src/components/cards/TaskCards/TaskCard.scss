@@ -2,83 +2,88 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .task-card {
-  &_active > &__header {
-    position: relative;
-    @include task-card_border(white);
-  }
-  &_fail > &__header {
-    position: relative;
-    @include task-card_border($error);
-  }
-  &_success > &__header {
-    position: relative;
-    @include task-card_border($success);
-  }
-  &__header {
-    background: $primary-bg;
-    padding: 10px 35px;
-
-    @include clearfix;
-  }
-  &__title {
-    font-size: 1.2rem;
-    border-bottom: 1px solid $dark-bg;
-    float: left;
-  }
   margin-bottom: 5px;
-  &.open > & {
-    &__header {
-      background: $highlight-bg;
+
+  @each $type, $color in ('active': white, 'fail': $error, 'success': $success) {
+    &_#{$type} > &__header {
+      position: relative;
+      @include task-card_border($color);
     }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 35px;
+    background: $primary-bg;
+    align-items: center;
+
+    &__title {
+      border-bottom: 1px solid $dark-bg;
+      font-size: 1.2rem;
+      padding: 0;
+    }
+  }
+
+  &.open > &__header {
+    background: $highlight-bg;
   }
 
   .state {
-    background: $highlight-bg;
     padding-top: 5px;
     padding-bottom: 5px;
+    background: $highlight-bg;
     font-size: 1.1rem;
+
     span {
+      display: inline-block;
+      width: 60px;
       padding: 5px;
       padding-left: 50px;
-      width: 60px;
-      display: inline-block;
-      text-align: center;
       background: $primary-bg;
-    }
-  }
-
-  &__header {
-    .date-badge {
-      float: right;
-      margin-top: 15px;
-      font-size: 1.3rem;
+      text-align: center;
     }
   }
 
   &__body {
-    border: 5px solid $highlight-bg;
     padding: 20px;
-    @include clearfix();
+    border: 3px solid $highlight-bg;
+
+    .button {
+      min-width: 100px;
+    }
+
     .date-badge {
       margin-right: 20px;
-      float: left;
       margin-bottom: 0;
       font-size: 1.1rem;
     }
   }
 
+  &__dates {
+    display: flex;
+  }
+
   &__description {
-    margin-bottom: 35px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border: 2px solid $primary-bg;
+    padding: 5px;
   }
 
   .button-block {
-    .button:not(.button_primary) {
-      float: right;
+    display: flex;
+    justify-content: space-between;
+    & > * {
       margin-left: 10px;
     }
-  }
-  &__dates {
-    @include clearfix;
+
+    .button-block {
+      display: flex;
+      & > * {
+        margin-left: 10px;
+      }
+    }
   }
 
   .button_invisible {

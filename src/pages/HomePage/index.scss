@@ -1,0 +1,65 @@
+@import '../../assets/styles/scss/vars.scss';
+@import '../../assets/styles/scss/mixins.scss';
+
+.main-container {
+  position: relative;
+  height: 50vh;
+  justify-content: flex-start;
+  align-items: center;
+  background: $header-bg;
+
+  position: absolute;
+
+  bottom: 50%;
+  right: 50%;
+  transform: translate(50%, 50%);
+
+  @media screen and (max-height: 700px) {
+    & {
+      height: 90vh;
+    }
+  }
+}
+
+.bgMain {
+  width: 50%;
+  height: auto;
+  margin: 0;
+  z-index: 10;
+  filter: drop-shadow(0 0 6px $highlight-bg);
+
+  @media screen and (max-width: 900px) {
+    & {
+      display: none;
+    }
+  }
+}
+
+.homepage-text__background {
+  left: auto;
+  margin: 0;
+  padding: 5% 2%;
+  box-sizing: border-box;
+
+  display: flex;
+  direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media screen and (max-width: 900px) {
+    & {
+      justify-self: center;
+      padding: 8%;
+    }
+  }
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+}
+
+ul {
+  padding-left: 0;
+}

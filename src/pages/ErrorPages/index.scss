@@ -1,0 +1,47 @@
+@import '../../assets/styles/scss/vars.scss';
+@import '../../assets/styles/scss/mixins.scss';
+
+.error-image {
+  position: absolute;
+  bottom: 50%;
+  left: 10vw;
+  transform: translateY(50%);
+  height: auto;
+  width: 40vw;
+
+  @media screen and (max-width: 900px) {
+    & {
+      width: 80vw;
+      left: auto;
+      right: 50%;
+      transform: translate(50%, 50%);
+    }
+  }
+}
+
+.error-title {
+  & h1 {
+    font-size: 6vw;
+    position: absolute;
+    top: 34%;
+    bottom: 0;
+    margin: 0;
+    right: 0;
+    padding: 3%;
+    height: 66%;
+    opacity: 0.7;
+    box-sizing: border-box;
+    background: $primary-bg;
+
+    @media screen and (max-width: 900px) {
+      & {
+        display: none;
+      }
+    }
+  }
+  & .button {
+    position: absolute;
+    top: 55%;
+    right: 3%;
+  }
+}

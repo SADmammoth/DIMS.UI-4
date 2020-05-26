@@ -1,11 +1,13 @@
 import React from 'react';
 
-import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
-import placeInputCursorToEnd from '../../../../helpers/placeInputCursorToEnd';
-import getMaskCharsBeforePlaceholder from '../../../../helpers/getMaskCharsBeforePlaceholder';
-import invisibleMaskOnInputValue from '../../../../helpers/invisibleMaskOnInputValue';
+import placeInputCursorToEnd from '../../../../helpers/maskHelpers/placeInputCursorToEnd';
+import getMaskCharsBeforePlaceholder from '../../../../helpers/maskHelpers/getMaskCharsBeforePlaceholder';
+import invisibleMaskOnInputValue from '../../../../helpers/maskHelpers/invisibleMaskOnInputValue';
+import replaceSubstring from '../../../../helpers/formHelpers/replaceSubstring';
 
 function InvisibleMaskComponent(input, maskArray) {
+  const { name, onChange: inputOnChange, onBlur: inputOnBlur, onKeyPress: inputOnKeyPress } = input.props;
+
   const onFocus = (event) => {
     if (!event.target.value || event.target.value === '') {
       event.target.value = getMaskCharsBeforePlaceholder(maskArray);
@@ -17,26 +19,33 @@ function InvisibleMaskComponent(input, maskArray) {
     if (event.key.includes('Arrow') || event.key === 'Delete') {
       event.preventDefault();
     }
+
     if (event.key === 'Backspace') {
       const { target } = event;
-      let { value } = event.target;
+      const { value } = event.target;
       const start = target.selectionStart - 1;
       const end = target.selectionEnd;
-      value = value.split('');
-      value.splice(start, end - start, '');
-      event.target.value = value.join('');
+
+      event.target.value = replaceSubstring(value, start, end, '');
+      inputOnChange(event);
       event.preventDefault();
     }
-    if (maskArray[input.props.value.length]) {
-      if (!maskSpecialCharsRegex.test(maskArray[input.props.value.length])) {
-        input.props.onInput(invisibleMaskOnInputValue(input.props.name, input.props.value, maskArray));
-      }
-    }
+  };
+
+  const onChange = (event) => {
+    inputOnChange(invisibleMaskOnInputValue(name, event.target.value, maskArray));
+    inputOnKeyPress(event);
+  };
+
+  const onBlur = (event) => {
+    inputOnBlur(event);
   };
 
   return React.cloneElement(input, {
     onFocus,
     onKeyDown,
+    onChange,
+    onBlur,
   });
 }
 

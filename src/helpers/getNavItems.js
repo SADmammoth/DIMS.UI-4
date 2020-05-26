@@ -1,25 +1,29 @@
+import { matchPath } from 'react-router-dom';
+
 const NavItems = {
   admin: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/' },
     { id: 'New member', content: 'New member', link: '/members/new' },
+    { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   mentor: [
     { id: 'Members', content: 'Members', link: '/members' },
-    { id: 'Tasks', content: 'Tasks', link: '/tasks/:open?' },
+    { id: 'Tasks', content: 'Tasks', link: '/tasks/' },
+    { id: 'New task', content: 'New task', link: '/tasks/new' },
   ],
   member: [
-    { id: 'Tasks', content: 'Tasks', link: '/members/:id/tasks/:open?' },
-    { id: 'Tracks', content: 'Tracks', link: '/members/:id/tracks' },
+    { id: 'Tasks', content: 'Tasks', link: '/members/:userId/tasks' },
+    { id: 'Tracks', content: 'Tracks', link: '/members/:userId/tracks' },
   ],
+  guest: [{ id: 'Login', content: 'Log In', link: '/login' }],
 };
 
-export default function getNavItems({ role, userID }, currentRoute) {
+export default function getNavItems({ role, userId }, currentPath) {
   return NavItems[role].map((item) => {
-    let itemCopy = { ...item };
-    itemCopy.active = itemCopy.link === currentRoute;
-    itemCopy.link = itemCopy.link.replace(':id', userID);
-    itemCopy.link = itemCopy.link.replace(/\/:[^/]*/g, '');
+    const itemCopy = { ...item };
+    itemCopy.active = !!matchPath(currentPath, itemCopy.link);
+    itemCopy.link = itemCopy.link.replace(':userId', userId);
     return itemCopy;
   });
 }

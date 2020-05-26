@@ -2,20 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function ContainerComponent(props) {
-  const { fullwidth, display, children, className } = props;
+  const { fullWidth, display, children, className } = props;
   return (
-    <div className={`container${fullwidth ? ' fullwidth' : ''}${` ${display}`}${` ${className}`}`}>{children}</div>
+    <div className={`container${fullWidth ? ' fullwidth' : ''}${` ${display}`}${` ${className}`}`}>{children}</div>
   );
 }
 
 ContainerComponent.defaultProps = {
+  fullWidth: false,
   display: '',
   className: '',
 };
 
 ContainerComponent.propTypes = {
-  fullwidth: PropTypes.bool.isRequired,
-  children: PropTypes.any,
+  fullWidth: PropTypes.bool,
+  children: PropTypes.node.isRequired,
   display: PropTypes.string,
   className: PropTypes.string,
 };

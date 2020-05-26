@@ -1,22 +1,31 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
+
 import Client from '../helpers/Client';
 import TaskTrackCard from '../components/cards/TaskCards/TaskTrackCard';
-import CollapsableItemsList from '../components/lists/CollapsableItemsList';
+import CollapsibleItemsConditionalList from '../components/lists/CollapsibleItemsConditionalList';
 import ContainerComponent from '../components/elements/ContainerComponent';
 import Header from '../components/elements/Header';
-import UserContext from '../helpers/UserContext';
+import Spinner from '../components/elements/Spinner/Spinner';
+import UserContextConsumer from '../helpers/components/UserContextConsumer';
 import getNavItems from '../helpers/getNavItems';
+import Footer from '../components/elements/Footer';
 
 class MemberTracksPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tracks: {} };
+    this.state = { tracks: null };
   }
 
-  async componentDidMount() {
-    const tracksData = await Client.getTracks(this.props.match.params.id);
+  componentDidMount() {
+    this.update();
+  }
+
+  async update() {
+    const { match } = this.props;
+    const tracksData = await Client.getTracks(match.params.id);
     this.setState({
       tracks: tracksData,
     });
@@ -29,44 +38,62 @@ class MemberTracksPage extends React.Component {
     }
 
     return Object.entries(tracks).map(({ 0: id, 1: data }) => {
-      return MemberTracksPage.renderTaskTrack(id, data);
+      return this.renderTaskTrack(id, data);
     });
   }
 
-  static renderTaskTrack(id, data) {
-    const { memberTaskID, taskName, trackNote, trackDate } = data;
+  renderTaskTrack(id, data) {
+    const { memberTaskId, taskName, trackNote, trackDate } = data;
+    const reload = () => {
+      this.update();
+    };
     return (
       <TaskTrackCard
         id={id}
-        memberTaskID={memberTaskID}
+        memberTaskId={memberTaskId}
         taskName={taskName}
         trackNote={trackNote}
         trackDate={trackDate}
+        reload={reload}
       />
     );
   }
 
   render() {
+    const { tracks } = this.state;
+    const { match } = this.props;
     return (
       <>
         <Helmet>
           <title>Task tracks</title>
         </Helmet>
-        <UserContext>
-          {({ role, userID }) => {
-            return (
-              <Header role={role} title='Task tracks' navItems={getNavItems({ role, userID }, this.props.match.path)} />
-            );
+        <UserContextConsumer>
+          {({ role, userId }) => {
+            return <Header role={role} title='Task tracks' navItems={getNavItems({ role, userId }, match.path)} />;
           }}
-        </UserContext>
-        <ContainerComponent>
-          <div>
-            {Object.keys(this.state.tracks).length ? <CollapsableItemsList items={this.renderTracks()} /> : 'No tracks'}
-          </div>
-        </ContainerComponent>
+        </UserContextConsumer>
+        <main>
+          <ContainerComponent>
+            {tracks ? (
+              <CollapsibleItemsConditionalList itemsPluralName='tracks' items={this.renderTracks()} />
+            ) : (
+              <Spinner centered />
+            )}
+          </ContainerComponent>
+        </main>
+        <Footer />
       </>
     );
   }
 }
+
+MemberTracksPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    path: PropTypes.string,
+  }).isRequired,
+};
 
 export default withRouter(MemberTracksPage);

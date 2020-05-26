@@ -1,0 +1,40 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+@import '../../../assets/styles/scss/animations.scss';
+
+.spinner {
+  --common-color: #{$dark-bg};
+  --bg-color: #{$light-bg};
+
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border: 8px solid var(--common-color);
+  border-radius: 100%;
+  box-sizing: border-box;
+
+  &_centered {
+    position: absolute;
+    right: 50%;
+    bottom: 50%;
+    transform: translate(50%, 50%);
+  }
+
+  &::before {
+    content: '';
+    --i: 0;
+    display: block;
+    position: absolute;
+    top: -9px;
+    left: -9px;
+    width: 92px;
+    height: 92px;
+    border-radius: 100%;
+    box-sizing: border-box;
+
+    background: linear-gradient(calc(90deg + var(--i)), transparent 50%, var(--bg-color) 50%),
+      linear-gradient(90deg, var(--bg-color) 50%, transparent 50%);
+
+    animation: spin 0.8s linear infinite, scale 1.5s infinite ease-in-out;
+  }
+}

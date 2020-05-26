@@ -1,7 +1,10 @@
-import maskSpecialCharsRegex from '../../helpers/maskSpecialCharsRegex';
+import maskSpecialCharsRegex from '../../helpers/maskHelpers/maskSpecialCharsRegex';
 
-describe('maskEscapedCharsRegex', () => {
+describe('maskSpecialCharsRegex', () => {
   test('Must match special chars and not include escaped', () => {
-    expect('9\\9\\\\831aa\\'.match(maskSpecialCharsRegex)).toStrictEqual(['9', 'a']);
+    const actual = '9\\9\\\\831aa\\'.match(maskSpecialCharsRegex);
+    const expected = ['9', 'a'];
+
+    expect(actual).toStrictEqual(expected);
   });
 });

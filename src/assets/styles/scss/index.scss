@@ -9,9 +9,18 @@ html {
   font-size: 16px;
 }
 
-body {
+@media screen and (max-width: 500px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+body,
+#root {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  background: $light-bg;
 }
 
 .error-color {
@@ -115,4 +124,13 @@ a:visited {
   & > div {
     margin-bottom: 20px;
   }
+}
+
+a,
+a:visited {
+  color: inherit;
+}
+
+.collapsible-items-list {
+  padding-bottom: 9.5vh;
 }

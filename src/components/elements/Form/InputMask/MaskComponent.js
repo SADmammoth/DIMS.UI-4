@@ -1,24 +1,45 @@
 import React from 'react';
 import Validator from '../../../../helpers/Validator';
-import getValueFromMask from '../../../../helpers/getValueFromMask';
+import getValueFromMask from '../../../../helpers/maskHelpers/getValueFromMask';
 
-import maskEscapedCharsRegex from '../../../../helpers/maskEscapedCharsRegex';
-import maskSpecialCharsRegex from '../../../../helpers/maskSpecialCharsRegex';
-import addMask from '../../../../helpers/addMask';
+import addMask from '../../../../helpers/maskHelpers/addMask';
+import placeInputCursorToEnd from '../../../../helpers/maskHelpers/placeInputCursorToEnd';
+import maskNotSpecialCharsRegex from '../../../../helpers/maskHelpers/maskNotSpecialCharsRegex';
+import getUniqueItems from '../../../../helpers/getUniqueItems';
+import regexpEscape from '../../../../helpers/Validator/regexpEscape';
+import replaceAll from '../../../../helpers/formHelpers/replaceAll';
 
 function MaskComponent(input, maskArray) {
   if (maskArray[input.props.value.length]) {
-    if (!input.props.value || input.props.value === '') {
+    if (input.props.value && input.props.value !== '') {
       return input;
     }
   }
-  function setCursorToEndOfInput(eventTarget) {
-    const firstPlaceholder = eventTarget.value.indexOf('_');
-    eventTarget.setSelectionRange(firstPlaceholder, firstPlaceholder);
-  }
+
+  const handleBackspaceInMask = (event) => {
+    const { target } = event;
+    const { value } = event.target;
+    const start = target.selectionStart - 1;
+    const end = target.selectionEnd;
+
+    const charsToDelete = regexpEscape(
+      getUniqueItems(
+        maskArray.filter((maskElement) => {
+          return maskElement.match(maskNotSpecialCharsRegex);
+        }),
+      ).join(''),
+    );
+
+    const charsToDeleteRegex = new RegExp(`[^${charsToDelete}]`, 'g');
+
+    event.target.value = replaceAll(value, start, end, charsToDeleteRegex, '_');
+    event.target.setSelectionRange(start, start);
+
+    input.props.onChange(event);
+  };
 
   const onClick = (event) => {
-    setCursorToEndOfInput(event.target);
+    placeInputCursorToEnd(event.target, maskArray);
   };
 
   const onFocus = (event) => {
@@ -26,58 +47,27 @@ function MaskComponent(input, maskArray) {
   };
 
   const onKeyDown = (event) => {
-    if (event.key.includes('Arrow')) {
-      event.preventDefault();
-    }
-    if (event.key === 'Delete') {
-      event.preventDefault();
-    }
     if (event.key === 'Backspace') {
       handleBackspaceInMask(event);
     }
-  };
 
-  const handleBackspaceInMask = (event) => {
-    const { target } = event;
-    let { value } = event.target;
-    const start = target.selectionStart - 1;
-    const end = target.selectionEnd;
-    value = value.split('');
-
-    const charactersToDelete = new RegExp(
-      `[^${maskArray
-        .filter((el, i, arr) => !arr.slice(i + 1).includes(el))
-        .join('')
-        .replace(maskSpecialCharsRegex, '')
-        .replace(maskEscapedCharsRegex, '$1')}]+`,
-      'g',
-    );
-    value.splice(start, end - start, target.value.substring(start, end).replace(charactersToDelete, '_'));
-    event.target.value = value.join('');
-    event.target.setSelectionRange(start, end - 1);
-    event.preventDefault();
-  };
-
-  const onKeyPress = (event) => {
     if (Validator.maskByChar(getValueFromMask(event.target.value) + event.key, maskArray.join(''))) {
       event.target.value = addMask(getValueFromMask(event.target.value) + event.key, maskArray);
-      input.props.onKeyPress(event);
-      input.props.onInput(event);
-      setCursorToEndOfInput(event.target);
+      input.props.onChange(event);
+      placeInputCursorToEnd(event.target, maskArray);
     }
+
     event.preventDefault();
   };
 
   const onBlur = (event) => {
     event.target.value = getValueFromMask(event.target.value);
-    input.props.onBlur(event);
   };
 
   return React.cloneElement(input, {
     onClick,
     onFocus,
     onKeyDown,
-    onKeyPress,
     onBlur,
   });
 }

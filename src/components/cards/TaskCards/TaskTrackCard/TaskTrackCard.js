@@ -2,50 +2,86 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import CollapsedTaskTrackCard from './CollapsedTaskTrackCard';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
-import ButtonGroup from '../../../elements/ButtonGroup/ButtonGroup';
+import ButtonGroup from '../../../elements/ButtonGroup';
+import CollapsibleCard from '../../CollapsibleCard';
+import DateBadge from '../../../elements/DateBadge';
+import DialogButton from '../../../elements/DialogButton';
+import compareObjects from '../../../../helpers/compareObjects';
+import dateTypes from '../../../../helpers/dateTypes';
+import Client from '../../../../helpers/Client';
 
 function TaskTrackCard(props) {
-  const { taskName, trackNote, trackDate, collapsed, id, memberTaskID } = props;
+  const {
+    match: {
+      params: { id: userId },
+    },
+    taskName,
+    trackNote,
+    trackDate,
+    collapsed,
+    id,
+    memberTaskId,
+    open,
+    close,
+    reload,
+  } = props;
 
-  function onClick(collapsed) {
-    collapsed ? props.open(id) : props.close(id);
-  }
+  const onDelete = ({ dialogValue }) => {
+    return Client.deleteTrack(dialogValue).then((response) => {
+      reload();
+      return response;
+    });
+  };
+
+  const onEdit = ({ trackDate, trackNote }) => {
+    return Client.editTrack(id, trackDate, trackNote).then((response) => {
+      reload();
+      return response;
+    });
+  };
 
   return (
-    <article className={`task-card ${collapsed ? '' : 'open'}`}>
-      <CollapsedTaskTrackCard taskName={taskName} trackDate={trackDate} onClick={onClick} collapsed={collapsed} />
-      {collapsed || (
-        <>
-          <div className='task-card__body'>
-            <p className='task-card__description'>{trackNote}</p>
-            <ButtonGroup>
-              <Button classMod='secondary' content='Delete' />
-              <TrackButton
-                buttonClassMod='secondary'
-                taskName={taskName}
-                trackDate={trackDate}
-                trackNote={trackNote}
-                buttonContent='Edit'
-              />
-              <Button
-                classMod='ghost'
-                link={`/members/${props.match.params.id}/tasks/${memberTaskID}`}
-                content='Show in tasks'
-              />
-            </ButtonGroup>
-          </div>
-        </>
-      )}
-    </article>
+    <CollapsibleCard id={id} className='track-card' cardClass='task' collapsed={collapsed} open={open} close={close}>
+      <CollapsibleCard.Header>
+        <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
+        <DateBadge type={dateTypes.trackStart} date={trackDate} />
+      </CollapsibleCard.Header>
+      <CollapsibleCard.Body>
+        <CollapsibleCard.Description>{trackNote}</CollapsibleCard.Description>
+        <ButtonGroup>
+          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
+          <DialogButton
+            buttonClassMod='secondary'
+            buttonContent='Delete'
+            message={
+              <>
+                Are you confident, you want to delete track <b>{taskName}</b>?
+              </>
+            }
+            confirmButtonClassMod='error'
+            confirmButtonContent='Delete'
+            dialogValue={id}
+            onSubmit={onDelete}
+          />
+          <TrackButton
+            buttonClassMod='secondary'
+            taskName={taskName}
+            trackDate={trackDate}
+            trackNote={trackNote}
+            buttonContent='Edit'
+            onSubmit={onEdit}
+          />
+        </ButtonGroup>
+      </CollapsibleCard.Body>
+    </CollapsibleCard>
   );
 }
 
 TaskTrackCard.propTypes = {
   id: PropTypes.string.isRequired,
-  memberTaskID: PropTypes.string.isRequired,
+  memberTaskId: PropTypes.string.isRequired,
   collapsed: PropTypes.bool.isRequired,
   open: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
@@ -53,10 +89,13 @@ TaskTrackCard.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackNote: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date).isRequired,
+
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  reload: PropTypes.func.isRequired,
 };
 
-function areEqual(prevProps, nextProps) {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-}
-
-export default withRouter(React.memo(TaskTrackCard, areEqual));
+export default withRouter(React.memo(TaskTrackCard, compareObjects));

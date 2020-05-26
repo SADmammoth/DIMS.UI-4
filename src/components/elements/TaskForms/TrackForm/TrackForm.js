@@ -1,26 +1,42 @@
-import React from 'react';
+import React, { useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../Form';
 import Button from '../../Button';
 import TextBadge from '../../TextBadge';
-import Validator from '../../../../helpers/Validator';
 import trackFormInputsAttributes from './trackFormInputsAttributes';
+import Spinner from '../../Spinner';
+import inputsReducer, { updateAction } from '../../../../helpers/formHelpers/inputsReducer';
 
-class TrackForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { inputs: {} };
-  }
+const TrackForm = (props) => {
+  const { taskName, onSubmit } = props;
+  const [inputs, dispatch] = useReducer(inputsReducer, {});
+  const setInputs = (data) => {
+    dispatch(updateAction(data));
+  };
 
-  render() {
-    const { taskName } = this.props;
-    const { inputs } = this.state;
-    return (
-      <>
+  const [loading, setLoading] = useState(false);
+
+  const onSubmitHandler = (data) => {
+    setLoading(true);
+    return onSubmit(data)
+      .then((response) => {
+        setLoading(false);
+        return response;
+      })
+      .catch((response) => {
+        setLoading(false);
+        return response;
+      });
+  };
+
+  return (
+    <>
+      {!loading ? (
         <Form
-          inputs={trackFormInputsAttributes(this.props)}
-          onInputsUpdate={(inputsComponents) => this.setState({ inputs: inputsComponents })}
+          inputs={trackFormInputsAttributes(props)}
+          onInputsUpdate={setInputs}
           submitButton={<Button content='Confirm' classMod='secondary' />}
+          onSubmit={onSubmitHandler}
         >
           <div className='task-edit__header'>
             <p className='task-edit__title'>{taskName}</p>
@@ -38,11 +54,12 @@ class TrackForm extends React.Component {
             </div>
           </div>
         </Form>
-      </>
-    );
-  }
-}
-
+      ) : (
+        <Spinner centered />
+      )}
+    </>
+  );
+};
 TrackForm.defaultProps = {
   trackDate: new Date(),
   trackNote: '',
@@ -52,6 +69,7 @@ TrackForm.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date),
   trackNote: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default TrackForm;

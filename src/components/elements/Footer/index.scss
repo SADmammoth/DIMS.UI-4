@@ -1,0 +1,14 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  height: 7vh;
+  border: 2px solid $light-bg;
+  background: $header-bg;
+  text-align: center;
+
+  @include acrylic-glass-effect;
+}

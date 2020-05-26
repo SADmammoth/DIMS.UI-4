@@ -23,43 +23,19 @@ export default class FirebaseFaker {
     members.forEach((el) => Client.db.collection('members').add(el));
   }
 
-  static async generateMemberTasks(userID) {
+  static async generateMemberTasks(userId) {
     let members = new Array(5).fill(null);
 
     const tasks = await Client.db.collection('tasks').get();
 
     members = members.map(() => ({
-      userID,
-      taskID: faker.helpers.randomize(tasks.docs).id,
+      userId,
+      taskId: faker.helpers.randomize(tasks.docs).id,
       state: faker.helpers.randomize(['Active', 'Fail', 'Success']),
     }));
 
     members.forEach((el) => Client.db.collection('memberTasks').add(el));
   }
-
-  // static generateProgress(userID) {
-  //   let members = new Array(5).fill(null);
-
-  //   const generateTaskName = () => {
-  //     const taskName = `${faker.hacker.verb()} ${faker.hacker.adjective()} ${faker.hacker.noun()}`;
-  //     return taskName.charAt(0).toUpperCase() + taskName.slice(1);
-  //   };
-
-  //   let startDate;
-
-  //   members = members.map(async () => ({
-  //     userID,
-  //     userName: (await Client.getMember(userID)).firstName,
-  //     taskName: generateTaskName(),
-  //     trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
-  //     trackDate: (() => {
-  //       startDate = faker.date.recent();
-  //       return startDate;
-  //     })(),
-  //   }));
-
-  //   members.forEach(async (el) => Client.db.collection('progress').add(await el));
-  // }
 
   static generateTasks() {
     let tasks = new Array(faker.random.number({ min: 5, max: 10 })).fill(null);
@@ -80,13 +56,13 @@ export default class FirebaseFaker {
     tasks.forEach(async (el) => Client.db.collection('tasks').add(await el));
   }
 
-  static async generateTracks(userID) {
-    const memberTasks = await Client.getUserTasks(userID);
+  static async generateTracks(userId) {
+    const memberTasks = await Client.getUserTasks(userId);
     const tracks = [];
     Object.entries(memberTasks).forEach(({ 0: id, 1: data }) => {
       if (faker.random.boolean && data.state === 'Active') {
         tracks.push({
-          memberTaskID: id,
+          memberTaskId: id,
           trackDate: faker.date.future(0, data.startDate),
           trackNote: faker.lorem.paragraph(faker.random.number({ min: 1, max: 5 })),
         });
@@ -95,10 +71,10 @@ export default class FirebaseFaker {
     tracks.forEach(async (el) => Client.db.collection('track').add(await el));
   }
 
-  static async createUser(login, password, role, userID) {
+  static async createUser(login, password, role, userId) {
     await Client.db
       .collection('users')
-      .add({ login, password: md5(password), role, userID, token: faker.random.alphaNumeric(15) });
+      .add({ login, password: md5(password), role, userId, token: faker.random.alphaNumeric(15) });
   }
 
   static async generateUsers() {
@@ -120,7 +96,7 @@ function saveAsFile(content, filename) {
   const blob = new Blob([content], { type: 'text/text' });
   const anchor = document.createElement('a');
 
-  anchor.download = filename + '.txt';
+  anchor.download = `${filename}.txt`;
   anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
   anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
   anchor.click();

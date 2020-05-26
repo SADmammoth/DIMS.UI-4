@@ -2,32 +2,42 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .track-create {
-  width: 50vw;
+  width: 51vw;
   height: 65vh;
-  .task-edit__description {
-    height: 29vh;
+  max-height: 500px;
+  padding: 0;
+  padding-bottom: 20px;
+
+  overflow-y: auto;
+
+  .form-textarea {
+    height: 10vh !important;
+    min-height: 240px !important;
   }
 
-  .task-edit__dates {
-    margin-bottom: 10px;
+  .task-edit {
+    &__dates {
+      margin-bottom: 10px;
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
-  .task-edit__header {
-    @include clearfix();
-  }
-  .task-edit__title {
-    float: left;
-  }
+
   .text-badge {
-    float: right;
     margin-right: 5%;
   }
 
   .form-label {
     font-weight: bold;
   }
+
   .button[type='submit'] {
-    float: right;
-    margin-right: 6.5%;
     margin-top: 10px;
+    margin-right: 2vw;
+    float: right;
   }
 }
