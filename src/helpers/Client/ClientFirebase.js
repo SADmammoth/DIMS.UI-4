@@ -121,7 +121,9 @@ class Client {
     });
   }
 
-  static async deleteMember(userId) {}
+  static deleteMember(userId) {
+    return Client.db.collection('members').doc(userId).delete();
+  }
 
   static async getUserProgress(userID) {
     const track = await Client.getTracks(userID);
@@ -156,6 +158,9 @@ class Client {
         tasksObject[doc.id].assignedTo = await Promise.all(
           users.map(async ({ memberTaskId, userId }) => {
             user = await Client.getMember(userId);
+            if (!user) {
+              return null;
+            }
             return { userId, memberTaskId, firstName: user.firstName, lastName: user.lastName };
           }),
         );

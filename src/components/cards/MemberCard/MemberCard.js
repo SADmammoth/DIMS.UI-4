@@ -42,7 +42,7 @@ const MemberCard = (props) => {
     edit: editDefault,
   } = props;
 
-  const { dispatch } = useDispatch();
+  const dispatch = useDispatch();
 
   const age = calculateAge(birthDate);
   const modal = useRef({});
