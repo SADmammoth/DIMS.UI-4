@@ -11,11 +11,7 @@
   .button-block {
     display: flex;
     justify-content: center;
-    @include clearfix;
-
-    .button {
-      float: left;
-    }
+    display: flex;
   }
 
   &__head {

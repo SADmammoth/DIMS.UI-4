@@ -43,7 +43,7 @@ function TaskTrackCard(props) {
   };
 
   return (
-    <CollapsibleCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
+    <CollapsibleCard id={id} className='track-card' cardClass='task' collapsed={collapsed} open={open} close={close}>
       <CollapsibleCard.Header>
         <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
         <DateBadge type={dateTypes.trackStart} date={trackDate} />
@@ -51,6 +51,7 @@ function TaskTrackCard(props) {
       <CollapsibleCard.Body>
         <CollapsibleCard.Description>{trackNote}</CollapsibleCard.Description>
         <ButtonGroup>
+          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
           <DialogButton
             buttonClassMod='secondary'
             buttonContent='Delete'
@@ -72,7 +73,6 @@ function TaskTrackCard(props) {
             buttonContent='Edit'
             onSubmit={onEdit}
           />
-          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
         </ButtonGroup>
       </CollapsibleCard.Body>
     </CollapsibleCard>

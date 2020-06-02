@@ -2,7 +2,7 @@
 @import '../../../../assets/styles/scss/mixins.scss';
 
 .track-create {
-  width: 50vw;
+  width: 51vw;
   height: 65vh;
   max-height: 500px;
   padding: 0;
@@ -21,17 +21,14 @@
     }
 
     &__header {
-      @include clearfix();
-    }
-
-    &__title {
-      float: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
   .text-badge {
     margin-right: 5%;
-    float: right;
   }
 
   .form-label {
