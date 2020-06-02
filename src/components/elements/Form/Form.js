@@ -198,10 +198,7 @@ class Form extends React.Component {
       }
 
       this.errorNotification('Server error', response && response.toString());
-      return;
     }
-
-    this.errorNotification('Form error', response && response.toString());
   };
 
   onResponseError = (error) => {
@@ -222,9 +219,7 @@ class Form extends React.Component {
 
     if (validateForm(values, inputs, this.onValidationFail)) {
       if (onSubmitHandler) {
-        onSubmitHandler(formatFormValues(values))
-          .then(this.onResponseReceived)
-          .catch(this.onResponseError);
+        onSubmitHandler(formatFormValues(values)).then(this.onResponseReceived).catch(this.onResponseError);
       }
     }
   };

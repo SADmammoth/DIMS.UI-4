@@ -51,6 +51,7 @@ function MaskComponent(input, maskArray) {
       handleBackspaceInMask(event);
     }
 
+    console.log(Validator.maskByChar(getValueFromMask(event.target.value) + event.key, maskArray.join('')));
     if (Validator.maskByChar(getValueFromMask(event.target.value) + event.key, maskArray.join(''))) {
       event.target.value = addMask(getValueFromMask(event.target.value) + event.key, maskArray);
       input.props.onChange(event);
