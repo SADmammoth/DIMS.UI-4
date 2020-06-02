@@ -17,6 +17,7 @@ import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
 import dateTypes from '../../../helpers/dateTypes';
 import matchMaxWidth from '../../../helpers/matchMaxWidth';
+import ButtonGroup from '../../elements/ButtonGroup';
 
 const MemberCard = (props) => {
   const {
@@ -79,41 +80,49 @@ const MemberCard = (props) => {
             <b>{firstName}</b>
             {` ${lastName}, ${age}`}
           </CollapsibleCard.Title>
-          {matchMaxWidth('1000px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
-          {matchMaxWidth('550px') || <TextBadge>{direction}</TextBadge>}
+          {matchMaxWidth('550px') || (
+            <div>
+              <TextBadge>{direction}</TextBadge>
+              {matchMaxWidth('1000px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
+            </div>
+          )}
         </CollapsibleCard.Header>
         <CollapsibleCard.Body>
-          <Button classMod='primary' link={`/members/${id}/progress`}>
-            <ProgressIcon className='icon-progress' />
-            <span>Progress</span>
-          </Button>
-          <Button classMod='primary' link={`/members/${id}/tasks`}>
-            <TasksIcon className='icon-tasks' />
-            <span>Tasks</span>
-          </Button>
-          {role === 'admin' && (
-            <>
-              {matchMaxWidth('550px') || (
-                <>
-                  <DialogButton
-                    buttonClassMod='secondary'
-                    buttonContent='Delete'
-                    message={
-                      <>
-                        Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                      </>
-                    }
-                    confirmButtonClassMod='error'
-                    confirmButtonContent='Delete'
-                    dialogValue={id}
-                    onSubmit={onDelete}
-                  />
-                  <Button content='Edit' classMod='secondary' onClick={showEditModal} />
-                </>
-              )}
-            </>
-          )}
-          <Button content='More info' classMod='ghost' onClick={showModal} />
+          <ButtonGroup>
+            <Button classMod='primary' link={`/members/${id}/progress`}>
+              <ProgressIcon className='icon-progress' />
+              <span>Progress</span>
+            </Button>
+            <Button classMod='primary' link={`/members/${id}/tasks`}>
+              <TasksIcon className='icon-tasks' />
+              <span>Tasks</span>
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button content='More info' classMod='ghost' onClick={showModal} />
+            {role === 'admin' && (
+              <>
+                {matchMaxWidth('550px') || (
+                  <>
+                    <DialogButton
+                      buttonClassMod='secondary'
+                      buttonContent='Delete'
+                      message={
+                        <>
+                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                        </>
+                      }
+                      confirmButtonClassMod='error'
+                      confirmButtonContent='Delete'
+                      dialogValue={id}
+                      onSubmit={onDelete}
+                    />
+                    <Button content='Edit' classMod='secondary' onClick={showEditModal} />
+                  </>
+                )}
+              </>
+            )}
+          </ButtonGroup>
         </CollapsibleCard.Body>
       </CollapsibleCard>
       <Modal ref={modal} className='member-info' onClose={editOff}>

@@ -78,17 +78,14 @@ const MemberInfo = (props) => {
           ) : (
             <>
               <div className='member-info__header'>
-                {handleClose && (
-                  <Button onClick={handleClose}>
-                    <BackIcon className='icon-back common-text-color' />
-                  </Button>
-                )}
                 <p className='member-info__title'>
                   <b>{firstName}</b>
                   {` ${lastName}`}
                 </p>
-                <DateBadge date={startDate} type={dateTypes.startDate} />
-                <TextBadge>{direction}</TextBadge>
+                <div>
+                  <TextBadge>{direction}</TextBadge>
+                  <DateBadge date={startDate} type={dateTypes.startDate} />
+                </div>
               </div>
               <div className='member-info__body'>
                 <div className='member-info__contacts'>
@@ -140,32 +137,39 @@ const MemberInfo = (props) => {
                 </FlexColumn>
               </div>
               <ButtonGroup>
-                <Button classMod='primary' link={`/members/${id}/progress`}>
-                  <ProgressIcon className='icon-progress' />
-                  <span>Progress</span>
-                </Button>
-                <Button classMod='primary' link={`/members/${id}/tasks`}>
-                  <TasksIcon className='icon-tasks' />
-                  <span>Tasks</span>
-                </Button>
-                {role === 'admin' && (
-                  <>
-                    <DialogButton
-                      buttonClassMod='secondary'
-                      buttonContent='Delete'
-                      message={
-                        <>
-                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                        </>
-                      }
-                      confirmButtonClassMod='error'
-                      confirmButtonContent='Delete'
-                      dialogValue={id}
-                      onSubmit={onDelete}
-                    />
-                    <Button content='Edit' classMod='secondary' onClick={openEditModal} />
-                  </>
-                )}
+                <ButtonGroup>
+                  <Button classMod='primary' link={`/members/${id}/progress`}>
+                    <ProgressIcon className='icon-progress' />
+                    <span>Progress</span>
+                  </Button>
+                  <Button classMod='primary' link={`/members/${id}/tasks`}>
+                    <TasksIcon className='icon-tasks' />
+                    <span>Tasks</span>
+                  </Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                  <Button classMod='ghost' onClick={handleClose}>
+                    Close
+                  </Button>
+                  {role === 'admin' && (
+                    <>
+                      <DialogButton
+                        buttonClassMod='secondary'
+                        buttonContent='Delete'
+                        message={
+                          <>
+                            Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                          </>
+                        }
+                        confirmButtonClassMod='error'
+                        confirmButtonContent='Delete'
+                        dialogValue={id}
+                        onSubmit={onDelete}
+                      />
+                      <Button content='Edit' classMod='secondary' onClick={openEditModal} />
+                    </>
+                  )}
+                </ButtonGroup>
               </ButtonGroup>
             </>
           )}
