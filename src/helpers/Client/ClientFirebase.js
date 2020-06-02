@@ -56,7 +56,70 @@ class Client {
     return member.data();
   }
 
-  static async editMember(userId) {}
+  static editMember(
+    userId,
+    firstName,
+    lastName,
+    email,
+    direction,
+    sex,
+    education,
+    birthDate,
+    universityAverageScore,
+    mathScore,
+    address,
+    mobilePhone,
+    skype,
+    startDate,
+  ) {
+    return Client.db.collection('members').doc(userId).update({
+      firstName,
+      lastName,
+      email,
+      direction,
+      sex,
+      education,
+      birthDate,
+      universityAverageScore,
+      mathScore,
+      address,
+      mobilePhone,
+      skype,
+      startDate,
+    });
+  }
+
+  static postMember(
+    firstName,
+    lastName,
+    email,
+    direction,
+    sex,
+    education,
+    birthDate,
+    universityAverageScore,
+    mathScore,
+    address,
+    mobilePhone,
+    skype,
+    startDate,
+  ) {
+    return Client.db.collection('members').add({
+      firstName,
+      lastName,
+      email,
+      direction,
+      sex,
+      education,
+      birthDate,
+      universityAverageScore,
+      mathScore,
+      address,
+      mobilePhone,
+      skype,
+      startDate,
+    });
+  }
 
   static async deleteMember(userId) {}
 
