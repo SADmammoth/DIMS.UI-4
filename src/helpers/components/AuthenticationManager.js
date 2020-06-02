@@ -19,6 +19,7 @@ class AuthenticationManager extends Component {
   logIn = async (login, password) => {
     const authResponse = await this.authenticate(login, password);
     this.setState({ authenticated: authResponse.status === 'success' });
+    return authResponse;
   };
 
   logOut = () => {
@@ -77,8 +78,8 @@ class AuthenticationManager extends Component {
             )}
           </>
         ) : (
-          <Spinner centered />
-        )}
+            <Spinner centered />
+          )}
       </>
     );
   }
