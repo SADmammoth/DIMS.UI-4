@@ -21,6 +21,7 @@ class Client {
   static directions = ['Front-end', '.Net', 'Salesforce', 'Java'];
 
   static async getMembers() {
+    await Client.deleteTask('3jwHTLFOSnE7gP0VIQKW');
     const members = await Client.db.collection('members').get();
 
     const membersObject = {};
@@ -155,15 +156,17 @@ class Client {
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
         users = await Client.getAssigned(doc.id);
-        tasksObject[doc.id].assignedTo = await Promise.all(
-          users.map(async ({ memberTaskId, userId }) => {
-            user = await Client.getMember(userId);
-            if (!user) {
-              return null;
-            }
-            return { userId, memberTaskId, firstName: user.firstName, lastName: user.lastName };
-          }),
-        );
+        tasksObject[doc.id].assignedTo = (
+          await Promise.all(
+            users.map(async ({ memberTaskId, userId }) => {
+              user = await Client.getMember(userId);
+              if (!user) {
+                return null;
+              }
+              return { userId, memberTaskId, firstName: user.firstName, lastName: user.lastName };
+            }),
+          )
+        ).filter((el) => !!el);
         tasksObject[doc.id].id = doc.id;
         tasksObject[doc.id].taskId = doc.id;
       }),
@@ -173,9 +176,11 @@ class Client {
 
   static async getAssigned(taskID) {
     const memberTasks = await Client.db.collection('memberTasks').where('taskID', '==', taskID).get();
-    return memberTasks.docs.map((doc) => {
-      return { userId: doc.data().userID, memberTaskId: doc.id };
-    });
+    return await Promise.all(
+      memberTasks.docs.map((doc) => {
+        return { userId: doc.data().userID, memberTaskId: doc.id };
+      }),
+    );
   }
 
   static async getTracks(userID) {
@@ -190,6 +195,60 @@ class Client {
       tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
     });
     return tracksObject;
+  }
+
+  static async assignTask(taskID, userIds) {
+    await Promise.all(
+      userIds.map((userId) => {
+        return Client.db.collection('memberTasks').add({ userID: userId, taskID, status: 'active' });
+      }),
+    );
+
+    const assigned = await Client.getAssigned(taskID);
+    console.log(assigned);
+    return assigned.filter(({ userId }) => userIds.includes(userId));
+  }
+
+  static editTask(taskId, taskName, description, taskStart, taskDeadline) {
+    return Client.db.collection('tasks').doc(taskId).update({ taskName, description, taskStart, taskDeadline });
+  }
+
+  static postTask(taskName, description, taskStart, taskDeadline) {
+    return Client.db.collection('tasks').add({ taskName, description, taskStart, taskDeadline });
+  }
+
+  static setUserTaskState(taskId, userId, status) {
+    return Client.db
+      .collection('membersTasks')
+      .where('userID', '==', userId)
+      .where('taskID', '==', taskId)
+      .update({ status });
+  }
+
+  static async deleteTask(taskId) {
+    (await Client.db.collection('membersTasks').where('taskID', '==', taskId).get()).docs.map(async ({ id }) => {
+      await Client.db.collection('membersTasks').doc(id).delete();
+    });
+    await Client.db.collection('tasks').doc(taskId).delete();
+  }
+
+  static deleteTrack(trackId) {
+    return Client.db.collection('track').doc(trackId).delete();
+  }
+
+  static createTrack(memberTaskID, trackNote, trackDate) {
+    return Client.db.collection('track').add({ memberTaskID, trackNote, trackDate });
+  }
+
+  static editTrack(trackId, trackNote, trackDate) {
+    return Client.db.collection('track').doc(trackId).update({ trackNote, trackDate });
+  }
+
+  static async unassignTask(taskId, userIds) {
+    await Client.db.collection('membersTasks').where('taskId', '==', taskId).where('userId', 'in', userIds).delete();
+
+    const unassigned = await Client.getAssigned(taskId);
+    return unassigned.filter(({ userId }) => userIds.includes(userId));
   }
 
   static async signIn(login, password) {

@@ -17,6 +17,7 @@ import compareObjects from '../../../../helpers/compareObjects';
 import editAndAssignTask from '../../../../helpers/editAndAssignTask';
 import dateTypes from '../../../../helpers/dateTypes';
 import store from '../../../../redux';
+import { useDispatch } from 'react-redux';
 
 function MemberTaskCard(props) {
   const {
@@ -41,8 +42,10 @@ function MemberTaskCard(props) {
 
   const assignedToIds = assignedTo.map((user) => user.userId);
 
+  const dispatch = useDispatch();
+
   const onEdit = (data) => {
-    return editAndAssignTask(store, data, taskId);
+    return editAndAssignTask(dispatch, data, taskId);
   };
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTask(dialogValue);
