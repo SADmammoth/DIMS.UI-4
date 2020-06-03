@@ -10,22 +10,6 @@ import UserContextConsumer from './helpers/components/UserContextConsumer';
 const App = () => {
   return (
     <Provider store={store}>
-<<<<<<< HEAD
-      <Router>
-        <ScrollToTop />
-        <AuthorizationManager>
-          <UserContextConsumer>
-            {({ role, userId }) => {
-              return (
-                <Preloader role={role}>
-                  <Routes role={role} userId={userId} />
-                </Preloader>
-              );
-            }}
-          </UserContextConsumer>
-        </AuthorizationManager>
-      </Router>
-=======
       <Preloader>
         <Router>
           <AuthorizationManager>
@@ -37,7 +21,6 @@ const App = () => {
           </AuthorizationManager>
         </Router>
       </Preloader>
->>>>>>> api-integration
     </Provider>
   );
 };

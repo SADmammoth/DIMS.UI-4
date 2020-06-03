@@ -8,27 +8,29 @@ import * as assignedTasksActions from '../../redux/actions/assignedTasksActions'
 import preloadTheme from '../preloadTheme';
 import getStateMembers from '../getStateMembers';
 
-const Preloader = ({ children, members, role }) => {
+const Preloader = ({ children, members }) => {
   const dispatch = useDispatch();
   preloadTheme();
   useEffect(() => {
     async function fetchMembers() {
-      await Client.getDirections();
       const fetchedMembers = await Client.getMembers();
       dispatch(membersActions.setMembers(fetchedMembers));
     }
 
-    if (role !== 'member') {
-      fetchMembers();
+    async function fetchDirections() {
+      await Client.getDirections();
     }
-  }, [role, dispatch]);
+
+    fetchDirections();
+    fetchMembers();
+  }, [dispatch]);
 
   useEffect(() => {
     async function fetchAssignedTasks() {
       if (members && Object.keys(members).length) {
         const taskIds = Object.keys(await Client.getTasks());
         const assigned = {};
-        console.log(taskIds);
+
         await Promise.all(
           taskIds.map(async (taskId) => {
             const assignedArray = (await Client.getAssigned(taskId)).data.map(({ _id: userId, memberTaskId }) => {
@@ -41,10 +43,8 @@ const Preloader = ({ children, members, role }) => {
         dispatch(assignedTasksActions.setAssignedToTasks(assigned));
       }
     }
-    if (role !== 'member') {
-      fetchAssignedTasks();
-    }
-  }, [members, role, dispatch]);
+    fetchAssignedTasks();
+  }, [members, dispatch]);
 
   return <>{children}</>;
 };
@@ -52,7 +52,6 @@ const Preloader = ({ children, members, role }) => {
 Preloader.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   members: PropTypes.objectOf(PropTypes.object).isRequired,
-  role: PropTypes.string.isRequired,
 };
 
 export default connect(getStateMembers)(Preloader);

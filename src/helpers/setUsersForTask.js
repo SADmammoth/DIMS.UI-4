@@ -14,13 +14,13 @@ export default async function setUsersForTask(dispatch, taskId, assigned, prevAs
   }
 
   const newMembers = arraysSubtraction(assigned, prevAssigned);
-  console.log(newMembers);
+
   if (newMembers.length) {
     const assignedArray = await Client.assignTask(taskId, newMembers);
     dispatch(actions.assignTask(taskId, assignedArray));
   }
   const deletedMembers = arraysSubtraction(prevAssigned, assigned);
-  console.log(deletedMembers);
+
   if (deletedMembers.length) {
     const unassignedArray = (await Client.unassignTask(taskId, deletedMembers)).data;
     dispatch(actions.unassignTask(taskId, unassignedArray));

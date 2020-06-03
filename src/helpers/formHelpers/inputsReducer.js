@@ -8,7 +8,7 @@ export default function inputsReducer(state, action) {
 }
 
 function update(data) {
-  return { data };
+  return { ...data };
 }
 
 function updateAction(data) {

@@ -19,6 +19,8 @@ class AuthenticationManager extends Component {
   logIn = async (login, password) => {
     const authResponse = await this.authenticate(login, password);
     this.setState({ authenticated: authResponse.status === 'success' });
+    console.log(authResponse);
+    return { status: '200', ...authResponse };
   };
 
   logOut = () => {
@@ -57,7 +59,6 @@ class AuthenticationManager extends Component {
     } else {
       Client.setToken(authToken);
       const { role, userId } = await Client.confirmUser();
-      console.log(role);
       authorize(role, userId);
     }
 

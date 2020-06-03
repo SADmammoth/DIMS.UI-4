@@ -7,7 +7,7 @@ import logo from '../../../assets/images/devinc.gif';
 
 const LoginForm = (props) => {
   const onSubmit = ({ userName, password }) => {
-    props.logIn(userName, password);
+    return props.logIn(userName, password);
   };
 
   return (

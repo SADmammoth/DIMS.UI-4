@@ -265,10 +265,8 @@ class Client {
 
     // await Client.deleteTask(taskId.toString());
     let createdTask = false;
-    console.log(userTasks);
     await Promise.all(
       Object.values(userTasks).map(async (userTask) => {
-        console.log(userTask);
         if (userIds.indexOf(userTask.userId) < 0) {
           const { userId, taskName, taskDescription, taskStart, taskDeadline, state } = userTask;
           if (!createdTask) {

@@ -34,7 +34,6 @@ class Client {
   static createMembersObject(memberResponse) {
     const member = {};
     const {
-      _id,
       firstName,
       lastName,
       birthDate,
@@ -49,7 +48,7 @@ class Client {
       skype,
       startDate,
     } = memberResponse;
-
+    console.log(memberResponse);
     member.firstName = firstName;
     member.lastName = lastName;
     member.birthDate = new Date(birthDate);
@@ -69,7 +68,7 @@ class Client {
 
   static async getMembers() {
     const members = (
-      await axios.get(concatPath(apiPath, 'members', 'profile'), {
+      await axios.get(concatPath(apiPath, 'members', 'profiles'), {
         headers: Client.defaultHeader,
       })
     ).data;
@@ -97,7 +96,7 @@ class Client {
     startDate,
   ) {
     return axios.post(
-      concatPath(apiPath, 'members', 'profile'),
+      concatPath(apiPath, 'members', 'profiles'),
       {
         firstName,
         lastName,
@@ -134,7 +133,7 @@ class Client {
     startDate,
   ) {
     return axios.put(
-      concatPath(apiPath, path.join('members', userId.toString(), 'profile')),
+      concatPath(apiPath, 'members', userId.toString(), 'profile'),
       {
         firstName,
         lastName,
@@ -206,7 +205,8 @@ class Client {
 
   static async getUserTasks(userId) {
     const userTasks = (
-      await axios.get(concatPath(apiPath, 'members', userId.toString(), 'tasks'), {
+      await axios.get(concatPath(apiPath, 'tasks'), {
+        params: { member: userId.toString() },
         headers: Client.defaultHeader,
       })
     ).data;
@@ -225,14 +225,14 @@ class Client {
   }
 
   static getAssigned(taskId) {
-    return axios.get(concatPath(apiPath, 'tasks', taskId.toString(), 'assigned'), {
+    return axios.get(concatPath(apiPath, 'tasks', taskId.toString(), 'members'), {
       headers: Client.defaultHeader,
     });
   }
 
   static editTask(taskId, taskName, taskDescription, startDate, deadlineDate) {
     return axios.put(
-      concatPath(apiPath, path.join('tasks', taskId.toString())),
+      concatPath(apiPath, 'tasks', taskId.toString()),
       {
         taskId,
         taskName,
@@ -300,7 +300,6 @@ class Client {
       .data;
     const tracksObject = {};
     tracks.forEach((track) => {
-      console.log(track);
       tracksObject[track._id] = Client.createTracksObject(track);
     });
     return tracksObject;
@@ -340,7 +339,6 @@ class Client {
 
   static setToken(token) {
     Client.token = token;
-    console.log(0);
     Client.defaultHeader = { Authorization: `bearer ${Client.token}` };
   }
 
