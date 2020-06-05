@@ -83,7 +83,7 @@ const MemberCard = (props) => {
           {matchMaxWidth('550px') || (
             <div>
               <TextBadge>{direction}</TextBadge>
-              {matchMaxWidth('1000px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
+              {matchMaxWidth('750px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
             </div>
           )}
         </CollapsibleCard.Header>

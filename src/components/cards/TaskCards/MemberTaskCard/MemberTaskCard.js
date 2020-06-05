@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button';
@@ -16,16 +17,13 @@ import ChangeStateButton from '../../../elements/ChangeStateButton';
 import compareObjects from '../../../../helpers/compareObjects';
 import editAndAssignTask from '../../../../helpers/editAndAssignTask';
 import dateTypes from '../../../../helpers/dateTypes';
-import store from '../../../../redux';
-import { useDispatch } from 'react-redux';
 
 function MemberTaskCard(props) {
   const {
     taskName,
-    userId,
     taskId,
     taskDescription,
-    state,
+    status,
     taskStart,
     taskDeadline,
     collapsed,
@@ -51,18 +49,19 @@ function MemberTaskCard(props) {
     return Client.deleteTask(dialogValue);
   };
   const onTrack = ({ trackDate, trackNote }) => {
-    return Client.createTrack(userId, id, trackDate, trackNote);
+    return Client.createTrack(id, trackNote, trackDate);
   };
 
   const isAdmin = role === 'admin';
   const isMentor = role === 'mentor';
-  const isAdminOrMentor = role === 'admin' || role === 'mentor';
+  const isMember = role === 'member';
+  const isAdminOrMentor = isAdmin || isMentor;
 
   return (
     <CollapsibleCard
       id={id}
       cardClass='task'
-      className={state ? `task-card_${state.toLowerCase()}` : null}
+      className={status ? `task-card_${status.toLowerCase()}` : null}
       collapsed={collapsed}
       open={open}
       close={close}
@@ -70,9 +69,9 @@ function MemberTaskCard(props) {
       <CollapsibleCard.Header>
         <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
       </CollapsibleCard.Header>
-      {state && (
-        <div className='state'>
-          <span>{state}</span>
+      {status && (
+        <div className='status'>
+          <span>{status}</span>
         </div>
       )}
       <CollapsibleCard.Body>
@@ -105,7 +104,7 @@ function MemberTaskCard(props) {
         )}
 
         <ButtonGroup>
-          {isMentor && (
+          {isMember && (
             <TrackButton reload={reload} taskName={taskName} onSubmit={onTrack} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
@@ -126,18 +125,20 @@ function MemberTaskCard(props) {
           <ButtonGroup>
             {isAdminOrMentor && taskSet === 'user' && (
               <>
-                <ChangeStateButton
-                  reload={reload}
-                  buttonClassMod='success'
-                  taskId={taskId}
-                  userId={userId}
-                  state='success'
-                >
-                  Success
-                </ChangeStateButton>
-                <ChangeStateButton reload={reload} buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
-                  Fail
-                </ChangeStateButton>
+                {status === 'active' ? (
+                  <>
+                    <ChangeStateButton reload={reload} buttonClassMod='success' memberTaskId={id} status='success'>
+                      Success
+                    </ChangeStateButton>
+                    <ChangeStateButton reload={reload} buttonClassMod='error' memberTaskId={id} status='fail'>
+                      Fail
+                    </ChangeStateButton>
+                  </>
+                ) : (
+                  <ChangeStateButton reload={reload} buttonClassMod='primary' memberTaskId={id} status='active'>
+                    Reset status
+                  </ChangeStateButton>
+                )}
                 <Button classMod='ghost' link={`/tasks/id${taskId}`}>
                   Show in tasks
                 </Button>
@@ -185,7 +186,7 @@ function MemberTaskCard(props) {
 MemberTaskCard.defaultProps = {
   assignedTo: [],
   members: [],
-  state: null,
+  status: null,
 };
 
 MemberTaskCard.propTypes = {
@@ -201,7 +202,7 @@ MemberTaskCard.propTypes = {
 
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
-  state: PropTypes.string,
+  status: PropTypes.string,
   taskStart: PropTypes.instanceOf(Date).isRequired,
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
   assignedTo: PropTypes.arrayOf(

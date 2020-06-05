@@ -4,14 +4,12 @@ import arraysSubtraction from './arraysSubtraction';
 import * as actions from '../redux/actions/assignedTasksActions';
 
 export default async function setUsersForTask(dispatch, taskId, assigned, prevAssigned = {}) {
-  console.log(assigned, prevAssigned);
   if (compareObjects(assigned, prevAssigned)) {
     return;
   }
 
   if (!Object.keys(prevAssigned).length) {
     const assignedArray = await Client.assignTask(taskId, assigned).map;
-    console.log(assignedArray);
     dispatch(actions.assignTask(taskId, assignedArray));
   }
 

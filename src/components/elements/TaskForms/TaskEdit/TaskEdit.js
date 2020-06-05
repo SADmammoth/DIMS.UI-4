@@ -15,8 +15,6 @@ const TaskEdit = (props) => {
     dispatch(updateAction(data));
   };
 
-  console.log(inputs);
-
   const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = (data) => {

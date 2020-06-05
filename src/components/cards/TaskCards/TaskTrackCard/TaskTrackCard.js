@@ -36,7 +36,7 @@ function TaskTrackCard(props) {
   };
 
   const onEdit = ({ trackDate, trackNote }) => {
-    return Client.editTrack(id, trackDate, trackNote).then((response) => {
+    return Client.editTrack(id, trackNote, trackDate).then((response) => {
       reload();
       return response;
     });

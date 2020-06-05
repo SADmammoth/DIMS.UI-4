@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import md5 from 'md5';
+import DateMask from '../Validator/DateMask';
 
 //* Firebase configuration
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
@@ -34,7 +35,7 @@ class Client {
   }
 
   static async getUserTasks(userID) {
-    const tasks = await Client.db.collection('memberTasks').where('userID', '==', userID).get();
+    const tasks = await Client.db.collection('membersTasks').where('userID', '==', userID).get();
 
     const tasksObject = {};
     let taskData = {};
@@ -175,23 +176,23 @@ class Client {
   }
 
   static async getAssigned(taskID) {
-    const memberTasks = await Client.db.collection('memberTasks').where('taskID', '==', taskID).get();
+    const membersTasks = await Client.db.collection('membersTasks').where('taskID', '==', taskID).get();
     return await Promise.all(
-      memberTasks.docs.map((doc) => {
+      membersTasks.docs.map((doc) => {
         return { userId: doc.data().userID, memberTaskId: doc.id };
       }),
     );
   }
 
   static async getTracks(userID) {
-    const memberTasks = await Client.getUserTasks(userID);
-    const tracks = await Client.db.collection('track').where('memberTaskID', 'in', Object.keys(memberTasks)).get();
+    const membersTasks = await Client.getUserTasks(userID);
+    const tracks = await Client.db.collection('track').where('memberTaskID', 'in', Object.keys(membersTasks)).get();
 
     const tracksObject = {};
     tracks.docs.map(async (doc) => {
       tracksObject[doc.id] = doc.data();
-      tracksObject[doc.id].taskId = memberTasks[doc.data().memberTaskID].taskID;
-      tracksObject[doc.id].taskName = memberTasks[doc.data().memberTaskID].taskName;
+      tracksObject[doc.id].taskId = membersTasks[doc.data().memberTaskID].taskID;
+      tracksObject[doc.id].taskName = membersTasks[doc.data().memberTaskID].taskName;
       tracksObject[doc.id].trackDate = new Date(tracksObject[doc.id].trackDate.seconds * 1000);
     });
     return tracksObject;
@@ -200,29 +201,25 @@ class Client {
   static async assignTask(taskID, userIds) {
     await Promise.all(
       userIds.map((userId) => {
-        return Client.db.collection('memberTasks').add({ userID: userId, taskID, status: 'active' });
+        return Client.db.collection('membersTasks').add({ userID: userId, taskID, status: 'active' });
       }),
     );
 
     const assigned = await Client.getAssigned(taskID);
-    console.log(assigned);
     return assigned.filter(({ userId }) => userIds.includes(userId));
   }
 
-  static editTask(taskId, taskName, description, taskStart, taskDeadline) {
-    return Client.db.collection('tasks').doc(taskId).update({ taskName, description, taskStart, taskDeadline });
+  static editTask(taskId, taskName, taskDescription, taskStart, taskDeadline) {
+    return Client.db.collection('tasks').doc(taskId).update({ taskName, taskDescription, taskStart, taskDeadline });
   }
 
-  static postTask(taskName, description, taskStart, taskDeadline) {
-    return Client.db.collection('tasks').add({ taskName, description, taskStart, taskDeadline });
+  static async postTask(taskName, taskDescription, taskStart, taskDeadline) {
+    const { id } = await Client.db.collection('tasks').add({ taskName, taskDescription, taskStart, taskDeadline });
+    return id;
   }
 
-  static setUserTaskState(taskId, userId, status) {
-    return Client.db
-      .collection('membersTasks')
-      .where('userID', '==', userId)
-      .where('taskID', '==', taskId)
-      .update({ status });
+  static setUserTaskState(memberTaskId, status) {
+    return Client.db.collection('membersTasks').doc(memberTaskId).update({ status });
   }
 
   static async deleteTask(taskId) {
@@ -237,15 +234,29 @@ class Client {
   }
 
   static createTrack(memberTaskID, trackNote, trackDate) {
-    return Client.db.collection('track').add({ memberTaskID, trackNote, trackDate });
+    const date = DateMask.parseDateByMask(trackDate, 'dd-MM-yyyy');
+    return Client.db.collection('track').add({ memberTaskID, trackNote, trackDate: date });
   }
 
   static editTrack(trackId, trackNote, trackDate) {
-    return Client.db.collection('track').doc(trackId).update({ trackNote, trackDate });
+    const date = DateMask.parseDateByMask(trackDate, 'dd-MM-yyyy');
+    return Client.db.collection('track').doc(trackId).update({ trackNote, trackDate: date });
   }
 
   static async unassignTask(taskId, userIds) {
-    await Client.db.collection('membersTasks').where('taskId', '==', taskId).where('userId', 'in', userIds).delete();
+    const tasks = await await Client.db
+      .collection('membersTasks')
+      .where('taskID', '==', taskId)
+      .where('userID', 'in', userIds)
+      .get();
+
+    const batch = Client.db.batch();
+
+    tasks.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    batch.commit();
 
     const unassigned = await Client.getAssigned(taskId);
     return unassigned.filter(({ userId }) => userIds.includes(userId));
@@ -253,7 +264,7 @@ class Client {
 
   static async signIn(login, password) {
     const user = await Client.db.collection('users').where('login', '==', login).get();
-    if (user) {
+    if (user && user.docs.length) {
       if (user.docs[0].data().password === md5(password)) {
         return {
           status: 'success',

@@ -67,7 +67,6 @@ class Form extends React.Component {
     const valuesData = {};
 
     inputs.forEach((input) => {
-      console.log(input.defaultValue);
       valuesData[input.name] = {
         id: input.name,
         value: input.defaultValue || input.value,
@@ -195,10 +194,9 @@ class Form extends React.Component {
     if (response) {
       if (response.status === 200) {
         this.successNotification('Success', 'Data sent and accepted by server');
-        return;
+      } else if (response.status) {
+        this.errorNotification('Server error', response && response.toString());
       }
-
-      this.errorNotification('Server error', response && response.toString());
     }
   };
 
