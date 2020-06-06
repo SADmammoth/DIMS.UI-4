@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useSpring, animated } from 'react-spring';
 import CollapsibleCardTitle from './CollapsibleCardTitle';
+import changeColorScheme from '../../../helpers/changeColorScheme';
 
 function CollapsedCard(props) {
-  const { children, cardClass, onClick, collapsed } = props;
+  const { children, cardClass, onClick: onClickProp, collapsed } = props;
+
+  const initState = { background: changeColorScheme.currentColors.primaryBg, transform: 'scale(1)' };
+  const highlightedState = { background: changeColorScheme.currentColors.highlightBg, transform: 'scale(1.01)' };
+
+  const [style, set, stop] = useSpring(() => ({ config: { duration: 200 }, ...initState }));
+  useEffect(() => {
+    collapsed ? set(initState) : set(highlightedState);
+  }, [collapsed, set, initState, highlightedState]);
+
+  const onClick = (collapsed) => {
+    stop();
+    onClickProp(collapsed);
+  };
+
   return (
-    <div className={`${cardClass}-card__header`}>
+    <animated.div className={`${cardClass}-card__header`} style={style}>
       {React.Children.map(children, (child) => {
         if (!child) {
           return child;
@@ -15,7 +31,7 @@ function CollapsedCard(props) {
         }
         return child;
       })}
-    </div>
+    </animated.div>
   );
 }
 

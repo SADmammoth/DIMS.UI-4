@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Spring } from 'react-spring/renderprops';
 
 class Modal extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { show: false };
+    this.state = {
+      show: false,
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+      swapped: false,
+    };
   }
 
   static getDerivedStateFromProps(prevProps, state) {
@@ -22,18 +28,32 @@ class Modal extends React.PureComponent {
 
   handleClose = () => {
     const { onClose } = this.props;
-    onClose();
-    this.setState({ show: false });
+    this.fadeOut();
+    setTimeout(() => {
+      onClose();
+      this.setState({ show: false });
+    }, 100);
   };
 
   handleShow = () => {
     this.setState({ show: true });
+    this.fadeIn();
   };
 
   modalBackfaceClick = (e) => {
     e.preventDefault();
     this.handleClose();
   };
+
+  fadeOut() {
+    this.setState({ to: this.state.from, from: this.state.to, swapped: true });
+  }
+
+  fadeIn() {
+    if (this.state.swapped) {
+      this.setState({ to: this.state.from, from: this.state.to, swapped: false });
+    }
+  }
 
   toggle() {
     const { show } = this.state;
@@ -45,15 +65,24 @@ class Modal extends React.PureComponent {
   }
 
   render() {
-    const { show } = this.state;
-    const { children, backface, className } = this.props;
+    const { show, from, to } = this.state;
+    const { children, backface, className, animationDelay } = this.props;
+
     return (
       <>
         {show && (
-          <>
-            <article className={`modal ${show ? 'show' : ''} ${className || ''}`}>{children}</article>
-            {backface && <div className='modal-shadow' role='article' onClick={this.modalBackfaceClick} />}
-          </>
+          <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
+            {(props) => (
+              <>
+                <article className={`modal ${show ? 'show' : ''} ${className || ''}`} style={props}>
+                  {children}
+                </article>
+                {backface && (
+                  <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
+                )}
+              </>
+            )}
+          </Spring>
         )}
       </>
     );
@@ -64,6 +93,7 @@ Modal.defaultProps = {
   show: null,
   backface: true,
   onClose: () => {},
+  animationDelay: 0,
 };
 
 Modal.propTypes = {
@@ -72,6 +102,7 @@ Modal.propTypes = {
   backface: PropTypes.bool,
   onClose: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  animationDelay: PropTypes.number,
 };
 
 export default Modal;

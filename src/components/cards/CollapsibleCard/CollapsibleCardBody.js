@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSpring, animated } from 'react-spring';
 import CollapsibleCardDescription from './CollapsibleCardDescription';
 
 function CollapsibleCardBody(props) {
   const { cardClass, children } = props;
+
+  const style = useSpring({
+    config: { duration: 100 },
+    to: { opacity: 1, height: 65, transform: 'scaleY(1)' },
+    from: { opacity: 0, height: 30, transform: 'scaleY(0)' },
+  });
+
   return (
-    <div className={`${cardClass}-card__body`}>
+    <animated.div className={`${cardClass}-card__body`} style={style}>
       {React.Children.map(children, (child) => {
         if (!child) {
           return child;
@@ -15,7 +23,7 @@ function CollapsibleCardBody(props) {
         }
         return child;
       })}
-    </div>
+    </animated.div>
   );
 }
 

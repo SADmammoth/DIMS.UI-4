@@ -58,7 +58,7 @@ function MemberTaskCard(props) {
   const isAdminOrMentor = isAdmin || isMentor;
 
   return (
-    <CollapsibleCard
+    <CollapsibleCard.Card
       id={id}
       cardClass='task'
       className={status ? `task-card_${status.toLowerCase()}` : null}
@@ -179,7 +179,7 @@ function MemberTaskCard(props) {
           </ButtonGroup>
         </ButtonGroup>
       </CollapsibleCard.Body>
-    </CollapsibleCard>
+    </CollapsibleCard.Card>
   );
 }
 

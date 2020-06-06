@@ -43,7 +43,14 @@ function TaskTrackCard(props) {
   };
 
   return (
-    <CollapsibleCard id={id} className='track-card' cardClass='task' collapsed={collapsed} open={open} close={close}>
+    <CollapsibleCard.Card
+      id={id}
+      className='track-card'
+      cardClass='task'
+      collapsed={collapsed}
+      open={open}
+      close={close}
+    >
       <CollapsibleCard.Header>
         <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
         <DateBadge type={dateTypes.trackStart} date={trackDate} />
@@ -75,7 +82,7 @@ function TaskTrackCard(props) {
           />
         </ButtonGroup>
       </CollapsibleCard.Body>
-    </CollapsibleCard>
+    </CollapsibleCard.Card>
   );
 }
 

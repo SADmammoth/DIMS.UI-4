@@ -74,7 +74,7 @@ const MemberCard = (props) => {
 
   return (
     <>
-      <CollapsibleCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
+      <CollapsibleCard.Card id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
         <CollapsibleCard.Header>
           <CollapsibleCard.Title>
             <b>{firstName}</b>
@@ -124,7 +124,7 @@ const MemberCard = (props) => {
             )}
           </ButtonGroup>
         </CollapsibleCard.Body>
-      </CollapsibleCard>
+      </CollapsibleCard.Card>
       <Modal ref={modal} className='member-info' onClose={editOff}>
         <MemberInfo
           edit={edit}

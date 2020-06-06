@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useSpring, animated } from 'react-spring';
 
 import ContainerComponent from '../ContainerComponent';
 import Nav from './Nav';
@@ -8,20 +9,37 @@ import TextBadge from '../TextBadge';
 import SettingsButton from '../SettingsButton';
 import MobileNav from './MobileNav';
 import matchMaxWidth from '../../../helpers/matchMaxWidth';
-import Form from '../Form';
-import regexpEscape from '../../../helpers/Validator/regexpEscape';
 import Button from '../Button';
-import Modal from '../Modal/Modal';
 import { ReactComponent as SearchIcon } from '../../../assets/icons/Search.svg';
 import { ReactComponent as LogoIcon } from '../../../assets/images/devinc.svg';
+import FilterPanel from './FilterPanel';
 
 function Header(props) {
   const { title, navItems, role, filterFunction } = props;
   const [filterRegexpMode, setFilterRegexpMode] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
 
+  const initState = { config: { duration: 10 }, height: 80 };
+  const finalState = { config: { duration: 200 }, height: 138 };
+
+  const [style, set, stop] = useSpring(() => initState);
+
+  useEffect(() => {
+    if (!showFilterPanel) {
+      console.log(initState);
+      set(initState);
+    } else {
+      set(finalState);
+    }
+  }, [showFilterPanel, set, initState, finalState, stop]);
+
+  const togglePanel = () => {
+    stop();
+    setShowFilterPanel(!showFilterPanel);
+  };
+
   return (
-    <header className={`header fixed-top${showFilterPanel ? ' extended' : ''}`}>
+    <animated.header className={`header fixed-top${showFilterPanel ? ' extended' : ''}`} style={style}>
       <ContainerComponent display='flex'>
         <p className='site-title'>
           <Link to='/'>
@@ -46,63 +64,23 @@ function Header(props) {
               </>
             )}
             {filterFunction && (
-              <Button
-                classMod='invisible'
-                onClick={() => {
-                  setShowFilterPanel(!showFilterPanel);
-                }}
-              >
+              <Button classMod='invisible' onClick={togglePanel}>
                 <SearchIcon className='icon-search' />
               </Button>
             )}
             {role && <SettingsButton />}
           </ContainerComponent>
           {filterFunction && (
-            <Modal show={showFilterPanel} className='input-panel' backface={false}>
-              <Form
-                inputs={[
-                  {
-                    id: 'search',
-                    type: 'text',
-                    name: 'filter',
-                    placeholder: 'Search',
-                    description: 'Search',
-                    onInput: (name, input) => {
-                      let filterString;
-                      if (filterRegexpMode) {
-                        try {
-                          filterString = new RegExp(input, 'i');
-                        } catch (err) {
-                          filterFunction();
-                        }
-
-                        regexpEscape(input);
-                      } else {
-                        filterString = regexpEscape(input);
-                      }
-
-                      filterFunction(filterString);
-                    },
-                  },
-                  {
-                    id: 'regexpMode',
-                    type: 'checkbox',
-                    name: 'regexpMode',
-                    description: 'Regexp mode',
-                    onChange: (name, input) => {
-                      setFilterRegexpMode(input.includes('on'));
-                    },
-                    valueOptions: [{ label: 'Regexp mode', value: 'on' }],
-                  },
-                ]}
-                showNotifications='hideAll'
-                onSubmit={null}
-              />
-            </Modal>
+            <FilterPanel
+              showFilterPanel={showFilterPanel}
+              filterRegexpMode={filterRegexpMode}
+              setFilterRegexpMode={setFilterRegexpMode}
+              filterFunction={filterFunction}
+            />
           )}
         </div>
       </ContainerComponent>
-    </header>
+    </animated.header>
   );
 }
 
