@@ -179,7 +179,7 @@ class Client {
     let allUserTasks;
     let userTasks;
 
-    const resultArray = await Promise.all(
+    const resultArray = await Promise.allSettled(
       usersIds.map(async (userId) => {
         allUserTasks = await this.getUserTasks(userId);
 
@@ -207,7 +207,7 @@ class Client {
     const assignedTo = [];
     let userTasks;
 
-    await Promise.all(
+    await Promise.allSettled(
       Object.entries(allUsers).map(async ([userId, user]) => {
         userTasks = await this.getUserTasks(userId);
         Object.values(userTasks).forEach((userTask) => {

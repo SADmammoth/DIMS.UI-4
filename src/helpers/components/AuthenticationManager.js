@@ -78,8 +78,8 @@ class AuthenticationManager extends Component {
             )}
           </>
         ) : (
-            <Spinner centered />
-          )}
+          <Spinner centered />
+        )}
       </>
     );
   }

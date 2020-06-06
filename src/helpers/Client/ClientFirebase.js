@@ -39,7 +39,7 @@ class Client {
 
     const tasksObject = {};
     let taskData = {};
-    await Promise.all(
+    await Promise.allSettled(
       tasks.docs.map(async (doc) => {
         taskData = await Client.db.collection('tasks').doc(doc.data().taskID).get();
         tasksObject[doc.id] = Object.assign(doc.data(), taskData.data());
@@ -133,7 +133,7 @@ class Client {
     const progressObject = {};
     let userData = {};
 
-    await Promise.all(
+    await Promise.allSettled(
       Object.entries(track).map(async ([id, data]) => {
         const { memberTaskId, ...progressData } = data;
         progressObject[id] = progressData;
@@ -151,14 +151,14 @@ class Client {
     const tasksObject = {};
     let users = [];
     let user = {};
-    await Promise.all(
+    await Promise.allSettled(
       tasks.docs.map(async (doc) => {
         tasksObject[doc.id] = doc.data();
         tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
         tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
         users = await Client.getAssigned(doc.id);
         tasksObject[doc.id].assignedTo = (
-          await Promise.all(
+          await Promise.allSettled(
             users.map(async ({ memberTaskId, userId }) => {
               user = await Client.getMember(userId);
               if (!user) {
@@ -177,11 +177,26 @@ class Client {
 
   static async getAssigned(taskID) {
     const membersTasks = await Client.db.collection('membersTasks').where('taskID', '==', taskID).get();
-    return await Promise.all(
+    return await Promise.allSettled(
       membersTasks.docs.map((doc) => {
         return { userId: doc.data().userID, memberTaskId: doc.id };
       }),
     );
+  }
+
+  static async getAllAssigned() {
+    const taskIds = Object.keys(await Client.getTasks());
+    const assigned = {};
+
+    await Promise.allSettled(
+      taskIds.map(async (taskId) => {
+        const assignedArray = await Client.getAssigned(taskId);
+
+        assigned[taskId] = assignedArray;
+      }),
+    );
+
+    return assigned;
   }
 
   static async getTracks(userID) {
@@ -199,7 +214,7 @@ class Client {
   }
 
   static async assignTask(taskID, userIds) {
-    await Promise.all(
+    await Promise.allSettled(
       userIds.map((userId) => {
         return Client.db.collection('membersTasks').add({ userID: userId, taskID, status: 'active' });
       }),
