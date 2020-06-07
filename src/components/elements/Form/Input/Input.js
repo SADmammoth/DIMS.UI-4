@@ -52,7 +52,7 @@ function Input(props) {
     } = event;
 
     if (!byCharValidator(value + key)) {
-      preventDefault();
+      event.preventDefault();
     }
   };
 

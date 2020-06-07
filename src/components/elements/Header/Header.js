@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useSpring, animated } from 'react-spring';
+import { animated } from 'react-spring';
 
 import ContainerComponent from '../ContainerComponent';
 import Nav from './Nav';
@@ -13,25 +13,16 @@ import Button from '../Button';
 import { ReactComponent as SearchIcon } from '../../../assets/icons/Search.svg';
 import { ReactComponent as LogoIcon } from '../../../assets/images/devinc.svg';
 import FilterPanel from './FilterPanel';
+import useAnimation from '../../../helpers/hooks/useAnimation';
+import headerAnimation from '../../../helpers/animations/headerAnimation';
 
 function Header(props) {
   const { title, navItems, role, filterFunction } = props;
   const [filterRegexpMode, setFilterRegexpMode] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const { initState, finalState } = headerAnimation();
 
-  const initState = { config: { duration: 10 }, height: 80 };
-  const finalState = { config: { duration: 200 }, height: 138 };
-
-  const [style, set, stop] = useSpring(() => initState);
-
-  useEffect(() => {
-    if (!showFilterPanel) {
-      console.log(initState);
-      set(initState);
-    } else {
-      set(finalState);
-    }
-  }, [showFilterPanel, set, initState, finalState, stop]);
+  const [style, , stop] = useAnimation({ trigger: () => showFilterPanel, initState, finalState });
 
   const togglePanel = () => {
     stop();

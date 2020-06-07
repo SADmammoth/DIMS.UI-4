@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Spring } from 'react-spring/renderprops';
+import fadeIn from '../../../helpers/animations/fadeIn';
 
 class Modal extends React.PureComponent {
   constructor(props) {
     super(props);
+    const { initState, finalState } = fadeIn();
+
     this.state = {
       show: false,
-      from: { opacity: 0 },
-      to: { opacity: 1 },
+      from: initState,
+      to: finalState,
       swapped: false,
     };
   }
@@ -46,12 +49,14 @@ class Modal extends React.PureComponent {
   };
 
   fadeOut() {
-    this.setState({ to: this.state.from, from: this.state.to, swapped: true });
+    const { from, to } = this.state;
+    this.setState({ to: from, from: to, swapped: true });
   }
 
   fadeIn() {
-    if (this.state.swapped) {
-      this.setState({ to: this.state.from, from: this.state.to, swapped: false });
+    const { swapped, from, to } = this.state;
+    if (swapped) {
+      this.setState({ to: from, from: to, swapped: false });
     }
   }
 

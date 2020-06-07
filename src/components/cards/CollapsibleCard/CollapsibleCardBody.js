@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSpring, animated } from 'react-spring';
 import CollapsibleCardDescription from './CollapsibleCardDescription';
+import cardBodyAnimation from '../../../helpers/animations/cardBodyAnimation';
 
 function CollapsibleCardBody(props) {
   const { cardClass, children } = props;
+  const { config, initState, finalState } = cardBodyAnimation();
 
   const style = useSpring({
-    config: { duration: 100 },
-    to: { opacity: 1, height: 65, transform: 'scaleY(1)' },
-    from: { opacity: 0, height: 30, transform: 'scaleY(0)' },
+    config,
+    to: initState,
+    from: finalState,
   });
 
   return (

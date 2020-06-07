@@ -1,19 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useSpring, animated } from 'react-spring';
+import { animated } from 'react-spring';
 import CollapsibleCardTitle from './CollapsibleCardTitle';
-import changeColorScheme from '../../../helpers/changeColorScheme';
+import useAnimation from '../../../helpers/hooks/useAnimation';
+import cardHeaderAnimation from '../../../helpers/animations/cardHeaderAnimation';
 
 function CollapsedCard(props) {
   const { children, cardClass, onClick: onClickProp, collapsed } = props;
+  const { initState, finalState } = cardHeaderAnimation();
 
-  const initState = { background: changeColorScheme.currentColors.primaryBg, transform: 'scale(1)' };
-  const highlightedState = { background: changeColorScheme.currentColors.highlightBg, transform: 'scale(1.01)' };
-
-  const [style, set, stop] = useSpring(() => ({ config: { duration: 200 }, ...initState }));
-  useEffect(() => {
-    collapsed ? set(initState) : set(highlightedState);
-  }, [collapsed, set, initState, highlightedState]);
+  const [style, , stop] = useAnimation({ trigger: () => !collapsed, initState, finalState });
 
   const onClick = (collapsed) => {
     stop();
