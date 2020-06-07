@@ -27,7 +27,7 @@ const Client = {
       return direction.data().name;
     });
   },
-  
+
   getMembers: async () => {
     const members = await db.collection('members').get();
     const membersObject = {};
