@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsibleCard from '../../CollapsibleCard';
+import * as CollapsibleCard from '../../CollapsibleCard';
 import DateBadge from '../../../elements/DateBadge';
 import DialogButton from '../../../elements/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';

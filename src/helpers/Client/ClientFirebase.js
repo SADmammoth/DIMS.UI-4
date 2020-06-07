@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import md5 from 'md5';
 import DateMask from '../Validator/DateMask';
+import parseDate from './parseDate';
 
 //* Firebase configuration
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
@@ -35,8 +36,8 @@ const Client = {
     const formatMember = async (doc) => {
       membersObject[doc.id] = {
         ...doc.data(),
-        startDate: new Date(doc.data().startDate.seconds * 1000),
-        birthDate: new Date(doc.data().birthDate.seconds * 1000),
+        startDate: parseDate(doc.data().startDate.seconds),
+        birthDate: parseDate(doc.data().birthDate.seconds),
       };
     };
 
@@ -56,8 +57,8 @@ const Client = {
         ...taskData.data(),
         id: doc.id,
         taskId: doc.data().taskID,
-        taskStart: new Date(doc.data().taskStart.seconds * 1000),
-        taskDeadline: new Date(doc.data().taskDeadline.seconds * 1000),
+        taskStart: parseDate(doc.data().taskStart.seconds),
+        taskDeadline: parseDate(doc.data().taskDeadline.seconds),
       };
     };
 
@@ -181,8 +182,8 @@ const Client = {
 
     const formatTask = async (doc) => {
       tasksObject[doc.id] = doc.data();
-      tasksObject[doc.id].taskStart = new Date(tasksObject[doc.id].taskStart.seconds * 1000);
-      tasksObject[doc.id].taskDeadline = new Date(tasksObject[doc.id].taskDeadline.seconds * 1000);
+      tasksObject[doc.id].taskStart = parseDate(tasksObject[doc.id].taskStart.seconds);
+      tasksObject[doc.id].taskDeadline = parseDate(tasksObject[doc.id].taskDeadline.seconds);
       users = await Client.getAssigned(doc.id);
       tasksObject[doc.id].assignedTo = await formatAssigned();
       tasksObject[doc.id].id = doc.id;
@@ -226,7 +227,7 @@ const Client = {
         ...data(),
         taskId: membersTasks[data().memberTaskID].taskID,
         taskName: membersTasks[data().memberTaskID].taskName,
-        trackDate: new Date(tracksObject[id].trackDate.seconds * 1000),
+        trackDate: parseDate(tracksObject[id].trackDate.seconds),
       };
     };
 

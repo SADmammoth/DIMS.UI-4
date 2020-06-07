@@ -8,8 +8,9 @@ import cardHeaderAnimation from '../../../helpers/animations/cardHeaderAnimation
 function CollapsedCard(props) {
   const { children, cardClass, onClick: onClickProp, collapsed } = props;
   const { initState, finalState } = cardHeaderAnimation();
+  const trigger = () => !collapsed;
 
-  const [style, , stop] = useAnimation({ trigger: () => !collapsed, initState, finalState });
+  const [style, stop] = useAnimation({ trigger, initState, finalState });
 
   const onClick = (collapsed) => {
     stop();

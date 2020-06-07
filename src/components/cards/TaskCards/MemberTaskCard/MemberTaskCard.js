@@ -9,7 +9,7 @@ import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg'
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsibleCard from '../../CollapsibleCard';
+import * as CollapsibleCard from '../../CollapsibleCard';
 import DialogButton from '../../../elements/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
 import Client from '../../../../helpers/Client';
