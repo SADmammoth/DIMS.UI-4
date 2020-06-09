@@ -20,14 +20,14 @@ export default function assignedTasks(state = initialState, action) {
 function assignTask(state, taskId, userIds) {
   let newState = { ...state };
   if (!state || !Object.keys(state).length) {
-    newState = {};
+    newState = { [taskId]: [] };
   }
 
   if (!newState[taskId]) {
     newState[taskId] = userIds;
     return newState;
   }
-
+  console.log(userIds, newState);
   newState[taskId].push(...userIds);
   return newState;
 }

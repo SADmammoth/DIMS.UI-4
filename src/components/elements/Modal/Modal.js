@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Spring } from 'react-spring/renderprops';
+import ReactDOM from 'react-dom';
 import fadeIn from '../../../helpers/animations/fadeIn';
 
 class Modal extends React.PureComponent {
@@ -72,25 +73,48 @@ class Modal extends React.PureComponent {
   render() {
     const { show, from, to } = this.state;
     const { children, backface, className, animationDelay } = this.props;
+    const container = document.getElementById('modals');
 
-    return (
-      <>
-        {show && (
-          <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
-            {(props) => (
-              <>
-                <article className={`modal ${show ? 'show' : ''} ${className || ''}`} style={props}>
-                  {children}
-                </article>
-                {backface && (
-                  <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
-                )}
-              </>
-            )}
-          </Spring>
-        )}
-      </>
-    );
+    if (!backface) {
+      return (
+        <>
+          {show && (
+            <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
+              {(props) => (
+                <>
+                  <article className={`modal ${show ? 'show' : ''} ${className || ''}`} style={props}>
+                    {children}
+                  </article>
+                  {backface && (
+                    <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
+                  )}
+                </>
+              )}
+            </Spring>
+          )}
+        </>
+      );
+    }
+
+    if (show) {
+      return ReactDOM.createPortal(
+        <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
+          {(props) => (
+            <>
+              <article className={`modal ${className || ''}`} style={props}>
+                {children}
+              </article>
+              {backface && (
+                <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
+              )}
+            </>
+          )}
+        </Spring>,
+        container,
+      );
+    }
+
+    return null;
   }
 }
 

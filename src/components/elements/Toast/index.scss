@@ -6,7 +6,7 @@
   margin: 10px;
   background-color: $light-bg;
 
-  @include toast-header;
+  @include toast-header();
 
   &__header {
     padding: 10px 20px;

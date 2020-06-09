@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import md5 from 'md5';
 import DateMask from '../Validator/DateMask';
 import parseDate from './parseDate';
+import getValue from './getValue';
 
 //* Firebase configuration
 const projectId = process.env.REACT_APP_FIREBASE_PROJECTID;
@@ -49,20 +50,22 @@ const Client = {
     const tasks = await db.collection('membersTasks').where('userID', '==', userID).get();
     const tasksObject = {};
     let taskData = {};
-
+    console.log(tasks);
     const formatTasks = async (doc) => {
       taskData = await db.collection('tasks').doc(doc.data().taskID).get();
+      console.log(taskData);
       tasksObject[doc.id] = {
         ...doc.data(),
         ...taskData.data(),
         id: doc.id,
         taskId: doc.data().taskID,
-        taskStart: parseDate(doc.data().taskStart.seconds),
-        taskDeadline: parseDate(doc.data().taskDeadline.seconds),
+        taskStart: parseDate(taskData.data().taskStart.seconds),
+        taskDeadline: parseDate(taskData.data().taskDeadline.seconds),
       };
     };
 
     await Promise.allSettled(tasks.docs.map(formatTasks));
+    console.log(tasksObject);
     return tasksObject;
   },
 
@@ -154,7 +157,7 @@ const Client = {
       progressObject[id].userName = userData.data().firstName;
     };
 
-    await Promise.allSettled(Object.entries(track).map(formatProgress));
+    (await Promise.allSettled(Object.entries(track).map(formatProgress))).map(getValue);
 
     return progressObject;
   },
@@ -177,7 +180,9 @@ const Client = {
             return { userId, memberTaskId, firstName: user.firstName, lastName: user.lastName };
           }),
         )
-      ).filter((el) => !!el);
+      )
+        .map(getValue)
+        .filter((el) => !!el);
     };
 
     const formatTask = async (doc) => {
@@ -190,7 +195,7 @@ const Client = {
       tasksObject[doc.id].taskId = doc.id;
     };
 
-    await Promise.allSettled(tasks.docs.map(formatTask));
+    (await Promise.allSettled(tasks.docs.map(formatTask))).map(getValue);
     return tasksObject;
   },
 
@@ -200,7 +205,8 @@ const Client = {
       return { userId: doc.data().userID, memberTaskId: doc.id };
     };
 
-    return Promise.allSettled(membersTasks.docs.map(formatAssigned));
+    const assigned = (await Promise.allSettled(membersTasks.docs.map(formatAssigned))).map(getValue);
+    return assigned;
   },
 
   getAllAssigned: async () => {
@@ -209,30 +215,35 @@ const Client = {
 
     const processAssigned = async (taskId) => {
       const assignedArray = await Client.getAssigned(taskId);
+      console.log(assignedArray);
       assigned[taskId] = assignedArray;
     };
 
-    await Promise.allSettled(taskIds.map(processAssigned));
+    (await Promise.allSettled(taskIds.map(processAssigned))).map(getValue);
 
     return assigned;
   },
 
   getTracks: async (userID) => {
     const membersTasks = await Client.getUserTasks(userID);
-    const tracks = await db.collection('track').where('memberTaskID', 'in', Object.keys(membersTasks)).get();
+    const taskIds = Object.keys(membersTasks);
+    if (taskIds.length) {
+      const tracks = await db.collection('track').where('memberTaskID', 'in', taskIds).get();
 
-    const tracksObject = {};
-    const formatTrack = async ({ id, data }) => {
-      tracksObject[id] = {
-        ...data(),
-        taskId: membersTasks[data().memberTaskID].taskID,
-        taskName: membersTasks[data().memberTaskID].taskName,
-        trackDate: parseDate(tracksObject[id].trackDate.seconds),
+      const tracksObject = {};
+      const formatTrack = async (track) => {
+        tracksObject[track.id] = {
+          ...track.data(),
+          memberTaskId: track.data().memberTaskID,
+          taskName: membersTasks[track.data().memberTaskID].taskName,
+          trackDate: parseDate(track.data().trackDate.seconds),
+        };
       };
-    };
 
-    tracks.docs.map(formatTrack);
-    return tracksObject;
+      tracks.docs.map(formatTrack);
+      return tracksObject;
+    }
+    return {};
   },
 
   assignTask: async (taskID, userIds) => {
