@@ -50,10 +50,10 @@ const Client = {
     const tasks = await db.collection('membersTasks').where('userID', '==', userID).get();
     const tasksObject = {};
     let taskData = {};
-    console.log(tasks);
+
     const formatTasks = async (doc) => {
       taskData = await db.collection('tasks').doc(doc.data().taskID).get();
-      console.log(taskData);
+
       tasksObject[doc.id] = {
         ...doc.data(),
         ...taskData.data(),
@@ -65,7 +65,7 @@ const Client = {
     };
 
     await Promise.allSettled(tasks.docs.map(formatTasks));
-    console.log(tasksObject);
+
     return tasksObject;
   },
 
@@ -148,16 +148,21 @@ const Client = {
     const track = await Client.getTracks(userID);
 
     const progressObject = {};
-    let userData = {};
 
     const formatProgress = async ([id, data]) => {
       const { memberTaskId, ...progressData } = data;
-      progressObject[id] = progressData;
-      userData = await db.collection('members').doc(userID).get();
-      progressObject[id].userName = userData.data().firstName;
+      const { userID: userId } = (await db.collection('membersTasks').doc(memberTaskId).get()).data();
+      const { firstName: userName } = (await db.collection('members').doc(userID).get()).data();
+
+      progressObject[id] = {
+        ...progressData,
+        memberTaskId,
+        userId,
+        userName,
+      };
     };
 
-    (await Promise.allSettled(Object.entries(track).map(formatProgress))).map(getValue);
+    await Promise.allSettled(Object.entries(track).map(formatProgress));
 
     return progressObject;
   },
@@ -215,7 +220,6 @@ const Client = {
 
     const processAssigned = async (taskId) => {
       const assignedArray = await Client.getAssigned(taskId);
-      console.log(assignedArray);
       assigned[taskId] = assignedArray;
     };
 
@@ -232,8 +236,9 @@ const Client = {
 
       const tracksObject = {};
       const formatTrack = async (track) => {
+        const { memberTaskID, ...trackData } = track.data();
         tracksObject[track.id] = {
-          ...track.data(),
+          ...trackData,
           memberTaskId: track.data().memberTaskID,
           taskName: membersTasks[track.data().memberTaskID].taskName,
           trackDate: parseDate(track.data().trackDate.seconds),

@@ -33,11 +33,11 @@ const MemberEdit = (props) => {
           <b>{inputs.firstName}</b>
           {inputs.lastName}
         </p>
+        <TextBadge>{inputs.direction}</TextBadge>{' '}
         <div className='date-badge'>
           <FlagIcon className='icon-flag common-text-color' />
           {inputs.startDate}
         </div>
-        <TextBadge>{inputs.direction}</TextBadge>
       </div>
       <div className='member-info__body'>
         <div className='member-info__contacts'>

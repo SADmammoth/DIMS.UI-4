@@ -67,7 +67,7 @@
       }
 
       .text-badge {
-        margin: 10px 20px;
+        margin: 0 20px;
       }
     }
 
@@ -83,11 +83,11 @@
     }
 
     .date-badge {
-      margin-left: 50px;
       transform: scale(1.2);
     }
 
     .text-badge {
+      margin-right: 30px;
       margin-top: 7px;
       transform: scale(1.2);
     }
@@ -97,6 +97,12 @@
     margin: 0;
     margin-left: 3vw;
     font-size: 2.2rem;
+
+    @media screen and (min-width: 1200px) and (max-width: 1300px) {
+      & {
+        width: 200px;
+      }
+    }
   }
 
   hr {
@@ -113,7 +119,7 @@
     text-align: center;
     justify-content: center;
 
-    @media screen and (max-width: 950px) {
+    @media screen and (max-width: 1200px) {
       flex-wrap: wrap;
       & > * {
         width: auto !important;
@@ -195,11 +201,22 @@
 
     display: flex;
     justify-content: space-between;
-
-    .button-block {
+    & > .button-block {
       display: flex;
       & > * {
         margin: 0 5px;
+      }
+
+      @media screen and (max-width: 950px) {
+        & {
+          width: 100%;
+          justify-content: center;
+        }
+        &:last-child > .button:first-child {
+          border: 2px solid $primary-bg;
+          width: 100px;
+          text-decoration: none;
+        }
       }
     }
   }

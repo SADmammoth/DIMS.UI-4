@@ -66,7 +66,6 @@ class Form extends React.Component {
     const { values } = this.state;
     const valuesData = {};
     inputs.forEach((input) => {
-      console.log(input.defaultValue, input.value);
       valuesData[input.name] = {
         id: input.name,
         value: input.defaultValue || input.value,

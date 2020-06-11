@@ -60,7 +60,7 @@
 @include invalidBounceKeyframes(2);
 
 .form-control.invalid {
-  border-color: red;
+  border-color: $error;
   animation: 1s invalidBounce;
 }
 

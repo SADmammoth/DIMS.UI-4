@@ -116,6 +116,7 @@ const MemberCard = (props) => {
                       confirmButtonContent='Delete'
                       dialogValue={id}
                       onSubmit={onDelete}
+                      deletesAfterConfirmation
                     />
                     <Button content='Edit' classMod='secondary' onClick={showEditModal} />
                   </>

@@ -14,7 +14,7 @@ export default function useAuthorization({ role: defaultRole, userId: defaultId 
       }
       setUser(currentUser);
     }
-    console.log(role);
+    
     if (checkRole(role)) {
       localStorage.setItem('userInfo', JSON.stringify({ role, userId }));
       setUser({ role, userId });

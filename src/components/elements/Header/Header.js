@@ -27,6 +27,7 @@ function Header(props) {
 
   const togglePanel = () => {
     stop();
+    filterFunction('');
     setShowFilterPanel(!showFilterPanel);
   };
 
