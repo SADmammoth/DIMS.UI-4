@@ -27,7 +27,7 @@ function assignTask(state, taskId, userIds) {
     newState[taskId] = userIds;
     return newState;
   }
-  
+
   newState[taskId].push(...userIds);
   return newState;
 }

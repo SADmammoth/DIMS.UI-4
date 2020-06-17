@@ -14,13 +14,12 @@ export default function useAuthorization({ role: defaultRole, userId: defaultId 
       }
       setUser(currentUser);
     }
-    
+
     if (checkRole(role)) {
       localStorage.setItem('userInfo', JSON.stringify({ role, userId }));
       setUser({ role, userId });
     } else {
       notify('error', 'Invalid role');
-      alert(0);
     }
   }
 

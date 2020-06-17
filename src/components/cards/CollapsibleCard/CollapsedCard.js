@@ -12,9 +12,9 @@ function CollapsedCard(props) {
 
   const [style, stop] = useAnimation({ trigger, initState, finalState });
 
-  const onClick = (collapsed) => {
+  const onClick = (collapsedValue) => {
     stop();
-    onClickProp(collapsed);
+    onClickProp(collapsedValue);
   };
 
   return (
@@ -31,6 +31,12 @@ function CollapsedCard(props) {
     </animated.div>
   );
 }
+
+CollapsedCard.defaultProps = {
+  onClick: () => {},
+  cardClass: '',
+  collapsed: true,
+};
 
 CollapsedCard.propTypes = {
   onClick: PropTypes.func,

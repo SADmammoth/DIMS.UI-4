@@ -1,22 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import MemberProgressCard from '../../components/cards/TaskCards/MemberProgressCard';
 
-export default function WrappedMemberProgressCard({
-  id,
-  taskName,
-  trackNote,
-  trackDate,
-  collapsed,
-  open,
-  close,
-  memberTaskId,
-  userId,
-}) {
+function WrappedMemberProgressCard({ id, taskName, trackNote, trackDate, collapsed, open, close }) {
   return (
     <MemberProgressCard
       id={id}
-      memberTaskId={memberTaskId}
-      userId={userId}
       taskName={taskName}
       trackNote={trackNote}
       trackDate={trackDate}
@@ -26,3 +16,16 @@ export default function WrappedMemberProgressCard({
     />
   );
 }
+
+WrappedMemberProgressCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  open: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+
+  taskName: PropTypes.string.isRequired,
+  trackNote: PropTypes.string.isRequired,
+  trackDate: PropTypes.instanceOf(Date).isRequired,
+};
+
+export default WrappedMemberProgressCard;

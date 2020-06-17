@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -35,8 +37,8 @@ function TaskTrackCard(props) {
     });
   };
 
-  const onEdit = ({ trackDate, trackNote }) => {
-    return Client.editTrack(id, trackNote, trackDate).then((response) => {
+  const onEdit = ({ trackDate: date, trackNote: note }) => {
+    return Client.editTrack(id, note, date).then((response) => {
       reload();
       return response;
     });

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -187,10 +189,12 @@ MemberTaskCard.defaultProps = {
   assignedTo: [],
   members: [],
   status: null,
+  userId: null,
 };
 
 MemberTaskCard.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   edit: PropTypes.bool.isRequired,
   collapsed: PropTypes.bool.isRequired,
@@ -218,7 +222,6 @@ MemberTaskCard.propTypes = {
       lastName: PropTypes.string,
     }),
   ),
-  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default React.memo(MemberTaskCard, compareObjects);

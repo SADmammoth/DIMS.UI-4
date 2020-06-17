@@ -38,8 +38,6 @@ MemberProgressCard.propTypes = {
   taskName: PropTypes.string.isRequired,
   trackNote: PropTypes.string.isRequired,
   trackDate: PropTypes.instanceOf(Date).isRequired,
-  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  memberTaskId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 
 export default React.memo(MemberProgressCard, compareObjects);

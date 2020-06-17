@@ -77,6 +77,12 @@ function Header(props) {
   );
 }
 
+Header.defaultProps = {
+  navItems: null,
+  role: null,
+  filterFunction: null,
+};
+
 Header.propTypes = {
   title: PropTypes.string.isRequired,
   navItems: Nav.propTypes.navItems,

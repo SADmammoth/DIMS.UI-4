@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Spring } from 'react-spring/renderprops';
 import ReactDOM from 'react-dom';
 import fadeIn from '../../../helpers/animations/fadeIn';
+import renderModal from './renderModal';
+import CustomSpring from './CustomSpring';
 
 class Modal extends React.PureComponent {
   constructor(props) {
@@ -79,18 +82,9 @@ class Modal extends React.PureComponent {
       return (
         <>
           {show && (
-            <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
-              {(props) => (
-                <>
-                  <article className={`modal ${show ? 'show' : ''} ${className || ''}`} style={props}>
-                    {children}
-                  </article>
-                  {backface && (
-                    <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
-                  )}
-                </>
-              )}
-            </Spring>
+            <CustomSpring animationDelay={animationDelay} from={from} to={to}>
+              {(style) => renderModal(show, className, style, children)}
+            </CustomSpring>
           )}
         </>
       );
@@ -98,18 +92,16 @@ class Modal extends React.PureComponent {
 
     if (show) {
       return ReactDOM.createPortal(
-        <Spring config={{ duration: 50, delay: animationDelay }} from={from} to={to}>
-          {(props) => (
+        <CustomSpring animationDelay={animationDelay} from={from} to={to}>
+          {(style) => (
             <>
-              <article className={`modal ${className || ''}`} style={props}>
-                {children}
-              </article>
+              {renderModal(show, className, style, children)}
               {backface && (
-                <div className='modal-shadow' role='article' style={props} onClick={this.modalBackfaceClick} />
+                <div className='modal-shadow' role='article' style={style} onClick={this.modalBackfaceClick} />
               )}
             </>
           )}
-        </Spring>,
+        </CustomSpring>,
         container,
       );
     }
@@ -123,6 +115,7 @@ Modal.defaultProps = {
   backface: true,
   onClose: () => {},
   animationDelay: 0,
+  className: null,
 };
 
 Modal.propTypes = {

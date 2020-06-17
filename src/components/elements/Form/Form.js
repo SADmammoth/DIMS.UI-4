@@ -7,7 +7,7 @@ import errorNotification from '../../../helpers/formHelpers/errorNotification';
 import formatFormValues from '../../../helpers/formHelpers/formatFormValues';
 import validateForm from '../../../helpers/formHelpers/validateForm';
 import setFormDefaultValue from '../../../helpers/formHelpers/setFormDefaultValue';
-import createInput from './createInput';
+import CreateInput from './CreateInput';
 
 class Form extends React.Component {
   constructor(props) {
@@ -36,6 +36,7 @@ class Form extends React.Component {
     }
   }
 
+  // eslint-disable-next-line react/sort-comp
   update() {
     this.createValues();
     this.createInputs();
@@ -121,7 +122,7 @@ class Form extends React.Component {
           this.updateValue(inputName, value);
         };
 
-        inputsData[name] = createInput({
+        inputsData[name] = CreateInput({
           id: values[name].id,
           type,
           name,
@@ -250,6 +251,9 @@ Form.defaultProps = {
   submitButton: <></>,
   onInputsUpdate: (inputs) => inputs,
   showNotifications: 'all',
+  children: null,
+  onSubmit: false,
+  defaultValue: null,
 };
 
 Form.propTypes = {
@@ -270,7 +274,8 @@ Form.propTypes = {
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,
   showNotifications: PropTypes.oneOf(['all', 'errorsOnly', 'hideAll']),
-  defaultValue: PropTypes.array,
+  // eslint-disable-next-line react/no-unused-prop-types
+  defaultValue: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object])),
 };
 
 export default Form;
