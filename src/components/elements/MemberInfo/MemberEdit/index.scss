@@ -94,7 +94,6 @@
       margin-top: 10px;
       margin-bottom: 10px;
       font-size: 1.1rem !important;
-      text-align: center;
     }
   }
 
@@ -132,9 +131,11 @@
         height: 30px;
         box-sizing: border-box;
         padding: 2px;
+        margin-right: 0px !important;
         & > .form-select {
           height: 26px;
           padding-top: 3px;
+          width: 100%;
         }
       }
     }
