@@ -130,19 +130,17 @@
       & {
         height: 30px;
         box-sizing: border-box;
-        padding: 2px;
-        margin-right: 0px !important;
+        padding: 2px 0;
         & > .form-select {
           height: 26px;
-          padding-top: 3px;
-          width: 100%;
+          width: 126px;
         }
       }
     }
   }
 
   .form-select {
-    width: 150px;
+    width: 130px;
     padding: 5px;
     border: none;
     border-radius: 20px;

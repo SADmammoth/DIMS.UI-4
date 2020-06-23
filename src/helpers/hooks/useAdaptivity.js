@@ -5,6 +5,7 @@ export default function useAdaptivity() {
     height: window.innerHeight,
     width: window.innerWidth,
   });
+
   useEffect(() => {
     const resizeEffect = () => {
       setDimensions({
@@ -12,7 +13,9 @@ export default function useAdaptivity() {
         width: window.innerWidth,
       });
     };
+
     window.addEventListener('resize', resizeEffect);
+    return () => window.removeEventListener('resize', resizeEffect);
   }, []);
 
   return [dimensions];
