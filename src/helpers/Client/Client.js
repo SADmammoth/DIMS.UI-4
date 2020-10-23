@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Validator from '../Validator';
 import concatPath from '../concatPath';
+import getValue from './getValue';
 
 const apiPath = process.env.REACT_APP_APIPATH;
 

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -7,7 +9,8 @@ import MemberInfo from '../../elements/MemberInfo';
 import Modal from '../../elements/Modal';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
-import CollapsibleCard from '../CollapsibleCard';
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info.svg';
+import * as CollapsibleCard from '../CollapsibleCard';
 import DateBadge from '../../elements/DateBadge';
 import TextBadge from '../../elements/TextBadge';
 import DialogButton from '../../elements/DialogButton';
@@ -17,6 +20,8 @@ import calculateAge from '../../../helpers/calculateAge';
 import compareObjects from '../../../helpers/compareObjects';
 import dateTypes from '../../../helpers/dateTypes';
 import matchMaxWidth from '../../../helpers/matchMaxWidth';
+import ButtonGroup from '../../elements/ButtonGroup';
+import useAdaptivity from '../../../helpers/hooks/useAdaptivity';
 
 const MemberCard = (props) => {
   const {
@@ -41,12 +46,13 @@ const MemberCard = (props) => {
     edit: editDefault,
   } = props;
 
-  const { dispatch } = useDispatch();
+  const dispatch = useDispatch();
 
   const age = calculateAge(birthDate);
   const modal = useRef({});
 
   const [edit, setEdit] = useState(editDefault);
+  useAdaptivity();
 
   const editOff = () => {
     setEdit(false);
@@ -73,49 +79,66 @@ const MemberCard = (props) => {
 
   return (
     <>
-      <CollapsibleCard id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
+      <CollapsibleCard.Card id={id} cardClass='member' collapsed={collapsed} open={open} close={close}>
         <CollapsibleCard.Header>
           <CollapsibleCard.Title>
             <b>{firstName}</b>
             {` ${lastName}, ${age}`}
           </CollapsibleCard.Title>
-          {matchMaxWidth('1000px') || <DateBadge date={startDate} type={dateTypes.startDate} />}
-          {matchMaxWidth('550px') || <TextBadge>{direction}</TextBadge>}
+          {!matchMaxWidth('550px') && (
+            <div>
+              <TextBadge>{direction}</TextBadge>
+              {!matchMaxWidth('750px') && <DateBadge date={startDate} type={dateTypes.startDate} />}
+            </div>
+          )}
         </CollapsibleCard.Header>
         <CollapsibleCard.Body>
-          <Button classMod='primary' link={`/members/${id}/progress`}>
-            <ProgressIcon className='icon-progress' />
-            <span>Progress</span>
-          </Button>
-          <Button classMod='primary' link={`/members/${id}/tasks`}>
-            <TasksIcon className='icon-tasks' />
-            <span>Tasks</span>
-          </Button>
-          {role === 'admin' && (
-            <>
-              {matchMaxWidth('550px') || (
+          <ButtonGroup>
+            <Button classMod='primary' link={`/members/${id}/progress`}>
+              <ProgressIcon className='icon-progress' />
+              <span>Progress</span>
+            </Button>
+            <Button classMod='primary' link={`/members/${id}/tasks`}>
+              <TasksIcon className='icon-tasks' />
+              <span>Tasks</span>
+            </Button>
+            {matchMaxWidth('500px') && (
+              <Button classMod='primary' onClick={showModal}>
+                <InfoIcon className='icon-info' />
+              </Button>
+            )}
+          </ButtonGroup>
+
+          {!matchMaxWidth('500px') && (
+            <ButtonGroup>
+              <Button content='More info' classMod='ghost' onClick={showModal} />
+              {role === 'admin' && (
                 <>
-                  <DialogButton
-                    buttonClassMod='secondary'
-                    buttonContent='Delete'
-                    message={
-                      <>
-                        Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                      </>
-                    }
-                    confirmButtonClassMod='error'
-                    confirmButtonContent='Delete'
-                    dialogValue={id}
-                    onSubmit={onDelete}
-                  />
-                  <Button content='Edit' classMod='secondary' onClick={showEditModal} />
+                  {!matchMaxWidth('550px') && (
+                    <>
+                      <DialogButton
+                        buttonClassMod='secondary'
+                        buttonContent='Delete'
+                        message={
+                          <>
+                            Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                          </>
+                        }
+                        confirmButtonClassMod='error'
+                        confirmButtonContent='Delete'
+                        dialogValue={id}
+                        onSubmit={onDelete}
+                        selfDelete
+                      />
+                      <Button content='Edit' classMod='secondary' onClick={showEditModal} />
+                    </>
+                  )}
                 </>
               )}
-            </>
+            </ButtonGroup>
           )}
-          <Button content='More info' classMod='ghost' onClick={showModal} />
         </CollapsibleCard.Body>
-      </CollapsibleCard>
+      </CollapsibleCard.Card>
       <Modal ref={modal} className='member-info' onClose={editOff}>
         <MemberInfo
           edit={edit}

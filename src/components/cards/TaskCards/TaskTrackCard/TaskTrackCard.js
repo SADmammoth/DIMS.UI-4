@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -5,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import Button from '../../../elements/Button';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsibleCard from '../../CollapsibleCard';
+import * as CollapsibleCard from '../../CollapsibleCard';
 import DateBadge from '../../../elements/DateBadge';
 import DialogButton from '../../../elements/DialogButton';
 import compareObjects from '../../../../helpers/compareObjects';
@@ -35,15 +37,22 @@ function TaskTrackCard(props) {
     });
   };
 
-  const onEdit = ({ trackDate, trackNote }) => {
-    return Client.editTrack(id, trackDate, trackNote).then((response) => {
+  const onEdit = ({ trackDate: date, trackNote: note }) => {
+    return Client.editTrack(id, note, date).then((response) => {
       reload();
       return response;
     });
   };
 
   return (
-    <CollapsibleCard id={id} cardClass='task' collapsed={collapsed} open={open} close={close}>
+    <CollapsibleCard.Card
+      id={id}
+      className='track-card'
+      cardClass='task'
+      collapsed={collapsed}
+      open={open}
+      close={close}
+    >
       <CollapsibleCard.Header>
         <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
         <DateBadge type={dateTypes.trackStart} date={trackDate} />
@@ -51,6 +60,7 @@ function TaskTrackCard(props) {
       <CollapsibleCard.Body>
         <CollapsibleCard.Description>{trackNote}</CollapsibleCard.Description>
         <ButtonGroup>
+          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
           <DialogButton
             buttonClassMod='secondary'
             buttonContent='Delete'
@@ -72,10 +82,9 @@ function TaskTrackCard(props) {
             buttonContent='Edit'
             onSubmit={onEdit}
           />
-          <Button classMod='ghost' link={`/members/${userId}/tasks/id${memberTaskId}`} content='Show in tasks' />
         </ButtonGroup>
       </CollapsibleCard.Body>
-    </CollapsibleCard>
+    </CollapsibleCard.Card>
   );
 }
 

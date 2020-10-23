@@ -33,21 +33,26 @@ function Input(props) {
     validationMessage,
   } = props;
 
-  const onChangeHandler = ({ target: { name, value } }) => {
+  const onChangeHandler = ({ target: { name: targetName, value: targetValue } }) => {
     if (!validator(value)) {
       highlightInput();
       errorNotification(description, validationMessage);
     }
-    onChange(name, value);
+    onChange(targetName, targetValue);
   };
 
-  const onInputHandler = ({ target: { name, value } }) => {
-    onInput(name, value);
+  const onInputHandler = ({ target: { name: targetName, value: targetValue } }) => {
+    onInput(targetName, targetValue);
   };
 
-  const onKeyPressHandler = ({ target: { value }, key, preventDefault }) => {
-    if (!byCharValidator(value + key)) {
-      preventDefault();
+  const onKeyPressHandler = (event) => {
+    const {
+      target: { value: targetValue },
+      key,
+    } = event;
+
+    if (!byCharValidator(targetValue + key)) {
+      event.preventDefault();
     }
   };
 

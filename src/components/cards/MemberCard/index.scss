@@ -4,53 +4,69 @@
 .member-card {
   @include clearfix;
 
-  @media screen and (max-width: 790px) {
-    .button_primary {
-      width: 40px;
-      height: 40px;
-      & > span {
-        display: none;
-      }
-    }
-  }
-
   &.open > &__header {
     position: relative;
     background-color: $highlight-bg;
   }
 
   &__body {
-    margin-top: -5px;
+    display: flex;
+    position: relative;
+    top: -5px;
     padding: 10px 30px;
     border: 3px solid $highlight-bg;
 
-    .button {
-      margin: 0 5px;
+    .button-block {
+      display: flex;
+      .button {
+        height: 40px;
+        padding: 7px;
+        margin: 0 5px;
+      }
     }
 
-    & > .button:not(.button_primary) {
-      float: right;
-    }
+    width: 100%;
+    box-sizing: border-box;
+
+    justify-content: space-between;
   }
 
   &__header {
     position: relative;
+    display: flex;
     height: 35px;
     margin-bottom: 2px;
     padding: 15px 35px;
     background-color: $primary-bg;
 
-    @media screen and (max-width: 400px) {
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      & > * {
+        margin-left: 30px;
+      }
+    }
+
+    @media screen and (max-width: 550px) {
       &__title {
         width: 100%;
         text-align: center;
       }
     }
 
+    @media screen and (max-width: 550px) {
+      & {
+        padding: 0 !important;
+      }
+      &__title {
+        border-bottom: none;
+      }
+    }
+
     &__title {
       margin: 0;
       padding-bottom: 2px;
-      float: left;
       border-bottom: 1px solid $dark-bg;
       font-size: 1.5rem;
     }
@@ -60,12 +76,27 @@
       margin-top: -5px;
       margin-left: 40px;
       padding: 5px 0;
-      float: right;
       font-size: 1.3rem;
     }
+  }
 
-    .text-badge {
-      float: right;
+  @media screen and (max-width: 790px) {
+    & .button-block {
+      justify-content: center;
+      width: 100%;
+    }
+    & .button-block .button_primary {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        padding-right: 0;
+      }
+      & > span {
+        display: none;
+      }
     }
   }
 }

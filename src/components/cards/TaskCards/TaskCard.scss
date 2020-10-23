@@ -12,15 +12,16 @@
   }
 
   &__header {
+    display: flex;
+    justify-content: space-between;
     padding: 20px 35px;
     background: $primary-bg;
-
-    @include clearfix;
+    align-items: center;
 
     &__title {
-      float: left;
       border-bottom: 1px solid $dark-bg;
       font-size: 1.2rem;
+      padding: 0;
     }
   }
 
@@ -28,7 +29,7 @@
     background: $highlight-bg;
   }
 
-  .state {
+  .status {
     padding-top: 5px;
     padding-bottom: 5px;
     background: $highlight-bg;
@@ -44,19 +45,9 @@
     }
   }
 
-  &__header {
-    .date-badge {
-      margin-top: 15px;
-      float: right;
-      font-size: 1.3rem;
-    }
-  }
-
   &__body {
     padding: 20px;
     border: 3px solid $highlight-bg;
-
-    @include clearfix();
 
     .button {
       min-width: 100px;
@@ -65,9 +56,12 @@
     .date-badge {
       margin-right: 20px;
       margin-bottom: 0;
-      float: left;
       font-size: 1.1rem;
     }
+  }
+
+  &__dates {
+    display: flex;
   }
 
   &__description {
@@ -78,17 +72,45 @@
   }
 
   .button-block {
-    .button:not(.button_primary) {
-      margin-left: 10px;
-      float: right;
+    display: flex;
+    justify-content: space-between;
+
+    .button-block {
+      display: flex;
+      & > * {
+        margin-right: 10px;
+      }
+    }
+
+    .button_invisible {
+      padding: 20px;
     }
   }
 
-  &__dates {
-    @include clearfix;
-  }
+  @media screen and (max-width: 500px) {
+    .button-block {
+      display: flex;
+      justify-content: center;
+      & .button {
+        margin-right: 10px;
+        min-width: 40px !important;
+        width: 60px;
+        svg {
+          margin-left: 10px;
+        }
+      }
 
-  .button_invisible {
-    padding: 20px;
+      .button-block {
+        display: flex;
+        & > .button {
+          min-width: 40px !important;
+          width: 60px;
+        }
+      }
+
+      .button_invisible {
+        padding: 20px;
+      }
+    }
   }
 }

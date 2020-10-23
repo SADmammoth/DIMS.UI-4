@@ -34,7 +34,7 @@
       }
     }
     100% {
-      border-color: inherit;
+      border-color: $error;
     }
   }
 }
@@ -73,4 +73,10 @@
       }
     }
   }
+}
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

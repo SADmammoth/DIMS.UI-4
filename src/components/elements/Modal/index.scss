@@ -2,26 +2,18 @@
 @import '../../../assets/styles/scss/mixins.scss';
 
 .modal {
-  display: none;
   position: fixed;
   top: 50vh;
   left: 50vw;
   padding: 10px;
   transform: translate(-50%, -50%);
   background: $light-bg;
-  z-index: 101;
-
-  &.show {
-    display: block;
-
-    & + .modal-shadow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: transparentize(black, 0.2);
-      z-index: 100;
-    }
+  z-index: 1002;
+  opacity: 0;
+  & + .modal-shadow {
+    width: 100vw;
+    height: 100vh;
+    background: transparentize(black, 0.2);
+    z-index: 1001;
   }
 }

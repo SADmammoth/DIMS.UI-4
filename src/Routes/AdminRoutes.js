@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Error404Page } from '../pages/ErrorPages';
 import MembersManagerPage from '../pages/MembersManagerPage';
@@ -8,7 +7,7 @@ import MemberProgressPage from '../pages/MemberProgressPage';
 import NewTask from '../pages/NewTask';
 import NewMember from '../pages/NewMember';
 
-function AdminRoutes({ userId }) {
+function AdminRoutes() {
   return (
     <Switch>
       <Route exact path='/'>
@@ -18,10 +17,10 @@ function AdminRoutes({ userId }) {
         <MembersManagerPage />
       </Route>
       <Route exact path='/members/:id/tasks'>
-        <MemberTasksPage />
+        <MemberTasksPage taskSet='user' />
       </Route>
       <Route exact path='/members/:id/tasks/id:open?'>
-        <MemberTasksPage />
+        <MemberTasksPage taskSet='user' />
       </Route>
       <Route exact path='/members/:id/progress'>
         <MemberProgressPage />
@@ -54,9 +53,5 @@ function AdminRoutes({ userId }) {
     </Switch>
   );
 }
-
-AdminRoutes.propTypes = {
-  userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-};
 
 export default AdminRoutes;

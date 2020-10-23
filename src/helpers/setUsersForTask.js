@@ -11,6 +11,7 @@ export default async function setUsersForTask(dispatch, taskId, assigned, prevAs
   if (!Object.keys(prevAssigned).length) {
     const assignedArray = await Client.assignTask(taskId, assigned);
     dispatch(actions.assignTask(taskId, assignedArray));
+    return;
   }
 
   const newMembers = arraysSubtraction(assigned, prevAssigned);

@@ -19,8 +19,7 @@ class AuthenticationManager extends Component {
   logIn = async (login, password) => {
     const authResponse = await this.authenticate(login, password);
     this.setState({ authenticated: authResponse.status === 'success' });
-    console.log(authResponse);
-    return { status: '200', ...authResponse };
+    return authResponse;
   };
 
   logOut = () => {
@@ -31,7 +30,8 @@ class AuthenticationManager extends Component {
   };
 
   redirectHome = () => {
-    this.props.history.push('/');
+    const { history } = this.props;
+    history.push('/');
   };
 
   authenticate = async (login, password) => {

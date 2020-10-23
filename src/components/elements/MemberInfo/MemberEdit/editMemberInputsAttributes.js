@@ -119,8 +119,8 @@ export default function editMemberInputsAttributes({
       description: 'Direction',
       placeholder: 'Direction',
       value: direction,
-      valueOptions: Object.entries(Client.directions).map(([id, name]) => {
-        return { label: name, value: id };
+      valueOptions: Client.directions.map((directionName) => {
+        return { label: directionName, value: directionName };
       }),
       required: true,
     },

@@ -7,9 +7,17 @@ import ButtonGroup from '../ButtonGroup';
 import Spinner from '../Spinner';
 
 const DialogButton = (props) => {
-  const { buttonContent, buttonClassMod, dialogValue, message, confirmButtonClassMod, confirmButtonContent } = props;
+  const {
+    buttonContent,
+    buttonClassMod,
+    dialogValue,
+    message,
+    confirmButtonClassMod,
+    confirmButtonContent,
+    selfDelete,
+  } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(null);
   const modal = useRef({});
 
   const onClick = () => {
@@ -25,8 +33,10 @@ const DialogButton = (props) => {
     setLoading(true);
 
     return propsOnSubmit(data).then((response) => {
-      setLoading(false);
-      reload();
+      if (!selfDelete) {
+        setLoading(false);
+        reload();
+      }
       return response;
     });
   };
@@ -67,6 +77,7 @@ const DialogButton = (props) => {
 
 DialogButton.defaultProps = {
   reload: () => {},
+  selfDelete: false,
 };
 
 DialogButton.propTypes = {
@@ -78,6 +89,7 @@ DialogButton.propTypes = {
   dialogValue: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   reload: PropTypes.func,
+  selfDelete: PropTypes.bool,
 };
 
 export default DialogButton;

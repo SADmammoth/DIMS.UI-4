@@ -12,10 +12,6 @@
 
   @include acrylic-glass-effect;
 
-  &.extended {
-    height: 138px;
-  }
-
   .site-title {
     & > * {
       fill: $common-text;
@@ -66,7 +62,7 @@
     display: flex;
     position: absolute;
     right: 0;
-    float: right;
+    justify-content: flex-end;
     align-self: center;
 
     & > ul {

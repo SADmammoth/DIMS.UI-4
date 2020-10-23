@@ -62,7 +62,7 @@
 
   .button {
     margin-top: 40px;
-    margin-right: 25px;
+    margin-right: 2vw;
     float: right;
 
     &:last-child {
@@ -81,12 +81,19 @@
   }
 
   .date-badge {
+    [class*='icon-'] {
+      padding-right: 5px;
+    }
+
+    margin-left: 10px;
     .form-control {
-      width: 100px;
+      height: 30px;
+      box-sizing: border-box;
+      width: 110px;
       margin: 0;
       margin-top: 10px;
-      font-size: 1rem !important;
-      text-align: center;
+      margin-bottom: 10px;
+      font-size: 1.1rem !important;
     }
   }
 
@@ -118,11 +125,22 @@
   }
 
   .text-badge {
-    width: 150px;
+    width: 130px;
+    @media screen and (max-width: 1200px) {
+      & {
+        height: 30px;
+        box-sizing: border-box;
+        padding: 2px 0;
+        & > .form-select {
+          height: 26px;
+          width: 126px;
+        }
+      }
+    }
   }
 
   .form-select {
-    width: 150px;
+    width: 130px;
     padding: 5px;
     border: none;
     border-radius: 20px;
@@ -131,7 +149,7 @@
   }
 
   .form-control {
-    width: 60%;
+    width: 65%;
     height: 1.4rem;
     font-size: 1.2rem;
 
@@ -149,13 +167,13 @@
   }
 
   .address {
+    width: 96%;
     margin: 2%;
     margin-left: 90px;
     font-size: 1.4rem;
   }
 
   .member-info__additional-info {
-    display: flex;
     margin-top: 3%;
     background: $primary-bg;
     box-sizing: border-box;
@@ -176,10 +194,6 @@
     }
 
     @include clearfix;
-
-    .date-badge {
-      font-size: 1.4rem;
-    }
   }
 
   [class*='icon-'] {

@@ -137,6 +137,8 @@ MemberTasksPage.propTypes = {
     }),
     path: PropTypes.string,
   }).isRequired,
+  assignedTasks: PropTypes.objectOf(PropTypes.array).isRequired,
+  members: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default withRouter(

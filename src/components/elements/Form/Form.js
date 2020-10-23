@@ -7,7 +7,7 @@ import errorNotification from '../../../helpers/formHelpers/errorNotification';
 import formatFormValues from '../../../helpers/formHelpers/formatFormValues';
 import validateForm from '../../../helpers/formHelpers/validateForm';
 import setFormDefaultValue from '../../../helpers/formHelpers/setFormDefaultValue';
-import createInput from './createInput';
+import CreateInput from './CreateInput';
 
 class Form extends React.Component {
   constructor(props) {
@@ -36,6 +36,7 @@ class Form extends React.Component {
     }
   }
 
+  // eslint-disable-next-line react/sort-comp
   update() {
     this.createValues();
     this.createInputs();
@@ -65,11 +66,10 @@ class Form extends React.Component {
     const { inputs } = this.props;
     const { values } = this.state;
     const valuesData = {};
-
     inputs.forEach((input) => {
       valuesData[input.name] = {
         id: input.name,
-        value: input.value,
+        value: input.defaultValue || input.value,
         defaultValue: setFormDefaultValue(values, input),
       };
     });
@@ -122,7 +122,7 @@ class Form extends React.Component {
           this.updateValue(inputName, value);
         };
 
-        inputsData[name] = createInput({
+        inputsData[name] = CreateInput({
           id: values[name].id,
           type,
           name,
@@ -170,11 +170,11 @@ class Form extends React.Component {
     }
   }
 
-  onValidationFail(input) {
+  onValidationFail = (input) => {
     this.highlightInput(input.name);
     errorNotification(input.description || input.label || input.name, input.validationMessage);
     return false;
-  }
+  };
 
   highlightInput = (name) => {
     const { values } = this.state;
@@ -194,14 +194,10 @@ class Form extends React.Component {
     if (response) {
       if (response.status === 200) {
         this.successNotification('Success', 'Data sent and accepted by server');
-        return;
+      } else if (response.status) {
+        this.errorNotification('Server error', response && response.toString());
       }
-
-      this.errorNotification('Server error', response && response.toString());
-      return;
     }
-
-    this.errorNotification('Form error', response && response.toString());
   };
 
   onResponseError = (error) => {
@@ -222,9 +218,7 @@ class Form extends React.Component {
 
     if (validateForm(values, inputs, this.onValidationFail)) {
       if (onSubmitHandler) {
-        onSubmitHandler(formatFormValues(values))
-          .then(this.onResponseReceived)
-          .catch(this.onResponseError);
+        onSubmitHandler(formatFormValues(values)).then(this.onResponseReceived).catch(this.onResponseError);
       }
     }
   };
@@ -257,6 +251,9 @@ Form.defaultProps = {
   submitButton: <></>,
   onInputsUpdate: (inputs) => inputs,
   showNotifications: 'all',
+  children: null,
+  onSubmit: false,
+  defaultValue: null,
 };
 
 Form.propTypes = {
@@ -270,14 +267,15 @@ Form.propTypes = {
       validationMessage: PropTypes.string,
     }),
   ).isRequired,
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   submitButton: PropTypes.element,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
   // Passed in order to get inputs components
   onInputsUpdate: PropTypes.func,
   showNotifications: PropTypes.oneOf(['all', 'errorsOnly', 'hideAll']),
-  defaultValue: PropTypes.array,
+  // eslint-disable-next-line react/no-unused-prop-types
+  defaultValue: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object])),
 };
 
 export default Form;

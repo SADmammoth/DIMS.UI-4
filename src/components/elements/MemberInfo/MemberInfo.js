@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
-import { ReactComponent as BackIcon } from '../../../assets/icons/Back.svg';
 import { ReactComponent as TasksIcon } from '../../../assets/icons/Tasks.svg';
 import { ReactComponent as ProgressIcon } from '../../../assets/icons/Progress.svg';
 import { ReactComponent as SkypeIcon } from '../../../assets/icons/skype.svg';
@@ -22,6 +21,7 @@ import Spinner from '../Spinner';
 import { deleteMember } from '../../../redux/actions/membersActions';
 import editMemberHelper from '../../../helpers/editMemberHelper';
 import dateTypes from '../../../helpers/dateTypes';
+import CopyableText from '../CopyableText';
 
 const MemberInfo = (props) => {
   const {
@@ -78,29 +78,26 @@ const MemberInfo = (props) => {
           ) : (
             <>
               <div className='member-info__header'>
-                {handleClose && (
-                  <Button onClick={handleClose}>
-                    <BackIcon className='icon-back common-text-color' />
-                  </Button>
-                )}
                 <p className='member-info__title'>
                   <b>{firstName}</b>
                   {` ${lastName}`}
                 </p>
-                <DateBadge date={startDate} type={dateTypes.startDate} />
-                <TextBadge>{direction}</TextBadge>
+                <div className='badges'>
+                  <TextBadge>{direction}</TextBadge>
+                  <DateBadge date={startDate} type={dateTypes.startDate} />
+                </div>
               </div>
               <div className='member-info__body'>
                 <div className='member-info__contacts'>
-                  <a href={`mailto:${email}`}>
+                  <a title={email} href={`mailto:${email}`}>
                     <EnvelopeIcon className='icon-envelope' />
-                    <span>{email}</span>
+                    <CopyableText>{email}</CopyableText>
                   </a>
-                  <a href={`skype:${skype}`}>
+                  <a title={skype} href={`skype:${skype}`}>
                     <SkypeIcon className='icon-skype' />
                     {skype}
                   </a>
-                  <a href={`tel:${mobilePhone.replace(/[\s()+]/, '')}`}>
+                  <a title={mobilePhone} href={`tel:${mobilePhone.replace(/[\s()+]/, '')}`}>
                     <MobileIcon className='icon-mobile' />
                     <span>{mobilePhone}</span>
                   </a>
@@ -140,32 +137,41 @@ const MemberInfo = (props) => {
                 </FlexColumn>
               </div>
               <ButtonGroup>
-                <Button classMod='primary' link={`/members/${id}/progress`}>
-                  <ProgressIcon className='icon-progress' />
-                  <span>Progress</span>
-                </Button>
-                <Button classMod='primary' link={`/members/${id}/tasks`}>
-                  <TasksIcon className='icon-tasks' />
-                  <span>Tasks</span>
-                </Button>
-                {role === 'admin' && (
-                  <>
-                    <DialogButton
-                      buttonClassMod='secondary'
-                      buttonContent='Delete'
-                      message={
-                        <>
-                          Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
-                        </>
-                      }
-                      confirmButtonClassMod='error'
-                      confirmButtonContent='Delete'
-                      dialogValue={id}
-                      onSubmit={onDelete}
-                    />
-                    <Button content='Edit' classMod='secondary' onClick={openEditModal} />
-                  </>
-                )}
+                <ButtonGroup>
+                  <Button classMod='primary' link={`/members/${id}/progress`}>
+                    <ProgressIcon className='icon-progress' />
+                    <span>Progress</span>
+                  </Button>
+                  <Button classMod='primary' link={`/members/${id}/tasks`}>
+                    <TasksIcon className='icon-tasks' />
+                    <span>Tasks</span>
+                  </Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                  <Button classMod='ghost' onClick={handleClose}>
+                    Close
+                  </Button>
+                  {role === 'admin' && (
+                    <>
+                      <DialogButton
+                        buttonClassMod='secondary'
+                        buttonContent='Delete'
+                        message={
+                          // eslint-disable-next-line react/jsx-wrap-multilines
+                          <>
+                            {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+                            Are you confident, you want to delete member <b>{firstName}</b> <b>{lastName}</b>?
+                          </>
+                        }
+                        confirmButtonClassMod='error'
+                        confirmButtonContent='Delete'
+                        dialogValue={id}
+                        onSubmit={onDelete}
+                      />
+                      <Button content='Edit' classMod='secondary' onClick={openEditModal} />
+                    </>
+                  )}
+                </ButtonGroup>
               </ButtonGroup>
             </>
           )}

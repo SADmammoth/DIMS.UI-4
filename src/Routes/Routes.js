@@ -6,11 +6,13 @@ import MentorRoutes from './MentorRoutes';
 import AdminRoutes from './AdminRoutes';
 import MemberRoutes from './MemberRoutes';
 import useScrollToTop from '../helpers/hooks/useScrollToTop';
+import useAdaptivity from '../helpers/hooks/useAdaptivity';
 
 function Routes(props) {
   const { role, userId, location } = props;
 
   useScrollToTop({ location });
+  useAdaptivity();
 
   return (
     <>
@@ -25,7 +27,8 @@ function Routes(props) {
 
 Routes.propTypes = {
   role: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   location: PropTypes.object.isRequired,
 };
 

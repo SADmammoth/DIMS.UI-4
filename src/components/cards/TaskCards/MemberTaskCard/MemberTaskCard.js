@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import DateBadge from '../../../elements/DateBadge';
 import Button from '../../../elements/Button';
@@ -8,7 +11,7 @@ import { ReactComponent as TrackIcon } from '../../../../assets/icons/Track.svg'
 import { TaskEditButton } from '../../../elements/TaskForms/TaskEdit';
 import { TrackButton } from '../../../elements/TaskForms/TrackForm';
 import ButtonGroup from '../../../elements/ButtonGroup';
-import CollapsibleCard from '../../CollapsibleCard';
+import * as CollapsibleCard from '../../CollapsibleCard';
 import DialogButton from '../../../elements/DialogButton';
 import { AssignButton } from '../../../elements/AssignForm';
 import Client from '../../../../helpers/Client';
@@ -16,15 +19,13 @@ import ChangeStateButton from '../../../elements/ChangeStateButton';
 import compareObjects from '../../../../helpers/compareObjects';
 import editAndAssignTask from '../../../../helpers/editAndAssignTask';
 import dateTypes from '../../../../helpers/dateTypes';
-import store from '../../../../redux';
 
 function MemberTaskCard(props) {
   const {
     taskName,
-    userId,
     taskId,
     taskDescription,
-    state,
+    status,
     taskStart,
     taskDeadline,
     collapsed,
@@ -41,25 +42,28 @@ function MemberTaskCard(props) {
 
   const assignedToIds = assignedTo.map((user) => user.userId);
 
+  const dispatch = useDispatch();
+
   const onEdit = (data) => {
-    return editAndAssignTask(store, data, taskId);
+    return editAndAssignTask(dispatch, data, taskId);
   };
   const onDelete = ({ dialogValue }) => {
     return Client.deleteTask(dialogValue);
   };
   const onTrack = ({ trackDate, trackNote }) => {
-    return Client.createTrack(userId, id, trackDate, trackNote);
+    return Client.createTrack(id, trackNote, trackDate);
   };
 
   const isAdmin = role === 'admin';
   const isMentor = role === 'mentor';
-  const isAdminOrMentor = role === 'admin' || role === 'mentor';
+  const isMember = role === 'member';
+  const isAdminOrMentor = isAdmin || isMentor;
 
   return (
-    <CollapsibleCard
+    <CollapsibleCard.Card
       id={id}
       cardClass='task'
-      className={state ? `task-card_${state.toLowerCase()}` : null}
+      className={status ? `task-card_${status.toLowerCase()}` : null}
       collapsed={collapsed}
       open={open}
       close={close}
@@ -67,9 +71,9 @@ function MemberTaskCard(props) {
       <CollapsibleCard.Header>
         <CollapsibleCard.Title>{taskName}</CollapsibleCard.Title>
       </CollapsibleCard.Header>
-      {state && (
-        <div className='state'>
-          <span>{state}</span>
+      {status && (
+        <div className='status'>
+          <span>{status}</span>
         </div>
       )}
       <CollapsibleCard.Body>
@@ -86,7 +90,7 @@ function MemberTaskCard(props) {
                 <h3>Assigned to:</h3>
                 <ul className='inline-list'>
                   {assignedTo.map((user) => (
-                    <li key={user.userId}>
+                    <li key={user.memberTaskId + user.userId}>
                       <Link to={`/members/${user.userId}/tasks/id${user.memberTaskId}`}>
                         <b>{members[user.userId] ? members[user.userId].firstName : 'First name'}</b>
                         {` ${members[user.userId] ? members[user.userId].lastName : 'Last name'}`}
@@ -102,7 +106,7 @@ function MemberTaskCard(props) {
         )}
 
         <ButtonGroup>
-          {isMentor && (
+          {isMember && (
             <TrackButton reload={reload} taskName={taskName} onSubmit={onTrack} buttonClassMod='primary'>
               <TrackIcon className='icon-track' />
               <span>Track</span>
@@ -120,71 +124,78 @@ function MemberTaskCard(props) {
               <span>Assign</span>
             </AssignButton>
           )}
-          {isAdminOrMentor && taskSet === 'all' && (
-            <>
-              <DialogButton
-                buttonClassMod='secondary'
-                buttonContent='Delete'
-                message={
+          <ButtonGroup>
+            {isAdminOrMentor && taskSet === 'user' && (
+              <>
+                {status === 'active' ? (
                   <>
-                    Are you confident, you want to delete task <b>{taskName}</b>?
+                    <ChangeStateButton reload={reload} buttonClassMod='success' memberTaskId={id} status='success'>
+                      Success
+                    </ChangeStateButton>
+                    <ChangeStateButton reload={reload} buttonClassMod='error' memberTaskId={id} status='fail'>
+                      Fail
+                    </ChangeStateButton>
                   </>
-                }
-                confirmButtonClassMod='error'
-                confirmButtonContent='Delete'
-                dialogValue={id}
-                onSubmit={onDelete}
-                reload={reload}
-              />
-              <TaskEditButton
-                buttonClassMod='secondary'
-                taskId={taskId}
-                taskName={taskName}
-                taskDescription={taskDescription}
-                taskStart={taskStart}
-                taskDeadline={taskDeadline}
-                assignedTo={assignedTo}
-                show={edit}
-                members={members}
-                onSubmit={onEdit}
-                buttonContent='Edit'
-                reload={reload}
-              />
-            </>
-          )}
-          {isAdminOrMentor && taskSet === 'user' && (
-            <>
-              <ChangeStateButton
-                reload={reload}
-                buttonClassMod='success'
-                taskId={taskId}
-                userId={userId}
-                state='success'
-              >
-                Success
-              </ChangeStateButton>
-              <ChangeStateButton reload={reload} buttonClassMod='error' taskId={taskId} userId={userId} state='fail'>
-                Fail
-              </ChangeStateButton>
-              <Button classMod='ghost' link={`/tasks/id${taskId}`}>
-                Show in tasks
-              </Button>
-            </>
-          )}
+                ) : (
+                  <ChangeStateButton reload={reload} buttonClassMod='primary' memberTaskId={id} status='active'>
+                    Reset status
+                  </ChangeStateButton>
+                )}
+                <Button classMod='ghost' link={`/tasks/id${taskId}`}>
+                  Show in tasks
+                </Button>
+              </>
+            )}
+            {isAdminOrMentor && taskSet === 'all' && (
+              <>
+                <DialogButton
+                  buttonClassMod='secondary'
+                  buttonContent='Delete'
+                  message={
+                    <>
+                      Are you confident, you want to delete task <b>{taskName}</b>?
+                    </>
+                  }
+                  confirmButtonClassMod='error'
+                  confirmButtonContent='Delete'
+                  dialogValue={id}
+                  onSubmit={onDelete}
+                  reload={reload}
+                />
+                <TaskEditButton
+                  buttonClassMod='secondary'
+                  taskId={taskId}
+                  taskName={taskName}
+                  taskDescription={taskDescription}
+                  taskStart={taskStart}
+                  taskDeadline={taskDeadline}
+                  assignedTo={assignedTo}
+                  show={edit}
+                  members={members}
+                  onSubmit={onEdit}
+                  buttonContent='Edit'
+                  reload={reload}
+                />
+              </>
+            )}
+          </ButtonGroup>
         </ButtonGroup>
       </CollapsibleCard.Body>
-    </CollapsibleCard>
+    </CollapsibleCard.Card>
   );
 }
 
 MemberTaskCard.defaultProps = {
   assignedTo: [],
   members: [],
-  state: null,
+  status: null,
+  userId: null,
 };
 
 MemberTaskCard.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   taskId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   edit: PropTypes.bool.isRequired,
   collapsed: PropTypes.bool.isRequired,
@@ -196,7 +207,7 @@ MemberTaskCard.propTypes = {
 
   taskName: PropTypes.string.isRequired,
   taskDescription: PropTypes.string.isRequired,
-  state: PropTypes.string,
+  status: PropTypes.string,
   taskStart: PropTypes.instanceOf(Date).isRequired,
   taskDeadline: PropTypes.instanceOf(Date).isRequired,
   assignedTo: PropTypes.arrayOf(
@@ -212,7 +223,6 @@ MemberTaskCard.propTypes = {
       lastName: PropTypes.string,
     }),
   ),
-  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default React.memo(MemberTaskCard, compareObjects);

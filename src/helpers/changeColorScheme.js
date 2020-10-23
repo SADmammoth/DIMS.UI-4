@@ -30,7 +30,22 @@ export default function changeColorScheme({
       mutedText,
     }),
   );
+  const oldTheme = changeColorScheme.currentTheme;
   changeColorScheme.currentTheme = name;
+  changeColorScheme.currentColors = {
+    primaryBg,
+    highlightBg,
+    cardBg,
+    darkBg,
+    lightBg,
+    headerBg,
+    commonText,
+    lightText,
+    mutedText,
+  };
+  if (oldTheme && oldTheme !== name) {
+    document.location.reload();
+  }
 }
 
 const themes = {
