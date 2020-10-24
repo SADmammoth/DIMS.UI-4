@@ -38,6 +38,7 @@ function MemberTaskCard(props) {
     close,
     edit,
     reload,
+    userId,
   } = props;
 
   const assignedToIds = assignedTo.map((user) => user.userId);
@@ -129,15 +130,34 @@ function MemberTaskCard(props) {
               <>
                 {status === 'active' ? (
                   <>
-                    <ChangeStateButton reload={reload} buttonClassMod='success' memberTaskId={id} status='success'>
+                    {console.log(members[parseInt(userId, 10)], members, userId)}
+                    <ChangeStateButton
+                      reload={reload}
+                      buttonClassMod='success'
+                      taskId={taskId}
+                      userId={Object.keys(members)[parseInt(userId, 10)]}
+                      status='success'
+                    >
                       Success
                     </ChangeStateButton>
-                    <ChangeStateButton reload={reload} buttonClassMod='error' memberTaskId={id} status='fail'>
+                    <ChangeStateButton
+                      reload={reload}
+                      buttonClassMod='error'
+                      taskId={taskId}
+                      userId={Object.keys(members)[parseInt(userId, 10)]}
+                      status='fail'
+                    >
                       Fail
                     </ChangeStateButton>
                   </>
                 ) : (
-                  <ChangeStateButton reload={reload} buttonClassMod='primary' memberTaskId={id} status='active'>
+                  <ChangeStateButton
+                    reload={reload}
+                    buttonClassMod='primary'
+                    taskId={taskId}
+                    userId={Object.keys(members)[parseInt(userId, 10)]}
+                    status='active'
+                  >
                     Reset status
                   </ChangeStateButton>
                 )}

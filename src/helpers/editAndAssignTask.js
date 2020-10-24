@@ -4,6 +4,7 @@ import checkboxValueSeparator from './formHelpers/checkboxValueSeparator';
 import Validator from './Validator';
 import masks from './maskHelpers/masks';
 import setUsersForTask from './setUsersForTask';
+import compareObjects from './compareObjects';
 
 export default async function editAndAssignTask(
   dispatch,

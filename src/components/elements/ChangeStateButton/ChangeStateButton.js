@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Client from '../../../helpers/Client';
 import Button from '../Button';
 
-function ChangeStateButton({ memberTaskId, status, reload, buttonClassMod, buttonContent, children }) {
+function ChangeStateButton({ taskId, userId, status, reload, buttonClassMod, buttonContent, children }) {
   const onClickHandler = () => {
-    return Client.setUserTaskState(memberTaskId, status).then((res) => {
+    return Client.setUserTaskState(taskId, userId, status).then((res) => {
       reload();
       return res;
     });
@@ -25,7 +25,8 @@ ChangeStateButton.defaultProps = {
 };
 
 ChangeStateButton.propTypes = {
-  memberTaskId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  taskId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   status: PropTypes.string.isRequired,
   reload: PropTypes.func.isRequired,
   buttonClassMod: PropTypes.string,

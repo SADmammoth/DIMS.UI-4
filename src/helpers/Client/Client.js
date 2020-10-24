@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Validator from '../Validator';
 import concatPath from '../concatPath';
-import getValue from './getValue';
 
 const apiPath = process.env.REACT_APP_APIPATH;
 
@@ -9,8 +8,6 @@ const authPath = process.env.REACT_APP_AUTHAPIPATH;
 
 class Client {
   static directions = {};
-
-  static states = ['active', 'success', 'fail'];
 
   static token = null;
 
@@ -200,7 +197,7 @@ class Client {
     userTasks.taskDescription = taskDescription;
     userTasks.taskStart = new Date(startDate);
     userTasks.taskDeadline = new Date(deadlineDate);
-    userTasks.state = state;
+    userTasks.status = state;
     return userTasks;
   }
 
@@ -220,7 +217,7 @@ class Client {
   }
 
   static assignTask(taskId, usersIds) {
-    return axios.post(concatPath(apiPath, 'tasks', taskId.toString()), usersIds, {
+    return axios.post(concatPath(apiPath, 'tasks', taskId.toString(), 'members'), usersIds, {
       headers: Client.defaultHeader,
     });
   }
@@ -256,16 +253,13 @@ class Client {
     return axios.post(concatPath(apiPath, 'tasks'), data, { headers: Client.defaultHeader });
   }
 
-  static setUserTaskState(TaskId, UserId, Status) {
-    const StatusId = (Client.states.indexOf(Status) + 1).toString();
+  static setUserTaskState(taskId, userId, status) {
     return axios.put(
-      concatPath(apiPath, 'user', 'task'),
+      concatPath(apiPath, 'tasks', 'states', taskId.toString()),
       {
-        TaskId: TaskId.toString(),
-        UserId: UserId.toString(),
-        StatusId,
+        status,
       },
-      { headers: Client.defaultHeader },
+      { headers: Client.defaultHeader, params: { member: userId.toString() } },
     );
   }
 

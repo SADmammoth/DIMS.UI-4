@@ -10,7 +10,11 @@ import Client from '../Client';
 const usePreloader = ({ members, role }) => {
   const dispatch = useDispatch();
   preloadTheme();
-  Client.getDirections();
+  useEffect(() => {
+    (async () => {
+      await Client.getDirections();
+    })();
+  }, []);
 
   useEffect(() => {
     if (!Object.keys(members).length && role !== 'member' && role !== 'guest') {

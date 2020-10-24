@@ -120,12 +120,6 @@ class MemberTasksPage extends React.Component {
   }
 }
 
-MemberTasksPage.defaultProps = {
-  edit: false,
-  name: 'Name',
-  taskSet: 'all',
-};
-
 MemberTasksPage.propTypes = {
   taskSet: PropTypes.string,
   edit: PropTypes.bool,
@@ -139,6 +133,12 @@ MemberTasksPage.propTypes = {
   }).isRequired,
   assignedTasks: PropTypes.objectOf(PropTypes.array).isRequired,
   members: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+MemberTasksPage.defaultProps = {
+  edit: false,
+  name: 'Name',
+  taskSet: 'all',
 };
 
 export default withRouter(
