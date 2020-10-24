@@ -277,7 +277,10 @@ class Client {
 
   static async getUserProgress(userId) {
     const progress = (
-      await axios.get(concatPath(apiPath, 'member', userId, 'progress'), { headers: Client.defaultHeader })
+      await axios.get(concatPath(apiPath, 'tracks', 'progress'), {
+        headers: Client.defaultHeader,
+        params: { member: userId },
+      })
     ).data;
     const progressObject = {};
     progress.forEach((progressItem) => {
@@ -334,7 +337,8 @@ class Client {
 
   static setToken(token) {
     Client.token = token;
-    Client.defaultHeader = { Authorization: `bearer ${Client.token}` };
+    console.log(token);
+    Client.defaultHeader = { Authorization: `bearer ${token}` };
   }
 
   static async signIn(login, password) {

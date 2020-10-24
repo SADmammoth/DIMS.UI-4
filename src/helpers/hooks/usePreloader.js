@@ -10,16 +10,15 @@ import Client from '../Client';
 const usePreloader = ({ members, role }) => {
   const dispatch = useDispatch();
   preloadTheme();
-  useEffect(() => {
-    (async () => {
-      await Client.getDirections();
-    })();
-  }, []);
 
   useEffect(() => {
     if (!Object.keys(members).length && role !== 'member' && role !== 'guest') {
-      requestAndFetch(dispatch, membersActions.setMembers, Client.getMembers);
-      requestAndFetch(dispatch, assignedTasksActions.setAssignedToTasks, Client.getAllAssigned);
+      (async () => {
+        console.log(0);
+        await Client.getDirections();
+        await requestAndFetch(dispatch, membersActions.setMembers, Client.getMembers);
+        await requestAndFetch(dispatch, assignedTasksActions.setAssignedToTasks, Client.getAllAssigned);
+      })();
     }
   }, [role, members, dispatch]);
 

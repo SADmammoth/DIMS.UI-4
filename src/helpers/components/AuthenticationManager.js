@@ -53,6 +53,7 @@ class AuthenticationManager extends Component {
       }
 
       localStorage.setItem('token', token);
+      Client.setToken(token);
       authorize(role, userId);
 
       this.redirectHome();
