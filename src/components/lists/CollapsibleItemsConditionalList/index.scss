@@ -1,0 +1,17 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.list-placeholder {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  padding: 1% 0;
+  font-size: 1.3rem;
+  background: $primary-bg;
+  box-sizing: border-box;
+}

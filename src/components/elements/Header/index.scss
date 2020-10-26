@@ -1,0 +1,138 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.header {
+  width: 100vw;
+  height: 80px;
+  margin: 0;
+  padding: 0;
+  border-bottom: 2px solid $light-bg;
+  background: $header-bg;
+  z-index: 99;
+
+  @include acrylic-glass-effect;
+
+  .site-title {
+    & > * {
+      fill: $common-text;
+      margin-left: 20px;
+    }
+
+    min-width: 100px;
+    height: 55px;
+    margin-top: 8px;
+    box-sizing: border-box;
+  }
+
+  .page-title {
+    display: inline-block;
+    margin-top: 16px;
+
+    .text-badge {
+      display: inline-block;
+      margin-top: 5px;
+      margin-left: 10px;
+      padding: 5px;
+    }
+  }
+
+  & + * {
+    position: relative;
+    top: 100px;
+    height: calc(100vh - 100px);
+  }
+
+  &.extended + * {
+    top: 145px;
+  }
+
+  & > .container {
+    position: relative;
+  }
+
+  .content {
+    height: 80px;
+    padding: 0 20px;
+    padding-right: calc((100vw - #{$container-width}) / 2);
+    background: $primary-bg;
+    box-sizing: border-box;
+  }
+
+  &__nav {
+    display: flex;
+    position: absolute;
+    right: 0;
+    justify-content: flex-end;
+    align-self: center;
+
+    & > ul {
+      display: flex;
+    }
+  }
+
+  .nav-modal.show + .button {
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+    background: $light-bg;
+    box-sizing: border-box;
+  }
+
+  .nav-modal {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: auto;
+    padding: 0;
+    transform: none;
+    z-index: 99;
+
+    ul {
+      background: $primary-bg;
+      box-shadow: -2px 2px 6px $dark-bg;
+      display: flex;
+      width: 170px;
+      text-align: center;
+      flex-direction: column;
+      justify-content: center;
+
+      li {
+        width: 100%;
+      }
+
+      .button {
+        width: 100%;
+        border: 2px solid $light-bg;
+      }
+    }
+  }
+
+  .input-panel {
+    width: 100vw;
+    position: fixed;
+    transform: none;
+    right: auto;
+    top: auto;
+    left: 0;
+    background: none;
+
+    display: flex;
+    justify-content: center;
+
+    .form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  #filter {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 20px;
+    width: 500px;
+    font-size: 1.2rem;
+    margin-right: 200px;
+  }
+}

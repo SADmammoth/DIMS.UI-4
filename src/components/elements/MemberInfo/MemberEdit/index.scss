@@ -1,0 +1,202 @@
+@import '../../../../assets/styles/scss/vars.scss';
+@import '../../../../assets/styles/scss/mixins.scss';
+
+.edit-member {
+  @media screen and (max-width: 1000px) {
+    & {
+      margin-bottom: 20vh;
+    }
+  }
+
+  &.empty {
+    .member-info {
+      &__header {
+        padding: 10px;
+        padding-right: 40px;
+      }
+
+      &__title {
+        margin-left: 20px;
+      }
+
+      &__contacts {
+        margin-right: 0;
+        margin-left: 0;
+        padding: 10px 25px;
+      }
+
+      &__additional-info {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    .button {
+      margin-right: 0 !important;
+    }
+
+    hr {
+      width: 100%;
+    }
+  }
+
+  .flex-column > div {
+    display: flex;
+  }
+
+  .radio-group {
+    display: flex;
+    & > * {
+      margin-right: 5px;
+    }
+  }
+
+  .container > & .address {
+    margin: 0;
+    margin-left: 25px;
+
+    .form-control {
+      width: calc(100% - 70px);
+    }
+  }
+
+  .button {
+    margin-top: 40px;
+    margin-right: 2vw;
+    float: right;
+
+    &:last-child {
+      margin-right: 10px;
+    }
+  }
+
+  .flex-column {
+    width: 45%;
+  }
+
+  .member-info__contacts {
+    .form-control {
+      width: 75%;
+    }
+  }
+
+  .date-badge {
+    [class*='icon-'] {
+      padding-right: 5px;
+    }
+
+    margin-left: 10px;
+    .form-control {
+      height: 30px;
+      box-sizing: border-box;
+      width: 110px;
+      margin: 0;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 1.1rem !important;
+    }
+  }
+
+  .address {
+    .form-control {
+      width: calc(100% - 90px - 25px);
+    }
+  }
+
+  .form-radio {
+    margin-left: 0;
+    appearance: none;
+
+    & + label::before {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+      border: 2px solid $common-text;
+      border-radius: 20px;
+      background: $light-bg;
+      content: '';
+      box-sizing: border-box;
+    }
+
+    &:checked + label::before {
+      background: radial-gradient(circle, $common-text 0%, $common-text 50%, $light-bg 50%, $light-bg 100%);
+    }
+  }
+
+  .text-badge {
+    width: 130px;
+    @media screen and (max-width: 1200px) {
+      & {
+        height: 30px;
+        box-sizing: border-box;
+        padding: 2px 0;
+        & > .form-select {
+          height: 26px;
+          width: 126px;
+        }
+      }
+    }
+  }
+
+  .form-select {
+    width: 130px;
+    padding: 5px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    font-size: 1.1rem;
+  }
+
+  .form-control {
+    width: 65%;
+    height: 1.4rem;
+    font-size: 1.2rem;
+
+    &[name='firstName'],
+    &[name='lastName'] {
+      width: 200px;
+      margin-right: 10px;
+      font-size: 1.4rem;
+    }
+
+    &[name='universityAverageScore'],
+    &[name='mathScore'] {
+      width: 50px;
+    }
+  }
+
+  .address {
+    width: 96%;
+    margin: 2%;
+    margin-left: 90px;
+    font-size: 1.4rem;
+  }
+
+  .member-info__additional-info {
+    margin-top: 3%;
+    background: $primary-bg;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 1000px) {
+      & {
+        display: flex;
+        flex-direction: column;
+
+        .flex-column {
+          width: 100%;
+
+          & > * {
+            margin: 8px auto;
+          }
+        }
+      }
+    }
+
+    @include clearfix;
+  }
+
+  [class*='icon-'] {
+    fill: $common-text;
+  }
+}

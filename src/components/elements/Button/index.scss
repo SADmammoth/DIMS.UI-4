@@ -1,0 +1,111 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.button {
+  padding: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &_primary {
+    width: 150px;
+    background-color: $highlight-bg;
+    color: $light-text;
+    font-size: 1.1rem;
+    fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
+  }
+
+  &_success {
+    width: 80px;
+    background-color: $success;
+    color: white;
+    font-size: 1.1rem;
+    fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
+  }
+
+  &_error {
+    width: 80px;
+    background-color: $error;
+    color: white;
+    font-size: 1.1rem;
+    fill: $light-text;
+    & > svg[class*='icon-'] {
+      fill: $light-text;
+    }
+  }
+
+  &_ghost {
+    background: none;
+    color: $common-text;
+    font-size: 1.1rem;
+    text-decoration: underline;
+  }
+
+  &_secondary {
+    width: 100px;
+    background: $primary-bg;
+    color: $common-text;
+    font-size: 1.1rem;
+    fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
+  }
+
+  &_navItem {
+    padding: 5px 20px;
+    background-color: transparent;
+    color: $common-text;
+    font-size: 1.2rem;
+    font-weight: bold;
+    fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
+
+    &_active {
+      padding: 5px 20px;
+      background-color: transparent;
+      background-color: $light-bg;
+      color: $common-text;
+      font-size: 1.2rem;
+      font-weight: bold;
+      fill: $common-text;
+      & > svg[class*='icon-'] {
+        fill: $common-text;
+      }
+    }
+  }
+
+  &_invisible {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $common-text;
+    color: inherit;
+    fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
+  }
+
+  &_interactive {
+    margin: 0;
+    padding: 3px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $common-text;
+    color: inherit;
+    fill: $common-text;
+    & > svg[class*='icon-'] {
+      fill: $common-text;
+    }
+  }
+}

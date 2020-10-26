@@ -1,0 +1,43 @@
+@import '../../../../assets/styles/scss/vars.scss';
+@import '../../../../assets/styles/scss/mixins.scss';
+
+.track-create {
+  width: 51vw;
+  height: 65vh;
+  max-height: 500px;
+  padding: 0;
+  padding-bottom: 20px;
+
+  overflow-y: auto;
+
+  .form-textarea {
+    height: 10vh !important;
+    min-height: 240px !important;
+  }
+
+  .task-edit {
+    &__dates {
+      margin-bottom: 10px;
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .text-badge {
+    margin-right: 5%;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .button[type='submit'] {
+    margin-top: 10px;
+    margin-right: 2vw;
+    float: right;
+  }
+}

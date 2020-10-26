@@ -1,0 +1,107 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.form-control {
+  display: inline-block;
+  padding: 5px;
+  border: 2px solid $muted-text;
+  border-radius: 10px;
+  outline: none;
+  background: $light-bg;
+  color: $common-text;
+  background: $card-bg;
+}
+
+.form-checkbox {
+  appearance: none;
+
+  & + label {
+    position: relative;
+  }
+
+  &:checked + label::before {
+    position: absolute;
+    top: 8px;
+    left: -16px;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    background: $common-text;
+    content: '';
+    box-sizing: border-box;
+    border-radius: 2px;
+  }
+
+  & + label::after {
+    width: 6px;
+    height: 6px;
+    box-sizing: content-box;
+    padding: 1px;
+    margin-top: 5px;
+    float: left;
+    border: 2px solid $muted-text;
+    border-radius: 3px;
+    content: '';
+  }
+
+  &.required {
+    & + label::after {
+      width: 8px;
+      height: 8px;
+      margin-top: 5px;
+      float: left;
+      border: 2px solid $common-text;
+      border-radius: 3px;
+      content: '';
+    }
+  }
+}
+
+@include invalidBounceKeyframes(2);
+
+.form-control.invalid {
+  border-color: $error;
+  animation: 1s invalidBounce;
+}
+
+.form-textarea {
+  background: $card-bg;
+}
+
+.form-select {
+  display: inline-block;
+  padding: 5px;
+  border: 2px solid $dark-bg;
+  border-radius: 10px;
+  outline: none;
+  color: $common-text;
+  background: $card-bg;
+
+  option {
+    background-color: $card-bg;
+    border: none;
+  }
+
+  option:disabled {
+    color: $muted-text;
+    background-color: $card-bg;
+    border: none;
+  }
+}
+
+.form-label {
+  margin: 8px;
+  font-weight: bold;
+}
+
+.form-select::placeholder,
+.form-control::placeholder,
+.form-textarea::placeholder {
+  color: $muted-text;
+}
+
+.form-select:required,
+.form-control:required,
+.form-textarea:required {
+  border-color: $common-text !important;
+}

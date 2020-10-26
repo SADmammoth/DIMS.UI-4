@@ -1,33 +1,66 @@
-The link to principal idea of design - [design](https://symu.co/freebies/templates-4/merkury-dashboard-psd-template/). **You do not have to follow it, just use it as a guide**
+<h1 align="center">Welcome to DIMSUI   👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
+  <img src="https://img.shields.io/badge/yarn-%3E%3D1.22.4-blue.svg" />
+  <img src="https://img.shields.io/badge/node-%3E%3D12.14.0-blue.svg" />
+  <a href="https://github.com/SADmammoth/DIMS.UI-4#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/SADmammoth/DIMS.UI-4/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+</p>
 
-*In **/docs** you can find all other guides regarding project structure, pan and etc.*
+<img width="220" height="220" src="../media/devinc.png?raw=true" alt="DEVincubator"  align="right" />
 
+Welcome to the "Dev Incubator Management System" or more briefly
+**DIMSUI**!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> DIMSUI is a system for getting tasks and &#34;tracking&#34; time.
 
-## Available Scripts
+System is useful for you if you:
 
-In the project directory, you can run:
+- **Admin**, to manage and create new members.
+- **Mentor**, to create and assign tasks, see member's progress.
+- **Member**, to see own tasks and manage subtasks.
 
-### `yarn start`
+## Prerequisites
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- yarn >=1.22.4
+- node >=12.14.0
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Install
 
-### `yarn test`
+```sh
+yarn install
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Usage
 
-### `yarn build`
+```sh
+yarn run start
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Run tests
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```sh
+yarn run test
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Author
+
+👤 **Maxim Logvinenko**
+
+- Github: [@SADmammoth](https://github.com/SADmammoth)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SADmammoth/DIMS.UI-4/issues). You can also take a look at the [contributing guide](https://github.com/SADmammoth/DIMS.UI-4/blob/master/CONTRIBUTING.md).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+---
+
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

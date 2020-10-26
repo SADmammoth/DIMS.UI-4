@@ -1,0 +1,22 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+@include toast-header();
+
+.toast {
+  width: 300px;
+  margin: 10px;
+  background-color: $light-bg;
+
+  &__header {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  &__body {
+    padding: 10px 20px;
+    text-align: left;
+  }
+}

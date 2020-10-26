@@ -1,0 +1,116 @@
+@import '../../../assets/styles/scss/vars.scss';
+@import '../../../assets/styles/scss/mixins.scss';
+
+.task-card {
+  margin-bottom: 5px;
+
+  @each $type, $color in ('active': white, 'fail': $error, 'success': $success) {
+    &_#{$type} > &__header {
+      position: relative;
+      @include task-card_border($color);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 35px;
+    background: $primary-bg;
+    align-items: center;
+
+    &__title {
+      border-bottom: 1px solid $dark-bg;
+      font-size: 1.2rem;
+      padding: 0;
+    }
+  }
+
+  &.open > &__header {
+    background: $highlight-bg;
+  }
+
+  .status {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: $highlight-bg;
+    font-size: 1.1rem;
+
+    span {
+      display: inline-block;
+      width: 60px;
+      padding: 5px;
+      padding-left: 50px;
+      background: $primary-bg;
+      text-align: center;
+    }
+  }
+
+  &__body {
+    padding: 20px;
+    border: 3px solid $highlight-bg;
+
+    .button {
+      min-width: 100px;
+    }
+
+    .date-badge {
+      margin-right: 20px;
+      margin-bottom: 0;
+      font-size: 1.1rem;
+    }
+  }
+
+  &__dates {
+    display: flex;
+  }
+
+  &__description {
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border: 2px solid $primary-bg;
+    padding: 5px;
+  }
+
+  .button-block {
+    display: flex;
+    justify-content: space-between;
+
+    .button-block {
+      display: flex;
+      & > * {
+        margin-right: 10px;
+      }
+    }
+
+    .button_invisible {
+      padding: 20px;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .button-block {
+      display: flex;
+      justify-content: center;
+      & .button {
+        margin-right: 10px;
+        min-width: 40px !important;
+        width: 60px;
+        svg {
+          margin-left: 10px;
+        }
+      }
+
+      .button-block {
+        display: flex;
+        & > .button {
+          min-width: 40px !important;
+          width: 60px;
+        }
+      }
+
+      .button_invisible {
+        padding: 20px;
+      }
+    }
+  }
+}
