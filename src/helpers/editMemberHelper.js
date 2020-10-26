@@ -36,7 +36,7 @@ export default function editMemberHelper(
       sex,
       startDate: calculatedStartDate,
       birthDate: calculatedBirthDate,
-      direction,
+      direction: Client.directions[direction],
       education,
       universityAverageScore,
       mathScore,

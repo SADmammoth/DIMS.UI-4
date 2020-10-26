@@ -26,7 +26,7 @@ const NewTask = ({ members, match }) => {
     const membersArray = checkboxValueSeparator(membersList);
 
     if (membersArray.length) {
-      const { _id: taskId } = (await createTask()).data;
+      const taskId = await createTask();
       await Client.assignTask(taskId, membersArray);
     } else {
       await createTask();

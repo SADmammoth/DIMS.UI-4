@@ -44,7 +44,12 @@ class AuthenticationManager extends Component {
         return { status: fail };
       }
 
-      const { status, found, token, role, userId } = await Client.signIn(login, password);
+      const response = await Client.signIn(login, password);
+      if (!response) {
+        return { status: fail };
+      }
+
+      const { status, found, token, role, userId } = response;
       if (status === fail && found) {
         return { status, message: 'Incorrect password' };
       }

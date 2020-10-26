@@ -14,7 +14,6 @@ const usePreloader = ({ members, role }) => {
   useEffect(() => {
     if (!Object.keys(members).length && role !== 'member' && role !== 'guest') {
       (async () => {
-        console.log(0);
         await Client.getDirections();
         await requestAndFetch(dispatch, membersActions.setMembers, Client.getMembers);
         await requestAndFetch(dispatch, assignedTasksActions.setAssignedToTasks, Client.getAllAssigned);

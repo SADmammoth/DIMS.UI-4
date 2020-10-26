@@ -190,24 +190,6 @@ class Form extends React.Component {
     this.setState({ values }, () => this.createInputs());
   };
 
-  onResponseReceived = (response) => {
-    if (response) {
-      if (response.status === 200) {
-        this.successNotification('Success', 'Data sent and accepted by server');
-        return;
-      }
-
-      this.errorNotification('Server error', response && response.toString());
-      return;
-    }
-
-    this.errorNotification('Form error', response && response.toString());
-  };
-
-  onResponseError = (error) => {
-    this.errorNotification('Server error', error.response ? error.response.data.Message : error.toString());
-  };
-
   onSubmit = (event) => {
     const { values } = this.state;
     const { onSubmit: onSubmitHandler, inputs } = this.props;
@@ -222,7 +204,7 @@ class Form extends React.Component {
 
     if (validateForm(values, inputs, this.onValidationFail)) {
       if (onSubmitHandler) {
-        onSubmitHandler(formatFormValues(values)).then(this.onResponseReceived).catch(this.onResponseError);
+        onSubmitHandler(formatFormValues(values));
       }
     }
   };

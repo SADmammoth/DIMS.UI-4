@@ -52,7 +52,7 @@ function MemberTaskCard(props) {
     return Client.deleteTask(dialogValue);
   };
   const onTrack = ({ trackDate, trackNote }) => {
-    return Client.createTrack(id, trackNote, trackDate);
+    return Client.createTrack(userId, id, trackNote, trackDate);
   };
 
   const isAdmin = role === 'admin';
@@ -130,7 +130,6 @@ function MemberTaskCard(props) {
               <>
                 {status === 'active' ? (
                   <>
-                    {console.log(members[parseInt(userId, 10)], members, userId)}
                     <ChangeStateButton
                       reload={reload}
                       buttonClassMod='success'
