@@ -265,18 +265,19 @@ const Client = {
       .then(parseJSON);
 
     const tracksObject = {};
+
     tracks.forEach((track) => {
       tracksObject[track._id] = createTracksObject(track);
     });
     return tracksObject;
   },
 
-  createTrack(userId, memberTaskId, trackDate, trackNote) {
+  createTrack(userId, memberTaskId, trackNote, trackDate) {
     return axios
       .post(
         concatPath(apiPath, 'tracks'),
         {
-          trackDate,
+          trackDate: trackDate.toISOString(),
           trackNote,
         },
         {
@@ -291,7 +292,7 @@ const Client = {
       .then(parseJSON);
   },
 
-  editTrack(trackId, trackDate, trackNote) {
+  editTrack(trackId, trackNote, trackDate, userId) {
     return axios
       .put(
         concatPath(apiPath, 'tracks', trackId),
@@ -299,7 +300,7 @@ const Client = {
           trackDate,
           trackNote,
         },
-        { headers: Client.defaultHeader },
+        { headers: Client.defaultHeader, params: { member: userId } },
       )
       .catch(checkStatus)
       .then(parseJSON);
@@ -314,8 +315,11 @@ const Client = {
       .then(parseJSON);
   },
 
-  deleteTrack(trackId) {
-    return axios.delete(concatPath(apiPath, 'tracks', trackId), { headers: Client.defaultHeader });
+  deleteTrack(trackId, userId) {
+    return axios.delete(concatPath(apiPath, 'tracks', trackId), {
+      headers: Client.defaultHeader,
+      params: { member: userId },
+    });
   },
 
   setToken(token) {
