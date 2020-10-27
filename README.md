@@ -1,15 +1,4 @@
 <h1 align="center">Welcome to DIMSUI   👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/yarn-%3E%3D1.22.4-blue.svg" />
-  <img src="https://img.shields.io/badge/node-%3E%3D12.14.0-blue.svg" />
-  <a href="https://github.com/SADmammoth/DIMS.UI-4#readme" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
-  <a href="https://github.com/SADmammoth/DIMS.UI-4/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
-  </a>
-</p>
 
 <img width="220" height="220" src="../media/devinc.png?raw=true" alt="DEVincubator"  align="right" />
 
@@ -22,29 +11,75 @@ System is useful for you if you:
 
 - **Admin**, to manage and create new members.
 - **Mentor**, to create and assign tasks, see member's progress.
-- **Member**, to see own tasks and manage subtasks.
+- **Student (Member)**, to see own tasks and manage subtasks.
 
-## Prerequisites
+# Project features
+> Deployed on Heroku: https://dimsui.herokuapp.com/
+## Major
+For _Mentor_:
+* See _Members_ list.
+* CRUD _Tasks_ list.
+* Assign tasks to _Members_ and show assigned tasks.
+* See _Member's_ _Progress_: list of user-created subtasks (_Tracks_).
+* Set assigned _Task_ status: _Active_, _Success_, _Fail_.
 
-- yarn >=1.22.4
-- node >=12.14.0
+For _Admin_:
+* _Mentor_ features.
+* Edit, Delete, Create _Members_.
+
+For _Member_:
+* See assigned to him _Tasks_.
+* CRUD _Tracks_ list.
+
+## Minor
+* Authorization and authentication.
+* Role dependent site layout.
+* Dark and Light themes.
+* Cards animation.
+* Text search for members list with Regexp mode.
+
+Although:
+* Tests for most helper functions.
+* Generic `Form` component with custom inputs, incl. Masked inputs (with visible and invisible placeholders).
+* Generic `Validator` helper class, contains validation methods based on regular expressions.
+* Generic `MaskValidator` helper class, contains mask validation functions.
+* Generic `DateMask` helper class, contains methods to validate, parse and format date by date mask.
+* Accepts my self-written [backend](https://github.com/SADmammoth/dimsui_backend) or Firebase DB with included faker (should change export value in _/src/helpers/Client/index.js_ to use it).
+
+For my self written backend:
+* Use of JWT Authentication.
+* Role check on every app startup.
+
+
+# Project setup
+__Tech stack__: React 16, Redux, SCSS.
+
+__React features used__ (_in educational purpose_): class components, Hooks, Context API (themes), state management with Redux, PropTypes, axios, toasted-notes and etc.
+
+__Packages used__: create-react-app (with custom and not mine configurations), Jest, react-helmet, react-router-dom, react-spring.
+
+# How to
 
 ## Install
 
+Setup _.env_ file with path to api and authentication server.
+
+Then run:
+
 ```sh
-yarn install
+npm install
 ```
 
 ## Usage
 
 ```sh
-yarn run start
+npm start
 ```
 
 ## Run tests
 
 ```sh
-yarn run test
+npm test
 ```
 
 ## Author
@@ -52,15 +87,3 @@ yarn run test
 👤 **Maxim Logvinenko**
 
 - Github: [@SADmammoth](https://github.com/SADmammoth)
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SADmammoth/DIMS.UI-4/issues). You can also take a look at the [contributing guide](https://github.com/SADmammoth/DIMS.UI-4/blob/master/CONTRIBUTING.md).
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
----
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

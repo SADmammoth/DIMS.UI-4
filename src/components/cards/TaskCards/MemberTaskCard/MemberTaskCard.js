@@ -19,6 +19,8 @@ import ChangeStateButton from '../../../elements/ChangeStateButton';
 import compareObjects from '../../../../helpers/compareObjects';
 import editAndAssignTask from '../../../../helpers/editAndAssignTask';
 import dateTypes from '../../../../helpers/dateTypes';
+import masks from '../../../../helpers/maskHelpers/masks';
+import Validator from '../../../../helpers/Validator';
 
 function MemberTaskCard(props) {
   const {
@@ -52,7 +54,7 @@ function MemberTaskCard(props) {
     return Client.deleteTask(dialogValue);
   };
   const onTrack = ({ trackDate, trackNote }) => {
-    return Client.createTrack(userId, id, trackNote, trackDate);
+    return Client.createTrack(userId, id, trackNote, Validator.parseDateByMask(trackDate, masks.date));
   };
 
   const isAdmin = role === 'admin';

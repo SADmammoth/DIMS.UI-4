@@ -31,14 +31,14 @@ function TaskTrackCard(props) {
   } = props;
 
   const onDelete = ({ dialogValue }) => {
-    return Client.deleteTrack(dialogValue).then((response) => {
+    return Client.deleteTrack(dialogValue, userId).then((response) => {
       reload();
       return response;
     });
   };
 
   const onEdit = ({ trackDate: date, trackNote: note }) => {
-    return Client.editTrack(id, note, date).then((response) => {
+    return Client.editTrack(id, note, date, userId).then((response) => {
       reload();
       return response;
     });
